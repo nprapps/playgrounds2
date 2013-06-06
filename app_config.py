@@ -14,7 +14,7 @@ import os
 NAMES
 """
 # Project name used for display
-PROJECT_NAME = 'playgrounds2'
+PROJECT_NAME = 'Playgrounds!'
 
 # Project name used for paths on the filesystem and in urls
 # Use dashes, not underscores
@@ -33,7 +33,7 @@ STAGING_S3_BUCKETS = ['stage-apps.npr.org']
 STAGING_SERVERS = ['50.112.92.131']
 
 # Should code be deployed to the web/cron servers?
-DEPLOY_TO_SERVERS = False
+DEPLOY_TO_SERVERS = False 
 
 # Should the crontab file be installed on the servers?
 # If True, DEPLOY_TO_SERVERS must also be True
@@ -41,7 +41,7 @@ DEPLOY_CRONTAB = False
 
 # Should the service configurations be installed on the servers?
 # If True, DEPLOY_TO_SERVERS must also be True
-DEPLOY_SERVICES = False
+DEPLOY_SERVICES = False 
 
 # These variables will be set at runtime. See configure_targets() below
 S3_BUCKETS = []
@@ -82,6 +82,11 @@ NPR_DFP = {
 SERVICES
 """
 GOOGLE_ANALYTICS_ID = 'UA-5828686-4'
+
+"""
+Application specific
+"""
+DATA_GOOGLE_DOC_KEY = '0AlXMOHKxzQVRdDB0QXJ4dXRaUzRjR2tsTmQ2bnBEOHc'
 
 """
 Utilities

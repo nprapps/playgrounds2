@@ -8,6 +8,7 @@ from jinja2 import Template
 
 import app
 import app_config
+import data
 from etc import github
 
 """
@@ -396,6 +397,22 @@ def deploy(remote='origin'):
             deploy_confs()
 
 """
+Application specific
+"""
+def download_data():
+    base_url = 'https://docs.google.com/spreadsheet/pub?key=%s&single=true&gid=0&output=csv'
+    doc_url = base_url % app_config.DATA_GOOGLE_DOC_KEY
+    local('curl -o data/playgrounds.csv "%s"' % doc_url)
+
+def load_data():
+    data.clear_playgrounds()
+    data.load_playgrounds()
+
+def bootstrap():
+    download_data()
+    load_data()
+
+"""
 Cron jobs
 """
 def cron_test():
@@ -465,32 +482,3 @@ def shiva_the_destroyer():
 
             if env['deploy_services']:
                 nuke_confs()
-"""
-App-template specific setup. Not relevant after the project is running.
-"""
-def app_template_bootstrap(project_name=None, repository_name=None):
-    """
-    Execute the bootstrap tasks for a new project.
-    """
-    env.project_slug = os.getcwd().split('/')[-1]
-    env.project_name = project_name or env.project_slug
-    env.repository_name = repository_name or env.project_slug
-
-    _confirm("Have you created a Github repository named \"%(repository_name)s\"?" % env)
-
-    local('sed -i "" \'s|$NEW_PROJECT_SLUG|%(project_slug)s|g\' PROJECT_README.md app_config.py' % env)
-    local('sed -i "" \'s|$NEW_PROJECT_NAME|%(project_name)s|g\' PROJECT_README.md app_config.py' % env)
-    local('sed -i "" \'s|$NEW_REPOSITORY_NAME|%(repository_name)s|g\' PROJECT_README.md app_config.py' % env)
-
-    local('rm -rf .git')
-    local('git init')
-    local('mv PROJECT_README.md README.md')
-    local('rm *.pyc')
-    local('git add * .gitignore')
-    local('git commit -am "Initial import from app-template."')
-    local('git remote add origin https://github.com/nprapps/%(repository_name)s.git' % env)
-    local('git push -u origin master')
-
-    local('npm install less universal-jst')
-
-    update_copy()
