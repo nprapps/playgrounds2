@@ -15,31 +15,10 @@
 
 
 {% block content %}
-<h1>{{ PROJECT_NAME }}</h1>
-<div id="story-meta">
-    <p class="byline">by <span>{{ COPY.attribution.byline }}</span></p>
-    <p class="dateblock">
-        <span class="date">{{ COPY.attribution.pubdate }}</span>
-        <span class="time"> {{ COPY.attribution.pubtime }}</span>
-    </p>
-</div>
-
-<h2>Example COPY list</h2>
-<dl>
-    {% for row in COPY.example_list %}
-    <dt>{{ row.term }}</dt><dd>{{ row.definition }}</dd>
+<ul>
+    {% for playground in playgrounds %}
+    <li><a href="{{ url_for('_playground', playground_id=playground.id) }}">{{ playground.name }}</a></li>
     {% endfor %}
-</dl>
-
-<p id="template-example"></p>
+</ul>
 {% endblock %}
 
-
-{% block wide_content %}
-<div class="row">
-    <div class="span12">
-        <h2>{{ COPY.content.footer_title }}</h2>
-        <p>{{ COPY.content.lorem_ipsum }}</p>
-    </div>
-</div>
-{% endblock %}

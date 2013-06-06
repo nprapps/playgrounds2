@@ -8,17 +8,30 @@ import envoy
 from flask import Flask, Markup, abort, render_template
 
 import app_config
+import data
 from render_utils import flatten_app_config, make_context
 
 app = Flask(app_config.PROJECT_NAME)
 
-# Example application views
 @app.route('/')
 def index():
     """
-    Example view demonstrating rendering a simple HTML page.
+    Playgrounds index page.
     """
-    return render_template('index.html', **make_context())
+    context = make_context()
+    context['playgrounds'] = data.Playground.select().limit(10)
+
+    return render_template('index.html', **context)
+
+@app.route('/playground/<int:playground_id>')
+def _playground(playground_id):
+    """
+    Playground detail page.
+    """
+    context = make_context()
+    context['playground'] = data.Playground.get(id=playground_id)
+
+    return render_template('playground.html', **context)
 
 @app.route('/widget.html')
 def widget():
