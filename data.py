@@ -50,7 +50,8 @@ class Playground(Model):
                 'name': self.name,
                 'facility': self.facility,
                 'facility_type': self.facility_type,
-                'facility_type_facet': self.facility_type
+                'facility_type_facet': self.facility_type,
+                'full_text': ' | '.join([self.name, self.facility_type])
             }
         }
 

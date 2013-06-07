@@ -4,6 +4,7 @@ from glob import glob
 import json
 import os
 
+import boto.cloudsearch
 from fabric.api import *
 from jinja2 import Template
 import requests
@@ -466,7 +467,7 @@ def bootstrap():
     download_data()
     load_data()
 
-def upload_sdf():
+def update_search_index():
     """
     Batch upload playgrounds to CloudSearch as SDF.
     """
@@ -481,6 +482,15 @@ def upload_sdf():
 
     print response.status_code
     print response.text
+
+def set_default_search_field():
+    """
+    Use Boto to configure CloudSearch with the default search field.
+
+    There is no UI for this in the management console.
+    """
+    cloudsearch = boto.cloudsearch.connect_to_region(app_config.CLOUD_SEARCH_REGION)
+    cloudsearch.update_default_search_field(app_config.CLOUD_SEARCH_INDEX_NAME, app_config.CLOUD_SEARCH_DEFAULT_SEARCH_FIELD)
 
 """
 Cron jobs
