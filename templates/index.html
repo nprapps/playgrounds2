@@ -15,10 +15,55 @@
 
 
 {% block content %}
+<h3>First 10 playgrounds</h3>
+
 <ul>
     {% for playground in playgrounds %}
     <li><a href="{{ url_for('_playground', playground_id=playground.id) }}">{{ playground.name }}</a></li>
     {% endfor %}
 </ul>
+{% endblock %}
+
+{% block wide_content %}
+<div class="row">
+    <div class="span12">
+        <h3>Search for a playground</h3>
+
+        <form id="search">
+            <input type="text" name="query" placeholder="Foobar" /><br />
+            <input type="submit" value="Search" />
+        </form>
+
+        <ul id="search-results">
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_foot %}
+<script type="text/javascript">
+    var $search_form = null;
+    var $search_query = null;
+    var $search_results = null;
+
+    $(function() {
+        $search_form = $('#search');
+        $search_query = $('#search input[name="query"]');
+        $search_results = $('#search-results');
+
+        $search_form.submit(function() {
+            $.getJSON('/cloudsearch/2011-02-01/search?q=' + $search_query.val() +  '&return-fields=name', function(data) {
+                _.each(data['hits']['hit'], function(hit) {
+                    var context = $.extend(APP_CONFIG, hit);
+                    var html = JST.playground_item(context);
+
+                    $search_results.append(html);
+                });
+            });
+
+            return false;
+        });
+    });
+</script>
 {% endblock %}
 

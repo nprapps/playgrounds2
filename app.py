@@ -6,6 +6,7 @@ import urllib
 
 import envoy
 from flask import Flask, Markup, abort, render_template
+import requests
 
 import app_config
 import data
@@ -32,6 +33,16 @@ def _playground(playground_id):
     context['playground'] = data.Playground.get(id=playground_id)
 
     return render_template('playground.html', **context)
+
+@app.route('/cloudsearch/<path:path>')
+def _cloudsearch_proxy(path):
+    from flask import request
+
+    url = 'http://%s/%s?%s' % (app_config.CLOUD_SEARCH_DOMAIN, path, urllib.urlencode(request.args))
+
+    response = requests.get(url)
+
+    return (response.text, response.status_code, response.headers)
 
 @app.route('/widget.html')
 def widget():
