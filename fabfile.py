@@ -471,6 +471,7 @@ def update_search_index():
     """
     Batch upload playgrounds to CloudSearch as SDF.
     """
+    print 'Generating SDF batch...'
     sdf = [playground.sdf() for playground in data.Playground.select()]
     payload = json.dumps(sdf)
 
@@ -478,6 +479,7 @@ def update_search_index():
         print 'Exceeded 5MB limit for SDF uploads!'
         return
 
+    print 'Uploading to CloudSearch...'
     response = requests.post('http://%s/2011-02-01/documents/batch' % app_config.CLOUD_SEARCH_DOC_DOMAIN, data=payload, headers={ 'Content-Type': 'application/json' })
 
     print response.status_code

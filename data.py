@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import math
 import time
 
 from csvkit import CSVKitDictReader
@@ -41,7 +42,7 @@ class Playground(Model):
         """
         Return a representation of this playground in CloudSearch SDF format.
         """
-        return {
+        sdf = {
             'type': 'add',
             'id': self.id,
             'version': int(time.time()),
@@ -49,11 +50,19 @@ class Playground(Model):
             'fields': {
                 'name': self.name,
                 'facility': self.facility,
-                'facility_type': self.facility_type,
-                'facility_type_facet': self.facility_type,
-                'full_text': ' | '.join([self.name, self.facility_type])
+                'agency': self.agency,
+                'owner': self.owner,
+                'owner_type': self.owner_type,
+                'full_text': ' | '.join([self.name, self.facility, self.agency, self.owner])
             }
         }
+
+        # These are only included if valid, because CloudSearch won't allow uints to be null
+        if self.latitude:
+            sdf['fields']['latitude'] = int(self.latitude * 111133)
+            sdf['fields']['longitude'] = int(self.latitude * 111133 * math.cos(self.longitude))
+
+        return sdf
 
 def clear_playgrounds():
     """
