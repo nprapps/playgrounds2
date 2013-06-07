@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 
+import time
+
 from csvkit import CSVKitDictReader
 from peewee import *
 
 database = SqliteDatabase('playgrounds.db')
 
 class Playground(Model):
+    """
+    The playground model for the sqlite database.
+    """
     name = CharField()
     facility = CharField(null=True)
     facility_type = CharField(null=True)
@@ -32,13 +37,36 @@ class Playground(Model):
     class Meta:
         database = database
 
+    def sdf(self):
+        """
+        Return a representation of this playground in CloudSearch SDF format.
+        """
+        return {
+            'type': 'add',
+            'id': self.id,
+            'version': int(time.time()),
+            'lang': 'en',
+            'fields': {
+                'name': self.name,
+                'facility': self.facility,
+                'facility_type': self.facility_type,
+                'facility_type_facet': self.facility_type
+            }
+        }
+
 def clear_playgrounds():
+    """
+    Clear playground data from sqlite.
+    """
     try:
         Playground.drop_table()
     except:
         pass
 
 def load_playgrounds():
+    """
+    Load playground data from the CSV into sqlite.
+    """
     Playground.create_table()
 
     with open('data/playgrounds.csv') as f:
@@ -70,3 +98,4 @@ def load_playgrounds():
                 entry=row['Entry'],
                 source=row['Source']
             )
+

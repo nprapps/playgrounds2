@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 
 from glob import glob
+import json
 import os
 
 from fabric.api import *
 from jinja2 import Template
+import requests
 
 import app
 import app_config
@@ -463,6 +465,22 @@ def load_data():
 def bootstrap():
     download_data()
     load_data()
+
+def upload_sdf():
+    """
+    Batch upload playgrounds to CloudSearch as SDF.
+    """
+    sdf = [playground.sdf() for playground in data.Playground.select()]
+    payload = json.dumps(sdf)
+
+    if len(payload) > 5000 * 1024:
+        print 'Exceeded 5MB limit for SDF uploads!'
+        return
+
+    response = requests.post('http://%s/2011-02-01/documents/batch' % app_config.CLOUD_SEARCH_DOC_DOMAIN, data=payload, headers={ 'Content-Type': 'application/json' })
+
+    print response.status_code
+    print response.text
 
 """
 Cron jobs
