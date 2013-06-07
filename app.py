@@ -23,7 +23,7 @@ def index():
 
     return render_template('index.html', **context)
 
-@app.route('/playground/<int:playground_id>')
+@app.route('/playground/<int:playground_id>.html')
 def _playground(playground_id):
     """
     Playground detail page.

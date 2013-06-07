@@ -184,6 +184,57 @@ def render():
     # Un-fake-out deployment target
     app_config.configure_targets(app_config.DEPLOYMENT_TARGET)
 
+def render_playgrounds():
+    """
+    Render the playgrounds pages.
+    """
+    from flask import g, url_for
+
+    update_copy()
+    less()
+    jst()
+
+    # Fake out deployment target
+    app_config.configure_targets(env.get('settings', None))
+
+    app_config_js()
+
+    playgrounds = data.Playground.select()
+
+    compiled_includes = []
+
+    for playground in playgrounds:
+        # Silly fix because url_for require a context
+        with app.app.test_request_context() as ctx:
+            path = url_for('_playground', playground_id=playground.id)
+            ctx.path = path
+
+            print 'Rendering %s' % path
+
+            g.compile_includes = True
+            g.compiled_includes = compiled_includes
+
+            view = app.__dict__['_playground']
+            content = view(playground.id)
+
+            compiled_includes = g.compiled_includes
+
+        path = 'www%s' % path
+
+        # Ensure path exists
+        head = os.path.split(path)[0]
+        
+        try:
+            os.makedirs(head)
+        except OSError:
+            pass
+
+        with open(path, 'w') as f:
+            f.write(content.encode('utf-8'))
+
+    # Un-fake-out deployment target
+    app_config.configure_targets(app_config.DEPLOYMENT_TARGET)
+
 def tests():
     """
     Run Python unit tests.
@@ -384,6 +435,7 @@ def deploy(remote='origin'):
         _confirm("You are trying to deploy the '%(branch)s' branch to production.\nYou should really only deploy a stable branch.\nDo you know what you're doing?" % env)
 
     render()
+    render_playgrounds()
     _gzip_www()
     _deploy_to_s3()
 
