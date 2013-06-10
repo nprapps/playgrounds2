@@ -6,6 +6,8 @@ import time
 from csvkit import CSVKitDictReader
 from peewee import *
 
+import app_config
+
 database = SqliteDatabase('playgrounds.db')
 
 class Playground(Model):
@@ -61,8 +63,10 @@ class Playground(Model):
         }
 
         if self.latitude:
-            sdf['fields']['latitude'] = int(self.latitude * 111133)
-            sdf['fields']['longitude'] = int(self.longitude * (math.cos(self.latitude) * 111133))
+            # Convert to radians, scale up, convert to int and take the absolute value,
+            # All in the service of storing as an accurate uint
+            sdf['fields']['latitude'] = abs(int(self.latitude * math.pi / 180 * app_config.CLOUDSEARCH_RADIANS_SCALE))
+            sdf['fields']['longitude'] = abs(int(self.longitude * math.pi / 180 * app_config.CLOUDSEARCH_RADIANS_SCALE))
 
         return sdf
 

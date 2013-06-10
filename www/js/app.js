@@ -23,11 +23,12 @@ $(function() {
 
         if (latitude) {
             // Convert to approximate meters
-            var latitude_meters = parseInt(latitude * 111133);
-            var longitude_meters = parseInt(longitude * Math.cos(latitude) * 111133);
+            var latitude_radians = Math.abs(latitude * Math.PI / 180); 
+            var longitude_radians = Math.abs(longitude * Math.PI / 180);
+            var scale = APP_CONFIG.CLOUDSEARCH_RADIANS_SCALE;
 
             // Compile ranking algorithm
-            var rank_distance = 'sqrt(pow(abs(' + latitude_meters + ' - latitude),2) + pow(abs(' + longitude_meters + ' - longitude),2))';
+            var rank_distance = '6371 * Math.acos(Math.sin(' + latitude_radians + ') * Math.sin(latitude / ' + scale + ') + Math.cos(' + latitude_radians + ') * Math.cos(latitude / ' + scale + ') * Math.cos((longitude / ' + scale + ') - ' + longitude_radians + '))';
 
             params['rank'] = 'distance';
             params['rank-distance'] = rank_distance;
