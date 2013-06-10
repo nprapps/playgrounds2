@@ -24,7 +24,7 @@ env.deploy_to_servers = app_config.DEPLOY_TO_SERVERS
 env.deploy_crontab = app_config.DEPLOY_CRONTAB
 env.deploy_services = app_config.DEPLOY_SERVICES
 
-env.repo_url = 'git@github.com:nprapps/%(repository_name)s.git' % env
+env.repo_url = 'https://github.com/nprapps/%(repository_name)s.git' % env
 env.alt_repo_url = None  # 'git@bitbucket.org:nprapps/%(repository_name)s.git' % env
 env.user = 'ubuntu'
 env.python = 'python2.7'
@@ -226,7 +226,7 @@ def render_playgrounds():
 
         # Ensure path exists
         head = os.path.split(path)[0]
-        
+
         try:
             os.makedirs(head)
         except OSError:
