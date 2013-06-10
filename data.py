@@ -49,11 +49,14 @@ class Playground(Model):
             'lang': 'en',
             'fields': {
                 'name': self.name,
+                'city': self.city,
+                'state': self.state,
+                'zip_code': self.zip_code,
                 'facility': self.facility,
                 'agency': self.agency,
                 'owner': self.owner,
                 'owner_type': self.owner_type,
-                'full_text': ' | '.join([self.name, self.facility, self.agency, self.owner])
+                'full_text': ' | '.join([self.name, self.city, self. state, self.facility, self.agency, self.owner])
             }
         }
 
