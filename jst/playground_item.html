@@ -1,1 +1,1 @@
-<li><a href="/playground/<%= id %>.html"><%= data.name[0] || 'Unnamed playground' %><a/>  <%= data.city[0] %>, <%= data.state[0] %><% if (data.latitude.length > 0) { %> (~<%= data.distance[0] %>m away)<% } %></li>
+<li><a href="/playground/<%= id %>.html"><%= data.name[0] || 'Unnamed playground' %><a/>  <%= data.city[0] %>, <%= data.state[0] %><% if (data.distance && data.latitude.length > 0) { %> (~<%= data.distance[0] %>km away)<% } %></li>
