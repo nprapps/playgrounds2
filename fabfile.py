@@ -226,7 +226,7 @@ def render_playgrounds():
 
         # Ensure path exists
         head = os.path.split(path)[0]
-        
+
         try:
             os.makedirs(head)
         except OSError:
@@ -379,6 +379,7 @@ def render_confs():
 
     context = app_config.get_secrets()
     context['PROJECT_SLUG'] = app_config.PROJECT_SLUG
+    context['CLOUD_SEARCH_DOMAIN'] = app_config.CLOUD_SEARCH_DOMAIN
     context['PROJECT_NAME'] = app_config.PROJECT_NAME
     context['DEPLOYMENT_TARGET'] = env.settings
     context['CONFIG_NAME'] = env.project_slug.replace('-', '').upper()
