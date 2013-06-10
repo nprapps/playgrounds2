@@ -13,10 +13,10 @@ $(function() {
 
     $search_form.submit(function() {
         var params = {
-            'bq': 'full_text:\'' + $search_query.val() + '\'',
+            'bq': 'full_text:\'' + ($search_query.val() || '-nprapps') + '\'',
         };
 
-        var return_fields = ['name', 'latitude', 'longitude'];
+        var return_fields = ['name', 'city', 'state', 'latitude', 'longitude'];
 
         var latitude = parseFloat($search_latitude.val());
         var longitude = parseFloat($search_longitude.val());
@@ -38,11 +38,12 @@ $(function() {
         params['return-fields'] = return_fields.join(',')
 
         $.getJSON('/cloudsearch/2011-02-01/search', params, function(data) {
+            $search_results.empty();
+
             _.each(data['hits']['hit'], function(hit) {
                 var context = $.extend(APP_CONFIG, hit);
                 var html = JST.playground_item(context);
 
-                $search_results.empty();
                 $search_results.append(html);
             });
         });
