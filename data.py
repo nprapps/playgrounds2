@@ -60,7 +60,7 @@ class Playground(Model):
         # These are only included if valid, because CloudSearch won't allow uints to be null
         if self.latitude:
             sdf['fields']['latitude'] = int(self.latitude * 111133)
-            sdf['fields']['longitude'] = int(self.latitude * 111133 * math.cos(self.longitude))
+            sdf['fields']['longitude'] = int(self.longitude * (math.cos(self.latitude) * 111133))
 
         return sdf
 
