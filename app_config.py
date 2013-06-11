@@ -93,7 +93,7 @@ CLOUD_SEARCH_INDEX_NAME = 'nprapps-playgrounds'
 CLOUD_SEARCH_DOMAIN = 'search-nprapps-playgrounds-ujjvpbsloblpc625kcbhogeb3u.us-west-2.cloudsearch.amazonaws.com'
 CLOUD_SEARCH_DOC_DOMAIN = 'doc-nprapps-playgrounds-ujjvpbsloblpc625kcbhogeb3u.us-west-2.cloudsearch.amazonaws.com'
 CLOUD_SEARCH_DEFAULT_SEARCH_FIELD = 'full_text'
-CLOUD_SEARCH_RADIANS_SCALE = 1000
+CLOUD_SEARCH_FLOAT_SCALE = 1000
 
 """
 Utilities
