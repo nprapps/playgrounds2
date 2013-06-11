@@ -25,7 +25,7 @@ $(function() {
             // Convert to approximate meters
             var latitude_radians = Math.abs(latitude * Math.PI / 180); 
             var longitude_radians = Math.abs(longitude * Math.PI / 180);
-            var scale = APP_CONFIG.CLOUDSEARCH_RADIANS_SCALE;
+            var scale = APP_CONFIG.CLOUD_SEARCH_RADIANS_SCALE;
 
             // Compile ranking algorithm
             var rank_distance = '6371 * Math.acos(Math.sin(' + latitude_radians + ') * Math.sin(latitude / ' + scale + ') + Math.cos(' + latitude_radians + ') * Math.cos(latitude / ' + scale + ') * Math.cos((longitude / ' + scale + ') - ' + longitude_radians + '))';
