@@ -1,3 +1,5 @@
+var GEOLOCATE = Modernizr.geolocation;
+
 var $search_form = null;
 var $search_query = null;
 var $search_latitude = null;
