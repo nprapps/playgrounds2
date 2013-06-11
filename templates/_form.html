@@ -1,0 +1,11 @@
+<form id="playground-form" method="post" enctype="multipart/form-data" action="http://{{ SERVERS[0] }}/{{ PROJECT_SLUG }}/api/">
+    <ol>
+        {% for field in fields %}
+            <li{% if field.display %} {{ field.display|safe }}{% endif %}>
+                <label>{{ field.name }}</label>
+                {{ field.widget|safe }}
+            </li>
+        {% endfor %}
+    </ol>
+    <button class="btn btn-large btn-success">Save</button>
+</form>

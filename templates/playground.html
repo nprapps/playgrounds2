@@ -1,15 +1,13 @@
 {% extends '_base.html' %}
 
+{% block body_class %}playground{% endblock body_class %}
+
 {% block header_content %}
 <header>
     <div class="container">
         <div class="row">
             <div class="span12">
-                <h1>{{ playground.name }}</h1>
-                <h2>
-                    {% if playground.facility %}{{ playground.facility }}{% endif %}
-                    {% if playground.facility_type %}({{ playground.facility_type }}){% endif %}
-                </h2>
+                <h1>{{ PROJECT_NAME }}</h1>
             </div>
         </div>
     </div>
@@ -18,21 +16,70 @@
 
 
 {% block content %}
+<a href="#edit-playground" role="button" class="btn edit-playground-btn" data-toggle="modal">Edit this playground</a>
+<h1><a href="index.html">{{ playground.name }}</a></h1>
 
 <!-- Photos -->
 
 <!-- Map / Address -->
+<p>
+{% if playground.facility %}
+    {{ playground.facility }}
+    {% if playground.facility_type %}({{ playground.facility_type }}){% endif %}
+{% endif %}<br />
+{% if playground.address %}{{ playground.address }}<br />{% endif %}
+{% if playground.city %}{{ playground.city }}, {% endif %}
+{% if playground.state %}{{ playground.state }} {% endif %}
+{% if playground.zip %}{{ playground.zip }} {% endif %}
+</p>
+
+<!-- Directions -->
+<!-- if mobile -->
+
+<!-- if desktop -->
 
 <!-- Share buttons -->
 
 <!-- Categories -->
 
 <!-- Description -->
+<ul>
+    {% if playground.agency %}
+    <li class="agency">
+            <strong>Agency:</strong>
+            {{ playground.agency }}
+            {% if playground.agencytype %} ({{ playground.agencytype }}){% endif %}
+    </li>
+    {% endif %}
+    {% if playground.owner %}
+    <li class="owner">
+        <strong>Owner:</strong>
+        {{ playground.owner }}
+        {% if playground.owner_type %} ({{ playground.owner_type }}){% endif %}
+    </li>
+    {% endif %}
+    {% if playground.remarks %}
+    <li class="description">
+        <strong>Description:</strong>
+        {{ playground.remarks }}
+    </li>
+    {% endif %}
+</ul>
 
 <!-- disqus -->
 
 <!-- nearby parks -->
 
+<!-- update form -->
+<div id="edit-playground" class="update-form-modal modal hide fade">
+    <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>Edit playground</h3>
+	</div>
+	<div class="modal-body">
+		{% include "_form.html" %}
+	</div>
+</div>
 {% endblock %}
 
 
