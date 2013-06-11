@@ -13,10 +13,10 @@ database = SqliteDatabase('playgrounds.db')
 
 def unfield(field_name):
     return field_name\
-            .replace('_', ' ')\
-            .capitalize()\
-            .replace('Zip ', 'ZIP ')\
-            .replace('Url ', 'URL ')
+        .replace('_', ' ')\
+        .capitalize()\
+        .replace('Zip ', 'ZIP ')\
+        .replace('Url ', 'URL ')
 
 
 class Playground(Model):
@@ -56,7 +56,7 @@ class Playground(Model):
             field_dict['name'] = unfield(field)
             if field == 'id':
                 field_dict['display'] = 'style="display:none"'
-            field_dict['widget'] = '<input type="text" value=""></input>'
+            field_dict['widget'] = '<input type="text" name="%s" value=""></input>' % field
             fields.append(field_dict)
         return fields
 
@@ -67,7 +67,7 @@ class Playground(Model):
             field_dict['name'] = unfield(field)
             if field == 'id':
                 field_dict['display'] = 'style="display:none"'
-            field_dict['widget'] = '<input type="text" value="%s"></input>' % self.__dict__['_data'][field]
+            field_dict['widget'] = '<input type="text" name="%s" value="%s"></input>' % (field, self.__dict__['_data'][field])
             fields.append(field_dict)
         return fields
 
