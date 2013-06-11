@@ -1,5 +1,9 @@
 {% extends '_base.html' %}
 
+{% block extra_css %}
+    {{ CSS.push('css/mapbox.css') }}
+{% endblock %}
+
 {% block header_content %}
 <header>
     <div class="container">
@@ -36,6 +40,8 @@
             <button type="button" id="geolocate">Use my location</button>
             <input type="submit" value="Search" />
         </form>
+    
+        <img id="search-results-map" src="" />
 
         <ul id="search-results">
         </ul>
@@ -43,3 +49,9 @@
 </div>
 {% endblock %}
 
+{% block extra_foot %}
+<!--[if lte IE 8]>
+    <link href='css/mapbox.ie.css' rel='stylesheet' />
+<![endif]-->
+<script type="text/javascript" src="js/lib/mapbox.js"> </script>
+{% endblock extra_foot %}
