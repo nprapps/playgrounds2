@@ -42,7 +42,7 @@ $(function() {
             var scale = APP_CONFIG.CLOUD_SEARCH_RADIANS_SCALE;
 
             // Compile ranking algorithm (spherical law of cosines)
-            var rank_distance = '6371 * Math.acos(Math.sin(' + latitude_radians + ') * Math.sin(latitude / ' + scale + ') + Math.cos(' + latitude_radians + ') * Math.cos(latitude / ' + scale + ') * Math.cos((longitude / ' + scale + ') - ' + longitude_radians + '))';
+            var rank_distance = '3958.761 * Math.acos(Math.sin(' + latitude_radians + ') * Math.sin(latitude / ' + scale + ') + Math.cos(' + latitude_radians + ') * Math.cos(latitude / ' + scale + ') * Math.cos((longitude / ' + scale + ') - ' + longitude_radians + '))';
 
             params['rank'] = 'distance';
             params['rank-distance'] = rank_distance;
