@@ -2,6 +2,7 @@
 
 import datetime
 import json
+import os
 import time
 
 from flask import Flask
@@ -22,6 +23,21 @@ def _dynamic_page():
 
 @app.route('/%s/api/' % app_config.PROJECT_SLUG, methods=['POST'])
 def _api():
+
+    def write_data(payload, write_mode):
+        with open('data/updates.json', write_mode) as f:
+
+            if write_mode == 'r+':
+                filedata = f.read()
+                f.seek(0)
+                output = json.loads(filedata)
+                f.truncate()
+            else:
+                output = []
+
+            output.append(payload)
+            f.write(json.dumps(output))
+
     from flask import request
 
     if request.method == 'POST':
@@ -48,6 +64,11 @@ def _api():
                     payload['playground'][field] = None
 
             payload['playground']['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
+
+            if os.path.exists("data/updates.json"):
+                write_data(payload, 'r+')
+            else:
+                write_data(payload, 'w')
 
             return json.dumps(payload)
 
