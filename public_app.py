@@ -28,18 +28,27 @@ def _api():
 
             p = data.Playground.select()[0]
             payload = {}
+            payload['playground'] = {}
+            payload['request'] = {}
+            payload['request']['headers'] = {}
+
+            for key, value in request.headers:
+                payload['request']['headers'][key.lower().replace('-', '_')] = value
+
+            payload['request']['cookies'] = request.cookies
 
             for field in p.__dict__['_data'].keys():
 
                 try:
-                    payload[field] = int(request.form.get(field, None))
+                    payload['playground'][field] = int(request.form.get(field, None))
                 except ValueError:
-                    payload[field] = request.form.get(field, None)
+                    payload['playground'][field] = request.form.get(field, None)
 
-                if payload[field] in ['', 'None']:
-                    payload[field] = None
+                if payload['playground'][field] in ['', 'None']:
+                    payload['playground'][field] = None
 
-            payload['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
+            payload['playground']['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
+
             return json.dumps(payload)
 
 if __name__ == '__main__':
