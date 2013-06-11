@@ -54,15 +54,16 @@ $(function() {
         navigator.geolocation.getCurrentPosition(geolocated);
     });
 
+    $('#newyork').click(function() {
+        $search_latitude.val(40.7142);
+        $search_longitude.val(-74.0064);
+    });
+
     $search_form.submit(function() {
         var deployment_target = (APP_CONFIG.DEPLOYMENT_TARGET || 'staging');
         var query = $search_query.val();
         var latitude = parseFloat($search_latitude.val());
         var longitude = parseFloat($search_longitude.val());
-
-        // NEW YORK
-        var latitude = 40.7142;
-        var longitude = -74.0064;
 
         var params = {};
         var return_fields = ['name', 'city', 'state', 'latitude', 'longitude'];
@@ -103,6 +104,7 @@ $(function() {
 
         $.getJSON('/cloudsearch/2011-02-01/search', params, function(data) {
             $search_results.empty();
+            $search_results_map.attr('src', '');
             
             var markers = []; 
 
@@ -119,8 +121,6 @@ $(function() {
 
             if (latitude && markers.length > 0) {
                 $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/examples.map-4l7djmvo/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + static_map_size+ 'x' + static_map_size + '.png');
-            } else {
-                $search_results_map.attr('src', '');
             }
         });
 
