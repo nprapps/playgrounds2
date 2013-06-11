@@ -10,6 +10,15 @@ import app_config
 
 database = SqliteDatabase('playgrounds.db')
 
+
+def unfield(field_name):
+    return field_name\
+            .replace('_', ' ')\
+            .capitalize()\
+            .replace('Zip ', 'ZIP ')\
+            .replace('Url ', 'URL ')
+
+
 class Playground(Model):
     """
     The playground model for the sqlite database.
@@ -24,7 +33,7 @@ class Playground(Model):
     zip_code = CharField(null=True)
     latitude = FloatField(null=True)
     longitude = FloatField(null=True)
- 
+
     agency = CharField(null=True)
     agency_type = CharField(null=True)
 
@@ -39,6 +48,28 @@ class Playground(Model):
 
     class Meta:
         database = database
+
+    def create_form(self):
+        fields = []
+        for field in self.__dict__['_data'].keys():
+            field_dict = {}
+            field_dict['name'] = unfield(field)
+            if field == 'id':
+                field_dict['display'] = 'style="display:none"'
+            field_dict['widget'] = '<input type="text" value=""></input>'
+            fields.append(field_dict)
+        return fields
+
+    def update_form(self):
+        fields = []
+        for field in self.__dict__['_data'].keys():
+            field_dict = {}
+            field_dict['name'] = unfield(field)
+            if field == 'id':
+                field_dict['display'] = 'style="display:none"'
+            field_dict['widget'] = '<input type="text" value="%s"></input>' % self.__dict__['_data'][field]
+            fields.append(field_dict)
+        return fields
 
     def sdf(self):
         """
