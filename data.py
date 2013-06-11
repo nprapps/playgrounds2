@@ -13,10 +13,10 @@ database = SqliteDatabase('playgrounds.db')
 
 def unfield(field_name):
     return field_name\
-            .replace('_', ' ')\
-            .capitalize()\
-            .replace('Zip ', 'ZIP ')\
-            .replace('Url ', 'URL ')
+        .replace('_', ' ')\
+        .capitalize()\
+        .replace('Zip ', 'ZIP ')\
+        .replace('Url ', 'URL ')
 
 
 class Playground(Model):
@@ -56,7 +56,7 @@ class Playground(Model):
             field_dict['name'] = unfield(field)
             if field == 'id':
                 field_dict['display'] = 'style="display:none"'
-            field_dict['widget'] = '<input type="text" value=""></input>'
+            field_dict['widget'] = '<input type="text" name="%s" value=""></input>' % field
             fields.append(field_dict)
         return fields
 
@@ -67,7 +67,7 @@ class Playground(Model):
             field_dict['name'] = unfield(field)
             if field == 'id':
                 field_dict['display'] = 'style="display:none"'
-            field_dict['widget'] = '<input type="text" value="%s"></input>' % self.__dict__['_data'][field]
+            field_dict['widget'] = '<input type="text" name="%s" value="%s"></input>' % (field, self.__dict__['_data'][field])
             fields.append(field_dict)
         return fields
 
@@ -97,8 +97,8 @@ class Playground(Model):
         if self.latitude:
             # Convert to radians, scale up, convert to int and take the absolute value,
             # All in the service of storing as an accurate uint
-            sdf['fields']['latitude'] = abs(int(self.latitude * app_config.CLOUD_SEARCH_FLOAT_SCALE))
-            sdf['fields']['longitude'] = abs(int(self.longitude * app_config.CLOUD_SEARCH_FLOAT_SCALE))
+            sdf['fields']['latitude'] = abs(int((self.latitude + app_config.CLOUD_SEARCH_DEG_OFFSET) * app_config.CLOUD_SEARCH_DEG_SCALE))
+            sdf['fields']['longitude'] = abs(int((self.longitude + app_config.CLOUD_SEARCH_DEG_OFFSET) * app_config.CLOUD_SEARCH_DEG_SCALE))
 
         return sdf
 

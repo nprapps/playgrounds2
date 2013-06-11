@@ -1,4 +1,4 @@
-<form id="playground-form" method="post" enctype="multipart/form-data" action="http://{{ SERVERS[0] }}/{{ PROJECT_SLUG }}/">
+<form id="playground-form" method="post" enctype="multipart/form-data" action="http://{{ SERVERS[0] }}/{{ PROJECT_SLUG }}/api/">
     <ol>
         {% for field in fields %}
             <li{% if field.display %} {{ field.display|safe }}{% endif %}>

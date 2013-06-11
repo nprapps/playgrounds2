@@ -16,7 +16,10 @@
 
 
 {% block content %}
+
+<a href="#edit-playground" role="button" class="btn edit-playground-btn" data-toggle="modal">Edit this playground</a>
 <h1>{{ playground.name }}</h1>
+
 
 <!-- Photos -->
 
@@ -90,8 +93,15 @@
 
 
 <!-- update form -->
-{% include "_form.html" %}
-
+<div id="edit-playground" class="update-form-modal modal hide fade">
+    <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>Edit playground</h3>
+	</div>
+	<div class="modal-body">
+		{% include "_form.html" %}
+	</div>
+</div>
 {% endblock %}
 
 
