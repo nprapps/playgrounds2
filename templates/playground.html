@@ -45,30 +45,32 @@
 <ul>
     {% if playground.agency %}
     <li class="agency">
-            <strong>Agency:</strong> 
+            <strong>Agency:</strong>
             {{ playground.agency }}
             {% if playground.agencytype %} ({{ playground.agencytype }}){% endif %}
     </li>
     {% endif %}
     {% if playground.owner %}
     <li class="owner">
-        <strong>Owner:</strong> 
+        <strong>Owner:</strong>
         {{ playground.owner }}
         {% if playground.owner_type %} ({{ playground.owner_type }}){% endif %}
     </li>
     {% endif %}
     {% if playground.remarks %}
     <li class="description">
-        <strong>Description:</strong> 
+        <strong>Description:</strong>
         {{ playground.remarks }}
     </li>
     {% endif %}
 </ul>
-        
 
 <!-- disqus -->
 
 <!-- nearby parks -->
+
+<!-- update form -->
+{% include "_form.html" %}
 
 {% endblock %}
 

@@ -14,6 +14,7 @@ from render_utils import flatten_app_config, make_context
 
 app = Flask(app_config.PROJECT_NAME)
 
+
 @app.route('/')
 def index():
     """
@@ -31,8 +32,17 @@ def _playground(playground_id):
     """
     context = make_context()
     context['playground'] = data.Playground.get(id=playground_id)
+    context['fields'] = context['playground'].update_form()
 
     return render_template('playground.html', **context)
+
+@app.route('/playground/create/')
+def _playground_create():
+    p = data.Playground().select()[0]
+    context = make_context()
+    context['fields'] = p.create_form()
+
+    return render_template('create.html', **context)
 
 @app.route('/cloudsearch/<path:path>')
 def _cloudsearch_proxy(path):
