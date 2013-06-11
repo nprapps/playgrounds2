@@ -1,15 +1,26 @@
 var $search_form = null;
 var $search_query = null;
 var $search_latitude = null;
-var $serach_longitude = null;
+var $search_longitude = null;
+var $geolocate_button = null;
 var $search_results = null;
+
+function geolocated(position) { 
+    $search_latitude.val(position.coords.latitude);
+    $search_longitude.val(position.coords.longitude);
+}
 
 $(function() {
     $search_form = $('#search');
     $search_query = $('#search input[name="query"]');
     $search_latitude = $('#search input[name="latitude"]');
     $search_longitude = $('#search input[name="longitude"]');
+    $geolocate_button = $('#geolocate');
     $search_results = $('#search-results');
+
+    $geolocate_button.click(function() {
+        navigator.geolocation.getCurrentPosition(geolocated);
+    });
 
     $search_form.submit(function() {
         var deployment_target = (APP_CONFIG.DEPLOYMENT_TARGET || 'staging');
@@ -30,7 +41,7 @@ $(function() {
             var longitude_radians = Math.abs(longitude * Math.PI / 180);
             var scale = APP_CONFIG.CLOUD_SEARCH_RADIANS_SCALE;
 
-            // Compile ranking algorithm
+            // Compile ranking algorithm (spherical law of cosines)
             var rank_distance = '6371 * Math.acos(Math.sin(' + latitude_radians + ') * Math.sin(latitude / ' + scale + ') + Math.cos(' + latitude_radians + ') * Math.cos(latitude / ' + scale + ') * Math.cos((longitude / ' + scale + ') - ' + longitude_radians + '))';
 
             params['rank'] = 'distance';
@@ -54,4 +65,8 @@ $(function() {
 
         return false;
     });
+
+    /*if (Modernizr.geolocation) {
+        $geolocate_button.show();
+    }*/
 });
