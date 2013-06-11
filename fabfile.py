@@ -143,6 +143,7 @@ def render():
     jst()
 
     # Fake out deployment target
+    deployment_target = app_config.DEPLOYMENT_TARGET
     app_config.configure_targets(env.get('settings', None))
 
     app_config_js()
@@ -185,7 +186,7 @@ def render():
             f.write(content.encode('utf-8'))
 
     # Un-fake-out deployment target
-    app_config.configure_targets(app_config.DEPLOYMENT_TARGET)
+    app_config.configure_targets(deployment_target)
 
 def render_playgrounds():
     """
@@ -198,6 +199,7 @@ def render_playgrounds():
     jst()
 
     # Fake out deployment target
+    deployment_target = app_config.DEPLOYMENT_TARGET
     app_config.configure_targets(env.get('settings', None))
 
     app_config_js()
@@ -236,7 +238,7 @@ def render_playgrounds():
             f.write(content.encode('utf-8'))
 
     # Un-fake-out deployment target
-    app_config.configure_targets(app_config.DEPLOYMENT_TARGET)
+    app_config.configure_targets(deployment_target)
 
 def tests():
     """
@@ -472,6 +474,12 @@ def update_search_index():
     """
     Batch upload playgrounds to CloudSearch as SDF.
     """
+    require('settings', provided_by=[production, staging])
+
+    # Fake out deployment target
+    deployment_target = app_config.DEPLOYMENT_TARGET
+    app_config.configure_targets(env.get('settings', None))
+
     print 'Generating SDF batch...'
     sdf = [playground.sdf() for playground in data.Playground.select()]
     payload = json.dumps(sdf)
@@ -485,6 +493,9 @@ def update_search_index():
 
     print response.status_code
     print response.text
+
+    # Un-fake-out deployment target
+    app_config.configure_targets(deployment_target)
 
 def set_default_search_field():
     """

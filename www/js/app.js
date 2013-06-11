@@ -12,8 +12,11 @@ $(function() {
     $search_results = $('#search-results');
 
     $search_form.submit(function() {
+        var deployment_target = (APP_CONFIG.DEPLOYMENT_TARGET || 'staging');
+        var query = ($search_query.val() || '-nprapps');
+
         var params = {
-            'bq': 'full_text:\'' + ($search_query.val() || '-nprapps') + '\'',
+            'bq': '(and deployment_target:\'' + deployment_target + '\' full_text:\'' + query + '\')',
         };
 
         var return_fields = ['name', 'city', 'state', 'latitude', 'longitude'];

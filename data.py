@@ -46,10 +46,11 @@ class Playground(Model):
         """
         sdf = {
             'type': 'add',
-            'id': self.id,
+            'id': '%s_%i' % (app_config.DEPLOYMENT_TARGET, self.id),
             'version': int(time.time()),
             'lang': 'en',
             'fields': {
+                'deployment_target': app_config.DEPLOYMENT_TARGET,
                 'name': self.name,
                 'city': self.city,
                 'state': self.state,

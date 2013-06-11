@@ -127,6 +127,7 @@ def configure_targets(deployment_target):
     global S3_BUCKETS
     global SERVERS
     global DEBUG
+    global DEPLOYMENT_TARGET
 
     if deployment_target == 'production':
         S3_BUCKETS = PRODUCTION_S3_BUCKETS
@@ -137,10 +138,10 @@ def configure_targets(deployment_target):
         SERVERS = STAGING_SERVERS
         DEBUG = True
 
+    DEPLOYMENT_TARGET = deployment_target
+
 """
 Run automated configuration
 """
-DEPLOYMENT_TARGET = os.environ.get('DEPLOYMENT_TARGET', None)
-
-configure_targets(DEPLOYMENT_TARGET)
+configure_targets(os.environ.get('DEPLOYMENT_TARGET', None))
 
