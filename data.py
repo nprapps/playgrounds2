@@ -97,8 +97,8 @@ class Playground(Model):
         if self.latitude:
             # Convert to radians, scale up, convert to int and take the absolute value,
             # All in the service of storing as an accurate uint
-            sdf['fields']['latitude'] = abs(int(self.latitude * math.pi / 180 * app_config.CLOUD_SEARCH_RADIANS_SCALE))
-            sdf['fields']['longitude'] = abs(int(self.longitude * math.pi / 180 * app_config.CLOUD_SEARCH_RADIANS_SCALE))
+            sdf['fields']['latitude'] = abs(int(self.latitude * app_config.CLOUD_SEARCH_FLOAT_SCALE))
+            sdf['fields']['longitude'] = abs(int(self.longitude * app_config.CLOUD_SEARCH_FLOAT_SCALE))
 
         return sdf
 
