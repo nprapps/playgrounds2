@@ -109,14 +109,14 @@ $(function() {
             if (data['hits']['hit'].length > 0) {
                 var markers = []; 
 
-                _.each(data['hits']['hit'], function(hit) {
+                _.each(data['hits']['hit'], function(hit, i) {
                     var context = $.extend(APP_CONFIG, hit);
                     var html = JST.playground_item(context);
 
                     $search_results.append(html);
 
                     if (hit.data.latitude.length > 0) {
-                        markers.push('pin-m-star+ff6633(' + cloudSearchToDeg(hit.data.longitude[0]) + ',' + cloudSearchToDeg(hit.data.latitude[0]) + ')');
+                        markers.push('pin-m-' + i + '+ff6633(' + cloudSearchToDeg(hit.data.longitude[0]) + ',' + cloudSearchToDeg(hit.data.latitude[0]) + ')');
                     }
                 });
             } else {
