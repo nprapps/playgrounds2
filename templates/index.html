@@ -44,7 +44,11 @@
             <input type="submit" value="Search" />
         </form>
     
-        <img id="search-results-map" src="" />
+        <div id="search-results-map-wrapper" style="display:none;">
+            <img id="search-results-map" src="" />
+            <button type="button" id="zoom-in">Zoom in</button>
+            <button type="button" id="zoom-out">Zoom out</button>
+        </div>
 
         <ol id="search-results">
         </ol>

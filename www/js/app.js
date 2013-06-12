@@ -1,4 +1,9 @@
 var GEOLOCATE = Modernizr.geolocation;
+var RESULTS_MAP_WIDTH = 500;
+var RESULTS_MAP_HEIGHT = 500;
+var RESULTS_MAX_ZOOM = 16;
+var RESULTS_MIN_ZOOM = 10;
+var RESULTS_DEFAULT_ZOOM = 15;
 
 var $search_form = null;
 var $search_query = null;
@@ -6,10 +11,12 @@ var $search_latitude = null;
 var $search_longitude = null;
 var $geolocate_button = null;
 var $search_results = null;
+var $search_results_map_wrapper = null;
 var $search_results_map = null;
+var $zoom_in = null;
+var $zoom_out = null;
 
-var zoom = 15;
-var static_map_size = 500;
+var zoom = RESULTS_DEFAULT_ZOOM;
 var crs = null;
 
 function geolocated(position) { 
@@ -46,7 +53,10 @@ $(function() {
     $search_longitude = $('#search input[name="longitude"]');
     $geolocate_button = $('#geolocate');
     $search_results = $('#search-results');
+    $search_results_map_wrapper = $('#search-results-map-wrapper');
     $search_results_map = $('#search-results-map');
+    $zoom_in = $('#zoom-in');
+    $zoom_out = $('#zoom-out');
 
     var crs = L.CRS.EPSG3857;
 
@@ -57,6 +67,30 @@ $(function() {
     $('#newyork').click(function() {
         $search_latitude.val(40.7142);
         $search_longitude.val(-74.0064);
+    });
+
+    $zoom_in.click(function() {
+        zoom += 1;
+
+        if (zoom == RESULTS_MAX_ZOOM) {
+            $zoom_in.attr('disabled', 'disabled');
+        }
+
+        $zoom_out.removeAttr('disabled');
+
+        $search_form.submit();
+    });
+
+    $zoom_out.click(function() {
+        zoom -= 1;
+
+        if (zoom == RESULTS_MIN_ZOOM) {
+            $zoom_out.attr('disabled', 'disabled');
+        }
+
+        $zoom_in.removeAttr('disabled');
+
+        $search_form.submit();
     });
 
     $search_form.submit(function() {
@@ -77,10 +111,9 @@ $(function() {
         // If using geosearch
         if (latitude) {
             // Generate bounding box for map viewport
-            var half_map_size = static_map_size / 2;
             var point = crs.latLngToPoint(new L.LatLng(latitude, longitude), zoom);
-            var upper_left = point.subtract([half_map_size, half_map_size]);
-            var lower_right = point.add([half_map_size, half_map_size]);
+            var upper_left = point.subtract([RESULTS_MAP_WIDTH / 2, RESULTS_MAP_HEIGHT / 2]);
+            var lower_right = point.add([RESULTS_MAP_WIDTH / 2, RESULTS_MAP_HEIGHT / 2]);
             var northwest = crs.pointToLatLng(upper_left, zoom);
             var southeast = crs.pointToLatLng(lower_right, zoom);
 
@@ -105,11 +138,11 @@ $(function() {
 
         $.getJSON('/cloudsearch/2011-02-01/search', params, function(data) {
             $search_results.empty();
-            $search_results_map.hide();
-            
-            if (data['hits']['hit'].length > 0) {
-                var markers = []; 
+            $search_results_map_wrapper.hide();
 
+            var markers = []; 
+
+            if (data['hits']['hit'].length > 0) {
                 _.each(data['hits']['hit'], function(hit, i) {
                     var context = $.extend(APP_CONFIG, hit);
                     var html = JST.playground_item(context);
@@ -127,9 +160,9 @@ $(function() {
             markers.push('pin-l-star+ff6633(' + longitude + ',' + latitude + ')');
 
             if (latitude && markers.length > 0) {
-                $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/examples.map-4l7djmvo/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + static_map_size+ 'x' + static_map_size + '.png');
+                $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/examples.map-4l7djmvo/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + RESULTS_MAP_WIDTH + 'x' + RESULTS_MAP_HEIGHT + '.png');
 
-                $search_results_map.show();
+                $search_results_map_wrapper.show();
             }
         });
 
