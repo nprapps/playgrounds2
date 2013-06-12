@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
+import datetime
 from glob import glob
 import json
 import os
-from shutil import copy
+import time
 
 import boto.cloudsearch
 from fabric.api import *
@@ -475,6 +476,7 @@ def parse_inserts():
     data.parse_inserts()
 
 def update_records():
+    local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.utcnow()).timetuple()))
     local('cp data/updates.json inserts.json && rm -f data/updates.json')
     parse_inserts()
     local('rm -f inserts.json')

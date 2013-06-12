@@ -42,6 +42,7 @@ data/copy.xls
 tumblr-theme.html
 
 data/playgrounds.csv
+data/*.db
 playgrounds.db
 www/playground
 data/updates.json
