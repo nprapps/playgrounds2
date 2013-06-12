@@ -3,6 +3,7 @@
 from glob import glob
 import json
 import os
+from shutil import copy
 
 import boto.cloudsearch
 from fabric.api import *
@@ -469,6 +470,11 @@ def load_data():
 def bootstrap():
     download_data()
     load_data()
+
+def update_records():
+    local('cp data/updates.json inserts.json && rm -f data/updates.json')
+    parse_inserts()
+    local('rm -f inserts.json')
 
 def update_search_index():
     """

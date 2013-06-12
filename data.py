@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import json
 import math
 import time
 
@@ -51,14 +52,14 @@ class Playground(Model):
 
     def feature_form(self):
         fields = []
-        for f in app_config.FEATURE_LIST:
+        for f, slug in app_config.FEATURE_LIST:
             feature = PlaygroundFeature.select().where(
                 PlaygroundFeature.playground == self.id,
                 PlaygroundFeature.name == f)
             if feature.count() > 0:
                 fields.append("""
                     <label>
-                    <input type="checkbox" name="%s" disabled="disabled" checked="checked">
+                    <input type="checkbox" name="%s" checked="checked">
                         &nbsp;%s
                     </label>""" % (f.replace(' ', '-').lower(), f))
             else:
@@ -87,7 +88,10 @@ class Playground(Model):
             field_dict['name'] = unfield(field)
             if field == 'id':
                 field_dict['display'] = 'style="display:none"'
-            field_dict['widget'] = '<input type="text" name="%s" value="%s"></input>' % (field, self.__dict__['_data'][field])
+            field_value = self.__dict__['_data'][field]
+            if field_value == None:
+                field_value = ''
+            field_dict['widget'] = '<input type="text" name="%s" value="%s"></input>' % (field, field_value)
             if field in app_config.PUBLIC_FIELDS:
                 fields.append(field_dict)
         return fields
@@ -185,3 +189,29 @@ def load_playgrounds():
                 source=row['Source']
             )
 
+def parse_inserts():
+    with open('inserts.json', 'r') as jsonfile:
+        inserts = json.loads(jsonfile.read())
+    for record in inserts:
+        update_dict = {}
+        for key, value in record['playground'].items():
+            if key not in ['id', 'timestamp', 'features']:
+                if value == '':
+                    value = None
+                update_dict[key] = value
+
+        playground = Playground.get(id=int(record['playground']['id']))
+        playground.update(**update_dict).execute()
+
+        PlaygroundFeature.delete().where(PlaygroundFeature.playground == playground.id).execute()
+
+        features = record['playground']['features']
+
+        if len(features) > 0:
+            for feature in features:
+                try:
+                    PlaygroundFeature.get(PlaygroundFeature.slug == feature)
+                except PlaygroundFeature.DoesNotExist:
+                    for f, slug in app_config.FEATURE_LIST:
+                        if feature == slug:
+                            PlaygroundFeature(slug=slug, name=f, playground=playground).save()

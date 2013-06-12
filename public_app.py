@@ -74,10 +74,9 @@ def _api():
 
         print request.form
 
-        for f in app_config.FEATURE_LIST:
-            f = f.replace(' ', '-').lower()
-            if request.form.get(f, None):
-                payload['playground']['features'].append(f)
+        for f, slug in app_config.FEATURE_LIST:
+            if request.form.get(slug, None):
+                payload['playground']['features'].append(slug)
 
         if os.path.exists("data/updates.json"):
             write_data(payload, 'r+')
