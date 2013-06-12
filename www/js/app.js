@@ -5,6 +5,8 @@ var RESULTS_MAX_ZOOM = 16;
 var RESULTS_MIN_ZOOM = 10;
 var RESULTS_DEFAULT_ZOOM = 15;
 
+var LETTERS = 'abcdefghijklmnopqrstuvwxyz';
+
 var $search_form = null;
 var $search_query = null;
 var $search_latitude = null;
@@ -125,12 +127,15 @@ $(function() {
             var scale = APP_CONFIG.CLOUD_SEARCH_DEG_SCALE;
 
             // Compile ranking algorithm (spherical law of cosines)
-            var rank_distance = '3958.761 * Math.acos(Math.sin(' + latitude_radians + ') * Math.sin(((latitude / ' + scale + ') - ' + offset + ') * 3.14159 / 180) + Math.cos(' + latitude_radians + ') * Math.cos(((latitude / ' + scale + ') - ' + offset + ') * 3.14159 / 180) * Math.cos((((longitude / ' + scale + ') - ' + offset + ') * 3.14159 / 180) - ' + longitude_radians + '))';
+            // Note results are scaled up by 1000x.
+            var rank_distance = '3958.761 * Math.acos(Math.sin(' + latitude_radians + ') * Math.sin(((latitude / ' + scale + ') - ' + offset + ') * 3.14159 / 180) + Math.cos(' + latitude_radians + ') * Math.cos(((latitude / ' + scale + ') - ' + offset + ') * 3.14159 / 180) * Math.cos((((longitude / ' + scale + ') - ' + offset + ') * 3.14159 / 180) - ' + longitude_radians + ')) * 1000';
 
             params['rank'] = 'distance';
             params['rank-distance'] = rank_distance;
 
             return_fields.push('distance');
+        } else {
+            params['rank'] = 'name';
         }
 
         params['bq'] = '(and ' + query_bits.join(' ') + ')';
@@ -145,19 +150,20 @@ $(function() {
             if (data['hits']['hit'].length > 0) {
                 _.each(data['hits']['hit'], function(hit, i) {
                     var context = $.extend(APP_CONFIG, hit);
+                    context['letter'] = LETTERS[i];
                     var html = JST.playground_item(context);
 
                     $search_results.append(html);
 
                     if (hit.data.latitude.length > 0) {
-                        markers.push('pin-m-' + i + '+ff6633(' + cloudSearchToDeg(hit.data.longitude[0]) + ',' + cloudSearchToDeg(hit.data.latitude[0]) + ')');
+                        markers.push('pin-m-' + context['letter'] + '+ff6633(' + cloudSearchToDeg(hit.data.longitude[0]) + ',' + cloudSearchToDeg(hit.data.latitude[0]) + ')');
                     }
                 });
             } else {
                 $search_results.append('<li>No results</li>');
             }
 
-            markers.push('pin-l-star+ff6633(' + longitude + ',' + latitude + ')');
+            markers.push('pin-l-circle+006633(' + longitude + ',' + latitude + ')');
 
             if (latitude && markers.length > 0) {
                 $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/examples.map-4l7djmvo/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + RESULTS_MAP_WIDTH + 'x' + RESULTS_MAP_HEIGHT + '.png');
