@@ -125,12 +125,15 @@ $(function() {
             var scale = APP_CONFIG.CLOUD_SEARCH_DEG_SCALE;
 
             // Compile ranking algorithm (spherical law of cosines)
-            var rank_distance = '3958.761 * Math.acos(Math.sin(' + latitude_radians + ') * Math.sin(((latitude / ' + scale + ') - ' + offset + ') * 3.14159 / 180) + Math.cos(' + latitude_radians + ') * Math.cos(((latitude / ' + scale + ') - ' + offset + ') * 3.14159 / 180) * Math.cos((((longitude / ' + scale + ') - ' + offset + ') * 3.14159 / 180) - ' + longitude_radians + '))';
+            // Note results are scaled up by 1000x.
+            var rank_distance = '3958.761 * Math.acos(Math.sin(' + latitude_radians + ') * Math.sin(((latitude / ' + scale + ') - ' + offset + ') * 3.14159 / 180) + Math.cos(' + latitude_radians + ') * Math.cos(((latitude / ' + scale + ') - ' + offset + ') * 3.14159 / 180) * Math.cos((((longitude / ' + scale + ') - ' + offset + ') * 3.14159 / 180) - ' + longitude_radians + ')) * 1000';
 
             params['rank'] = 'distance';
             params['rank-distance'] = rank_distance;
 
             return_fields.push('distance');
+        } else {
+            params['rank'] = 'name';
         }
 
         params['bq'] = '(and ' + query_bits.join(' ') + ')';
