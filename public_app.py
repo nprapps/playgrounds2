@@ -42,35 +42,49 @@ def _api():
 
     if request.method == 'POST':
 
-            p = data.Playground.select()[0]
-            payload = {}
-            payload['playground'] = {}
-            payload['request'] = {}
-            payload['request']['headers'] = {}
+        p = data.Playground.select()[0]
+        payload = {}
+        payload['playground'] = {}
+        payload['request'] = {}
+        payload['request']['headers'] = {}
 
-            for key, value in request.headers:
-                payload['request']['headers'][key.lower().replace('-', '_')] = value
+        for key, value in request.headers:
+            payload['request']['headers'][key.lower().replace('-', '_')] = value
 
-            payload['request']['cookies'] = request.cookies
+        payload['request']['cookies'] = request.cookies
 
-            for field in p.__dict__['_data'].keys():
+        for field in p.__dict__['_data'].keys():
 
-                try:
-                    payload['playground'][field] = int(request.form.get(field, None))
-                except ValueError:
-                    payload['playground'][field] = request.form.get(field, None)
+            try:
+                payload['playground'][field] = int(request.form.get(field, None))
+            except ValueError:
+                payload['playground'][field] = request.form.get(field, None)
+            except TypeError:
+                pass
 
+            try:
                 if payload['playground'][field] in ['', 'None']:
                     payload['playground'][field] = None
+            except KeyError:
+                pass
 
-            payload['playground']['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
+        payload['playground']['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
 
-            if os.path.exists("data/updates.json"):
-                write_data(payload, 'r+')
-            else:
-                write_data(payload, 'w')
+        payload['playground']['features'] = []
 
-            return json.dumps(payload)
+        print request.form
+
+        for f in app_config.FEATURE_LIST:
+            f = f.replace(' ', '-').lower()
+            if request.form.get(f, None):
+                payload['playground']['features'].append(f)
+
+        if os.path.exists("data/updates.json"):
+            write_data(payload, 'r+')
+        else:
+            write_data(payload, 'w')
+
+        return json.dumps(payload)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8001, debug=app_config.DEBUG)

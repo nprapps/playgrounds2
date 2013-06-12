@@ -49,6 +49,25 @@ class Playground(Model):
     class Meta:
         database = database
 
+    def feature_form(self):
+        fields = []
+        for f in app_config.FEATURE_LIST:
+            feature = PlaygroundFeature.select().where(
+                PlaygroundFeature.playground == self.id,
+                PlaygroundFeature.name == f)
+            if feature.count() > 0:
+                fields.append("""
+                    <label>
+                    <input type="checkbox" name="%s" disabled="disabled" checked="checked">
+                        &nbsp;%s
+                    </label>""" % (f.replace(' ', '-').lower(), f))
+            else:
+                fields.append("""
+                    <label>
+                    <input type="checkbox" name="%s">
+                    &nbsp;%s</label>""" % (f.replace(' ', '-').lower(), f))
+        return fields
+
     def create_form(self):
         fields = []
         for field in self.__dict__['_data'].keys():
@@ -57,7 +76,8 @@ class Playground(Model):
             if field == 'id':
                 field_dict['display'] = 'style="display:none"'
             field_dict['widget'] = '<input type="text" name="%s" value=""></input>' % field
-            fields.append(field_dict)
+            if field in app_config.PUBLIC_FIELDS:
+                fields.append(field_dict)
         return fields
 
     def update_form(self):
@@ -68,7 +88,8 @@ class Playground(Model):
             if field == 'id':
                 field_dict['display'] = 'style="display:none"'
             field_dict['widget'] = '<input type="text" name="%s" value="%s"></input>' % (field, self.__dict__['_data'][field])
-            fields.append(field_dict)
+            if field in app_config.PUBLIC_FIELDS:
+                fields.append(field_dict)
         return fields
 
     def sdf(self):
@@ -111,12 +132,28 @@ class Playground(Model):
 
         return sdf
 
+
+class PlaygroundFeature(Model):
+    """
+    A feature at a single playground.
+    Feature names should be limited to app_config.FEATURE_LIST
+    """
+    name = TextField()
+    slug = TextField()
+    description = TextField(null=True)
+    playground = ForeignKeyField(Playground, cascade=False)
+
+    class Meta:
+        database = database
+
+
 def clear_playgrounds():
     """
     Clear playground data from sqlite.
     """
     try:
         Playground.drop_table()
+        PlaygroundFeature.drop_table()
     except:
         pass
 
@@ -125,6 +162,7 @@ def load_playgrounds():
     Load playground data from the CSV into sqlite.
     """
     Playground.create_table()
+    PlaygroundFeature.create_table()
 
     with open('data/playgrounds.csv') as f:
         rows = CSVKitDictReader(f)

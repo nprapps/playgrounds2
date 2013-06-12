@@ -33,6 +33,7 @@ def _playground(playground_id):
     context = make_context()
     context['playground'] = data.Playground.get(id=playground_id)
     context['fields'] = context['playground'].update_form()
+    context['features'] = context['playground'].feature_form()
 
     return render_template('playground.html', **context)
 
@@ -41,6 +42,7 @@ def _playground_create():
     p = data.Playground().select()[0]
     context = make_context()
     context['fields'] = p.create_form()
+    context['features'] = p.feature_form()
 
     return render_template('create.html', **context)
 
