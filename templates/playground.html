@@ -18,8 +18,11 @@
 {% block content %}
 
 <a href="#edit-playground" role="button" class="btn edit-playground-btn" data-toggle="modal">Edit this playground</a>
-<h1>{{ playground.name }}</h1>
-
+<h1>
+{% if playground.name %}{{ playground.name }}
+{% elif playground.facility %}Playground at {{ playground.facility }}
+{% else %}Unnamed Playground{% endif %}
+</h1>
 
 <!-- Photos -->
 
@@ -28,7 +31,8 @@
 {% if playground.facility %}
     {{ playground.facility }}
     {% if playground.facility_type %}({{ playground.facility_type }}){% endif %}
-{% endif %}<br />
+    <br />
+{% endif %}
 {% if playground.address %}{{ playground.address }}<br />{% endif %}
 {% if playground.city %}{{ playground.city }}, {% endif %}
 {% if playground.state %}{{ playground.state }} {% endif %}
@@ -36,9 +40,13 @@
 </p>
 
 <!-- Directions -->
+{% if playground.address %}
+<p><a href="https://maps.google.com/maps?saddr=&daddr={{ playground.address }}+{{ playground.city }}+{{ playground.state }}+{{ playground.zip }}&z=16" target="_blank" class="btn btn-blue">Get Driving Directions</a></p>
+{% elif playground.latitude and playground.longitude %}
+<p><a href="https://maps.google.com/maps?saddr=&daddr={{ playground.latitude }},{{ playground.longitude }}&z=16" target="_blank" class="btn btn-blue">Get Driving Directions</a></p>
+{% endif %}
 
 <!-- Share buttons -->
-<h3>Share This Park</h3>
 <ul class="social">
     <li class="twitter"><a rel="external" href="http://twitter.com/share?text={{ PROJECT_NAME }}%3A+{{ playground.name }}&amp;url={{ TWITTER.URL }}playground%2F{{ playground.id }}.html" alt="Share on Twitter" target="_blank" onclick="_gaq.push(['_trackEvent', 'Social', 'Click Twitter In Navbar', '{{ PROJECT_NAME }}']);">Share This Page On Twitter</a></li>
     <li class="facebook"><a rel="external" href="https://www.facebook.com/dialog/feed?app_id={{ FACEBOOK.APP_ID }}&amp;link={{ FACEBOOK.URL }}playground%2F{{ playground.id }}.html&amp;name={{ PROJECT_NAME }}%3A+{{ playground.name }}&amp;picture={{ FACEBOOK.IMAGE_URL }}&amp;redirect_uri={{ FACEBOOK.URL }}" alt="Share on Facebook" target="_blank" onclick="_gaq.push(['_trackEvent', 'Social', 'Click Facebook In Navbar', '{{ PROJECT_NAME }}']);">Like This Page On Facebook</a></li>
@@ -55,13 +63,14 @@
 
 <!-- Description -->
 {% if playground.remarks or playground.agency or playground.owner  %}
-<h3>About This Park</h3>
+<h3>About This Playground</h3>
 {% endif %}
 
 {% if playground.remarks %}
 <p class="description">{{ playground.remarks }}</p>
 {% endif %}
 
+{% if playground.agency or playground.owner  %}
 <ul>
     {% if playground.agency %}
     <li class="agency">
@@ -78,17 +87,24 @@
     </li>
     {% endif %}
 </ul>
+{% endif %}
+
 <!-- disqus -->
 <!-- TODO: add disqus form -->
 <h3>Leave A Note</h3>
+<p>Intro text for comments</p>
+
+<h3>Help Us Improve This Page</h3>
+<p><a href="#edit-playground" class="btn btn-blue" data-toggle="modal">Edit This Page</a></p>
+<p><a href="../about/">Learn more about NPR's accessible playgrounds project.</a></p>
 
 <!-- nearby parks -->
 <!-- TODO: list 3 parks closest to this park -->
-<h3>Nearby Parks</h3>
+<h3>Nearby Playgrounds</h3>
 <ul>
-    <li><a href="">Park Name</a> in City, State (x miles away)</li>
-    <li><a href="">Park Name</a> in City, State (x miles away)</li>
-    <li><a href="">Park Name</a> in City, State (x miles away)</li>
+    <li><a href="">Playground Name</a> in City, State <span class="distance">(x miles away)</span></li>
+    <li><a href="">Playground Name</a> in City, State <span class="distance">(x miles away)</span></li>
+    <li><a href="">Playground Name</a> in City, State <span class="distance">(x miles away)</span></li>
 </ul>
 
 
@@ -96,7 +112,7 @@
 <div id="edit-playground" class="update-form-modal modal hide fade">
     <div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		<h3>Edit playground</h3>
+		<h3>Edit Playground</h3>
 	</div>
 	<div class="modal-body">
 		{% include "_form.html" %}
