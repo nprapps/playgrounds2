@@ -11,7 +11,7 @@
     <div class="container">
         <div class="row">
             <div class="span12">
-                <h1>{{ COPY.content.header_title }}</h1>
+                <h1>{{ PROJECT_NAME }}</h1>
                 <h2>{{ COPY.content.lorem_ipsum }}</h2>
             </div>
         </div>
@@ -33,7 +33,8 @@
 {% block wide_content %}
 <div class="row">
     <div class="span12">
-        <h3>Search for a playground</h3>
+        <h3>{{ COPY.content.search_title }}</h3>
+        <p>{{ COPY.content.search_description }}</p>
 
         <form id="search">
             <label for="query">Search: <input type="text" name="query" placeholder="upper" /></label><br />
@@ -41,22 +42,23 @@
             <label for="longitude">Longitude: <input type="text" name="longitude" placeholder="95.3008" /></label><br />
             <label for="address">Address: <input type="text" name="address" placeholder="521 E Charnwood St Tyler, TX 75701" /></label><br />
             <button type="button" id="newyork" class="btn btn-blue">Use New York</button>
-            <button type="button" id="geolocate" class="btn btn-blue">Use my location</button>
-            <button type="button" id="geocode" class="btn btn-blue">Geocode address</button>
+            <button type="button" id="geolocate" class="btn btn-blue">Use My Location</button>
+            <button type="button" id="geocode" class="btn btn-blue">Geocode Address</button>
             <input type="submit" value="Search" class="btn btn-blue" />
         </form>
     
         <div id="search-results-map-wrapper" style="display:none;">
             <img id="search-results-map" src="" />
-            <button type="button" id="zoom-in" class="btn-zoom">Zoom in</button>
-            <button type="button" id="zoom-out" class="btn-zoom">Zoom out</button>
+            <button type="button" id="zoom-in" class="btn-zoom">Zoom In</button>
+            <button type="button" id="zoom-out" class="btn-zoom">Zoom Out</button>
         </div>
 
         <ul id="search-results">
         </ul>
 
         <div class="help-prompt">
-            <p>Are we missing something? Help us out and <a href="playground/create/" class="btn btn-blue">Add A Playground</a></p> 
+            <p class="prompt">Are we missing something? Help us out:</p>
+            <p><a href="playground/create/" class="btn btn-blue">Add A Playground</a></p> 
         </div>
     </div>
 </div>

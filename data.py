@@ -246,6 +246,9 @@ def load_playgrounds():
 def parse_inserts():
     with open('inserts.json', 'r') as jsonfile:
         inserts = json.loads(jsonfile.read())
+
+    updated_playgrounds = []
+
     for record in inserts:
         update_dict = {}
         for key, value in record['playground'].items():
@@ -255,8 +258,8 @@ def parse_inserts():
                 update_dict[key] = value
 
         playground = Playground.get(id=int(record['playground']['id']))
-
         playground.update(**update_dict).execute()
+        updated_playgrounds.append(playground.id)
 
         old_features = []
 
@@ -306,3 +309,5 @@ def parse_inserts():
             timestamp=int(record['playground']['timestamp']),
             log=json.dumps(revisions)
         ).save()
+
+    return updated_playgrounds
