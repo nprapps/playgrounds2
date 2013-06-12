@@ -97,14 +97,14 @@ CLOUD_SEARCH_DEG_OFFSET = 180
 CLOUD_SEARCH_DEG_SCALE = 10000
 
 FEATURE_LIST = [
-    "Smooth surface throughout",
-    "Ramps to play components",
-    "Transfer stations to play components",
-    "Accessible swing",
-    "Sound play components",
-    "Sight-impaired play components",
-    "Safety fence",
-    "Single entrance"
+    ("Smooth surface throughout", "smooth-surface-throughout"),
+    ("Ramps to play components", "ramps-to-play-components"),
+    ("Transfer stations to play components", "transfer-stations-to-play-components"),
+    ("Accessible swing", "accessible-swing"),
+    ("Sound play components", "sound-play-components"),
+    ("Sight-impaired play components", "sight-impaired-play-components"),
+    ("Safety fence", "safety-fence"),
+    ("Single entrance", "single-entrance")
 ]
 
 PUBLIC_FIELDS = [
@@ -117,7 +117,8 @@ PUBLIC_FIELDS = [
     "agency",
     "owner",
     "remarks",
-    "url"
+    "url",
+    'id'
 ]
 
 """
