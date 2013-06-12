@@ -96,6 +96,30 @@ CLOUD_SEARCH_DEFAULT_SEARCH_FIELD = 'full_text'
 CLOUD_SEARCH_DEG_OFFSET = 180
 CLOUD_SEARCH_DEG_SCALE = 10000
 
+FEATURE_LIST = [
+    "Smooth surface throughout",
+    "Ramps to play components",
+    "Transfer stations to play components",
+    "Accessible swing",
+    "Sound play components",
+    "Sight-impaired play components",
+    "Safety fence",
+    "Single entrance"
+]
+
+PUBLIC_FIELDS = [
+    "name",
+    "facility",
+    "address",
+    "city",
+    "state",
+    "zip_code",
+    "agency",
+    "owner",
+    "remarks",
+    "url"
+]
+
 """
 Utilities
 """

@@ -7,5 +7,10 @@
                 </div>
             </div>
         {% endfor %}
+        <div class="features">
+        {% for feature in features %}
+            {{ feature|safe }}
+        {% endfor %}
+        </div>
     <button class="btn btn-large btn-success">Save</button>
 </form>
