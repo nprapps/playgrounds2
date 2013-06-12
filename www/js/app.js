@@ -77,9 +77,10 @@ $(function() {
         // If using geosearch
         if (latitude) {
             // Generate bounding box for map viewport
+            var half_map_size = static_map_size / 2;
             var point = crs.latLngToPoint(new L.LatLng(latitude, longitude), zoom);
-            var upper_left = point.subtract([static_map_size, static_map_size]);
-            var lower_right = point.add([static_map_size, static_map_size]);
+            var upper_left = point.subtract([half_map_size, half_map_size]);
+            var lower_right = point.add([half_map_size, half_map_size]);
             var northwest = crs.pointToLatLng(upper_left, zoom);
             var southeast = crs.pointToLatLng(lower_right, zoom);
 
@@ -122,6 +123,8 @@ $(function() {
             } else {
                 $search_results.append('<li>No results</li>');
             }
+
+            markers.push('pin-l-star+ff6633(' + longitude + ',' + latitude + ')');
 
             if (latitude && markers.length > 0) {
                 $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/examples.map-4l7djmvo/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + static_map_size+ 'x' + static_map_size + '.png');
