@@ -68,6 +68,8 @@ def _api():
             except KeyError:
                 pass
 
+        payload['playground']['zip_code'] = str(payload['playground']['zip_code'])
+
         payload['playground']['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
 
         payload['playground']['features'] = []
