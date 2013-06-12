@@ -154,7 +154,10 @@ class Playground(Model):
         return sdf
 
     def nearby(self):
-        return Playground.raw('SELECT *, distance(?, ?, latitude, longitude) as distance FROM playground WHERE distance < ? LIMIT ?', self.latitude, self.longitude, 10, 10)
+        if not self.latitude or not self.longitude:
+            return []
+
+        return Playground.raw('SELECT *, distance(?, ?, latitude, longitude) as distance FROM playground WHERE latitude IS NOT NULL AND longitude IS NOT NULL AND id <> ? ORDER BY distance ASC LIMIT ?', self.latitude, self.longitude, self.id, 10)
 
 
 class PlaygroundFeature(Model):

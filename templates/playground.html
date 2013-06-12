@@ -102,9 +102,9 @@
 <!-- TODO: list 3 parks closest to this park -->
 <h3>{{ COPY.content.playground_nearby_title }}</h3>
 <ul>
-    <li><a href="">Playground Name</a> in City, State <span class="distance">(x miles away)</span></li>
-    <li><a href="">Playground Name</a> in City, State <span class="distance">(x miles away)</span></li>
-    <li><a href="">Playground Name</a> in City, State <span class="distance">(x miles away)</span></li>
+    {% for nearby in playground.nearby() %}
+    <li><a href="{{ url_for('_playground', playground_id=nearby.id) }}">{{ nearby.name }}</a> in {{ nearby.city }}, {{ nearby.state }} <span class="distance">({{ nearby.distance|round(1) }} miles away)</span></li>
+    {% endfor %}
 </ul>
 
 
