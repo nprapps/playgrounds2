@@ -151,6 +151,29 @@ class PlaygroundFeature(Model):
         database = database
 
 
+class Revision(Model):
+    """
+    A single atomic revision for a single playground.
+    Log should a list of dictionaries, one dictionary
+    for every field which has changed during the revision.
+    [{
+        "field": "field_name"
+        "from": "previous state of field"
+        "to": "new state of field"
+    }]
+    """
+    timestamp = IntegerField()
+    log = TextField()
+    playground = ForeignKeyField(Playground, cascade=False)
+
+    class Meta:
+        database = database
+
+    @classmethod
+    def log_dict(self):
+        return json.loads(self.log)
+
+
 def clear_playgrounds():
     """
     Clear playground data from sqlite.
@@ -158,6 +181,7 @@ def clear_playgrounds():
     try:
         Playground.drop_table()
         PlaygroundFeature.drop_table()
+        Revision.drop_table()
     except:
         pass
 
@@ -167,6 +191,7 @@ def load_playgrounds():
     """
     Playground.create_table()
     PlaygroundFeature.create_table()
+    Revision.create_table()
 
     with open('data/playgrounds.csv') as f:
         rows = CSVKitDictReader(f)
@@ -205,12 +230,18 @@ def parse_inserts():
         update_dict = {}
         for key, value in record['playground'].items():
             if key not in ['id', 'timestamp', 'features']:
-                if value == '':
+                if value == u'':
                     value = None
                 update_dict[key] = value
 
         playground = Playground.get(id=int(record['playground']['id']))
+
         playground.update(**update_dict).execute()
+
+        old_features = []
+
+        for feature in PlaygroundFeature.select().where(PlaygroundFeature.playground == playground.id):
+            old_features.append(feature.slug)
 
         PlaygroundFeature.delete().where(PlaygroundFeature.playground == playground.id).execute()
 
@@ -224,3 +255,34 @@ def parse_inserts():
                     for f, slug in app_config.FEATURE_LIST:
                         if feature == slug:
                             PlaygroundFeature(slug=slug, name=f, playground=playground).save()
+
+        revisions = []
+        old_data = playground.__dict__['_data']
+        new_data = update_dict
+
+        for key, value in new_data.items():
+            if value is None:
+                new_data[key] = ''
+
+            if old_data[key] != new_data[key]:
+                revision_dict = {}
+                revision_dict['field'] = key
+                revision_dict['from'] = old_data[key]
+                revision_dict['to'] = new_data[key]
+                revisions.append(revision_dict)
+
+        new_features = record['playground']['features']
+
+        for f, slug in app_config.FEATURE_LIST:
+            if slug in old_features:
+                if f not in new_features:
+                    revisions.append({"field": slug, "from": 1, "to": 0})
+            if slug in new_features:
+                if f not in old_features:
+                    revisions.append({"field": slug, "from": 0, "to": 1})
+
+        Revision(
+            playground=playground,
+            timestamp=int(record['playground']['timestamp']),
+            log=json.dumps(revisions)
+        ).save()

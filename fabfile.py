@@ -471,6 +471,9 @@ def bootstrap():
     download_data()
     load_data()
 
+def parse_inserts():
+    data.parse_inserts()
+
 def update_records():
     local('cp data/updates.json inserts.json && rm -f data/updates.json')
     parse_inserts()
