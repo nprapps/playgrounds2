@@ -45,4 +45,5 @@ data/playgrounds.csv
 data/*.db
 playgrounds.db
 www/playground
+www/test/test.html
 data/updates.json

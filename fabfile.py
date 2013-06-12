@@ -190,7 +190,7 @@ def render():
     # Un-fake-out deployment target
     app_config.configure_targets(deployment_target)
 
-def render_playgrounds():
+def render_playgrounds(playgrounds=None):
     """
     Render the playgrounds pages.
     """
@@ -200,20 +200,23 @@ def render_playgrounds():
     less()
     jst()
 
+    if not playgrounds:
+        playgrounds = []
+        for playground in data.Playground.select():
+            playgrounds.append(playground.id)
+
     # Fake out deployment target
     deployment_target = app_config.DEPLOYMENT_TARGET
     app_config.configure_targets(env.get('settings', None))
 
     app_config_js()
 
-    playgrounds = data.Playground.select()
-
     compiled_includes = []
 
-    for playground in playgrounds:
+    for playground_id in playgrounds:
         # Silly fix because url_for require a context
         with app.app.test_request_context() as ctx:
-            path = url_for('_playground', playground_id=playground.id)
+            path = url_for('_playground', playground_id=playground_id)
             ctx.path = path
 
             print 'Rendering %s' % path
@@ -222,7 +225,7 @@ def render_playgrounds():
             g.compiled_includes = compiled_includes
 
             view = app.__dict__['_playground']
-            content = view(playground.id)
+            content = view(playground_id)
 
             compiled_includes = g.compiled_includes
 
@@ -472,13 +475,11 @@ def bootstrap():
     download_data()
     load_data()
 
-def parse_inserts():
-    data.parse_inserts()
-
 def update_records():
     local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.utcnow()).timetuple()))
     local('cp data/updates.json inserts.json && rm -f data/updates.json')
-    parse_inserts()
+    playgrounds = data.parse_inserts()
+    render_playgrounds(playgrounds)
     local('rm -f inserts.json')
 
 def update_search_index():
