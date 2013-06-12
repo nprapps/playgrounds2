@@ -26,6 +26,9 @@ function geolocated(position) {
     $search_longitude.val(position.coords.longitude);
 }
 
+function geocoded(data) {
+}
+
 function degToRad(degree) {
     return degree * Math.PI / 180;
 }
@@ -69,6 +72,26 @@ $(function() {
     $('#newyork').click(function() {
         $search_latitude.val(40.7142);
         $search_longitude.val(-74.0064);
+    });
+
+    $('#geocode').click(function() {
+        var address = $('#search input[name="address"]').val();
+        var params = {
+            'location': address,
+            'callback': 'geocoded'
+        };
+
+        $.ajax({
+            'url': 'http://open.mapquestapi.com/geocoding/v1/address',
+            'data': params,
+            'dataType': 'jsonp',
+            'contentType': 'application/json',
+            'success': function(data) {
+                var locale = data['results'][0]['locations'][0];
+                $search_latitude.val(locale['latLng']['lat']);
+                $search_longitude.val(locale['latLng']['lng']);
+            }
+        });
     });
 
     $zoom_in.click(function() {
