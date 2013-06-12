@@ -102,6 +102,15 @@ class Playground(Model):
 
         return sdf
 
+    def delete_sdf(self):
+        sdf = {
+            'type': 'delete',
+            'id': '%s_%i' % (app_config.DEPLOYMENT_TARGET, self.id),
+            'version': int(time.time())
+        }
+
+        return sdf
+
 def clear_playgrounds():
     """
     Clear playground data from sqlite.

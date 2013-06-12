@@ -497,6 +497,32 @@ def update_search_index():
     # Un-fake-out deployment target
     app_config.configure_targets(deployment_target)
 
+def clear_search_index():
+    require('settings', provided_by=[production, staging])
+
+    _confirm("You are about to delete the %(settings)s search index for this project.\nDo you know what you're doing?" % env)
+
+    # Fake out deployment target
+    deployment_target = app_config.DEPLOYMENT_TARGET
+    app_config.configure_targets(env.get('settings', None))
+
+    print 'Generating SDF batch...'
+    sdf = [playground.delete_sdf() for playground in data.Playground.select()]
+    payload = json.dumps(sdf)
+
+    if len(payload) > 5000 * 1024:
+        print 'Exceeded 5MB limit for SDF uploads!'
+        return
+
+    print 'Uploading to CloudSearch...'
+    response = requests.post('http://%s/2011-02-01/documents/batch' % app_config.CLOUD_SEARCH_DOC_DOMAIN, data=payload, headers={ 'Content-Type': 'application/json' })
+
+    print response.status_code
+    print response.text
+
+    # Un-fake-out deployment target
+    app_config.configure_targets(deployment_target)
+
 def set_default_search_field():
     """
     Use Boto to configure CloudSearch with the default search field.
