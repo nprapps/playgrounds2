@@ -1,8 +1,21 @@
 {% extends "_base.html" %}
 
+{% block body_class %}playground{% endblock body_class %}
+
+{% block header_content %}
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <h1><a href="../../">{{ PROJECT_NAME }}</a></h1>
+            </div>
+        </div>
+    </div>
+</header>
+{% endblock %}
 
 {% block content %}
-    <h1>Add A Playground</h1>
-    <p>Intro intro intro text</p>
+    <h1>{{ COPY.content.create_title }}</h1>
+    <p>{{ COPY.content.create_description }}</p>
     {% include "_form.html" %}
 {% endblock %}

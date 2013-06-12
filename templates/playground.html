@@ -7,7 +7,7 @@
     <div class="container">
         <div class="row">
             <div class="span12">
-                <h1><a href="index.html">{{ PROJECT_NAME }}</a></h1>
+                <h1><a href="../../">{{ PROJECT_NAME }}</a></h1>
             </div>
         </div>
     </div>
@@ -91,16 +91,16 @@
 
 <!-- disqus -->
 <!-- TODO: add disqus form -->
-<h3>Leave A Note</h3>
-<p>Intro text for comments</p>
+<h3>{{ COPY.content.playground_note_title }}</h3>
+<p>{{ COPY.content.playground_note_description }}</p>
 
-<h3>Help Us Improve This Page</h3>
+<h3>{{ COPY.content.playground_help_title }}</h3>
 <p><a href="#edit-playground" class="btn btn-blue" data-toggle="modal">Edit This Page</a></p>
 <p><a href="../about/">Learn more about NPR's accessible playgrounds project.</a></p>
 
 <!-- nearby parks -->
 <!-- TODO: list 3 parks closest to this park -->
-<h3>Nearby Playgrounds</h3>
+<h3>{{ COPY.content.playground_nearby_title }}</h3>
 <ul>
     <li><a href="">Playground Name</a> in City, State <span class="distance">(x miles away)</span></li>
     <li><a href="">Playground Name</a> in City, State <span class="distance">(x miles away)</span></li>
