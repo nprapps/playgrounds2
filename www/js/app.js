@@ -54,15 +54,16 @@ $(function() {
         navigator.geolocation.getCurrentPosition(geolocated);
     });
 
+    $('#newyork').click(function() {
+        $search_latitude.val(40.7142);
+        $search_longitude.val(-74.0064);
+    });
+
     $search_form.submit(function() {
         var deployment_target = (APP_CONFIG.DEPLOYMENT_TARGET || 'staging');
         var query = $search_query.val();
         var latitude = parseFloat($search_latitude.val());
         var longitude = parseFloat($search_longitude.val());
-
-        // NEW YORK
-        var latitude = 40.7142;
-        var longitude = -74.0064;
 
         var params = {};
         var return_fields = ['name', 'city', 'state', 'latitude', 'longitude'];
@@ -103,24 +104,29 @@ $(function() {
 
         $.getJSON('/cloudsearch/2011-02-01/search', params, function(data) {
             $search_results.empty();
+            $search_results_map.hide();
             
-            var markers = []; 
+            if (data['hits']['hit'].length > 0) {
+                var markers = []; 
 
-            _.each(data['hits']['hit'], function(hit) {
-                var context = $.extend(APP_CONFIG, hit);
-                var html = JST.playground_item(context);
+                _.each(data['hits']['hit'], function(hit, i) {
+                    var context = $.extend(APP_CONFIG, hit);
+                    var html = JST.playground_item(context);
 
-                $search_results.append(html);
+                    $search_results.append(html);
 
-                if (hit.data.latitude.length > 0) {
-                    markers.push('pin-m-star+ff6633(' + cloudSearchToDeg(hit.data.longitude[0]) + ',' + cloudSearchToDeg(hit.data.latitude[0]) + ')');
-                }
-            });
+                    if (hit.data.latitude.length > 0) {
+                        markers.push('pin-m-' + i + '+ff6633(' + cloudSearchToDeg(hit.data.longitude[0]) + ',' + cloudSearchToDeg(hit.data.latitude[0]) + ')');
+                    }
+                });
+            } else {
+                $search_results.append('<li>No results</li>');
+            }
 
             if (latitude && markers.length > 0) {
                 $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/examples.map-4l7djmvo/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + static_map_size+ 'x' + static_map_size + '.png');
-            } else {
-                $search_results_map.attr('src', '');
+
+                $search_results_map.show();
             }
         });
 
