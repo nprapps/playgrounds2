@@ -85,13 +85,13 @@ class Playground(Model):
                 PlaygroundFeature.name == f)
             if feature.count() > 0:
                 fields.append("""
-                    <label>
+                    <label class="checkbox">
                     <input type="checkbox" name="%s" checked="checked">
                         &nbsp;%s
                     </label>""" % (f.replace(' ', '-').lower(), f))
             else:
                 fields.append("""
-                    <label>
+                    <label class="checkbox">
                     <input type="checkbox" name="%s">
                     &nbsp;%s</label>""" % (f.replace(' ', '-').lower(), f))
         return fields
