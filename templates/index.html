@@ -21,66 +21,56 @@
 
 
 {% block content %}
-<h3>First 10 playgrounds</h3>
+<h3>{{ COPY.content.search_title }}</h3>
+<p>{{ COPY.content.search_description }}</p>
 
-<ul>
-    {% for playground in playgrounds %}
-    <li><a href="{{ url_for('_playground', playground_id=playground.id) }}">{{ playground.name }}</a></li>
-    {% endfor %}
+<form id="search">
+    <button type="button" id="geolocate" class="btn btn-blue btn-block">Find Playgrounds Near Me</button>
+    
+    <hr />
+    
+    <h3>OR</h3>
+
+    <label for="address">Address: <input type="text" name="address" /></label><br />
+    <label for="query">Keyword: <input type="text" name="query" /></label>
+
+    <p class="example">For example, 
+        <a id="newyork">New York City</a> or
+        <a id="huntley">Deicke Park, Huntley, IL</a> or
+        <a id="zip">79410</a>
+    </p>
+
+    <div id="search-help" style="display: none;">
+        <p>Did you mean...?</p>
+        <ul>
+            <li>Blah blah, AZ</li> <!-- click to execute a search -->
+            <li>Blah blah, AZ</li> <!-- click to execute a search -->
+            <li>Blah blah, AZ</li> <!-- click to execute a search -->
+        </ul>
+    </div>
+
+    <input type="hidden" name="latitude" />
+    <input type="hidden" name="longitude" />
+    <input type="submit" value="Search" class="btn btn-blue btn-block" />
+</form>
+
+<div id="search-results-map-wrapper" style="display:none;">
+    <img id="search-results-map" src="" />
+    <button type="button" id="zoom-in" class="btn-zoom">Zoom In</button>
+    <button type="button" id="zoom-out" class="btn-zoom">Zoom Out</button>
+</div>
+
+<ul id="search-results">
 </ul>
+
+<div class="help-prompt">
+    <p class="prompt">Are we missing something? Help us out:</p>
+    <p><a href="playground/create/" class="btn btn-blue">Add A Playground</a></p> 
+</div>
 {% endblock %}
 
+
 {% block wide_content %}
-<div class="row">
-    <div class="span12">
-        <h3>{{ COPY.content.search_title }}</h3>
-        <p>{{ COPY.content.search_description }}</p>
-
-        <form id="search">
-            <button type="button" id="geolocate" class="btn btn-blue btn-block">Find Playgrounds Near Me</button>
-            
-            <hr />
-            
-            <h3>OR</h3>
-
-            <label for="query">Search: <input type="text" name="query" /></label><br />
-            <label for="address">Address: <input type="text" name="address" /></label>
-
-            <p class="example">For example, 
-                <a id="newyork">New York City</a> or
-                <a id="huntley">Deicke Park, Huntley, IL</a> or
-                <a id="zip">79410</a>
-            </p>
-
-            <div id="search-help" style="display: none;">
-                <p>Did you mean...?</p>
-                <ul>
-                    <li>Blah blah, AZ</li> <!-- click to execute a search -->
-                    <li>Blah blah, AZ</li> <!-- click to execute a search -->
-                    <li>Blah blah, AZ</li> <!-- click to execute a search -->
-                </ul>
-            </div>
-
-            <input type="hidden" name="latitude" />
-            <input type="hidden" name="longitude" />
-            <input type="submit" value="Search" class="btn btn-blue btn-block" />
-        </form>
-        
-        <div id="search-results-map-wrapper" style="display:none;">
-            <img id="search-results-map" src="" />
-            <button type="button" id="zoom-in" class="btn-zoom">Zoom In</button>
-            <button type="button" id="zoom-out" class="btn-zoom">Zoom Out</button>
-        </div>
-
-        <ul id="search-results">
-        </ul>
-
-        <div class="help-prompt">
-            <p class="prompt">Are we missing something? Help us out:</p>
-            <p><a href="playground/create/" class="btn btn-blue">Add A Playground</a></p> 
-        </div>
-    </div>
-</div>
 {% endblock %}
 
 {% block extra_foot %}
