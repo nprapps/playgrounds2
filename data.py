@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 
+import datetime
 import json
 import math
 import time
+from sets import Set
 
 from csvkit import CSVKitDictReader
+from jinja2 import Template
 from peewee import *
 from playhouse.sqlite_ext import SqliteExtDatabase
 
@@ -82,13 +85,13 @@ class Playground(Model):
                 PlaygroundFeature.name == f)
             if feature.count() > 0:
                 fields.append("""
-                    <label>
+                    <label class="checkbox">
                     <input type="checkbox" name="%s" checked="checked">
                         &nbsp;%s
                     </label>""" % (f.replace(' ', '-').lower(), f))
             else:
                 fields.append("""
-                    <label>
+                    <label class="checkbox">
                     <input type="checkbox" name="%s">
                     &nbsp;%s</label>""" % (f.replace(' ', '-').lower(), f))
         return fields
@@ -147,7 +150,8 @@ class Playground(Model):
                 'agency': self.agency,
                 'owner': self.owner,
                 'owner_type': self.owner_type,
-                'full_text': ' | '.join([self.name, self.city, self. state, self.facility, self.agency, self.owner])
+                'full_text': ' | '.join([self.name, self.city, self. state, self.facility, self.agency, self.owner]),
+                'display_name': self.display_name
             }
         }
 
@@ -168,11 +172,21 @@ class Playground(Model):
 
         return sdf
 
+    @property
+    def display_name(self):
+        if self.name:
+            return self.name
+
+        if self.facility:
+            return 'Playground at %s'  % self.facility
+
+        return 'Unnamed Playground'
+
     def nearby(self, n):
         if not self.latitude or not self.longitude:
             return []
 
-        return Playground.raw('SELECT *, distance(?, ?, latitude, longitude) as distance FROM playground WHERE latitude IS NOT NULL AND longitude IS NOT NULL AND id <> ? ORDER BY distance ASC LIMIT ?', self.latitude, self.longitude, self.id, n)
+        return Playground.raw('SELECT *, distance(?, ?, latitude, longitude) as distance FROM playground WHERE distance IS NOT NULL AND id <> ? ORDER BY distance ASC LIMIT ?', self.latitude, self.longitude, self.id, n)
 
 
 class PlaygroundFeature(Model):
@@ -212,6 +226,7 @@ class Revision(Model):
     playground = ForeignKeyField(Playground, cascade=False)
     headers = TextField(null=True)
     cookies = TextField(null=True)
+    revision_group = IntegerField()
 
     class Meta:
         database = database
@@ -275,73 +290,199 @@ def load_playgrounds():
                 source=row['Source']
             )
 
+
+def prepare_email(revision_group=None):
+    if not revision_group:
+        revision_group = 1371164033.0
+    revisions = Revision.select().where(Revision.revision_group == int(revision_group))
+    context = {}
+    context['total_revisions'] = revisions.count()
+    context['playgrounds'] = []
+
+    updated_playgrounds = Set([])
+
+    for revision in revisions:
+        updated_playgrounds.add(revision.playground.id)
+
+    for playground_id in updated_playgrounds:
+        p = Playground.get(id=playground_id)
+        playground_dict = p.__dict__['_data']
+        playground_dict['site_url'] = 'http://127.0.0.1:8000/playground/%s.html' % playground_id
+        playground_dict['revisions'] = []
+        for revision in revisions:
+            if revision.playground.id == playground_id:
+                revision_dict = {}
+                revision_dict['revision_group'] = revision_group
+                revision_dict['fields'] = revision.get_log()
+                playground_dict['revisions'].append(revision_dict)
+        context['playgrounds'].append(playground_dict)
+
+    with open('templates/_email.html', 'rb') as read_template:
+        payload = Template(read_template.read())
+
+    return payload.render(**context)
+
 def parse_inserts():
+
+    # The revision_group is a single pass of this cron job.
+    # This is a grouping of all inserts made in one run of the function.
+    revision_group = time.mktime((datetime.datetime.utcnow()).timetuple())
+
+    # Set up a blank list of inserts.
+    inserts = []
+
+    # Open the inserts file and load the JSON as the inserts list.
     with open('inserts.json', 'r') as jsonfile:
         inserts = json.loads(jsonfile.read())
 
+    # Set up a blank list of updated playgrounds.
     updated_playgrounds = []
 
+    # Okay, the fun part.
+    # Loop through the inserts.
     for record in inserts:
-        update_dict = {}
+
+        # First, capture the old data from this playground.
+        old_data = Playground.get(id=record['playground']['id']).__dict__['_data']
+
+        # This is an intermediate data store for this record.
+        record_dict = {}
+
+        # Loop through each of the key/value pairs in the playground record.
         for key, value in record['playground'].items():
+
+            # Ignore some keys because they aren't really what we want to update.
             if key not in ['id', 'timestamp', 'features']:
+
+                # If the value is blank, make it null.
+                # Life is too short for many different kinds of emptyness.
                 if value == u'':
                     value = None
-                update_dict[key] = value
 
-        playground = Playground.get(id=int(record['playground']['id']))
-        playground.update(**update_dict).execute()
-        updated_playgrounds.append(playground.id)
+                # Update the record_dict with our new key/value pair.
+                record_dict[key] = value
 
+        # Run the update query against this playground.
+        # Pushes any updates in the record_dict to the model.
+        Playground.update(**record_dict).where(Playground.id == int(record['playground']['id'])).execute()
+
+        # Add this playground to the updated_playgrounds list.
+        updated_playgrounds.append(record['playground']['id'])
+
+        # Set up the list of old features.
+        # We're going to remove them all.
+        # We'll re-add anything that stuck around.
         old_features = []
 
-        for feature in PlaygroundFeature.select().where(PlaygroundFeature.playground == playground.id):
+        # Append the old features to the list.
+        for feature in PlaygroundFeature.select().where(PlaygroundFeature.playground == record['playground']['id']):
             old_features.append(feature.slug)
 
-        PlaygroundFeature.delete().where(PlaygroundFeature.playground == playground.id).execute()
+        # Delete any features attached to this playground.
+        PlaygroundFeature.delete().where(PlaygroundFeature.playground == record['playground']['id']).execute()
 
-        features = record['playground']['features']
+        # Check to see if we have any incoming features from the inserts.json.
+        # If we don't, set up an empty list.
+        try:
+            features = record['playground']['features']
+        except KeyError:
+            features = []
 
+        # If we have an empty list, give up and go home.
+        # Otherwise, continue to the promised land.
         if len(features) > 0:
+
+            # Loop over the features list.
             for feature in features:
-                try:
-                    PlaygroundFeature.get(PlaygroundFeature.slug == feature)
-                except PlaygroundFeature.DoesNotExist:
+
+                    # Loop over the entire set of features from app_config.
+                    # This makes sure people don't submit random features.
+                    # And it lets us look up by slug, which is what we're kinda doing.
                     for f, slug in app_config.FEATURE_LIST:
+
+                        # If this feature matches the slug of something from the app_config
+                        # feature list, attach it to the playground.
                         if feature == slug:
-                            PlaygroundFeature(slug=slug, name=f, playground=playground).save()
 
+                            # Get the playground object.
+                            p = Playground.get(id=record['playground']['id'])
+
+                            # Create a new playground feature object.
+                            pf = PlaygroundFeature(slug=slug, name=f, playground=p)
+
+                            # Save it like it's hot.
+                            pf.save()
+
+        # Now, let's set up some revisions.
+        # Create a list of revisions to apply.
         revisions = []
-        old_data = playground.__dict__['_data']
-        new_data = update_dict
 
+        # Our old data was captured up top. It's called old_data.
+        # This is the new data. It's just the record_dict from above.
+        new_data = record_dict
+
+        # Loop over the key/value pairs in the new data we have.
         for key, value in new_data.items():
+
+            # Fix the variety of None that we bother maintaining.
             if value is None:
                 new_data[key] = ''
 
+            # Now, if the old data and the new data don't match, let's make a revision.
             if old_data[key] != new_data[key]:
+
+                # Set up an intermediate data structure for the revision.
                 revision_dict = {}
+
+                # Set up the data for this revision.
                 revision_dict['field'] = key
                 revision_dict['from'] = old_data[key]
                 revision_dict['to'] = new_data[key]
+
+                # Append it to the revisions list.
                 revisions.append(revision_dict)
 
-        new_features = record['playground']['features']
+        # Let's get started on features.
+        # First, let's figure out the new features coming from the Web.
+        try:
+            # If there are any new features, create a list for them.
+            new_features = record['playground']['features']
+        except:
+            # Otherwise, empty list.
+            new_features = []
 
-        for f, slug in app_config.FEATURE_LIST:
-            if slug in old_features:
-                if f not in new_features:
-                    revisions.append({"field": slug, "from": 1, "to": 0})
-            if slug in new_features:
-                if f not in old_features:
-                    revisions.append({"field": slug, "from": 0, "to": 1})
+        # First case: If the list of old and new features is identical, don't do anything.
+        if old_features != new_features:
+
+            # So there's a difference between the old and new feature lists.
+            # Since the Web can both add new features and remove old features,
+            # we have to prepare for each path.
+            # First, let's loop over the list of features that are available.
+            for f, slug in app_config.FEATURE_LIST:
+
+                # If the slug is in the old feature set, let's check it against the new.
+                if slug in old_features:
+
+                    # If it's not in the new feature set but IS in the old feature set,
+                    # let's append a revision taking it from 1 to 0.
+                    if slug not in new_features:
+                        revisions.append({"field": slug, "from": 1, "to": 0})
+
+                # Similarly, if the slug in the new feature set, let's check it agains the old.
+                if slug in new_features:
+
+                    # If it's not in the old_feature set but IS in the new feature set,
+                    # let's append a revision taking it from 0 to 1.
+                    if slug not in old_features:
+                        revisions.append({"field": slug, "from": 0, "to": 1})
 
         Revision(
-            playground=playground,
+            playground=Playground.get(id=record['playground']['id']),
             timestamp=int(record['playground']['timestamp']),
             log=json.dumps(revisions),
             headers=json.dumps(record['request']['headers']),
-            cookies=json.dumps(record['request']['cookies'])
+            cookies=json.dumps(record['request']['cookies']),
+            revision_group=revision_group
         ).save()
 
-    return updated_playgrounds
+    return (updated_playgrounds, revision_group)

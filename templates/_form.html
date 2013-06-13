@@ -1,19 +1,26 @@
-<form id="playground-form" class="form-horizontal" method="post" enctype="multipart/form-data" action="http://{{ SERVERS[0] }}/{{ PROJECT_SLUG }}/api/">
-        {% for field in fields %}
-            <div class="control-group"{% if field.display %} {{ field.display|safe }}{% endif %}>
-                <label class="control-label">{{ field.name }}</label>
-                <div class="controls">
-                	{{ field.widget|safe }}
+<div class="modal-body">
+    <form id="playground-form" class="row-fluid" method="post" enctype="multipart/form-data" action="http://{{ SERVERS[0] }}/{{ PROJECT_SLUG }}/api/">
+            <div class="basic-info span6">
+            {% for field in fields %}
+                <div class="control-group"{% if field.display %} {{ field.display|safe }}{% endif %}>
+                    <label class="control-label">{{ field.name }}</label>
+                    <div class="controls">
+                    	{{ field.widget|safe }}
+                    </div>
                 </div>
+            {% endfor %}
             </div>
-        {% endfor %}
-        <div class="features">
-        {% for feature in features %}
-            {{ feature|safe }}
-        {% endfor %}
-        </div>
-</form>
-<button id="playground-update" class="btn btn-large btn-success">Save</button>
+            <div class="features span6">
+            <h4>Features</h4>
+            {% for feature in features %}
+                {{ feature|safe }}
+            {% endfor %}
+            </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button id="playground-update" class="btn btn-large btn-success">Save</button>
+</div>
 <script type="text/javascript">
     /*
     * We only want to submit changed formfields to the server for processing.
@@ -27,7 +34,6 @@
         $(this).attr('data-changed', 'true');
     });
     $('#playground-update').on('click', function(){
-        data = {}
         $.each($('#playground-form input'), function(index, item){
             if ($(item).attr('data-changed') != 'true') {
                 $(item).removeAttr('name');
