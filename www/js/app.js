@@ -195,7 +195,7 @@ $(function() {
         return false;
     });
 
-    /*if (Modernizr.geolocation) {
+    if (GEOLOCATE) {
         $geolocate_button.show();
-    }*/
+    }
 });
