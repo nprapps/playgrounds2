@@ -140,7 +140,7 @@ function search() {
                 }
             });
         } else {
-            $search_results.append('<li>No results</li>');
+            $search_results.append('<li class="no-results">No results</li>');
         }
 
         if (latitude) {
@@ -150,6 +150,7 @@ function search() {
 
             $search_results_map_wrapper.show();
         }
+        $search_results.show();
     });
 }
 
