@@ -6,10 +6,11 @@ import time
 
 from csvkit import CSVKitDictReader
 from peewee import *
+from playhouse.sqlite_ext import SqliteExtDatabase
 
 import app_config
 
-database = SqliteDatabase('playgrounds.db')
+database = SqliteExtDatabase('playgrounds.db')
 
 
 def unfield(field_name):
@@ -18,6 +19,22 @@ def unfield(field_name):
         .capitalize()\
         .replace('Zip ', 'ZIP ')\
         .replace('Url ', 'URL ')
+
+
+@database.func()
+def distance(lat1, lng1, lat2, lng2):
+    """
+    Use spherical law of cosines to compute distance.
+    """
+    if not lat1 or not lng1 or not lat2 or not lng2:
+        return None 
+
+    lat1_rad = math.radians(lat1)
+    lng1_rad = math.radians(lng1)
+    lat2_rad = math.radians(lat2)
+    lng2_rad = math.radians(lng2)
+
+    return 3958.761 * math.acos(math.sin(lat1_rad) * math.sin(lat2_rad) + math.cos(lat1_rad) * math.cos(lat2_rad) * math.cos(lng2_rad - lng1_rad))
 
 
 class Playground(Model):
@@ -136,6 +153,12 @@ class Playground(Model):
 
         return sdf
 
+    def nearby(self):
+        if not self.latitude or not self.longitude:
+            return []
+
+        return Playground.raw('SELECT *, distance(?, ?, latitude, longitude) as distance FROM playground WHERE latitude IS NOT NULL AND longitude IS NOT NULL AND id <> ? ORDER BY distance ASC LIMIT ?', self.latitude, self.longitude, self.id, 10)
+
 
 class PlaygroundFeature(Model):
     """
@@ -226,6 +249,9 @@ def load_playgrounds():
 def parse_inserts():
     with open('inserts.json', 'r') as jsonfile:
         inserts = json.loads(jsonfile.read())
+
+    updated_playgrounds = []
+
     for record in inserts:
         update_dict = {}
         for key, value in record['playground'].items():
@@ -235,8 +261,8 @@ def parse_inserts():
                 update_dict[key] = value
 
         playground = Playground.get(id=int(record['playground']['id']))
-
         playground.update(**update_dict).execute()
+        updated_playgrounds.append(playground.id)
 
         old_features = []
 
@@ -286,3 +312,5 @@ def parse_inserts():
             timestamp=int(record['playground']['timestamp']),
             log=json.dumps(revisions)
         ).save()
+
+    return updated_playgrounds
