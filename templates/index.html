@@ -21,47 +21,52 @@
 
 
 {% block content %}
-<h3>First 10 playgrounds</h3>
+<h3>{{ COPY.content.search_title }}</h3>
+<p>{{ COPY.content.search_description }}</p>
 
-<ul>
-    {% for playground in playgrounds %}
-    <li><a href="{{ url_for('_playground', playground_id=playground.id) }}">{{ playground.name }}</a></li>
-    {% endfor %}
+<form id="search">
+    <button type="button" id="geolocate" class="btn btn-blue btn-block">Find Playgrounds Near Me</button>
+    
+    <h6 class="divider">OR</h6>
+    
+    <div class="text-search">
+        <p><label for="address">Address:</label> <input type="text" name="address" /></p>
+        <p><label for="query">Keyword:</label> <input type="text" name="query" /></p>
+
+        <p class="example">For example, 
+            <a id="newyork">New York City</a> or
+            <a id="huntley">Deicke Park, Huntley, IL</a> or
+            <a id="zip">79410</a>
+        </p>
+    </div>
+    <input type="hidden" name="latitude" />
+    <input type="hidden" name="longitude" />
+    <input type="submit" value="Search" class="btn btn-blue btn-block" />
+</form>
+
+<div id="search-help">
+    <h4>Did you mean...?</h4>
+    <ul></ul>
+</div>
+
+<div id="search-results-map-wrapper" style="display:none;">
+    <img id="search-results-map" src="" />
+    <button type="button" id="zoom-in" class="btn-zoom">Zoom In</button>
+    <button type="button" id="zoom-out" class="btn-zoom">Zoom Out</button>
+    <div id="results-address"></div>
+</div>
+
+<ul id="search-results">
 </ul>
+
+<div class="help-prompt">
+    <p class="prompt">Are we missing something? Help us out:</p>
+    <p><a href="playground/create/" class="btn btn-blue">Add A Playground</a></p> 
+</div>
 {% endblock %}
 
+
 {% block wide_content %}
-<div class="row">
-    <div class="span12">
-        <h3>{{ COPY.content.search_title }}</h3>
-        <p>{{ COPY.content.search_description }}</p>
-
-        <form id="search">
-            <label for="query">Search: <input type="text" name="query" placeholder="upper" /></label><br />
-            <label for="latitude">Latitude: <input type="text" name="latitude" placeholder="32.3511" /></label><br />
-            <label for="longitude">Longitude: <input type="text" name="longitude" placeholder="95.3008" /></label><br />
-            <label for="address">Address: <input type="text" name="address" placeholder="521 E Charnwood St Tyler, TX 75701" /></label><br />
-            <button type="button" id="newyork" class="btn btn-blue">Use New York</button>
-            <button type="button" id="geolocate" class="btn btn-blue">Use My Location</button>
-            <button type="button" id="geocode" class="btn btn-blue">Geocode Address</button>
-            <input type="submit" value="Search" class="btn btn-blue" />
-        </form>
-    
-        <div id="search-results-map-wrapper" style="display:none;">
-            <img id="search-results-map" src="" />
-            <button type="button" id="zoom-in" class="btn-zoom">Zoom In</button>
-            <button type="button" id="zoom-out" class="btn-zoom">Zoom Out</button>
-        </div>
-
-        <ul id="search-results">
-        </ul>
-
-        <div class="help-prompt">
-            <p class="prompt">Are we missing something? Help us out:</p>
-            <p><a href="playground/create/" class="btn btn-blue">Add A Playground</a></p> 
-        </div>
-    </div>
-</div>
 {% endblock %}
 
 {% block extra_foot %}

@@ -141,13 +141,60 @@ header {
 // Content
 section.the-goods { margin-top: 44px; }
 .index {
+    #search {
+        h6.divider {
+            margin: 22px 0;
+            text-align: center;
+            color: #666;
+            font-weight: bold;
+        }
+        p { 
+            margin: 0;
+
+            &.example {
+                font-size: 13px;
+                margin-top: 12px;
+                color: #555;
+            }
+        }
+        label {
+            width: 65px;
+            display: inline-block;
+            margin-right: 11px;
+        }
+        .text-search {
+            margin-bottom: 22px;
+        }
+    }
+    #search-help {
+        margin: 33px 0 0 0;
+        display: none;
+        
+        h4 {
+            margin-bottom: 22px;
+        }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            
+            > li {
+                margin-bottom: 11px;
+                color: #555;
+                font-size: 15px;
+                
+                a { font-weight: bold; }
+            }
+        }
+    }
     #search-results-map-wrapper {
-        margin-bottom: 22px;
+        margin: 22px 0;
     }
     ul#search-results {
         list-style-type: none;
         margin: 0;
         padding: 0;
+        display: none;
         
         > li {
             margin-bottom: 11px;
@@ -171,6 +218,7 @@ section.the-goods { margin-top: 44px; }
     }
     .help-prompt {
         margin-top: 33px;
+        display: none;
 
         p.prompt { 
             font-size: 13px;
