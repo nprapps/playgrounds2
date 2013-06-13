@@ -88,6 +88,8 @@ Application specific
 """
 DATA_GOOGLE_DOC_KEY = '0AlXMOHKxzQVRdGxsTklpUnBHV3NSRHFZaDVFWnQ5VVE'
 
+MAPBOX_BASE_LAYER = 'examples.map-4l7djmvo'
+
 CLOUD_SEARCH_REGION = 'us-west-2'
 CLOUD_SEARCH_INDEX_NAME = 'nprapps-playgrounds'
 CLOUD_SEARCH_DOMAIN = 'search-nprapps-playgrounds-ujjvpbsloblpc625kcbhogeb3u.us-west-2.cloudsearch.amazonaws.com'

@@ -27,6 +27,9 @@
 <!-- Photos -->
 
 <!-- Map / Address -->
+{% if playground.latitude and playground.longitude %}
+<img src="http://api.tiles.mapbox.com/v3/{{ MAPBOX_BASE_LAYER }}/pin-m-star+ff6633({{ playground.longitude }},{{ playground.latitude }})/{{ playground.longitude }},{{ playground.latitude }},15/300x300.png" />
+{% endif %}
 <p>
 {% if playground.facility %}
     {{ playground.facility }}

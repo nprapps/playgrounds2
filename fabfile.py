@@ -472,6 +472,7 @@ def load_data():
     data.load_playgrounds()
 
 def bootstrap():
+    update_copy()
     download_data()
     load_data()
 
