@@ -147,7 +147,8 @@ class Playground(Model):
                 'agency': self.agency,
                 'owner': self.owner,
                 'owner_type': self.owner_type,
-                'full_text': ' | '.join([self.name, self.city, self. state, self.facility, self.agency, self.owner])
+                'full_text': ' | '.join([self.name, self.city, self. state, self.facility, self.agency, self.owner]),
+                'display_name': self.display_name
             }
         }
 
@@ -168,11 +169,21 @@ class Playground(Model):
 
         return sdf
 
+    @property
+    def display_name(self):
+        if self.name:
+            return self.name
+
+        if self.facility:
+            return 'Playground at %s'  % self.facility
+
+        return 'Unnamed Playground'
+
     def nearby(self, n):
         if not self.latitude or not self.longitude:
             return []
 
-        return Playground.raw('SELECT *, distance(?, ?, latitude, longitude) as distance FROM playground WHERE latitude IS NOT NULL AND longitude IS NOT NULL AND id <> ? ORDER BY distance ASC LIMIT ?', self.latitude, self.longitude, self.id, n)
+        return Playground.raw('SELECT *, distance(?, ?, latitude, longitude) as distance FROM playground WHERE distance IS NOT NULL AND id <> ? ORDER BY distance ASC LIMIT ?', self.latitude, self.longitude, self.id, n)
 
 
 class PlaygroundFeature(Model):

@@ -18,11 +18,7 @@
 {% block content %}
 
 <a href="#edit-playground" role="button" class="btn edit-playground-btn" data-toggle="modal">Edit this playground</a>
-<h1>
-{% if playground.name %}{{ playground.name }}
-{% elif playground.facility %}Playground at {{ playground.facility }}
-{% else %}Unnamed Playground{% endif %}
-</h1>
+<h1>{{ playground.display_name }}</h1>
 
 <!-- Photos -->
 
@@ -105,7 +101,7 @@
 <h3>{{ COPY.content.playground_nearby_title }}</h3>
 <ul>
     {% for nearby in playground.nearby(3) %}
-    <li><a href="{{ url_for('_playground', playground_id=nearby.id) }}">{{ nearby.name }}</a> in {% if nearby.city %}{{ nearby.city }}, {% endif %}{{ nearby.state }} <span class="distance">({{ nearby.distance|round(1) }} miles away)</span></li>
+    <li><a href="{{ url_for('_playground', playground_id=nearby.id) }}">{{ nearby.display_name }}</a> in {% if nearby.city %}{{ nearby.city }}, {% endif %}{{ nearby.state }} <span class="distance">({{ nearby.distance|round(1) }} miles away)</span></li>
     {% endfor %}
 </ul>
 

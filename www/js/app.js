@@ -2,8 +2,8 @@ var GEOLOCATE = Modernizr.geolocation;
 var RESULTS_MAP_WIDTH = 500;
 var RESULTS_MAP_HEIGHT = 500;
 var RESULTS_MAX_ZOOM = 16;
-var RESULTS_MIN_ZOOM = 10;
-var RESULTS_DEFAULT_ZOOM = 15;
+var RESULTS_MIN_ZOOM = 8;
+var RESULTS_DEFAULT_ZOOM = 14;
 
 var LETTERS = 'abcdefghijklmnopqrstuvwxyz';
 
@@ -63,7 +63,7 @@ function buildCloudSearchParams() {
     var longitude = parseFloat($search_longitude.val());
 
     var params = {};
-    var return_fields = ['name', 'city', 'state', 'latitude', 'longitude'];
+    var return_fields = ['name', 'display_name', 'city', 'state', 'latitude', 'longitude'];
 
     var query_bits = ['deployment_target:\'' + deployment_target + '\''];
 

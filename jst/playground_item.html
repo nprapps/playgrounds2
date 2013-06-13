@@ -1,7 +1,7 @@
 <li>
     <a href="/playground/<%= id.split('_')[1] %>.html">
         <strong class="map-letter"><%= letter.toUpperCase() %></strong> 
-        <%= data.name[0] || 'Unnamed playground' %>
+        <%= data.display_name[0] %>
     </a>
     in <% if (data.city[0]) { %><%= data.city[0] %>, <% } %><%= data.state[0] %>
     <% if (data.distance && data.latitude.length > 0) { %> 
