@@ -14,6 +14,9 @@ database = SqliteExtDatabase('playgrounds.db')
 
 
 def unfield(field_name):
+    """
+    Turn field names into pretty titles.
+    """
     return field_name\
         .replace('_', ' ')\
         .capitalize()\
@@ -27,7 +30,7 @@ def distance(lat1, lng1, lat2, lng2):
     Use spherical law of cosines to compute distance.
     """
     if not lat1 or not lng1 or not lat2 or not lng2:
-        return None 
+        return None
 
     lat1_rad = math.radians(lat1)
     lng1_rad = math.radians(lng1)
@@ -68,6 +71,10 @@ class Playground(Model):
         database = database
 
     def feature_form(self):
+        """
+        Constructs the features form for this playground.
+        Shows the current state of attached features, if any exist.
+        """
         fields = []
         for f, slug in app_config.FEATURE_LIST:
             feature = PlaygroundFeature.select().where(
@@ -87,6 +94,9 @@ class Playground(Model):
         return fields
 
     def create_form(self):
+        """
+        Construct the creation form for this playground.
+        """
         fields = []
         for field in self.__dict__['_data'].keys():
             field_dict = {}
@@ -99,16 +109,21 @@ class Playground(Model):
         return fields
 
     def update_form(self):
+        """
+        Construct the update form for this playground.
+        """
         fields = []
         for field in self.__dict__['_data'].keys():
             field_dict = {}
             field_dict['name'] = unfield(field)
-            if field == 'id':
-                field_dict['display'] = 'style="display:none"'
             field_value = self.__dict__['_data'][field]
             if field_value == None:
                 field_value = ''
-            field_dict['widget'] = '<input type="text" name="%s" value="%s"></input>' % (field, field_value)
+            if field == 'id':
+                field_dict['display'] = 'style="display:none"'
+                field_dict['widget'] = '<input type="text" name="%s" value="%s" data-changed="true"></input>' % (field, field_value)
+            else:
+                field_dict['widget'] = '<input type="text" name="%s" value="%s"></input>' % (field, field_value)
             if field in app_config.PUBLIC_FIELDS:
                 fields.append(field_dict)
         return fields
@@ -179,22 +194,36 @@ class Revision(Model):
     A single atomic revision for a single playground.
     Log should a list of dictionaries, one dictionary
     for every field which has changed during the revision.
+    Each feature also becomes a similar dictionary, except
+    that the from/to fields become 0 or 1, depending on if
+    a feature was removed or added.
     [{
-        "field": "field_name"
-        "from": "previous state of field"
-        "to": "new state of field"
+        "field": "zip_code",
+        "from": "20005",
+        "to": "20006"
+    }, {
+        "field": "sound-play-components",
+        "from": 0,
+        "to": 1
     }]
     """
     timestamp = IntegerField()
     log = TextField()
     playground = ForeignKeyField(Playground, cascade=False)
+    headers = TextField(null=True)
+    cookies = TextField(null=True)
 
     class Meta:
         database = database
 
-    @classmethod
-    def log_dict(self):
+    def get_log(self):
         return json.loads(self.log)
+
+    def get_headers(self):
+        return json.loads(self.headers)
+
+    def get_cookies(self):
+        return json.loads(self.cookies)
 
 
 def clear_playgrounds():
@@ -310,7 +339,9 @@ def parse_inserts():
         Revision(
             playground=playground,
             timestamp=int(record['playground']['timestamp']),
-            log=json.dumps(revisions)
+            log=json.dumps(revisions),
+            headers=json.dumps(record['request']['headers']),
+            cookies=json.dumps(record['request']['cookies'])
         ).save()
 
     return updated_playgrounds
