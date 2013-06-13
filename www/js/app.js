@@ -21,19 +21,17 @@ var $zoom_out = null;
 var zoom = RESULTS_DEFAULT_ZOOM;
 var crs = null;
 
-function geolocated(position) { 
-    $search_latitude.val(position.coords.latitude);
-    $search_longitude.val(position.coords.longitude);
-}
-
-function geocoded(data) {
-}
-
 function degToRad(degree) {
+    /*
+     * Convert degrees to radians.
+     */
     return degree * Math.PI / 180;
 }
 
 function radToDeg(radian) {
+    /*
+     * Convert radians to degrees.
+     */
     return radian / Math.PI * 180;
 }
 
@@ -66,7 +64,10 @@ $(function() {
     var crs = L.CRS.EPSG3857;
 
     $geolocate_button.click(function() {
-        navigator.geolocation.getCurrentPosition(geolocated);
+        navigator.geolocation.getCurrentPosition(function(position) {
+            $search_latitude.val(position.coords.latitude);
+            $search_longitude.val(position.coords.longitude);
+        });
     });
 
     $('#newyork').click(function() {
