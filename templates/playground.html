@@ -102,11 +102,10 @@
 <p><a href="../about/">Learn more about NPR's accessible playgrounds project.</a></p>
 
 <!-- nearby parks -->
-<!-- TODO: list 3 parks closest to this park -->
 <h3>{{ COPY.content.playground_nearby_title }}</h3>
 <ul>
-    {% for nearby in playground.nearby() %}
-    <li><a href="{{ url_for('_playground', playground_id=nearby.id) }}">{{ nearby.name }}</a> in {{ nearby.city }}, {{ nearby.state }} <span class="distance">({{ nearby.distance|round(1) }} miles away)</span></li>
+    {% for nearby in playground.nearby(3) %}
+    <li><a href="{{ url_for('_playground', playground_id=nearby.id) }}">{{ nearby.name }}</a> in {% if nearby.city %}{{ nearby.city }}, {% endif %}{{ nearby.state }} <span class="distance">({{ nearby.distance|round(1) }} miles away)</span></li>
     {% endfor %}
 </ul>
 
