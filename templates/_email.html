@@ -4,8 +4,8 @@
 {% for playground in playgrounds %}
 {{ playground.name }} {{ playground.site_url }}
 {% for revision in playground.revisions %}
-    Revision: {{ revision.revision_group }}
-        {% for field in revision.fields %}{{ field.field }} changed from {{ field.from }} to {{ field.to }}
-        {% endfor %}
+Revision: {{ revision.revision_group }}
+* {% for field in revision.fields %}{{ field.field }} changed from {{ field.from }} to {{ field.to }}
+{% endfor %}
 {% endfor %}
 {% endfor %}
