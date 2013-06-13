@@ -8,6 +8,7 @@ var RESULTS_DEFAULT_ZOOM = 15;
 var LETTERS = 'abcdefghijklmnopqrstuvwxyz';
 
 var $search_form = null;
+var $search_address = null;
 var $search_query = null;
 var $search_latitude = null;
 var $search_longitude = null;
@@ -108,8 +109,49 @@ function buildMapboxPin(size, shape, color, lat, lng) {
     return 'pin-' + size + '-' + shape + '+' + color + '(' + lng + ',' + lat + ')';
 }
 
+function search() {
+    var latitude = parseFloat($search_latitude.val());
+    var longitude = parseFloat($search_longitude.val());
+
+    $.getJSON('/cloudsearch/2011-02-01/search', buildCloudSearchParams(), function(data) {
+        $search_results.empty();
+        $search_results_map_wrapper.hide();
+
+        var markers = []; 
+
+        if (data['hits']['hit'].length > 0) {
+            _.each(data['hits']['hit'], function(hit, i) {
+                var context = $.extend(APP_CONFIG, hit);
+                context['letter'] = LETTERS[i];
+
+                var html = JST.playground_item(context);
+
+                $search_results.append(html);
+
+                if (hit.data.latitude.length > 0) {
+                    var lat = cloudSearchToDeg(hit.data.latitude[0]);
+                    var lng = cloudSearchToDeg(hit.data.longitude[0]);
+
+                    markers.push(buildMapboxPin('m', context['letter'], 'ff6633', lat, lng));
+                }
+            });
+        } else {
+            $search_results.append('<li>No results</li>');
+        }
+
+        if (latitude) {
+            markers.push(buildMapboxPin('l', 'circle', '006633', latitude, longitude));
+
+            $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + APP_CONFIG.MAPBOX_BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + RESULTS_MAP_WIDTH + 'x' + RESULTS_MAP_HEIGHT + '.png');
+
+            $search_results_map_wrapper.show();
+        }
+    });
+}
+
 $(function() {
     $search_form = $('#search');
+    $search_address = $('#search input[name="address"]');
     $search_query = $('#search input[name="query"]');
     $search_latitude = $('#search input[name="latitude"]');
     $search_longitude = $('#search input[name="longitude"]');
@@ -126,28 +168,19 @@ $(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
             $search_latitude.val(position.coords.latitude);
             $search_longitude.val(position.coords.longitude);
+            $search_form.submit();
         });
     });
 
     $('#newyork').click(function() {
+        $search_query.val('');
+        $search_address.val('');
         $search_latitude.val(40.7142);
         $search_longitude.val(-74.0064);
+        $search_form.submit();
     });
 
     $('#geocode').click(function() {
-        var address = $('#search input[name="address"]').val();
-
-        $.ajax({
-            'url': 'http://open.mapquestapi.com/geocoding/v1/address',
-            'data': { 'location': address },
-            'dataType': 'jsonp',
-            'contentType': 'application/json',
-            'success': function(data) {
-                var locale = data['results'][0]['locations'][0];
-                $search_latitude.val(locale['latLng']['lat']);
-                $search_longitude.val(locale['latLng']['lng']);
-            }
-        });
     });
 
     $zoom_in.click(function() {
@@ -175,44 +208,24 @@ $(function() {
     });
 
     $search_form.submit(function() {
-        var latitude = parseFloat($search_latitude.val());
-        var longitude = parseFloat($search_longitude.val());
-
-        $.getJSON('/cloudsearch/2011-02-01/search', buildCloudSearchParams(), function(data) {
-            $search_results.empty();
-            $search_results_map_wrapper.hide();
-
-            var markers = []; 
-
-            if (data['hits']['hit'].length > 0) {
-                _.each(data['hits']['hit'], function(hit, i) {
-                    var context = $.extend(APP_CONFIG, hit);
-                    context['letter'] = LETTERS[i];
-
-                    var html = JST.playground_item(context);
-
-                    $search_results.append(html);
-
-                    if (hit.data.latitude.length > 0) {
-                        var lat = cloudSearchToDeg(hit.data.latitude[0]);
-                        var lng = cloudSearchToDeg(hit.data.longitude[0]);
-
-                        markers.push(buildMapboxPin('m', context['letter'], 'ff6633', lat, lng));
-                    }
-                });
-            } else {
-                $search_results.append('<li>No results</li>');
-            }
-
-            if (latitude) {
-                markers.push(buildMapboxPin('l', 'circle', '006633', latitude, longitude));
-
-                $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + APP_CONFIG.MAPBOX_BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + RESULTS_MAP_WIDTH + 'x' + RESULTS_MAP_HEIGHT + '.png');
-
-                $search_results_map_wrapper.show();
-            }
-        });
-
+        var address = $search_address.val();
+        
+        if (address) {
+            $.ajax({
+                'url': 'http://open.mapquestapi.com/geocoding/v1/address',
+                'data': { 'location': address },
+                'dataType': 'jsonp',
+                'contentType': 'application/json',
+                'success': function(data) {
+                    var locale = data['results'][0]['locations'][0];
+                    $search_latitude.val(locale['latLng']['lat']);
+                    $search_longitude.val(locale['latLng']['lng']);
+                    search();
+                }
+            });
+        } else {
+            search();
+        }
         return false;
     });
 

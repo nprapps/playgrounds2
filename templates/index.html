@@ -37,16 +37,33 @@
         <p>{{ COPY.content.search_description }}</p>
 
         <form id="search">
-            <label for="query">Search: <input type="text" name="query" placeholder="upper" /></label><br />
-            <label for="latitude">Latitude: <input type="text" name="latitude" placeholder="32.3511" /></label><br />
-            <label for="longitude">Longitude: <input type="text" name="longitude" placeholder="95.3008" /></label><br />
-            <label for="address">Address: <input type="text" name="address" placeholder="521 E Charnwood St Tyler, TX 75701" /></label><br />
+            <button type="button" id="geolocate" class="btn btn-blue btn-block">Find Playgrounds Near Me</button>
+            
+            <hr />
+            
+            <h3>OR</h3>
+
+            <label for="query">Search: <input type="text" name="query" /></label><br />
+            <label for="address">Address: <input type="text" name="address" /></label>
             <button type="button" id="newyork" class="btn btn-blue">Use New York</button>
-            <button type="button" id="geolocate" class="btn btn-blue">Use My Location</button>
+            <!--
             <button type="button" id="geocode" class="btn btn-blue">Geocode Address</button>
-            <input type="submit" value="Search" class="btn btn-blue" />
+            -->
+
+            <div id="search-help">
+                <p>Did you mean...?</p>
+                <ul>
+                    <li>Blah blah, AZ</li> <!-- click to execute a search -->
+                    <li>Blah blah, AZ</li> <!-- click to execute a search -->
+                    <li>Blah blah, AZ</li> <!-- click to execute a search -->
+                </ul>
+            </div>
+
+            <input type="hidden" name="latitude" />
+            <input type="hidden" name="longitude" />
+            <input type="submit" value="Search" class="btn btn-blue btn-block" />
         </form>
-    
+        
         <div id="search-results-map-wrapper" style="display:none;">
             <img id="search-results-map" src="" />
             <button type="button" id="zoom-in" class="btn-zoom">Zoom In</button>
