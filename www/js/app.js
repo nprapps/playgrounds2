@@ -8,7 +8,6 @@ var RESULTS_DEFAULT_ZOOM = 14;
 var LETTERS = 'abcdefghijklmnopqrstuvwxyz';
 
 var $search_title = null;
-var $search_description = null;
 var $search_form = null;
 var $search_address = null;
 var $search_again = null;
@@ -190,18 +189,15 @@ function show_search() {
     $search_results_wrapper.hide();
     $search_again.hide();
     $search_title.show();
-    $search_description.show();
 }
 
 function hide_search() {
     $search_form.hide();
     $search_again.show();
-    $search_description.hide();
 }
 
 $(function() {
     $search_title = $('#search-title');
-    $search_description = $('#search-description');
     $search_form = $('#search');
     $search_address = $('#search input[name="address"]');
     $search_again = $('#search-again');
