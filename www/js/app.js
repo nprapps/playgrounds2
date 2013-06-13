@@ -179,8 +179,19 @@ $(function() {
         $search_longitude.val(-74.0064);
         $search_form.submit();
     });
-
-    $('#geocode').click(function() {
+    $('#huntley').click(function() {
+        $search_query.val('');
+        $search_address.val('');
+        $search_latitude.val(42.163924);
+        $search_longitude.val(-88.433642);
+        $search_form.submit();
+    });
+    $('#zip').click(function() {
+        $search_query.val('');
+        $search_address.val('');
+        $search_latitude.val(33.568778);
+        $search_longitude.val(-101.890443);
+        $search_form.submit();
     });
 
     $zoom_in.click(function() {
@@ -217,6 +228,7 @@ $(function() {
                 'dataType': 'jsonp',
                 'contentType': 'application/json',
                 'success': function(data) {
+                    console.log(data);
                     var locale = data['results'][0]['locations'][0];
                     $search_latitude.val(locale['latLng']['lat']);
                     $search_longitude.val(locale['latLng']['lng']);
