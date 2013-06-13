@@ -7,6 +7,8 @@ var RESULTS_DEFAULT_ZOOM = 14;
 
 var LETTERS = 'abcdefghijklmnopqrstuvwxyz';
 
+var $search_title = null;
+var $search_description = null;
 var $search_form = null;
 var $search_address = null;
 var $search_again = null;
@@ -187,14 +189,19 @@ function show_search() {
     $search_form.show();
     $search_results_wrapper.hide();
     $search_again.hide();
+    $search_title.show();
+    $search_description.show();
 }
 
 function hide_search() {
     $search_form.hide();
     $search_again.show();
+    $search_description.hide();
 }
 
 $(function() {
+    $search_title = $('#search-title');
+    $search_description = $('#search-description');
     $search_form = $('#search');
     $search_address = $('#search input[name="address"]');
     $search_again = $('#search-again');
@@ -228,7 +235,7 @@ $(function() {
         $search_address.val('');
         $search_latitude.val(40.7142);
         $search_longitude.val(-74.0064);
-        $results_address.html('Showing results near New York, New York:');
+        $results_address.html('Showing results near New York, New York');
         $search_form.submit();
     });
     $('#huntley').click(function() {
@@ -236,7 +243,7 @@ $(function() {
         $search_address.val('');
         $search_latitude.val(42.163924);
         $search_longitude.val(-88.433642);
-        $results_address.html('Showing results near Huntley, Illinois:');
+        $results_address.html('Showing results near Huntley, Illinois');
         $search_form.submit();
     });
     $('#zip').click(function() {
@@ -244,7 +251,7 @@ $(function() {
         $search_address.val('');
         $search_latitude.val(33.568778);
         $search_longitude.val(-101.890443);
-        $results_address.html('Showing results near 79410, Texas:');
+        $results_address.html('Showing results near 79410, Texas');
         $search_form.submit();
     });
 
@@ -280,7 +287,7 @@ $(function() {
 
         $search_latitude.val(latitude);
         $search_longitude.val(longitude);
-        $results_address.html('Showing results near ' + address + ':');
+        $results_address.html('Showing results near ' + address);
 
         $search_help.hide();
         
@@ -322,7 +329,7 @@ $(function() {
                         $search_latitude.val(locale['latLng']['lat']);
                         $search_longitude.val(locale['latLng']['lng']);
 
-                        $results_address.html('Showing results near ' + formatMapQuestAddress(locale) + '.');
+                        $results_address.html('Showing results near ' + formatMapQuestAddress(locale));
 
                         search();
                     } else {
