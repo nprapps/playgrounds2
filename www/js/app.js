@@ -9,11 +9,13 @@ var LETTERS = 'abcdefghijklmnopqrstuvwxyz';
 
 var $search_form = null;
 var $search_address = null;
+var $search_again = null;
 var $search_divider = null;
 var $search_query = null;
 var $search_latitude = null;
 var $search_longitude = null;
 var $geolocate_button = null;
+var $search_results_wrapper = null;
 var $search_results = null;
 var $search_results_map_wrapper = null;
 var $search_results_map = null;
@@ -177,16 +179,31 @@ function search() {
         }
         $search_results.show();
     });
+
+    hide_search();
+}
+
+function show_search() {
+    $search_form.show();
+    $search_results_wrapper.hide();
+    $search_again.hide();
+}
+
+function hide_search() {
+    $search_form.hide();
+    $search_again.show();
 }
 
 $(function() {
     $search_form = $('#search');
-    $search_divider = $search_form.find('h6.divider');
     $search_address = $('#search input[name="address"]');
+    $search_again = $('#search-again');
+    $search_divider = $search_form.find('h6.divider');
     $search_query = $('#search input[name="query"]');
     $search_latitude = $('#search input[name="latitude"]');
     $search_longitude = $('#search input[name="longitude"]');
     $geolocate_button = $('#geolocate');
+    $search_results_wrapper = $('#search-results-wrapper');
     $search_results = $('#search-results');
     $search_results_map_wrapper = $('#search-results-map-wrapper');
     $search_results_map = $('#search-results-map');
@@ -211,7 +228,7 @@ $(function() {
         $search_address.val('');
         $search_latitude.val(40.7142);
         $search_longitude.val(-74.0064);
-        $results_address.html('Showing results near New York, NY.');
+        $results_address.html('Showing results near New York, New York:');
         $search_form.submit();
     });
     $('#huntley').click(function() {
@@ -219,7 +236,7 @@ $(function() {
         $search_address.val('');
         $search_latitude.val(42.163924);
         $search_longitude.val(-88.433642);
-        $results_address.html('Showing results near Huntley, IL.');
+        $results_address.html('Showing results near Huntley, Illinois:');
         $search_form.submit();
     });
     $('#zip').click(function() {
@@ -227,7 +244,7 @@ $(function() {
         $search_address.val('');
         $search_latitude.val(33.568778);
         $search_longitude.val(-101.890443);
-        $results_address.html('Showing results near 79410, TX.');
+        $results_address.html('Showing results near 79410, Texas:');
         $search_form.submit();
     });
 
@@ -263,17 +280,24 @@ $(function() {
 
         $search_latitude.val(latitude);
         $search_longitude.val(longitude);
-        $results_address.html('Showing results near ' + address + '.');
+        $results_address.html('Showing results near ' + address + ':');
 
         $search_help.hide();
         
         search();
     });
+    
+    $search_again.on('click', function() {
+        console.log('search again!');
+        show_search();
+    });
 
     $search_form.submit(function() {
+        hide_search();
         $search_help.hide();
         $search_results.empty();
         $search_results_map_wrapper.hide();
+        $search_results_wrapper.show();
 
         var address = $search_address.val();
         

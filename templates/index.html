@@ -25,7 +25,7 @@
 <p>{{ COPY.content.search_description }}</p>
 
 <form id="search">
-    <button type="button" id="geolocate" class="btn btn-blue btn-block">Find Playgrounds Near Me</button>
+    <button type="button" id="geolocate" class="btn btn-blue btn-block"><i class="icon-globe icon-white"></i>Find Playgrounds Near Me</button>
     
     <h6 class="divider">OR</h6>
     
@@ -47,24 +47,27 @@
 <div id="search-help">
     <h4>Did you mean...?</h4>
     <ul></ul>
+    <h6 class="divider">OR</h6>
 </div>
 
-<div class="search-results-wrapper">
-    <div id="search-results-map-wrapper" style="display:none;">
+<div id="search-results-wrapper">
+    <div id="search-results-map-wrapper">
+        <h4 id="results-address"></h4>
         <img id="search-results-map" src="" />
         <button type="button" id="zoom-in" class="btn-zoom">Zoom In</button>
         <button type="button" id="zoom-out" class="btn-zoom">Zoom Out</button>
-        <div id="results-address"></div>
     </div>
 
     <ul id="search-results">
     </ul>
 
-    <div class="help-prompt">
+    <div id="search-help-prompt">
         <p class="prompt">Are we missing something? Help us out:</p>
-        <p><a href="playground/create/" class="btn btn-blue">Add A Playground</a></p> 
+        <p><a href="playground/create/" class="btn btn-blue btn-block">Add A Playground</a></p> 
     </div>
 </div>
+
+<button type="button" id="search-again" class="btn btn-blue btn-block">Try Another Search</button>
 {% endblock %}
 
 

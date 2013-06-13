@@ -141,13 +141,21 @@ header {
 // Content
 section.the-goods { margin-top: 44px; }
 .index {
-    #geolocate { display: none; }
+    h6.divider {
+        margin: 22px 0;
+        text-align: center;
+        color: #666;
+        font-weight: bold;
+    }
+    #geolocate { 
+        display: none;
+        
+        i {
+            margin-right: 5px;
+        }
+    }
     #search {
         h6.divider {
-            margin: 22px 0;
-            text-align: center;
-            color: #666;
-            font-weight: bold;
             display: none;
         }
         p { 
@@ -175,6 +183,12 @@ section.the-goods { margin-top: 44px; }
         h4 {
             margin-bottom: 22px;
         }
+        h6.divider {
+            margin: 33px 0 11px 0;
+            padding-top: 11px;
+            border-top: 1px solid #eee;
+            color: #999;
+        }
         ul {
             list-style-type: none;
             margin: 0;
@@ -189,8 +203,16 @@ section.the-goods { margin-top: 44px; }
             }
         }
     }
+    #search-results-wrapper {
+        display: none;
+    }
     #search-results-map-wrapper {
         margin: 22px 0;
+        display: none;
+        
+        h4 {
+            margin-bottom: 11px;
+        }
     }
     ul#search-results {
         list-style-type: none;
@@ -218,16 +240,25 @@ section.the-goods { margin-top: 44px; }
             font-size: 12px;
         }
     }
-    .help-prompt {
-        margin-top: 33px;
-        display: none;
-
-        p.prompt { 
-            font-size: 13px;
-            font-style: italic;
-            color: #666;
-            margin-bottom: 6px;
+    #search-help-prompt {
+        margin: 44px 0 22px 0;
+        padding: 11px;
+        background-color: #f1f1f1;
+        
+        p {
+            margin: 0;
+            text-align: center;
+            
+            &.prompt {
+                font-size: 13px;
+                font-weight: bold;
+                color: #555;
+                margin-bottom: 6px;
+            }
         }
+    }
+    #search-again {
+        display: none;
     }
 }
 
