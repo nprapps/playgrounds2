@@ -1,2 +1,2 @@
-<li><a href="/playground/<%= id.split('_')[1] %>.html"><strong class="map-letter"><%= letter.toUpperCase() %></strong> <%= data.name[0] || 'Unnamed playground' %><a/> in <%= data.city[0] %>, <%= data.state[0] %><% if (data.distance && data.latitude.length > 0) { %> <span class="distance">(<%= data.distance[0] / 1000 %> miles away)</span><% } %></li>
+<li><a href="/playground/<%= id.split('_')[1] %>.html"><strong class="map-letter"><%= letter.toUpperCase() %></strong> <%= data.name[0] || 'Unnamed playground' %><a/> in <% if (data.city[0]) { %><%= data.city[0] %>, <% } %><%= data.state[0] %><% if (data.distance && data.latitude.length > 0) { %> <span class="distance">(<%= (data.distance[0] / 1000).toFixed(1) %> miles away)</span><% } %></li>
 
