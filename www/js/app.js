@@ -9,6 +9,7 @@ var LETTERS = 'abcdefghijklmnopqrstuvwxyz';
 
 var $search_form = null;
 var $search_address = null;
+var $search_divider = null;
 var $search_query = null;
 var $search_latitude = null;
 var $search_longitude = null;
@@ -180,6 +181,7 @@ function search() {
 
 $(function() {
     $search_form = $('#search');
+    $search_divider = $search_form.find('h6.divider');
     $search_address = $('#search input[name="address"]');
     $search_query = $('#search input[name="query"]');
     $search_latitude = $('#search input[name="latitude"]');
@@ -324,5 +326,6 @@ $(function() {
 
     if (GEOLOCATE) {
         $geolocate_button.show();
+        $search_divider.show();
     }
 });
