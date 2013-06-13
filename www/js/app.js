@@ -20,6 +20,7 @@ var $zoom_in = null;
 var $zoom_out = null;
 var $search_help = null;
 var $did_you_mean = null;
+var $results_address = null;
 
 var zoom = RESULTS_DEFAULT_ZOOM;
 var crs = null;
@@ -111,6 +112,29 @@ function buildMapboxPin(size, shape, color, lat, lng) {
     return 'pin-' + size + '-' + shape + '+' + color + '(' + lng + ',' + lat + ')';
 }
 
+function formatMapQuestAddress(locale) {
+    var quality = locale['geocodeQuality'];
+    var street = locale['street'];
+    var city = locale['adminArea5'];
+    var state = locale['adminArea3'];
+    var county = locale['adminArea4'];
+    var zip = locale['postalCode'];
+
+    if (quality == 'POINT' || quality == 'ADDRESS' || quality == 'INTERSECTION') {
+        return street + ' ' + city + ', ' + state + ' ' +  zip;
+    } else if (quality == 'CITY') {
+        return city + ', ' + state;
+    } else if (quality == 'COUNTY') {
+        return county + ' County, ' + state;
+    } else if (quality == 'ZIP' || quality == 'ZIP_EXTENDED') {
+        return zip + ', ' + state;
+    } else if (quality == 'STATE') {
+        return state;
+    } else {
+        return '';
+    }
+}
+
 function search() {
     /*
      * Execute a search using current UI state.
@@ -167,6 +191,7 @@ $(function() {
     $zoom_out = $('#zoom-out');
     $search_help = $('#search-help');
     $did_you_mean = $('#search-help ul');
+    $results_address = $('#results-address');
 
     crs = L.CRS.EPSG3857;
 
@@ -183,6 +208,7 @@ $(function() {
         $search_address.val('');
         $search_latitude.val(40.7142);
         $search_longitude.val(-74.0064);
+        $results_address.html('Showing results near New York, NY.');
         $search_form.submit();
     });
     $('#huntley').click(function() {
@@ -190,6 +216,7 @@ $(function() {
         $search_address.val('');
         $search_latitude.val(42.163924);
         $search_longitude.val(-88.433642);
+        $results_address.html('Showing results near Huntley, IL.');
         $search_form.submit();
     });
     $('#zip').click(function() {
@@ -197,6 +224,7 @@ $(function() {
         $search_address.val('');
         $search_latitude.val(33.568778);
         $search_longitude.val(-101.890443);
+        $results_address.html('Showing results near 79410, TX.');
         $search_form.submit();
     });
 
@@ -226,11 +254,13 @@ $(function() {
 
     $did_you_mean.on('click', 'li', function() {
         var $this = $(this);
+        var address = $this.data('address');
         var latitude = $this.data('latitude');
         var longitude = $this.data('longitude');
 
         $search_latitude.val(latitude);
         $search_longitude.val(longitude);
+        $results_address.html('Showing results near ' + address + '.');
 
         $search_help.hide();
         
@@ -251,7 +281,6 @@ $(function() {
                 'dataType': 'jsonp',
                 'contentType': 'application/json',
                 'success': function(data) {
-                    console.log(data);
                     var locales = data['results'][0]['locations'];
 
                     locales = _.filter(locales, function(locale) {
@@ -261,8 +290,12 @@ $(function() {
                     if (locales.length == 0) {
                         $did_you_mean.append('<li>No results</li>');
                     } else if (locales.length == 1) {
-                        $search_latitude.val(locales[0]['latLng']['lat']);
-                        $search_longitude.val(locales[0]['latLng']['lng']);
+                        var locale = locales[0];
+
+                        $search_latitude.val(locale['latLng']['lat']);
+                        $search_longitude.val(locale['latLng']['lng']);
+
+                        $results_address.html('Showing results near ' + formatMapQuestAddress(locale) + '.');
 
                         search();
                     } else {
@@ -270,6 +303,8 @@ $(function() {
 
                         _.each(locales, function(locale) {
                             var context = $.extend(APP_CONFIG, locale);
+                            context['address'] = formatMapQuestAddress(locale);
+
                             var html = JST.did_you_mean_item(context);
 
                             $did_you_mean.append(html);
