@@ -18,6 +18,8 @@ var $search_results_map_wrapper = null;
 var $search_results_map = null;
 var $zoom_in = null;
 var $zoom_out = null;
+var $search_help = null;
+var $did_you_mean = null;
 
 var zoom = RESULTS_DEFAULT_ZOOM;
 var crs = null;
@@ -110,12 +112,14 @@ function buildMapboxPin(size, shape, color, lat, lng) {
 }
 
 function search() {
+    /*
+     * Execute a search using current UI state.
+     */
     var latitude = parseFloat($search_latitude.val());
     var longitude = parseFloat($search_longitude.val());
 
     $.getJSON('/cloudsearch/2011-02-01/search', buildCloudSearchParams(), function(data) {
         $search_results.empty();
-        $search_results_map_wrapper.hide();
 
         var markers = []; 
 
@@ -161,6 +165,8 @@ $(function() {
     $search_results_map = $('#search-results-map');
     $zoom_in = $('#zoom-in');
     $zoom_out = $('#zoom-out');
+    $search_help = $('#search-help');
+    $did_you_mean = $('#search-help ul');
 
     crs = L.CRS.EPSG3857;
 
@@ -203,7 +209,7 @@ $(function() {
 
         $zoom_out.removeAttr('disabled');
 
-        $search_form.submit();
+        search();
     });
 
     $zoom_out.click(function() {
@@ -215,10 +221,27 @@ $(function() {
 
         $zoom_in.removeAttr('disabled');
 
-        $search_form.submit();
+        search();
+    });
+
+    $did_you_mean.on('click', 'li', function() {
+        var $this = $(this);
+        var latitude = $this.data('latitude');
+        var longitude = $this.data('longitude');
+
+        $search_latitude.val(latitude);
+        $search_longitude.val(longitude);
+
+        $search_help.hide();
+        
+        search();
     });
 
     $search_form.submit(function() {
+        $search_help.hide();
+        $search_results.empty();
+        $search_results_map_wrapper.hide();
+
         var address = $search_address.val();
         
         if (address) {
@@ -229,10 +252,32 @@ $(function() {
                 'contentType': 'application/json',
                 'success': function(data) {
                     console.log(data);
-                    var locale = data['results'][0]['locations'][0];
-                    $search_latitude.val(locale['latLng']['lat']);
-                    $search_longitude.val(locale['latLng']['lng']);
-                    search();
+                    var locales = data['results'][0]['locations'];
+
+                    locales = _.filter(locales, function(locale) {
+                        return locale['adminArea1'] == 'US';
+                    });
+
+                    if (locales.length == 0) {
+                        $did_you_mean.append('<li>No results</li>');
+                    } else if (locales.length == 1) {
+                        $search_latitude.val(locales[0]['latLng']['lat']);
+                        $search_longitude.val(locales[0]['latLng']['lng']);
+
+                        search();
+                    } else {
+                        $did_you_mean.empty();
+
+                        _.each(locales, function(locale) {
+                            var context = $.extend(APP_CONFIG, locale);
+                            var html = JST.did_you_mean_item(context);
+
+                            $did_you_mean.append(html);
+
+                        });
+
+                        $search_help.show();
+                    }
                 }
             });
         } else {

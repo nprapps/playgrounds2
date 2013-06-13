@@ -1,0 +1,15 @@
+<li data-latitude="<%= latLng.lat %>" data-longitude="<%= latLng.lng %>"><a href="javascript:;">
+<% if (geocodeQuality == 'POINT' || geocodeQuality == 'ADDRESS' || geocodeQuality == 'INTERSECTION') { %>
+<%= street %> <%= adminArea5 %>, <%= adminArea3 %> <%= postalCode %>
+<% } else if (geocodeQuality == 'CITY') { %>
+<%= adminArea5 %>, <%= adminArea3 %>
+<% } else if (geocodeQuality == 'COUNTY') { %>
+<%= adminArea4 %> County, <%= adminArea3 %>
+<% } else if (geocodeQuality == 'ZIP' || geocodeQuality == 'ZIP_EXTENDED') { %>
+<%= postalCode %>, <%= adminArea3 %>
+<% } else if (geocodeQuality == 'STATE') { %>
+<%= adminArea3 %>, <%= adminArea1 %>
+<% } else { %>
+UNSUPPORTED FORMAT (TKTK)
+<% } %>
+</a></li>
