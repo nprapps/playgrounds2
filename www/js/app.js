@@ -77,14 +77,10 @@ $(function() {
 
     $('#geocode').click(function() {
         var address = $('#search input[name="address"]').val();
-        var params = {
-            'location': address,
-            'callback': 'geocoded'
-        };
 
         $.ajax({
             'url': 'http://open.mapquestapi.com/geocoding/v1/address',
-            'data': params,
+            'data': { 'location': address },
             'dataType': 'jsonp',
             'contentType': 'application/json',
             'success': function(data) {
