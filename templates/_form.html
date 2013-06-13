@@ -27,7 +27,6 @@
         $(this).attr('data-changed', 'true');
     });
     $('#playground-update').on('click', function(){
-        data = {}
         $.each($('#playground-form input'), function(index, item){
             if ($(item).attr('data-changed') != 'true') {
                 $(item).removeAttr('name');

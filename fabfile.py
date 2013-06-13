@@ -7,7 +7,9 @@ import os
 import time
 
 import boto.cloudsearch
+import boto.ses
 from fabric.api import *
+from fabric.contrib.files import exists
 from jinja2 import Template
 import requests
 
@@ -15,6 +17,7 @@ import app
 import app_config
 import data
 from etc import github
+
 
 """
 Base configuration
@@ -214,9 +217,11 @@ def render_playgrounds(playgrounds=None):
     compiled_includes = []
 
     for playground_id in playgrounds:
+
         # Silly fix because url_for require a context
         with app.app.test_request_context() as ctx:
             path = url_for('_playground', playground_id=playground_id)
+
             ctx.path = path
 
             print 'Rendering %s' % path
@@ -462,6 +467,31 @@ def deploy(remote='origin'):
 """
 Application specific
 """
+def _send_email(addresses, payload):
+    connection = boto.ses.connect_to_region('us-east-1')
+    connection.send_email(
+        'nprapps@npr.org',
+        'Playgrounds Edits (%s)' % (datetime.datetime.utcnow().strftime('%m/%d %H:%M%p')),
+        payload,
+        addresses)
+
+def send_test_email():
+    payload = """
+    Howdy! This is a test email.
+    We'll send some more of these soon.
+    Hope you're really enjoying this!
+
+    Cheers,
+    Jeremy and Gerald
+    """
+    addresses = ['nprapps@npr.org', 'grich@npr.org', 'jbowers@npr.org']
+    _send_email(addresses, payload)
+
+def _send_revision_email(revision_group):
+    payload = data.prepare_email(revision_group)
+    addresses = ['nprapps@npr.org']
+    _send_email(addresses, payload)
+
 def download_data():
     base_url = 'https://docs.google.com/spreadsheet/pub?key=%s&single=true&gid=0&output=csv'
     doc_url = base_url % app_config.DATA_GOOGLE_DOC_KEY
@@ -477,11 +507,15 @@ def bootstrap():
     load_data()
 
 def update_records():
-    local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.utcnow()).timetuple()))
-    local('cp data/updates.json inserts.json && rm -f data/updates.json')
-    playgrounds = data.parse_inserts()
+    # local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.utcnow()).timetuple()))
+    # local('cp data/updates.json inserts.json && rm -f data/updates.json')
+    playgrounds, revision_group = data.parse_inserts()
     render_playgrounds(playgrounds)
+    _send_revision_email(revision_group)
     local('rm -f inserts.json')
+
+def prepare_email():
+    data.prepare_email()
 
 def update_search_index():
     """
