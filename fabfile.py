@@ -165,7 +165,7 @@ def render():
 
         if rule_string.endswith('/'):
             filename = 'www' + rule_string + 'index.html'
-        elif rule_string.endswith('.html'):
+        elif rule_string.endswith('.html') or rule_string.endswith('.xml'):
             filename = 'www' + rule_string
         else:
             print 'Skipping %s' % name
@@ -184,6 +184,9 @@ def render():
 
             view = app.__dict__[name]
             content = view()
+
+            if isinstance(content, tuple):
+                content = content[0]
 
             compiled_includes = g.compiled_includes
 

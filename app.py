@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
+from datetime import datetime
 import json
 from mimetypes import guess_type
 import urllib
 
 import envoy
-from flask import Flask, Markup, abort, render_template
+from flask import Flask, Markup, abort, render_template, url_for
 import requests
 
 import app_config
@@ -26,6 +27,25 @@ def index():
     context['playgrounds'] = data.Playground.select().limit(10)
 
     return render_template('index.html', **context)
+
+@app.route('/sitemap.xml')
+def sitemap():
+    """
+    Renders a sitemap.
+    """
+    context = make_context()
+    context['pages'] = []
+
+    now = datetime.now()
+
+    context['pages'].append(('/', now))
+
+    for playground in data.Playground.select():
+        context['pages'].append((url_for('_playground', playground_id=playground.id), now))
+
+    sitemap = render_template('sitemap.xml', **context)
+
+    return (sitemap, 200, { 'content-type': 'application/xml' })
 
 @app.route('/playground/<int:playground_id>.html')
 def _playground(playground_id):
