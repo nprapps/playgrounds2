@@ -507,8 +507,8 @@ def bootstrap():
     load_data()
 
 def update_records():
-    # local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.utcnow()).timetuple()))
-    # local('cp data/updates.json inserts.json && rm -f data/updates.json')
+    local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.utcnow()).timetuple()))
+    local('cp data/updates.json inserts.json && rm -f data/updates.json')
     playgrounds, revision_group = data.parse_inserts()
     render_playgrounds(playgrounds)
     _send_revision_email(revision_group)
