@@ -487,12 +487,12 @@ def send_test_email():
     Cheers,
     Jeremy and Gerald
     """
-    addresses = ['nprapps@npr.org', 'grich@npr.org', 'jbowers@npr.org']
+    addresses = ['grich@npr.org']
     _send_email(addresses, payload)
 
 def _send_revision_email(revision_group):
     payload = data.prepare_email(revision_group)
-    addresses = ['nprapps@npr.org']
+    addresses = ['grich@npr.org']
     _send_email(addresses, payload)
 
 def download_data():
