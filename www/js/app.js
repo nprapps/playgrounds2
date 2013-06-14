@@ -356,5 +356,5 @@ $(function() {
         $search_divider.show();
     }
 
-//    $('#newyork').trigger('click');
+    $('#newyork').trigger('click');
 });
