@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from datetime import datetime
+from datetime import date
 import json
 from mimetypes import guess_type
 import urllib
@@ -36,7 +36,7 @@ def sitemap():
     context = make_context()
     context['pages'] = []
 
-    now = datetime.now()
+    now = date.today().isoformat()
 
     context['pages'].append(('/', now))
 
