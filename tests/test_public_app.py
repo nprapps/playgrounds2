@@ -8,7 +8,7 @@ from flask import url_for
 
 import public_app
 
-class IndexTestCase(unittest.TestCase):
+class ApiTestCase(unittest.TestCase):
     """
     Test the index page.
     """
