@@ -35,5 +35,37 @@ class UpdatesTestCase(unittest.TestCase):
 
         self.assertEqual(len(non_duplicate), playgrounds.count())
 
+class EmailTestCase(unittest.TestCase):
+    """
+    Test send revisions email.
+    """
+    def setUp(self):
+        peewee.logger.setLevel(100)
+
+    def tearDown(self):
+        pass
+
+    def test_prepare_email(self):
+        playground = data.Playground.get(id=1)
+        
+        log = '''[{
+            "field": "name",
+            "from": "Strong Reach Playground",
+            "to": "Test Playground" 
+        }]'''
+
+        data.Revision(
+            playground=playground,
+            timestamp=0,
+            log=log,
+            headers='',
+            cookies='',
+            revision_group=1
+        ).save()
+
+        body = data.prepare_email(1)
+        
+        self.assertTrue(body.find(playground.name) >= 0)
+
 if __name__ == '__main__':
     unittest.main()
