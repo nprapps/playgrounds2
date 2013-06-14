@@ -9,7 +9,6 @@ import time
 import boto.cloudsearch
 import boto.ses
 from fabric.api import *
-from fabric.contrib.files import exists
 from jinja2 import Template
 import requests
 
@@ -487,35 +486,47 @@ def send_test_email():
     Cheers,
     Jeremy and Gerald
     """
-    addresses = ['nprapps@npr.org', 'grich@npr.org', 'jbowers@npr.org']
+    addresses = ['grich@npr.org']
     _send_email(addresses, payload)
 
 def _send_revision_email(revision_group):
     payload = data.prepare_email(revision_group)
-    addresses = ['nprapps@npr.org']
+    addresses = ['grich@npr.org']
     _send_email(addresses, payload)
 
 def download_data():
+    """
+    Download the latest playgrounds data CSV.
+    """
     base_url = 'https://docs.google.com/spreadsheet/pub?key=%s&single=true&gid=0&output=csv'
     doc_url = base_url % app_config.DATA_GOOGLE_DOC_KEY
     local('curl -o data/playgrounds.csv "%s"' % doc_url)
 
 def load_data():
+    """
+    Clear and reload playground data from CSV into sqlite.
+    """
     data.clear_playgrounds()
     data.load_playgrounds()
 
 def bootstrap():
+    """
+    Get and load all data required to make the app run.
+    """
     update_copy()
     download_data()
     load_data()
 
 def update_records():
+    """
+    Parse any updates waiting to be processed, rerender playgrounds and send notification emails.
+    """
     local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.utcnow()).timetuple()))
-    local('cp data/updates.json inserts.json && rm -f data/updates.json')
-    playgrounds, revision_group = data.parse_inserts()
+    local('cp data/updates.json updates-in-progress.json && rm -f data/updates.json')
+    playgrounds, revision_group = data.parse_updates()
     render_playgrounds(playgrounds)
     _send_revision_email(revision_group)
-    local('rm -f inserts.json')
+    local('rm -f updates-in-progress.json')
 
 def prepare_email():
     data.prepare_email()
