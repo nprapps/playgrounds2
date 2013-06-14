@@ -265,7 +265,7 @@ def load_playgrounds():
 
         for row in rows:
             if row['Duplicate'] == 'TRUE':
-                print 'Skipping duplicate: %s' % row['NAME']
+                #print 'Skipping duplicate: %s' % row['NAME']
                 continue
 
             Playground.create(
