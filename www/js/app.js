@@ -223,35 +223,35 @@ $(function() {
 
     $geolocate_button.click(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
+            hide_search();
+            $search_help.hide();
+            $search_results.empty();
+            $search_results_map_wrapper.hide();
+            $results_address.hide();
+            $search_results_wrapper.show();
+            
+            $results_address.text('Showing results near you.');
+
             $search_latitude.val(position.coords.latitude);
             $search_longitude.val(position.coords.longitude);
-            $search_form.submit();
+            search();
         });
         $results_address.html('Showing results nearby');
     });
 
     $('#newyork').click(function() {
         $search_query.val('');
-        $search_address.val('');
-        $search_latitude.val(40.7142);
-        $search_longitude.val(-74.0064);
-        $results_address.html('Showing results near New York, New York');
+        $search_address.val('New York City, New York');
         $search_form.submit();
     });
     $('#huntley').click(function() {
         $search_query.val('');
-        $search_address.val('');
-        $search_latitude.val(42.163924);
-        $search_longitude.val(-88.433642);
-        $results_address.html('Showing results near Huntley, Illinois');
+        $search_address.val('Deicke Park, Huntley, Illinois');
         $search_form.submit();
     });
     $('#zip').click(function() {
         $search_query.val('');
-        $search_address.val('');
-        $search_latitude.val(33.568778);
-        $search_longitude.val(-101.890443);
-        $results_address.html('Showing results near 79410, Texas');
+        $search_address.val('79410');
         $search_form.submit();
     });
 
@@ -308,7 +308,7 @@ $(function() {
         $search_results_wrapper.show();
 
         var address = $search_address.val();
-        
+
         if (address) {
             $.ajax({
                 'url': 'http://open.mapquestapi.com/geocoding/v1/address',
@@ -352,6 +352,8 @@ $(function() {
                 }
             });
         } else {
+            $search_latitude.val('');
+            $search_longitude.val('');
             search();
         }
         return false;
