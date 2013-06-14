@@ -265,7 +265,7 @@ def load_playgrounds():
 
         for row in rows:
             if row['Duplicate'] == 'TRUE':
-                print 'Skipping duplicate: %s' % row['NAME']
+                #print 'Skipping duplicate: %s' % row['NAME']
                 continue
 
             Playground.create(
@@ -291,9 +291,7 @@ def load_playgrounds():
             )
 
 
-def prepare_email(revision_group=None):
-    if not revision_group:
-        revision_group = 1371164033.0
+def prepare_email(revision_group):
     revisions = Revision.select().where(Revision.revision_group == int(revision_group))
     context = {}
     context['total_revisions'] = revisions.count()

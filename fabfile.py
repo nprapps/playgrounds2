@@ -528,9 +528,6 @@ def update_records():
     _send_revision_email(revision_group)
     local('rm -f updates-in-progress.json')
 
-def prepare_email():
-    data.prepare_email()
-
 def update_search_index():
     """
     Batch upload playgrounds to CloudSearch as SDF.
