@@ -1,11 +1,11 @@
 {{ playgrounds|length }} playgrounds were changed.
 {{ total_revisions }} total revisions were made.
-
 {% for playground in playgrounds %}
-{{ playground.name }} {{ playground.site_url }}
+{{ playground.name }} 
+{{ playground.site_url }}
 {% for revision in playground.revisions %}
 Revision: {{ revision.revision_group }}
-* {% for field in revision.fields %}{{ field.field }} changed from {{ field.from }} to {{ field.to }}
+{% for field in revision.fields %} * {{ field.field }} changed from {{ field.from }} to {{ field.to }}
 {% endfor %}
 {% endfor %}
 {% endfor %}
