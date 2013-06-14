@@ -6,7 +6,6 @@ import unittest
 
 from flask import url_for
 
-import app_config
 import public_app
 
 class IndexTestCase(unittest.TestCase):
