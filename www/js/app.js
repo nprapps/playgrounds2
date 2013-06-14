@@ -355,4 +355,6 @@ $(function() {
         $geolocate_button.show();
         $search_divider.show();
     }
+
+//    $('#newyork').trigger('click');
 });

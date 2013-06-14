@@ -220,10 +220,39 @@ section.the-goods { margin-top: 44px; }
     }
     #search-results-map-wrapper {
         margin: 22px 0;
+        position: relative;
         display: none;
         
         h4 {
             margin-bottom: 11px;
+        }
+        
+        .zoom-buttons {
+            position: absolute;
+            top: 11px;
+            left: 11px;
+            width: 44px;
+        }
+        .btn-zoom {
+            width: 33px;
+            height: 33px;
+            line-height: 33px;
+            padding: 0;
+            overflow: hidden;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            color: #555;
+            background-color: rgba(255,255,255,0.8);
+            display: block;
+            border: 1px solid #aaa;
+        }
+        #zoom-in {
+            border-radius: 4px 4px 0 0;
+        }
+        #zoom-out {
+            border-radius: 0 0 4px 4px;
+            border-top: none;
         }
     }
     ul#search-results {
