@@ -23,6 +23,7 @@ var $search_results_map = null;
 var $zoom_in = null;
 var $zoom_out = null;
 var $search_help = null;
+var $search_help_us = null;
 var $did_you_mean = null;
 var $results_address = null;
 
@@ -177,7 +178,7 @@ function search() {
             $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + APP_CONFIG.MAPBOX_BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + RESULTS_MAP_WIDTH + 'x' + RESULTS_MAP_HEIGHT + '.png');
 
             $search_results_map_wrapper.show();
-            $search_results_wrapper.show();
+            $results_address.show();
         }
         $search_results.show();
     });
@@ -215,23 +216,27 @@ $(function() {
     $zoom_out = $('#zoom-out');
     $search_help = $('#search-help');
     $did_you_mean = $('#search-help ul');
+    $search_help_us = $('#search-help-prompt');
     $results_address = $('#results-address');
 
     crs = L.CRS.EPSG3857;
 
     $geolocate_button.click(function() {
-            navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function(position) {
             hide_search();
             $search_help.hide();
             $search_results.empty();
             $search_results_map_wrapper.hide();
-
+            $results_address.hide();
+            $search_results_wrapper.show();
+            
             $results_address.text('Showing results near you.');
 
             $search_latitude.val(position.coords.latitude);
             $search_longitude.val(position.coords.longitude);
             search();
         });
+        $results_address.html('Showing results nearby');
     });
 
     $('#newyork').click(function() {
@@ -285,12 +290,12 @@ $(function() {
         $results_address.html('Showing results near ' + address);
 
         $search_help.hide();
+        $search_help_us.show();
         
         search();
     });
     
     $search_again.on('click', function() {
-        console.log('search again!');
         show_search();
     });
 
@@ -299,6 +304,8 @@ $(function() {
         $search_help.hide();
         $search_results.empty();
         $search_results_map_wrapper.hide();
+        $results_address.hide();
+        $search_results_wrapper.show();
 
         var address = $search_address.val();
 
@@ -314,7 +321,7 @@ $(function() {
                     locales = _.filter(locales, function(locale) {
                         return locale['adminArea1'] == 'US';
                     });
-
+                    
                     if (locales.length == 0) {
                         $did_you_mean.append('<li>No results</li>');
                     } else if (locales.length == 1) {
@@ -340,6 +347,7 @@ $(function() {
                         });
 
                         $search_help.show();
+                        $search_help_us.hide();
                     }
                 }
             });

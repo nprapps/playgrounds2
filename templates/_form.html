@@ -1,4 +1,9 @@
+<!-- <div class="modal-header">
+    
+</div> -->
+<!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->
 <div class="modal-body">
+    <h3>Edit Playground</h3>
     <form id="playground-form" class="row-fluid" method="post" enctype="multipart/form-data" action="http://{{ SERVERS[0] }}/{{ PROJECT_SLUG }}/api/">
             <div class="basic-info span6">
             {% for field in fields %}
@@ -17,8 +22,11 @@
             {% endfor %}
             </div>
     </form>
+    
 </div>
 <div class="modal-footer">
+    <button type="button" class="btn btn-large" data-dismiss="modal" aria-hidden="true">Cancel</button>
+
     <button id="playground-update" class="btn btn-large btn-success">Save</button>
 </div>
 <script type="text/javascript">
