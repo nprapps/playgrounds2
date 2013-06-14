@@ -103,6 +103,13 @@ python app.py
 
 Visit [localhost:8000](http://localhost:8000) in your browser.
 
+To test playground edits, access playgrounds2 directory from a second command line.
+
+```
+workon playgrounds2
+python public_app.py
+```
+
 Editing workflow
 -------------------
 
