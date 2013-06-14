@@ -322,27 +322,27 @@ def prepare_email(revision_group=None):
 
     return payload.render(**context)
 
-def parse_inserts():
+def parse_updates():
 
     # The revision_group is a single pass of this cron job.
-    # This is a grouping of all inserts made in one run of the function.
+    # This is a grouping of all updates made in one run of the function.
     revision_group = time.mktime((datetime.datetime.utcnow()).timetuple())
 
-    # Set up a blank list of inserts.
-    inserts = []
+    # Set up a blank list of updates.
+    updates = []
 
-    # Open the inserts file and load the JSON as the inserts list.
-    with open('inserts.json', 'r') as jsonfile:
-        inserts = json.loads(jsonfile.read())
+    # Open the updates file and load the JSON as the updates list.
+    with open('updates-in-progress.json', 'r') as jsonfile:
+        updates = json.loads(jsonfile.read())
 
     # Set up a blank list of updated playgrounds.
     updated_playgrounds = []
 
     # Okay, the fun part.
-    # Loop through the inserts.
-    for record in inserts:
+    # Loop through the updates.
+    for record in updates:
 
-        # First, capture the old data from this playground.
+        # First, capture the old data from this playground. 
         old_data = Playground.get(id=record['playground']['id']).__dict__['_data']
 
         # This is an intermediate data store for this record.
@@ -381,7 +381,7 @@ def parse_inserts():
         # Delete any features attached to this playground.
         PlaygroundFeature.delete().where(PlaygroundFeature.playground == record['playground']['id']).execute()
 
-        # Check to see if we have any incoming features from the inserts.json.
+        # Check to see if we have any incoming features from the updates.json.
         # If we don't, set up an empty list.
         try:
             features = record['playground']['features']

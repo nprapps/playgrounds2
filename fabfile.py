@@ -511,11 +511,11 @@ def bootstrap():
 
 def update_records():
     local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.utcnow()).timetuple()))
-    local('cp data/updates.json inserts.json && rm -f data/updates.json')
-    playgrounds, revision_group = data.parse_inserts()
+    local('cp data/updates.json updates-in-progress.json && rm -f data/updates.json')
+    playgrounds, revision_group = data.parse_updates()
     render_playgrounds(playgrounds)
     _send_revision_email(revision_group)
-    local('rm -f inserts.json')
+    local('rm -f updates-in-progress.json')
 
 def prepare_email():
     data.prepare_email()
