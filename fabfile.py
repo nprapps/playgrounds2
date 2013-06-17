@@ -63,6 +63,11 @@ def staging():
     env.s3_buckets = app_config.STAGING_S3_BUCKETS
     env.hosts = app_config.STAGING_SERVERS
 
+def development():
+    env.settings = 'development'
+    env.s3_buckets = '127.0.0.1:8000'
+    env.hosts = ['127.0.0.1:8001']
+
 """
 Branches
 
@@ -116,7 +121,10 @@ def download_copy():
     """
     base_url = 'https://docs.google.com/spreadsheet/pub?key=%s&output=xls'
     doc_url = base_url % app_config.COPY_GOOGLE_DOC_KEY
-    local('curl -o data/copy.xls "%s"' % doc_url)
+    if env.settings == 'development':
+        local('curl -o data/copy.xls "%s"' % doc_url)
+    else:
+        run('curl -o %s/data/copy.xls "%s"' % (env.path, doc_url))
 
 def update_copy():
     """
@@ -493,7 +501,10 @@ def download_data():
     """
     base_url = 'https://docs.google.com/spreadsheet/pub?key=%s&single=true&gid=0&output=csv'
     doc_url = base_url % app_config.DATA_GOOGLE_DOC_KEY
-    local('curl -o data/playgrounds.csv "%s"' % doc_url)
+    if env.settings == 'development':
+        local('curl -o data/playgrounds.csv "%s"' % doc_url)
+    else:
+        run('curl -o %s/data/playgrounds.csv "%s"' % (env.path, doc_url))
 
 def load_data():
     """
@@ -514,12 +525,21 @@ def update_records():
     """
     Parse any updates waiting to be processed, rerender playgrounds and send notification emails.
     """
-    local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.utcnow()).timetuple()))
-    local('cp data/updates.json updates-in-progress.json && rm -f data/updates.json')
+    env.now = time.mktime((datetime.datetime.utcnow()).timetuple())
+    if env.settings == 'development':
+        local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.utcnow()).timetuple()))
+        local('cp data/updates.json updates-in-progress.json && rm -f data/updates.json')
+    else:
+        run('cp %(path)splaygrounds.db %(path)s data/%(now)s-playgrounds.db' % env)
+        run('cp %(path)s/data/updates.json %(path)s/updates-in-progress.json && rm -f %(path)s/data/updates.json' % env)
+
     playgrounds, revision_group = data.parse_updates()
     render_playgrounds(playgrounds)
     _send_revision_email(revision_group)
-    local('rm -f updates-in-progress.json')
+    if env.settings == 'development':
+        local('rm -f updates-in-progress.json')
+    else:
+        run('rm -f updates-in-progress.json')
 
 def update_search_index():
     """
@@ -616,10 +636,11 @@ def nuke_confs():
     """
     require('settings', provided_by=[production, staging])
 
-    for service, remote_path in SERVICES:
+    for service, remote_path, extension in SERVICES:
         with settings(warn_only=True):
             service_name = '%s.%s' % (app_config.PROJECT_SLUG, service)
-            file_name = '%s.conf' % service_name
+            file_name = '%s.%s' % (service_name, extension)
+            remote_path = '%s%s' % (remote_path, file_name)
 
             if service == 'nginx':
                 sudo('rm -f %s%s' % (remote_path, file_name))
