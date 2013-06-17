@@ -35,6 +35,9 @@ def distance(lat1, lng1, lat2, lng2):
     if not lat1 or not lng1 or not lat2 or not lng2:
         return None
 
+    if lat1 == lat2 and lng1 == lng2:
+        return 0
+
     lat1_rad = math.radians(lat1)
     lng1_rad = math.radians(lng1)
     lat2_rad = math.radians(lat2)
