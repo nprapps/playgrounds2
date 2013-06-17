@@ -141,6 +141,53 @@ header {
             vertical-align: middle;
         }
 
+        .checkbox {
+            line-height: 1;
+        }
+
+        .features {
+
+            .feature {
+                position: relative;
+                padding-bottom: 10px;
+                min-height: 44px;
+
+                input[type="checkbox"] {
+                    opacity: 0;
+                    position: absolute;
+                    left: -2px;
+                    top: -2px;
+                    width: 35px;
+                    height: 35px;
+                    z-index: 10;
+                }
+
+
+                .checkbox {
+                    padding-left: 40px;
+                    padding-top: 10px;
+                    &:before {
+                        content: ' ';
+                        display: block;
+                        position: absolute;
+                        left:0;
+                        top: 0;
+                        z-index: 1;
+                        border: 2px solid lighten(#4774cc, 30%);
+                        width: 30px;
+                        height: 30px;
+                    }
+                }
+
+                input[type="checkbox"]:checked ~ .checkbox {
+                    &:before {
+                        background: #4774cc;
+                    }
+                }
+            }
+        }
+
+
         @media @screen-tiny {
             top: 0;
             bottom: 0;
