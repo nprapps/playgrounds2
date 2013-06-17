@@ -346,7 +346,7 @@ def parse_updates():
     # Loop through the updates.
     for record in updates:
 
-        # First, capture the old data from this playground. 
+        # First, capture the old data from this playground.
         old_data = Playground.get(id=record['playground']['id']).__dict__['_data']
 
         # This is an intermediate data store for this record.
