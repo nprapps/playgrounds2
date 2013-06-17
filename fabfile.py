@@ -219,13 +219,11 @@ def render_playgrounds(playgrounds=None):
     compiled_includes = []
 
     for playground_id in playgrounds:
-
         # Silly fix because url_for require a context
-        with app.app.test_request_context() as ctx:
+        with app.app.test_request_context():
             path = url_for('_playground', playground_id=playground_id)
 
-            ctx.path = path
-
+        with app.app.test_request_context(path=path):
             print 'Rendering %s' % path
 
             g.compile_includes = True

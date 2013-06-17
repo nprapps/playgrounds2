@@ -1,18 +1,18 @@
 <li>
     <strong class="map-letter"><%= letter.toUpperCase() %></strong>
     <div class="map-result">
-        <a href="/playground/<%= id.split('_')[1] %>.html">
+        <a href="<%= url_path %>/<%= id.split('_')[1] %>.html">
             <%= data.display_name[0] %>
         </a>
         <span class="distance">
-            <% if (data.distance && data.latitude.length > 0) { %> 
-                <%= (data.distance[0] / 1000).toFixed(1) %> miles away | 
+            <% if (data.distance && data.latitude.length > 0) { %>
+                <%= (data.distance[0] / 1000).toFixed(1) %> miles away |
             <% } %>
             <% if (data.city[0]) { %><%= data.city[0] %>, <% } %><%= data.state[0] %>
         </span>
         <!-- if description exists -->
         <span class="description">
-            <%= data.public_remarks[0] %> 
+            <%= data.public_remarks[0] %>
         </span>
     </div>
 </li>
