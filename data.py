@@ -3,6 +3,7 @@
 import datetime
 import json
 import math
+import re
 import time
 from sets import Set
 
@@ -50,6 +51,8 @@ class Playground(Model):
     """
     The playground model for the sqlite database.
     """
+    slug = CharField()
+
     name = CharField()
     facility = CharField(null=True)
     facility_type = CharField(null=True)
@@ -75,6 +78,36 @@ class Playground(Model):
 
     class Meta:
         database = database
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slugify()
+
+        super(Playground, self).save(*args, **kwargs)
+
+    def slugify(self):
+        bits = []
+
+        for field in ['display_name', 'city', 'state']:
+            attr = getattr(self, field)
+
+            if attr:
+                attr = attr.lower()
+                attr = re.sub(r"[^\w\s]", '', attr)
+                attr = re.sub(r"\s+", '-', attr)
+
+                bits.append(attr)
+
+        base_slug = '-'.join(bits)
+        
+        slug = base_slug
+        i = 1
+
+        while Playground.select().where(Playground.slug == slug).count():
+            i += 1
+            slug = '%s-%i' % (base_slug, i)
+
+        self.slug = slug
 
     def feature_form(self):
         """
@@ -157,6 +190,7 @@ class Playground(Model):
                 'owner_type': self.owner_type,
                 'public_remarks': self.public_remarks,
                 'full_text': ' | '.join([self.name, self.city, self.state, self.agency, self.owner, self.public_remarks]),
+                'slug': self.slug,
                 'display_name': self.display_name
             }
         }
@@ -368,10 +402,11 @@ def parse_updates():
 
         # Run the update query against this playground.
         # Pushes any updates in the record_dict to the model.
-        Playground.update(**record_dict).where(Playground.id == int(record['playground']['id'])).execute()
+        playground = Playground.get(id=int(record['playground']['id']))
+        playground.update(**record_dict)
 
         # Add this playground to the updated_playgrounds list.
-        updated_playgrounds.append(record['playground']['id'])
+        updated_playgrounds.append(playground.slug)
 
         # Set up the list of old features.
         # We're going to remove them all.
