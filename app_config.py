@@ -195,7 +195,7 @@ def configure_targets(deployment_target):
         DEBUG = True
 
         CLOUD_SEARCH_PROXY_BASE_URL = 'http://127.0.0.1:8000'
-        S3_BASE_URL = 'http://127.0.0.1'
+        S3_BASE_URL = 'http://127.0.0.1:8000'
         SERVER_BASE_URL = 'http://127.0.0.1:8001/%s'
 
     DEPLOYMENT_TARGET = deployment_target
