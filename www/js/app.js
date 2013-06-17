@@ -68,7 +68,7 @@ function buildCloudSearchParams() {
     var longitude = parseFloat($search_longitude.val());
 
     var params = {};
-    var return_fields = ['name', 'display_name', 'city', 'state', 'latitude', 'longitude'];
+    var return_fields = ['name', 'display_name', 'city', 'state', 'latitude', 'longitude', 'public_remarks'];
 
     var query_bits = ['deployment_target:\'' + deployment_target + '\''];
 
@@ -87,7 +87,7 @@ function buildCloudSearchParams() {
 
         query_bits.push('longitude:' + degToCloudSearch(northwest.lng) + '..' + degToCloudSearch(southeast.lng) + ' latitude:' + degToCloudSearch(southeast.lat) + '..' + degToCloudSearch(northwest.lat));
 
-        var latitude_radians = degToRad(latitude); 
+        var latitude_radians = degToRad(latitude);
         var longitude_radians = degToRad(longitude);
         var offset = APP_CONFIG.CLOUD_SEARCH_DEG_OFFSET;
         var scale = APP_CONFIG.CLOUD_SEARCH_DEG_SCALE;
@@ -146,41 +146,51 @@ function search() {
      */
     var latitude = parseFloat($search_latitude.val());
     var longitude = parseFloat($search_longitude.val());
+    var search_domain = 'http://' + APP_CONFIG.SERVERS[0] + '/';
 
-    $.getJSON('/cloudsearch/2011-02-01/search', buildCloudSearchParams(), function(data) {
-        $search_results.empty();
+    $.ajax({
+        url: search_domain + APP_CONFIG.PROJECT_SLUG + '/cloudsearch/2011-02-01/search',
+        data: buildCloudSearchParams(),
+        dataType: 'jsonp',
+        success: function(data) {
+            $search_results.empty();
 
-        var markers = []; 
+            var markers = [];
 
-        if (data['hits']['hit'].length > 0) {
-            _.each(data['hits']['hit'], function(hit, i) {
-                var context = $.extend(APP_CONFIG, hit);
-                context['letter'] = LETTERS[i];
+            if (data['hits']['hit'].length > 0) {
+                _.each(data['hits']['hit'], function(hit, i) {
+                    var context = $.extend(APP_CONFIG, hit);
+                    context['letter'] = LETTERS[i];
 
-                var html = JST.playground_item(context);
+                    var html = JST.playground_item(context);
 
-                $search_results.append(html);
+                    $search_results.append(html);
 
-                if (hit.data.latitude.length > 0) {
-                    var lat = cloudSearchToDeg(hit.data.latitude[0]);
-                    var lng = cloudSearchToDeg(hit.data.longitude[0]);
+                    if (hit.data.latitude.length > 0) {
+                        var lat = cloudSearchToDeg(hit.data.latitude[0]);
+                        var lng = cloudSearchToDeg(hit.data.longitude[0]);
 
-                    markers.push(buildMapboxPin('m', context['letter'], 'ff6633', lat, lng));
-                }
-            });
-        } else {
-            $search_results.append('<li class="no-results">No results</li>');
-        }
+                        markers.push(buildMapboxPin('m', context['letter'], 'ff6633', lat, lng));
+                    }
+                });
+            } else {
+                $search_results.append('<li class="no-results">No results</li>');
+            }
 
-        if (latitude) {
-            markers.push(buildMapboxPin('l', 'circle', '006633', latitude, longitude));
+            if (latitude) {
+                markers.push(buildMapboxPin('l', 'circle', '006633', latitude, longitude));
 
-            $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + APP_CONFIG.MAPBOX_BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + RESULTS_MAP_WIDTH + 'x' + RESULTS_MAP_HEIGHT + '.png');
+                $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + APP_CONFIG.MAPBOX_BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + RESULTS_MAP_WIDTH + 'x' + RESULTS_MAP_HEIGHT + '.png');
 
-            $search_results_map_wrapper.show();
-            $results_address.show();
-        }
-        $search_results.show();
+                $search_results_map_wrapper.show();
+                $results_address.show();
+            }
+            $search_results.show();
+        },
+        cache: true,
+        jsonp: false,
+        jsonpCallback: 'myCallback'
+
     });
 
     hide_search();
@@ -229,7 +239,7 @@ $(function() {
             $search_results_map_wrapper.hide();
             $results_address.hide();
             $search_results_wrapper.show();
-            
+
             $results_address.text('Showing results near you.');
 
             $search_latitude.val(position.coords.latitude);
@@ -291,10 +301,10 @@ $(function() {
 
         $search_help.hide();
         $search_help_us.show();
-        
+
         search();
     });
-    
+
     $search_again.on('click', function() {
         show_search();
     });
@@ -321,7 +331,7 @@ $(function() {
                     locales = _.filter(locales, function(locale) {
                         return locale['adminArea1'] == 'US';
                     });
-                    
+
                     if (locales.length == 0) {
                         $did_you_mean.append('<li>No results</li>');
                     } else if (locales.length == 1) {

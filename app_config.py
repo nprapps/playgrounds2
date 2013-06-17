@@ -94,9 +94,13 @@ CLOUD_SEARCH_REGION = 'us-west-2'
 CLOUD_SEARCH_INDEX_NAME = 'nprapps-playgrounds'
 CLOUD_SEARCH_DOMAIN = 'search-nprapps-playgrounds-ujjvpbsloblpc625kcbhogeb3u.us-west-2.cloudsearch.amazonaws.com'
 CLOUD_SEARCH_DOC_DOMAIN = 'doc-nprapps-playgrounds-ujjvpbsloblpc625kcbhogeb3u.us-west-2.cloudsearch.amazonaws.com'
-CLOUD_SEARCH_DEFAULT_SEARCH_FIELD = 'full_text'
+CLOUD_SEARCH_DEFAULT_SEARCH_FIELD = '' # empty string searches all text fields
 CLOUD_SEARCH_DEG_OFFSET = 180
 CLOUD_SEARCH_DEG_SCALE = 10000
+
+ADMIN_EMAILS = [
+    'grich@npr.org'
+]
 
 FEATURE_LIST = [
     ("Smooth surface throughout", "smooth-surface-throughout"),
