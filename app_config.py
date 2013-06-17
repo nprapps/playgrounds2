@@ -98,6 +98,10 @@ CLOUD_SEARCH_DEFAULT_SEARCH_FIELD = 'full_text'
 CLOUD_SEARCH_DEG_OFFSET = 180
 CLOUD_SEARCH_DEG_SCALE = 10000
 
+ADMIN_EMAILS = [
+    'grich@npr.org'
+]
+
 FEATURE_LIST = [
     ("Smooth surface throughout", "smooth-surface-throughout"),
     ("Ramps to play components", "ramps-to-play-components"),

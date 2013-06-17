@@ -304,23 +304,38 @@ section.the-goods { margin-top: 44px; }
         display: none;
         
         > li {
-            margin-bottom: 11px;
+            margin-bottom: 22px;
             color: #555;
             font-size: 15px;
         }
+        .description {
+            display: block;
+            font-size: 12px;
+        }
         .distance {
-            font-size: 80%;
+            margin-bottom: 3px;
+            display: block;
+            font-size: 12px;
         }
         .map-letter {
-            display: inline-block;
+            float: left;
+            display: block;
             background-color: #ff6706;
             border-radius: 10px;
+            overflow: hidden;
             width: 20px;
             color: #fff;
             text-align: center;
-            margin-right: 5px;
             font-weight: bold;
             font-size: 12px;
+        }
+        .map-result {
+            margin-left: 30px;
+            
+            a {
+                display: block;
+                margin-bottom: 2px;
+            }
         }
     }
     #search-help-prompt {

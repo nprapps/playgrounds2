@@ -46,5 +46,8 @@ data/*.db
 playgrounds.db
 www/playground
 www/test/test.html
-data/updates.json
+inserts.json # Any JSON in the site root should get deleted and recreated.
+updates-in-progress.json # Ditto.
+data/updates.json # Should get deleted, recreated.
 www/sitemap.xml
+*.un~ # Save file from vim, I think.
