@@ -87,7 +87,7 @@ function buildCloudSearchParams() {
 
         query_bits.push('longitude:' + degToCloudSearch(northwest.lng) + '..' + degToCloudSearch(southeast.lng) + ' latitude:' + degToCloudSearch(southeast.lat) + '..' + degToCloudSearch(northwest.lat));
 
-        var latitude_radians = degToRad(latitude); 
+        var latitude_radians = degToRad(latitude);
         var longitude_radians = degToRad(longitude);
         var offset = APP_CONFIG.CLOUD_SEARCH_DEG_OFFSET;
         var scale = APP_CONFIG.CLOUD_SEARCH_DEG_SCALE;
@@ -106,6 +106,8 @@ function buildCloudSearchParams() {
 
     params['bq'] = '(and ' + query_bits.join(' ') + ')';
     params['return-fields'] = return_fields.join(',')
+
+    params['callback'] = 'myCallback'
 
     return params;
 }
@@ -146,11 +148,12 @@ function search() {
      */
     var latitude = parseFloat($search_latitude.val());
     var longitude = parseFloat($search_longitude.val());
+    var search_domain = 'http://' + APP_CONFIG.SERVERS[0] + '/';
 
-    $.getJSON('/cloudsearch/2011-02-01/search', buildCloudSearchParams(), function(data) {
+    $.getJSON(search_domain + APP_CONFIG.PROJECT_SLUG + '/cloudsearch/2011-02-01/search', buildCloudSearchParams(), function(data) {
         $search_results.empty();
 
-        var markers = []; 
+        var markers = [];
 
         if (data['hits']['hit'].length > 0) {
             _.each(data['hits']['hit'], function(hit, i) {
@@ -229,7 +232,7 @@ $(function() {
             $search_results_map_wrapper.hide();
             $results_address.hide();
             $search_results_wrapper.show();
-            
+
             $results_address.text('Showing results near you.');
 
             $search_latitude.val(position.coords.latitude);
@@ -291,10 +294,10 @@ $(function() {
 
         $search_help.hide();
         $search_help_us.show();
-        
+
         search();
     });
-    
+
     $search_again.on('click', function() {
         show_search();
     });
@@ -321,7 +324,7 @@ $(function() {
                     locales = _.filter(locales, function(locale) {
                         return locale['adminArea1'] == 'US';
                     });
-                    
+
                     if (locales.length == 0) {
                         $did_you_mean.append('<li>No results</li>');
                     } else if (locales.length == 1) {
