@@ -392,19 +392,8 @@ section.the-goods { margin-top: 44px; }
             }
         }
     }
-    #search-results {
-        display: none;
-        
-        /*
-
-        > li {
-            margin-bottom: 11px;
-        }
-        .distance {
-            margin-bottom: 3px;
-        }
-        */
-    }
+    #search-again,
+    #search-results,
     #search-results-wrapper {
         display: none;
     }
@@ -416,7 +405,6 @@ section.the-goods { margin-top: 44px; }
         h4 {
             margin-bottom: 11px;
         }
-        
         .zoom-buttons {
             position: absolute;
             top: 11px;
@@ -444,9 +432,6 @@ section.the-goods { margin-top: 44px; }
             border-radius: 0 0 4px 4px;
             border-top: none;
         }
-    }
-    #search-again {
-        display: none;
     }
 }
 
@@ -489,6 +474,28 @@ section.the-goods { margin-top: 44px; }
 	.meta {
 	}
 	.social {
+	    li { 
+	        width: 50%;
+	        float: left;
+
+	        a { 
+	            background: #ebebeb url(@icon-sprite) no-repeat;
+	            display: block;
+	            line-height: 44px;
+	            height: 44px;
+                padding-left: 55px;
+                font-size: 11px;
+                font-weight: bold;
+	        }
+	        &.facebook a {
+                background-position: 0px -144px;
+                border-right: 2px solid #fff;
+            }
+            &.twitter a {
+                background-position: 0px -96px; 
+            }
+	    }
+	    &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
 	}
 	.update-form-modal {
 		ol {
@@ -650,4 +657,10 @@ footer {
 		h1 { font-size: 36px; }
 	}
 	footer { border-top: 1px solid #CCC; margin-top: 24px; }
+	.playground .social {
+	    li { 
+	        width: auto; float: none; 
+	        &.facebook a { border-right: none; border-bottom: 2px solid #fff; }
+	    }
+	}
 }
