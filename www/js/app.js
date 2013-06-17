@@ -146,8 +146,9 @@ function search() {
      */
     var latitude = parseFloat($search_latitude.val());
     var longitude = parseFloat($search_longitude.val());
+    var search_domain = 'http://' + APP_CONFIG.SERVERS[0] + '/';
 
-    $.getJSON('/' + APP_CONFIG.PROJECT_SLUG + '/cloudsearch/2011-02-01/search', buildCloudSearchParams(), function(data) {
+    $.getJSON(search_domain + APP_CONFIG.PROJECT_SLUG + '/cloudsearch/2011-02-01/search', buildCloudSearchParams(), function(data) {
         $search_results.empty();
 
         var markers = [];
