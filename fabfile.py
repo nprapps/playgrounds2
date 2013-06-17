@@ -110,16 +110,11 @@ def jst():
     """
     local('node_modules/.bin/jst --template underscore jst www/js/templates.js')
 
-def local_update_copy():
+def update_copy():
     """
     Fetches the latest Google Doc and updates local JSON.
     """
     local('curl -o data/copy.xls "%s"' % app_config.COPY_URL)
-
-def update_copy():
-    require('settings', provided_by=[production, staging])
-    env.copy_url = app_config.COPY_URL
-    run('curl -o %(repo_path)s/data/copy.xls "%(copy_url)s"' % env)
 
 def app_config_js():
     """
@@ -486,10 +481,6 @@ def _send_revision_email(revision_group):
     _send_email(addresses, payload)
 
 def download_data():
-    env.data_url = app_config.DATA_URL
-    run('curl -o %(repo_path)s/data/playgrounds.csv "%(data_url)s"' % env)
-
-def local_download_data():
     """
     Download the latest playgrounds data CSV.
     """
@@ -506,8 +497,8 @@ def local_bootstrap():
     """
     Get and load all data required to make the app run.
     """
-    local_update_copy()
-    local_download_data()
+    update_copy()
+    download_data()
     load_data()
 
 def bootstrap():
