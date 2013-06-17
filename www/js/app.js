@@ -26,6 +26,7 @@ var $search_help = null;
 var $search_help_us = null;
 var $did_you_mean = null;
 var $results_address = null;
+var $no_geocode = null;
 
 var zoom = RESULTS_DEFAULT_ZOOM;
 var crs = null;
@@ -161,10 +162,6 @@ function search() {
                 _.each(data['hits']['hit'], function(hit, i) {
                     var context = $.extend(APP_CONFIG, hit);
                     context['letter'] = LETTERS[i];
-                    context['url_path'] = '\/playground';
-                    if (APP_CONFIG.DEPLOYMENT_TARGET == 'staging' || APP_CONFIG.DEPLOYMENT_TARGET == 'production'){
-                        context['url_path'] = '\/' + APP_CONFIG.PROJECT_SLUG + '\/playground';
-                    }
 
                     var html = JST.playground_item(context);
                     $search_results.append(html);
@@ -188,12 +185,12 @@ function search() {
                 $search_results_map_wrapper.show();
                 $results_address.show();
             }
+
             $search_results.show();
         },
         cache: true,
         jsonp: false,
         jsonpCallback: 'myCallback'
-
     });
 
     hide_search();
@@ -231,6 +228,7 @@ $(function() {
     $did_you_mean = $('#search-help ul');
     $search_help_us = $('#search-help-prompt');
     $results_address = $('#results-address');
+    $no_geocode = $('#no-geocode');
 
     crs = L.CRS.EPSG3857;
 
@@ -318,6 +316,7 @@ $(function() {
         $search_results.empty();
         $search_results_map_wrapper.hide();
         $results_address.hide();
+        $no_geocode.hide();
         $search_results_wrapper.show();
 
         var address = $search_address.val();
@@ -337,6 +336,8 @@ $(function() {
 
                     if (locales.length == 0) {
                         $did_you_mean.append('<li>No results</li>');
+
+                        $no_geocode.show();
                     } else if (locales.length == 1) {
                         var locale = locales[0];
 
