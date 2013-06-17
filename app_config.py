@@ -14,7 +14,7 @@ import os
 NAMES
 """
 # Project name used for display
-PROJECT_NAME = 'Playgrounds!'
+PROJECT_NAME = 'Accessible Playgrounds'
 
 # Project name used for paths on the filesystem and in urls
 # Use dashes, not underscores
