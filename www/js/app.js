@@ -107,6 +107,8 @@ function buildCloudSearchParams() {
     params['bq'] = '(and ' + query_bits.join(' ') + ')';
     params['return-fields'] = return_fields.join(',')
 
+    params['callback'] = 'myCallback'
+
     return params;
 }
 
