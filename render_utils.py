@@ -41,11 +41,16 @@ class Includer(object):
 
     def _relativize_path(self, path):
         relative_path = path
+        print path
         depth = len(request.path.split('/')) - 2
+
+        print depth
 
         while depth > 0:
             relative_path = '../%s' % relative_path
             depth -= 1
+
+        print relative_path
 
         return relative_path
 
