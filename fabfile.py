@@ -511,9 +511,8 @@ def local_bootstrap():
 
 def bootstrap():
     require('settings', provided_by=[production, staging])
-    update_copy()
-    download_data()
-    load_data()
+    local_bootstrap()
+    put(local_path='playgrounds.db', remote_path='%(repo_path)s/playgrounds.db' % env)
 
 def update_records():
     """
