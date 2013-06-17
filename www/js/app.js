@@ -68,7 +68,7 @@ function buildCloudSearchParams() {
     var longitude = parseFloat($search_longitude.val());
 
     var params = {};
-    var return_fields = ['name', 'display_name', 'city', 'state', 'latitude', 'longitude'];
+    var return_fields = ['name', 'display_name', 'city', 'state', 'latitude', 'longitude', 'public_remarks'];
 
     var query_bits = ['deployment_target:\'' + deployment_target + '\''];
 
