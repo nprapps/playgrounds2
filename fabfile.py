@@ -462,7 +462,7 @@ def deploy_playgrounds():
     if (env.settings == 'production' and env.branch != 'stable'):
         _confirm("You are trying to deploy the '%(branch)s' branch to production.\nYou should really only deploy a stable branch.\nDo you know what you're doing?" % env)
 
-    #render_playgrounds()
+    render_playgrounds()
     _gzip('.playgrounds_html', '.playgrounds_gzip')
     _deploy_to_s3('.playgrounds_gzip')
 

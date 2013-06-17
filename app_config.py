@@ -164,6 +164,11 @@ def configure_targets(deployment_target):
     global S3_BUCKETS
     global SERVERS
     global DEBUG
+
+    global CLOUD_SEARCH_PROXY_BASE_URL
+    global S3_BASE_URL
+    global SERVER_BASE_URL
+
     global DEPLOYMENT_TARGET
 
     if deployment_target == 'production':

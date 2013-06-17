@@ -190,8 +190,16 @@ python -m SimpleHTTPServer
 Deploy to S3
 ------------
 
+To deploy all assets **except** the playgrounds pages:
+
 ```
 fab staging master deploy
+```
+
+To deploy the playgrounds pages:
+
+```
+fab staging deploy_playgrounds
 ```
 
 Deploy to EC2
