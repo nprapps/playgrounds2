@@ -173,7 +173,6 @@ function search() {
                     }
 
                     var html = JST.playground_item(context);
-                    console.log(context);
                     $search_results.append(html);
 
                     if (hit.data.latitude.length > 0) {

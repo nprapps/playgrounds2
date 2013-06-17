@@ -41,16 +41,11 @@ class Includer(object):
 
     def _relativize_path(self, path):
         relative_path = path
-        print path
         depth = len(request.path.split('/')) - 2
-
-        print depth
 
         while depth > 0:
             relative_path = '../%s' % relative_path
             depth -= 1
-
-        print relative_path
 
         return relative_path
 
@@ -104,8 +99,8 @@ class JavascriptIncluder(Includer):
         context = make_context()
         context['paths'] = src_paths
 
-        header = render_template('_js_header.js', **context) 
-        output.insert(0, header) 
+        header = render_template('_js_header.js', **context)
+        output.insert(0, header)
 
         return '\n'.join(output)
 
@@ -139,8 +134,8 @@ class CSSIncluder(Includer):
         context = make_context()
         context['paths'] = src_paths
 
-        header = render_template('_css_header.css', **context) 
-        output.insert(0, header) 
+        header = render_template('_css_header.css', **context)
+        output.insert(0, header)
 
 
         return '\n'.join(output)
