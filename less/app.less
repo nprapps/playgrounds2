@@ -145,6 +145,27 @@ header {
             line-height: 1;
         }
 
+        .basic-info {
+            input[type="text"],
+            textarea {
+                border: 2px solid #ccc;
+                .box-shadow(none);
+                -webkit-appearance: none;
+                border-radius: 0;
+                line-height: 44px;
+                height: 44px;
+            }
+
+            label {
+                color: #999;
+            }
+
+            textarea {
+                min-height: 200px;
+                line-height: 1.3;
+            }
+        }
+
         .features {
 
             .feature {
@@ -165,7 +186,6 @@ header {
 
                 .checkbox {
                     padding-left: 40px;
-                    padding-top: 10px;
                     &:before {
                         content: ' ';
                         display: block;
@@ -176,6 +196,10 @@ header {
                         border: 2px solid lighten(#4774cc, 30%);
                         width: 30px;
                         height: 30px;
+
+                        .lt-ie9 & {
+                            display: none;
+                        }
                     }
                 }
 
