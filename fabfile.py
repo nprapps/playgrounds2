@@ -110,19 +110,16 @@ def jst():
     """
     local('node_modules/.bin/jst --template underscore jst www/js/templates.js')
 
-def download_copy():
-    """
-    Downloads a Google Doc as an .xls file.
-    """
-    base_url = 'https://docs.google.com/spreadsheet/pub?key=%s&output=xls'
-    doc_url = base_url % app_config.COPY_GOOGLE_DOC_KEY
-    local('curl -o data/copy.xls "%s"' % doc_url)
-
-def update_copy():
+def local_update_copy():
     """
     Fetches the latest Google Doc and updates local JSON.
     """
-    download_copy()
+    local('curl -o data/copy.xls "%s"' % app_config.COPY_URL)
+
+def update_copy():
+    require('settings', provided_by=[production, staging])
+    env.copy_url = app_config.COPY_URL
+    run('curl -o %(repo_path)s/data/copy.xls "%(copy_url)s"' % env)
 
 def app_config_js():
     """
@@ -488,12 +485,14 @@ def _send_revision_email(revision_group):
     _send_email(addresses, payload)
 
 def download_data():
+    env.data_url = app_config.DATA_URL
+    run('curl -o %(repo_path)s/data/playgrounds.csv "%(data_url)s"' % env)
+
+def local_download_data():
     """
     Download the latest playgrounds data CSV.
     """
-    base_url = 'https://docs.google.com/spreadsheet/pub?key=%s&single=true&gid=0&output=csv'
-    doc_url = base_url % app_config.DATA_GOOGLE_DOC_KEY
-    local('curl -o data/playgrounds.csv "%s"' % doc_url)
+    local('curl -o data/playgrounds.csv "%s"' % app_config.DATA_URL)
 
 def load_data():
     """
@@ -502,10 +501,16 @@ def load_data():
     data.clear_playgrounds()
     data.load_playgrounds()
 
-def bootstrap():
+def local_bootstrap():
     """
     Get and load all data required to make the app run.
     """
+    local_update_copy()
+    local_download_data()
+    load_data()
+
+def bootstrap():
+    require('settings', provided_by=[production, staging])
     update_copy()
     download_data()
     load_data()
@@ -616,10 +621,11 @@ def nuke_confs():
     """
     require('settings', provided_by=[production, staging])
 
-    for service, remote_path in SERVICES:
+    for service, remote_path, extension in SERVICES:
         with settings(warn_only=True):
             service_name = '%s.%s' % (app_config.PROJECT_SLUG, service)
-            file_name = '%s.conf' % service_name
+            file_name = '%s.%s' % (service_name, extension)
+            remote_path = '%s%s' % (remote_path, file_name)
 
             if service == 'nginx':
                 sudo('rm -f %s%s' % (remote_path, file_name))
