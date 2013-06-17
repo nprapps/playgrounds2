@@ -73,7 +73,7 @@ function buildCloudSearchParams() {
     var query_bits = ['deployment_target:\'' + deployment_target + '\''];
 
     if (query) {
-        params['q'] = query;
+        query_bits.push('full_text:\'' + query + '\'');
     }
 
     // If using geosearch

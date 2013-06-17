@@ -156,6 +156,7 @@ class Playground(Model):
                 'owner': self.owner,
                 'owner_type': self.owner_type,
                 'public_remarks': self.public_remarks,
+                'full_text': ' | '.join([self.name, self.city, self.state, self.agency, self.owner, self.public_remarks]),
                 'display_name': self.display_name
             }
         }
