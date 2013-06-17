@@ -167,13 +167,13 @@ function search() {
                 _.each(data['hits']['hit'], function(hit, i) {
                     var context = $.extend(APP_CONFIG, hit);
                     context['letter'] = LETTERS[i];
-                    context['url_path'] = '/playground/';
+                    context['url_path'] = '\/playground';
                     if (APP_CONFIG.DEPLOYMENT_TARGET == 'staging' || APP_CONFIG.DEPLOYMENT_TARGET == 'production'){
-                        context['url_path'] = '/' + APP_CONFIG.PROJECT_SLUG + '/playgrounds/';
+                        context['url_path'] = '\/' + APP_CONFIG.PROJECT_SLUG + '\/playground';
                     }
 
                     var html = JST.playground_item(context);
-
+                    console.log(context);
                     $search_results.append(html);
 
                     if (hit.data.latitude.length > 0) {
