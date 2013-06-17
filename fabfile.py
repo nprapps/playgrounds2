@@ -207,8 +207,9 @@ def render_playgrounds(playgrounds=None):
 
     if not playgrounds:
         playgrounds = []
+
         for playground in data.Playground.select():
-            playgrounds.append(playground.id)
+            playgrounds.append(playground.slug)
 
     # Fake out deployment target
     deployment_target = app_config.DEPLOYMENT_TARGET
@@ -218,10 +219,10 @@ def render_playgrounds(playgrounds=None):
 
     compiled_includes = []
 
-    for playground_id in playgrounds:
+    for slug in playgrounds:
         # Silly fix because url_for require a context
         with app.app.test_request_context():
-            path = url_for('_playground', playground_id=playground_id)
+            path = url_for('_playground', playground_slug=slug)
 
         with app.app.test_request_context(path=path):
             print 'Rendering %s' % path
@@ -230,7 +231,7 @@ def render_playgrounds(playgrounds=None):
             g.compiled_includes = compiled_includes
 
             view = app.__dict__['_playground']
-            content = view(playground_id)
+            content = view(slug)
 
             compiled_includes = g.compiled_includes
 
