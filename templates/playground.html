@@ -37,6 +37,7 @@
     {% if playground.city %}{{ playground.city }}, {% endif %}
     {% if playground.state %}{{ playground.state }} {% endif %}
     {% if playground.zip %}{{ playground.zip }}{% endif %}
+    {% if playground.url %}<br /><a href="{{ playground.url }}">Playground website</a>{% endif %}
     </p>
 
     <!-- Directions -->
