@@ -91,152 +91,28 @@ header {
 	margin: 0;
 	border-bottom: 2px solid #fff;
 	
-	h1 { font-size: 48px; font-family: Arial, Helvetica, sans-serif; color: #555; margin-bottom: 11px; }
-	h2 { font-size: 15px; color: #666; margin: 0; }
+	h1 { 
+	    font-size: 48px; 
+	    font-family: Arial, Helvetica, sans-serif; 
+	    color: #555; 
+	    margin-bottom: 11px;
+	}
+	h2 {    
+	    font-size: 15px; 
+	    color: #666; 
+	    margin: 0;
+	}
 }
 .playground header {
-    padding-top: 30px;
-    h1 { font-size: 33px; margin-bottom: 0; }
+    padding-top: 22px;
+    padding-bottom: 22px;
+
+    h1 { 
+        font-size: 16px; 
+        margin-bottom: 0;
+    }
 }
 
-.playground {
-	.edit-playground-btn {
-		border: none;
-		box-sizing: border-box;
-		background: #6d8ac4;
-		-webkit-border-radius: 0;
-		   -moz-border-radius: 0;
-		        border-radius: 0;
-		color: #fff;
-		text-shadow: none;
-		width: 33.333333%;
-		padding: 15px;
-		font-size: 16px;
-		margin-bottom: 1.5em;
-
-		@media @screen-small {
-			width: 100%;
-		}
-	}
-
-	.update-form-modal {
-		ol {
-			list-style: none;
-			margin: 0;
-		}
-
-        .close {
-            position: absolute;
-            top: 0;
-            right: 0;
-            z-index: 10;
-            color: #fff;
-            background: #666;
-            width: 44px;
-            height: 44px;
-            line-height: 44px;
-            text-align: center;
-            font-weight: normal;
-            font-size: 24px;
-            vertical-align: middle;
-        }
-
-        .checkbox {
-            line-height: 1;
-        }
-
-        .basic-info {
-            input[type="text"],
-            textarea {
-                border: 2px solid #ccc;
-                .box-shadow(none);
-                -webkit-appearance: none;
-                border-radius: 0;
-                line-height: 44px;
-                height: 44px;
-            }
-
-            label {
-                color: #999;
-            }
-
-            textarea {
-                min-height: 200px;
-                line-height: 1.3;
-            }
-        }
-
-        .features {
-
-            .feature {
-                position: relative;
-                padding-bottom: 10px;
-                min-height: 44px;
-
-                input[type="checkbox"] {
-                    opacity: 0;
-                    position: absolute;
-                    left: -2px;
-                    top: -2px;
-                    width: 35px;
-                    height: 35px;
-                    z-index: 10;
-                }
-
-
-                .checkbox {
-                    padding-left: 40px;
-                    &:before {
-                        content: ' ';
-                        display: block;
-                        position: absolute;
-                        left:0;
-                        top: 0;
-                        z-index: 1;
-                        border: 2px solid lighten(#4774cc, 30%);
-                        width: 30px;
-                        height: 30px;
-
-                        .lt-ie9 & {
-                            display: none;
-                        }
-                    }
-                }
-
-                input[type="checkbox"]:checked ~ .checkbox {
-                    &:before {
-                        background: lighten(#4774cc, 10%);
-                    }
-                }
-            }
-        }
-
-
-        @media @screen-tiny {
-            top: 0;
-            bottom: 0;
-            right: 0;
-            left: 0;
-            border-radius: 0;
-
-            &.fade.in {
-                top: 0;
-            }
-            .modal-body {
-                box-sizing: border-box;
-                padding-bottom: 100px;
-            }
-
-            .modal-footer {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-            }
-        }
-	}
-    .modal-body { -webkit-overflow-scrolling:touch; }
-}
 
 // Cube ad
 .adwrapper { zoom: 1; padding: 0 0 12px 0; }
@@ -442,7 +318,7 @@ section.the-goods { margin-top: 44px; }
 }
 
 
-.playground {
+.playground #main-content {
     h3 {
         margin: 0 0 11px 0;
         font-size: 18px;
@@ -452,8 +328,12 @@ section.the-goods { margin-top: 44px; }
         line-height: 1.4;
         
         &.learn-more {
+            font-size: 12px;
+        }
+        &.removal {
             margin-top: 22px;
             font-size: 12px;
+            color: #555;
         }
     }
     ul {
@@ -497,6 +377,10 @@ section.the-goods { margin-top: 44px; }
                 padding-left: 55px;
                 font-size: 11px;
                 font-weight: bold;
+                
+                &:hover {
+                    opacity: .7;
+                }
 	        }
 	        &.facebook a {
                 background-position: 0px -144px;
@@ -504,6 +388,9 @@ section.the-goods { margin-top: 44px; }
             }
             &.twitter a {
                 background-position: 0px -96px; 
+            }
+            b { 
+                display: none;
             }
 	    }
 	    &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
@@ -513,7 +400,6 @@ section.the-goods { margin-top: 44px; }
 			list-style: none;
 			margin: 0;
 		}
-
         .close {
             position: absolute;
             top: 0;
@@ -532,6 +418,27 @@ section.the-goods { margin-top: 44px; }
 
         .checkbox {
             line-height: 1;
+        }
+
+        .basic-info {
+            input[type="text"],
+            textarea {
+                border: 2px solid #ccc;
+                .box-shadow(none);
+                -webkit-appearance: none;
+                border-radius: 0;
+                line-height: 44px;
+                height: 44px;
+            }
+
+            label {
+                color: #999;
+            }
+
+            textarea {
+                min-height: 200px;
+                line-height: 1.3;
+            }
         }
 
         .features {
@@ -554,7 +461,6 @@ section.the-goods { margin-top: 44px; }
 
                 .checkbox {
                     padding-left: 40px;
-                    padding-top: 10px;
                     &:before {
                         content: ' ';
                         display: block;
@@ -565,17 +471,20 @@ section.the-goods { margin-top: 44px; }
                         border: 2px solid lighten(#4774cc, 30%);
                         width: 30px;
                         height: 30px;
+
+                        .lt-ie9 & {
+                            display: none;
+                        }
                     }
                 }
 
                 input[type="checkbox"]:checked ~ .checkbox {
                     &:before {
-                        background: #4774cc;
+                        background: lighten(#4774cc, 10%);
                     }
                 }
             }
         }
-
 
         @media @screen-tiny {
             top: 0;
@@ -668,10 +577,8 @@ footer {
 		h1 { font-size: 36px; }
 	}
 	footer { border-top: 1px solid #CCC; margin-top: 24px; }
-	.playground .social {
-	    li { 
-	        width: auto; float: none; 
-	        &.facebook a { border-right: none; border-bottom: 2px solid #fff; }
-	    }
+	.playground #main-content .social li { 
+	    span { display: none; }
+	    b { display: inline; }
 	}
 }
