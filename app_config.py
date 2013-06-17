@@ -47,6 +47,7 @@ DEPLOY_SERVICES = True
 S3_BUCKETS = []
 SERVERS = []
 DEBUG = True
+CLOUD_SEARCH_PROXY = 'http://127.0.0.1:8000'
 
 """
 COPY EDITING
@@ -167,16 +168,19 @@ def configure_targets(deployment_target):
         S3_BUCKETS = PRODUCTION_S3_BUCKETS
         SERVERS = PRODUCTION_SERVERS
         DEBUG = False
+        CLOUD_SEARCH_PROXY = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
 
     elif deployment_target == 'staging':
         S3_BUCKETS = STAGING_S3_BUCKETS
         SERVERS = STAGING_SERVERS
         DEBUG = True
+        CLOUD_SEARCH_PROXY = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
 
     else:
         S3_BUCKETS = None
         SERVERS = ['127.0.0.1:8001']
         DEBUG = True
+        CLOUD_SEARCH_PROXY = 'http://127.0.0.1:8000'
 
     DEPLOYMENT_TARGET = deployment_target
 
