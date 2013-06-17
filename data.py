@@ -107,7 +107,9 @@ class Playground(Model):
             field_dict['name'] = unfield(field)
             if field == 'id':
                 field_dict['display'] = 'style="display:none"'
-            field_dict['widget'] = '<input type="text" name="%s" value=""></input>' % field
+                field_dict['widget'] = '<input type="text" name="%s" value=""></input>' % field
+            elif field == 'remarks':
+                field_dict['widget'] = '<textarea class="input-block-level" name="%s" rows="10">%s</textarea>' % (field, field_value)
             if field in app_config.PUBLIC_FIELDS:
                 fields.append(field_dict)
         return fields
@@ -126,8 +128,10 @@ class Playground(Model):
             if field == 'id':
                 field_dict['display'] = 'style="display:none"'
                 field_dict['widget'] = '<input type="text" name="%s" value="%s" data-changed="true"></input>' % (field, field_value)
+            elif field == 'remarks':
+                field_dict['widget'] = '<textarea class="input-block-level" name="%s" data-changed="true" rows="10">%s</textarea>' % (field, field_value)
             else:
-                field_dict['widget'] = '<input type="text" name="%s" value="%s"></input>' % (field, field_value)
+                field_dict['widget'] = '<input class="input-block-level" type="text" name="%s" value="%s"></input>' % (field, field_value)
             if field in app_config.PUBLIC_FIELDS:
                 fields.append(field_dict)
         return fields
