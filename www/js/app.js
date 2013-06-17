@@ -150,40 +150,49 @@ function search() {
     var longitude = parseFloat($search_longitude.val());
     var search_domain = 'http://' + APP_CONFIG.SERVERS[0] + '/';
 
-    $.getJSON(search_domain + APP_CONFIG.PROJECT_SLUG + '/cloudsearch/2011-02-01/search', buildCloudSearchParams(), function(data) {
-        $search_results.empty();
+    $.ajax({
+        url: search_domain + APP_CONFIG.PROJECT_SLUG + '/cloudsearch/2011-02-01/search',
+        data: buildCloudSearchParams(),
+        dataType: 'jsonp',
+        success: function(data) {
+            $search_results.empty();
 
-        var markers = [];
+            var markers = [];
 
-        if (data['hits']['hit'].length > 0) {
-            _.each(data['hits']['hit'], function(hit, i) {
-                var context = $.extend(APP_CONFIG, hit);
-                context['letter'] = LETTERS[i];
+            if (data['hits']['hit'].length > 0) {
+                _.each(data['hits']['hit'], function(hit, i) {
+                    var context = $.extend(APP_CONFIG, hit);
+                    context['letter'] = LETTERS[i];
 
-                var html = JST.playground_item(context);
+                    var html = JST.playground_item(context);
 
-                $search_results.append(html);
+                    $search_results.append(html);
 
-                if (hit.data.latitude.length > 0) {
-                    var lat = cloudSearchToDeg(hit.data.latitude[0]);
-                    var lng = cloudSearchToDeg(hit.data.longitude[0]);
+                    if (hit.data.latitude.length > 0) {
+                        var lat = cloudSearchToDeg(hit.data.latitude[0]);
+                        var lng = cloudSearchToDeg(hit.data.longitude[0]);
 
-                    markers.push(buildMapboxPin('m', context['letter'], 'ff6633', lat, lng));
-                }
-            });
-        } else {
-            $search_results.append('<li class="no-results">No results</li>');
-        }
+                        markers.push(buildMapboxPin('m', context['letter'], 'ff6633', lat, lng));
+                    }
+                });
+            } else {
+                $search_results.append('<li class="no-results">No results</li>');
+            }
 
-        if (latitude) {
-            markers.push(buildMapboxPin('l', 'circle', '006633', latitude, longitude));
+            if (latitude) {
+                markers.push(buildMapboxPin('l', 'circle', '006633', latitude, longitude));
 
-            $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + APP_CONFIG.MAPBOX_BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + RESULTS_MAP_WIDTH + 'x' + RESULTS_MAP_HEIGHT + '.png');
+                $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + APP_CONFIG.MAPBOX_BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + RESULTS_MAP_WIDTH + 'x' + RESULTS_MAP_HEIGHT + '.png');
 
-            $search_results_map_wrapper.show();
-            $results_address.show();
-        }
-        $search_results.show();
+                $search_results_map_wrapper.show();
+                $results_address.show();
+            }
+            $search_results.show();
+        },
+        cache: true,
+        jsonp: false,
+        jsonpCallback: 'myCallback'
+
     });
 
     hide_search();
