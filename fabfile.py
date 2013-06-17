@@ -63,11 +63,6 @@ def staging():
     env.s3_buckets = app_config.STAGING_S3_BUCKETS
     env.hosts = app_config.STAGING_SERVERS
 
-def development():
-    env.settings = 'development'
-    env.s3_buckets = '127.0.0.1:8000'
-    env.hosts = ['127.0.0.1:8001']
-
 """
 Branches
 
@@ -115,22 +110,16 @@ def jst():
     """
     local('node_modules/.bin/jst --template underscore jst www/js/templates.js')
 
-def download_copy():
-    """
-    Downloads a Google Doc as an .xls file.
-    """
-    base_url = 'https://docs.google.com/spreadsheet/pub?key=%s&output=xls'
-    doc_url = base_url % app_config.COPY_GOOGLE_DOC_KEY
-    if env.settings == 'development':
-        local('curl -o data/copy.xls "%s"' % doc_url)
-    else:
-        run('curl -o %s/data/copy.xls "%s"' % (env.repo_path, doc_url))
-
-def update_copy():
+def local_update_copy():
     """
     Fetches the latest Google Doc and updates local JSON.
     """
-    download_copy()
+    local('curl -o data/copy.xls "%s"' % app_config.COPY_URL)
+
+def update_copy():
+    require('settings', provided_by=[production, staging])
+    env.copy_url = app_config.COPY_URL
+    run('curl -o %(repo_path)s/data/copy.xls "%(copy_url)s"' % env)
 
 def app_config_js():
     """
@@ -496,15 +485,14 @@ def _send_revision_email(revision_group):
     _send_email(addresses, payload)
 
 def download_data():
+    env.data_url = app_config.DATA_URL
+    run('curl -o %(repo_path)s/data/playgrounds.csv "%(data_url)s"' % env)
+
+def local_download_data():
     """
     Download the latest playgrounds data CSV.
     """
-    base_url = 'https://docs.google.com/spreadsheet/pub?key=%s&single=true&gid=0&output=csv'
-    doc_url = base_url % app_config.DATA_GOOGLE_DOC_KEY
-    if env.settings == 'development':
-        local('curl -o data/playgrounds.csv "%s"' % doc_url)
-    else:
-        run('curl -o %s/data/playgrounds.csv "%s"' % (env.repo_path, doc_url))
+    local('curl -o data/playgrounds.csv "%s"' % app_config.DATA_URL)
 
 def load_data():
     """
@@ -513,33 +501,30 @@ def load_data():
     data.clear_playgrounds()
     data.load_playgrounds()
 
-def bootstrap():
+def local_bootstrap():
     """
     Get and load all data required to make the app run.
     """
-    update_copy()
-    download_data()
+    local_update_copy()
+    local_download_data()
     load_data()
+
+def bootstrap():
+    require('settings', provided_by=[production, staging])
+        update_copy()
+        download_data()
+        load_data()
 
 def update_records():
     """
     Parse any updates waiting to be processed, rerender playgrounds and send notification emails.
     """
-    env.now = time.mktime((datetime.datetime.utcnow()).timetuple())
-    if env.settings == 'development':
-        local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.utcnow()).timetuple()))
-        local('cp data/updates.json updates-in-progress.json && rm -f data/updates.json')
-    else:
-        run('cp %(repo_path)splaygrounds.db %(repo_path)s data/%(now)s-playgrounds.db' % env)
-        run('cp %(repo_path)s/data/updates.json %(repo_path)s/updates-in-progress.json && rm -f %(repo_path)s/data/updates.json' % env)
-
+    local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.utcnow()).timetuple()))
+    local('cp data/updates.json updates-in-progress.json && rm -f data/updates.json')
     playgrounds, revision_group = data.parse_updates()
     render_playgrounds(playgrounds)
     _send_revision_email(revision_group)
-    if env.settings == 'development':
-        local('rm -f updates-in-progress.json')
-    else:
-        run('rm -f updates-in-progress.json')
+    local('rm -f updates-in-progress.json')
 
 def update_search_index():
     """
