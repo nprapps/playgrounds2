@@ -124,7 +124,7 @@ def download_copy():
     if env.settings == 'development':
         local('curl -o data/copy.xls "%s"' % doc_url)
     else:
-        run('curl -o %s/data/copy.xls "%s"' % (env.path, doc_url))
+        run('curl -o %s/data/copy.xls "%s"' % (env.repo_path, doc_url))
 
 def update_copy():
     """
@@ -504,7 +504,7 @@ def download_data():
     if env.settings == 'development':
         local('curl -o data/playgrounds.csv "%s"' % doc_url)
     else:
-        run('curl -o %s/data/playgrounds.csv "%s"' % (env.path, doc_url))
+        run('curl -o %s/data/playgrounds.csv "%s"' % (env.repo_path, doc_url))
 
 def load_data():
     """
@@ -530,8 +530,8 @@ def update_records():
         local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.utcnow()).timetuple()))
         local('cp data/updates.json updates-in-progress.json && rm -f data/updates.json')
     else:
-        run('cp %(path)splaygrounds.db %(path)s data/%(now)s-playgrounds.db' % env)
-        run('cp %(path)s/data/updates.json %(path)s/updates-in-progress.json && rm -f %(path)s/data/updates.json' % env)
+        run('cp %(repo_path)splaygrounds.db %(repo_path)s data/%(now)s-playgrounds.db' % env)
+        run('cp %(repo_path)s/data/updates.json %(repo_path)s/updates-in-progress.json && rm -f %(repo_path)s/data/updates.json' % env)
 
     playgrounds, revision_group = data.parse_updates()
     render_playgrounds(playgrounds)
