@@ -35,6 +35,9 @@ def distance(lat1, lng1, lat2, lng2):
     if not lat1 or not lng1 or not lat2 or not lng2:
         return None
 
+    if lat1 == lat2 and lng1 == lng2:
+        return 0
+
     lat1_rad = math.radians(lat1)
     lng1_rad = math.radians(lng1)
     lat2_rad = math.radians(lat2)
@@ -85,15 +88,13 @@ class Playground(Model):
                 PlaygroundFeature.name == f)
             if feature.count() > 0:
                 fields.append("""
-                    <label class="checkbox">
                     <input type="checkbox" name="%s" checked="checked">
-                        &nbsp;%s
+                    <label class="checkbox">%s
                     </label>""" % (f.replace(' ', '-').lower(), f))
             else:
                 fields.append("""
-                    <label class="checkbox">
                     <input type="checkbox" name="%s">
-                    &nbsp;%s</label>""" % (f.replace(' ', '-').lower(), f))
+                    <label class="checkbox">%s</label>""" % (f.replace(' ', '-').lower(), f))
         return fields
 
     def create_form(self):
@@ -150,7 +151,7 @@ class Playground(Model):
                 'agency': self.agency,
                 'owner': self.owner,
                 'owner_type': self.owner_type,
-                'full_text': ' | '.join([self.name, self.city, self. state, self.facility, self.agency, self.owner]),
+                'public_remarks': self.public_remarks,
                 'display_name': self.display_name
             }
         }
