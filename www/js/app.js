@@ -161,9 +161,9 @@ function search() {
                 _.each(data['hits']['hit'], function(hit, i) {
                     var context = $.extend(APP_CONFIG, hit);
                     context['letter'] = LETTERS[i];
-                    context['path'] = '/playground/';
+                    context['url_path'] = '/playground/';
                     if (APP_CONFIG.DEPLOYMENT_TARGET == 'staging' || APP_CONFIG.DEPLOYMENT_TARGET == 'production'){
-                        context['path'] = '/' + APP_CONFIG.PROJECT_SLUG + '/playgrounds/'
+                        context['url_path'] = '/' + APP_CONFIG.PROJECT_SLUG + '/playgrounds/';
                     }
 
                     var html = JST.playground_item(context);
