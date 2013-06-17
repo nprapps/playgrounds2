@@ -70,8 +70,8 @@
     <h3>About This Playground</h3>
 {% endif %}
 
-    {% if playground.remarks %}
-    <p class="description">{{ playground.remarks }}</p>
+    {% if playground.public_remarks %}
+    <p class="description">{{ playground.public_remarks }}</p>
     {% endif %}
 
     {% if playground.agency or playground.owner  %}
@@ -105,9 +105,11 @@
 </div>
 
 
-<h3>{{ COPY.content.playground_help_title }}</h3>
-<p><a href="#edit-playground" class="btn btn-blue" data-toggle="modal">Edit This Page</a></p>
-<p><a href="../about/">Learn more about NPR's accessible playgrounds project.</a></p>
+<div class="help-prompt">
+    <p class="prompt">{{ COPY.content.playground_help_title }}</p>
+    <p><a href="#edit-playground" class="btn btn-blue" data-toggle="modal">Edit This Page</a></p>
+    <p class="more"><a href="../about/">Learn more about NPR's accessible playgrounds project.</a></p>
+</div>
 
 
 <!-- nearby parks -->

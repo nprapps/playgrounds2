@@ -99,6 +99,120 @@ header {
     h1 { font-size: 33px; margin-bottom: 0; }
 }
 
+.playground {
+	.edit-playground-btn {
+		border: none;
+		box-sizing: border-box;
+		background: #6d8ac4;
+		-webkit-border-radius: 0;
+		   -moz-border-radius: 0;
+		        border-radius: 0;
+		color: #fff;
+		text-shadow: none;
+		width: 33.333333%;
+		padding: 15px;
+		font-size: 16px;
+		margin-bottom: 1.5em;
+
+		@media @screen-small {
+			width: 100%;
+		}
+	}
+
+	.update-form-modal {
+		ol {
+			list-style: none;
+			margin: 0;
+		}
+
+        .close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 10;
+            color: #fff;
+            background: #666;
+            width: 44px;
+            height: 44px;
+            line-height: 44px;
+            text-align: center;
+            font-weight: normal;
+            font-size: 24px;
+            vertical-align: middle;
+        }
+
+        .checkbox {
+            line-height: 1;
+        }
+
+        .features {
+
+            .feature {
+                position: relative;
+                padding-bottom: 10px;
+                min-height: 44px;
+
+                input[type="checkbox"] {
+                    opacity: 0;
+                    position: absolute;
+                    left: -2px;
+                    top: -2px;
+                    width: 35px;
+                    height: 35px;
+                    z-index: 10;
+                }
+
+
+                .checkbox {
+                    padding-left: 40px;
+                    padding-top: 10px;
+                    &:before {
+                        content: ' ';
+                        display: block;
+                        position: absolute;
+                        left:0;
+                        top: 0;
+                        z-index: 1;
+                        border: 2px solid lighten(#4774cc, 30%);
+                        width: 30px;
+                        height: 30px;
+                    }
+                }
+
+                input[type="checkbox"]:checked ~ .checkbox {
+                    &:before {
+                        background: lighten(#4774cc, 10%);
+                    }
+                }
+            }
+        }
+
+
+        @media @screen-tiny {
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            border-radius: 0;
+
+            &.fade.in {
+                top: 0;
+            }
+            .modal-body {
+                box-sizing: border-box;
+                padding-bottom: 100px;
+            }
+
+            .modal-footer {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+            }
+        }
+	}
+    .modal-body { -webkit-overflow-scrolling:touch; }
+}
 
 // Cube ad
 .adwrapper { zoom: 1; padding: 0 0 12px 0; }
@@ -116,6 +230,23 @@ header {
 // Content
 section.the-goods { margin-top: 44px; }
 
+.help-prompt {
+    margin: 44px 0 22px 0;
+    padding: 11px;
+    background-color: #f1f1f1;
+    
+    p {
+        margin: 0;
+        text-align: center;
+        
+        &.prompt {
+            font-size: 13px;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 6px;
+        }
+    }
+}
 .playground-list {
     list-style-type: none;
     margin: 0;
@@ -285,23 +416,6 @@ section.the-goods { margin-top: 44px; }
         #zoom-out {
             border-radius: 0 0 4px 4px;
             border-top: none;
-        }
-    }
-    #search-help-prompt {
-        margin: 44px 0 22px 0;
-        padding: 11px;
-        background-color: #f1f1f1;
-        
-        p {
-            margin: 0;
-            text-align: center;
-            
-            &.prompt {
-                font-size: 13px;
-                font-weight: bold;
-                color: #555;
-                margin-bottom: 6px;
-            }
         }
     }
     #search-again {
