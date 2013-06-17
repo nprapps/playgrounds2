@@ -227,7 +227,7 @@ def render_playgrounds(playgrounds=None):
 
             compiled_includes = g.compiled_includes
 
-        path = 'www%s' % path
+        path = '.playgrounds_html%s' % path
 
         # Ensure path exists
         head = os.path.split(path)[0]
@@ -353,24 +353,24 @@ Changes to deployment requires a full-stack test. Deployment
 has two primary functions: Pushing flat files to S3 and deploying
 code to a remote server if required.
 """
-def _deploy_to_s3():
+def _deploy_to_s3(src='gzip'):
     """
     Deploy the gzipped stuff to S3.
     """
-    s3cmd = 's3cmd -P --add-header=Cache-Control:max-age=5 --guess-mime-type --recursive --exclude-from gzip_types.txt sync gzip/ %s'
-    s3cmd_gzip = 's3cmd -P --add-header=Cache-Control:max-age=5 --add-header=Content-encoding:gzip --guess-mime-type --recursive --exclude "*" --include-from gzip_types.txt sync gzip/ %s'
+    s3cmd = 's3cmd -P --add-header=Cache-Control:max-age=5 --guess-mime-type --recursive --exclude-from gzip_types.txt sync %s/ %s'
+    s3cmd_gzip = 's3cmd -P --add-header=Cache-Control:max-age=5 --add-header=Content-encoding:gzip --guess-mime-type --recursive --exclude "*" --include-from gzip_types.txt sync %s/ %s'
 
     for bucket in env.s3_buckets:
         env.s3_bucket = bucket
-        local(s3cmd % ('s3://%(s3_bucket)s/%(project_slug)s/' % env))
-        local(s3cmd_gzip % ('s3://%(s3_bucket)s/%(project_slug)s/' % env))
+        local(s3cmd % (src, 's3://%(s3_bucket)s/%(project_slug)s/' % env))
+        local(s3cmd_gzip % (src, 's3://%(s3_bucket)s/%(project_slug)s/' % env))
 
-def _gzip_www():
+def _gzip(src='www', dst='gzip'):
     """
     Gzips everything in www and puts it all in gzip
     """
-    local('python gzip_www.py')
-    local('rm -rf gzip/live-data')
+    local('python gzip_www.py %s %s' % (src, dst))
+    local('rm -rf %s/live-data' % dst)
 
 
 def render_confs():
@@ -444,8 +444,7 @@ def deploy(remote='origin'):
         _confirm("You are trying to deploy the '%(branch)s' branch to production.\nYou should really only deploy a stable branch.\nDo you know what you're doing?" % env)
 
     render()
-    render_playgrounds()
-    _gzip_www()
+    _gzip()
     _deploy_to_s3()
 
     if env['deploy_to_servers']:
@@ -456,6 +455,17 @@ def deploy(remote='origin'):
 
         if env['deploy_services']:
             deploy_confs()
+
+def deploy_playgrounds():
+    require('settings', provided_by=[production, staging])
+
+    if (env.settings == 'production' and env.branch != 'stable'):
+        _confirm("You are trying to deploy the '%(branch)s' branch to production.\nYou should really only deploy a stable branch.\nDo you know what you're doing?" % env)
+
+    #render_playgrounds()
+    _gzip('.playgrounds_html', '.playgrounds_gzip')
+    _deploy_to_s3('.playgrounds_gzip')
+
 
 """
 Application specific

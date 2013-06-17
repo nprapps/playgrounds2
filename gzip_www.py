@@ -4,6 +4,7 @@ from fnmatch import fnmatch
 import gzip
 import os
 import shutil
+import sys
 
 class FakeTime:
     def time(self):
@@ -17,10 +18,10 @@ def main():
     with open('gzip_types.txt') as f:
         gzip_globs = [glob.strip() for glob in f]
 
-    shutil.rmtree('gzip', ignore_errors=True)
-    shutil.copytree('www', 'gzip')
+    shutil.rmtree(sys.argv[2], ignore_errors=True)
+    shutil.copytree(sys.argv[1], sys.argv[2])
 
-    for path, dirs, files in os.walk('gzip'):
+    for path, dirs, files in os.walk(sys.argv[2]):
         for filename in files:
             if not any([fnmatch(filename, glob) for glob in gzip_globs]):
                 continue

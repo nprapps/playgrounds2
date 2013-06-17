@@ -47,7 +47,9 @@ DEPLOY_SERVICES = True
 S3_BUCKETS = []
 SERVERS = []
 DEBUG = True
-CLOUD_SEARCH_PROXY = 'http://127.0.0.1:8000'
+CLOUD_SEARCH_PROXY_BASE_URL = 'http://127.0.0.1:8000'
+S3_BASE_URL = 'http://127.0.0.1:8000'
+SERVER_BASE_URL = 'http://127.0.0.1:8001/%s' % PROJECT_SLUG
 
 """
 COPY EDITING
@@ -168,19 +170,28 @@ def configure_targets(deployment_target):
         S3_BUCKETS = PRODUCTION_S3_BUCKETS
         SERVERS = PRODUCTION_SERVERS
         DEBUG = False
-        CLOUD_SEARCH_PROXY = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
+
+        CLOUD_SEARCH_PROXY_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
+        S3_BASE_URL = 'http://%s/%s' % (S3_BUCKETS[0], PROJECT_SLUG)
+        SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
 
     elif deployment_target == 'staging':
         S3_BUCKETS = STAGING_S3_BUCKETS
         SERVERS = STAGING_SERVERS
         DEBUG = True
-        CLOUD_SEARCH_PROXY = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
+
+        CLOUD_SEARCH_PROXY_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
+        S3_BASE_URL = 'http://%s/%s' % (S3_BUCKETS[0], PROJECT_SLUG)
+        SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
 
     else:
-        S3_BUCKETS = None
-        SERVERS = ['127.0.0.1:8001']
+        S3_BUCKETS = None 
+        SERVERS = None 
         DEBUG = True
-        CLOUD_SEARCH_PROXY = 'http://127.0.0.1:8000'
+
+        CLOUD_SEARCH_PROXY_BASE_URL = 'http://127.0.0.1:8000'
+        S3_BASE_URL = 'http://127.0.0.1'
+        SERVER_BASE_URL = 'http://127.0.0.1:8001/%s'
 
     DEPLOYMENT_TARGET = deployment_target
 
