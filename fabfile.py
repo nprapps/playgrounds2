@@ -472,7 +472,7 @@ Application specific
 def _send_email(addresses, payload):
     connection = boto.ses.connect_to_region('us-east-1')
     connection.send_email(
-        'nprapps@npr.org',
+        'grich@npr.org',
         'Playgrounds Edits (%s)' % (datetime.datetime.utcnow().strftime('%m/%d %H:%M%p')),
         payload,
         addresses)
@@ -480,18 +480,13 @@ def _send_email(addresses, payload):
 def send_test_email():
     payload = """
     Howdy! This is a test email.
-    We'll send some more of these soon.
-    Hope you're really enjoying this!
-
-    Cheers,
-    Jeremy and Gerald
     """
-    addresses = ['grich@npr.org']
+    addresses = app_config.ADMIN_EMAILS
     _send_email(addresses, payload)
 
 def _send_revision_email(revision_group):
     payload = data.prepare_email(revision_group)
-    addresses = ['grich@npr.org']
+    addresses = app_config.ADMIN_EMAILS
     _send_email(addresses, payload)
 
 def download_data():
