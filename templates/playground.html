@@ -106,13 +106,6 @@
 </div>
 
 
-<div class="help-prompt">
-    <p class="prompt">{{ COPY.content.playground_help_title }}</p>
-    <p><a href="#edit-playground" class="btn btn-blue" data-toggle="modal">Edit This Page</a></p>
-    <p class="more"><a href="../about/">Learn more about NPR's accessible playgrounds project.</a></p>
-</div>
-
-
 <!-- nearby parks -->
 <div class="nearby">
     <h3>{{ COPY.content.playground_nearby_title }}</h3>
@@ -128,6 +121,14 @@
         {% endfor %}
     </ul>
 </div>
+
+
+<div class="help-prompt">
+    <p class="prompt">{{ COPY.content.playground_help_title }}</p>
+    <p><a href="#edit-playground" class="btn btn-blue btn-block" data-toggle="modal">Edit This Page</a></p>
+</div>
+<p class="learn-more"><a href="../about/">Learn more about NPR's accessible playgrounds project</a></p>
+
 
 <!-- update form -->
 <div id="edit-playground" class="update-form-modal modal hide fade">
