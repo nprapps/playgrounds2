@@ -76,7 +76,7 @@ def _cloudsearch_proxy(path):
 
     response = requests.get(url)
 
-    return (response.text, response.status_code, response.headers)
+    return ('myCallback(' + response.text + ');', response.status_code, response.headers)
 
 @app.route('/test/test.html')
 def test_dir():

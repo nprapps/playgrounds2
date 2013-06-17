@@ -146,10 +146,16 @@ function search() {
      */
     var latitude = parseFloat($search_latitude.val());
     var longitude = parseFloat($search_longitude.val());
-    var search_domain = 'http://' + APP_CONFIG.SERVERS[0] + '/';
+    var search_domain = null;
+    if (APP_CONFIG.DEPLOYMENT_TARGET == 'staging' || APP_CONFIG.DEPLOYMENT_TARGET == 'production') {
+        search_domain = 'http://' + APP_CONFIG.SERVERS[0] + '/' + APP_CONFIG.PROJECT_SLUG;
+    } else {
+        search_domain = 'http://127.0.0.1:8000';
+    }
+
 
     $.ajax({
-        url: search_domain + APP_CONFIG.PROJECT_SLUG + '/cloudsearch/2011-02-01/search',
+        url: search_domain + '/cloudsearch/2011-02-01/search',
         data: buildCloudSearchParams(),
         dataType: 'jsonp',
         success: function(data) {
