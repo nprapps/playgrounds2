@@ -147,10 +147,9 @@ function search() {
      */
     var latitude = parseFloat($search_latitude.val());
     var longitude = parseFloat($search_longitude.val());
-    var search_domain = APP_CONFIG.CLOUD_SEARCH_PROXY;
 
     $.ajax({
-        url: search_domain + '/cloudsearch/2011-02-01/search',
+        url: APP_CONFIG.CLOUD_SEARCH_PROXY_BASE_URL + '/cloudsearch/2011-02-01/search',
         data: buildCloudSearchParams(),
         dataType: 'jsonp',
         success: function(data) {

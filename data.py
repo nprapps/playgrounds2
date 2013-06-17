@@ -340,12 +340,12 @@ def prepare_email(revision_group):
     updated_playgrounds = Set([])
 
     for revision in revisions:
-        updated_playgrounds.add(revision.playground.id)
+        updated_playgrounds.add(revision.playground.slug)
 
-    for playground_id in updated_playgrounds:
+    for playground_slug in updated_playgrounds:
         p = Playground.get(id=playground_id)
         playground_dict = p.__dict__['_data']
-        playground_dict['site_url'] = 'http://127.0.0.1:8000/playground/%s.html' % playground_id
+        playground_dict['site_url'] = 'http://%s/playground/%s.html' % (app_config.S3_BASE_URL, playground_slug)
         playground_dict['revisions'] = []
         for revision in revisions:
             if revision.playground.id == playground_id:

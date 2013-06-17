@@ -51,3 +51,5 @@ updates-in-progress.json
 data/updates.json
 www/sitemap.xml
 *.un~ # Save file from vim, I think.
+.playgrounds_html
+.playgrounds_gzip
