@@ -502,6 +502,9 @@ section.the-goods { margin-top: 44px; }
             &.twitter a {
                 background-position: 0px -96px; 
             }
+            b { 
+                display: none;
+            }
 	    }
 	    &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
 	}
@@ -665,10 +668,8 @@ footer {
 		h1 { font-size: 36px; }
 	}
 	footer { border-top: 1px solid #CCC; margin-top: 24px; }
-	.playground .social {
-	    li { 
-	        width: auto; float: none; 
-	        &.facebook a { border-right: none; border-bottom: 2px solid #fff; }
-	    }
+	.playground .social li { 
+	    span { display: none; }
+	    b { display: inline; }
 	}
 }
