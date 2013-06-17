@@ -15,7 +15,9 @@
             <div class="features span6">
             <h4>Features</h4>
             {% for feature in features %}
-                {{ feature|safe }}
+                <div class="feature">
+                    {{ feature|safe }}
+                </div>
             {% endfor %}
             </div>
     </form>

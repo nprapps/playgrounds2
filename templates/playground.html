@@ -17,33 +17,35 @@
 
 {% block content %}
 
-<a href="#edit-playground" role="button" class="btn edit-playground-btn" data-toggle="modal">Edit this playground</a>
+<a href="#edit-playground" role="button" class="btn btn-blue btn-block btn-edit" data-toggle="modal">Edit This Playground</a>
 <h1>{{ playground.display_name }}</h1>
 
 <!-- Photos -->
 
 <!-- Map / Address -->
-{% if playground.latitude and playground.longitude %}
-<img src="http://api.tiles.mapbox.com/v3/{{ MAPBOX_BASE_LAYER }}/pin-m-star+ff6633({{ playground.longitude }},{{ playground.latitude }})/{{ playground.longitude }},{{ playground.latitude }},15/300x300.png" />
-{% endif %}
-<p>
-{% if playground.facility %}
-    {{ playground.facility }}
-    {% if playground.facility_type %}({{ playground.facility_type }}){% endif %}
-    <br />
-{% endif %}
-{% if playground.address %}{{ playground.address }}<br />{% endif %}
-{% if playground.city %}{{ playground.city }}, {% endif %}
-{% if playground.state %}{{ playground.state }} {% endif %}
-{% if playground.zip %}{{ playground.zip }} {% endif %}
-</p>
+<div class="address">
+    {% if playground.latitude and playground.longitude %}
+    <img src="http://api.tiles.mapbox.com/v3/{{ MAPBOX_BASE_LAYER }}/pin-m-star+ff6633({{ playground.longitude }},{{ playground.latitude }})/{{ playground.longitude }},{{ playground.latitude }},15/300x120.png" class="map"/>
+    {% endif %}
+    <p>
+    {% if playground.facility %}
+        {{ playground.facility }}
+        {% if playground.facility_type %}({{ playground.facility_type }}){% endif %}
+        <br />
+    {% endif %}
+    {% if playground.address %}{{ playground.address }}<br />{% endif %}
+    {% if playground.city %}{{ playground.city }}, {% endif %}
+    {% if playground.state %}{{ playground.state }} {% endif %}
+    {% if playground.zip %}{{ playground.zip }}{% endif %}
+    </p>
 
-<!-- Directions -->
-{% if playground.address %}
-<p><a href="https://maps.google.com/maps?saddr=&daddr={{ playground.address }}+{{ playground.city }}+{{ playground.state }}+{{ playground.zip }}&z=16" target="_blank" class="btn btn-blue">Get Driving Directions</a></p>
-{% elif playground.latitude and playground.longitude %}
-<p><a href="https://maps.google.com/maps?saddr=&daddr={{ playground.latitude }},{{ playground.longitude }}&z=16" target="_blank" class="btn btn-blue">Get Driving Directions</a></p>
-{% endif %}
+    <!-- Directions -->
+    {% if playground.address %}
+    <p><a href="https://maps.google.com/maps?saddr=&daddr={{ playground.address }}+{{ playground.city }}+{{ playground.state }}+{{ playground.zip }}&z=16" target="_blank" class="btn btn-blue">Get Driving Directions</a></p>
+    {% elif playground.latitude and playground.longitude %}
+    <p><a href="https://maps.google.com/maps?saddr=&daddr={{ playground.latitude }},{{ playground.longitude }}&z=16" target="_blank" class="btn btn-blue">Get Driving Directions</a></p>
+    {% endif %}
+</div>
 
 <!-- Share buttons -->
 <ul class="social">
@@ -53,58 +55,76 @@
 
 <!-- Categories / key features -->
 <!-- TODO: If categories/key features have been logged for this playground, list them -->
-<h3>Key Features</h3>
-<ul>
-    <li>Feature name</li>
-    <li>Feature name</li>
-    <li>Feature name</li>
-</ul>
+<div class="features">
+    <h3>Key Features</h3>
+    <ul>
+        <li>Feature name</li>
+        <li>Feature name</li>
+        <li>Feature name</li>
+    </ul>
+</div>
 
 <!-- Description -->
-{% if playground.remarks or playground.agency or playground.owner  %}
-<h3>About This Playground</h3>
+{% if playground.remarks or playground.agency or playground.owner %}
+<div class="about">
+    <h3>About This Playground</h3>
 {% endif %}
 
-{% if playground.remarks %}
-<p class="description">{{ playground.remarks }}</p>
+    {% if playground.remarks %}
+    <p class="description">{{ playground.remarks }}</p>
+    {% endif %}
+
+    {% if playground.agency or playground.owner  %}
+    <ul class="meta">
+        {% if playground.agency %}
+        <li class="agency">
+                <strong>Agency:</strong>
+                {{ playground.agency }}
+                {% if playground.agencytype %} ({{ playground.agencytype }}){% endif %}
+        </li>
+        {% endif %}
+        {% if playground.owner %}
+        <li class="owner">
+            <strong>Owner:</strong>
+            {{ playground.owner }}
+            {% if playground.owner_type %} ({{ playground.owner_type }}){% endif %}
+        </li>
+        {% endif %}
+    </ul>
+    {% endif %}
+{% if playground.remarks or playground.agency or playground.owner %}
+</div>
 {% endif %}
 
-{% if playground.agency or playground.owner  %}
-<ul>
-    {% if playground.agency %}
-    <li class="agency">
-            <strong>Agency:</strong>
-            {{ playground.agency }}
-            {% if playground.agencytype %} ({{ playground.agencytype }}){% endif %}
-    </li>
-    {% endif %}
-    {% if playground.owner %}
-    <li class="owner">
-        <strong>Owner:</strong>
-        {{ playground.owner }}
-        {% if playground.owner_type %} ({{ playground.owner_type }}){% endif %}
-    </li>
-    {% endif %}
-</ul>
-{% endif %}
 
 <!-- disqus -->
 <!-- TODO: add disqus form -->
-<h3>{{ COPY.content.playground_note_title }}</h3>
-<p>{{ COPY.content.playground_note_description }}</p>
+<div class="comments">
+    <h3>{{ COPY.content.playground_note_title }}</h3>
+    <p>{{ COPY.content.playground_note_description }}</p>
+</div>
+
 
 <h3>{{ COPY.content.playground_help_title }}</h3>
 <p><a href="#edit-playground" class="btn btn-blue" data-toggle="modal">Edit This Page</a></p>
 <p><a href="../about/">Learn more about NPR's accessible playgrounds project.</a></p>
 
-<!-- nearby parks -->
-<h3>{{ COPY.content.playground_nearby_title }}</h3>
-<ul>
-    {% for nearby in playground.nearby(3) %}
-    <li><a href="{{ url_for('_playground', playground_id=nearby.id) }}">{{ nearby.display_name }}</a> in {% if nearby.city %}{{ nearby.city }}, {% endif %}{{ nearby.state }} <span class="distance">({{ nearby.distance|round(1) }} miles away)</span></li>
-    {% endfor %}
-</ul>
 
+<!-- nearby parks -->
+<div class="nearby">
+    <h3>{{ COPY.content.playground_nearby_title }}</h3>
+    <ul class="playground-list">
+        {% for nearby in playground.nearby(3) %}
+        <li>
+            <a href="{{ url_for('_playground', playground_id=nearby.id) }}">{{ nearby.display_name }}</a>
+            <span class="distance">
+                {{ nearby.distance|round(1) }} miles away |
+                {% if nearby.city %}{{ nearby.city }}, {% endif %}{{ nearby.state }}
+            </span>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
 
 <!-- update form -->
 <div id="edit-playground" class="update-form-modal modal hide fade">
