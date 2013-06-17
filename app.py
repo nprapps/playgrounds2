@@ -41,19 +41,19 @@ def sitemap():
     context['pages'].append(('/', now))
 
     for playground in data.Playground.select():
-        context['pages'].append((url_for('_playground', playground_id=playground.id), now))
+        context['pages'].append((url_for('_playground', playground_slug=playground.slug), now))
 
     sitemap = render_template('sitemap.xml', **context)
 
     return (sitemap, 200, { 'content-type': 'application/xml' })
 
-@app.route('/playground/<int:playground_id>.html')
-def _playground(playground_id):
+@app.route('/playground/<string:playground_slug>.html')
+def _playground(playground_slug):
     """
     Playground detail page.
     """
     context = make_context()
-    context['playground'] = data.Playground.get(id=playground_id)
+    context['playground'] = data.Playground.get(slug=playground_slug)
     context['fields'] = context['playground'].update_form()
     context['features'] = context['playground'].feature_form()
 
