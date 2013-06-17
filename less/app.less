@@ -99,74 +99,6 @@ header {
     h1 { font-size: 33px; margin-bottom: 0; }
 }
 
-.playground {
-	.edit-playground-btn {
-		border: none;
-		box-sizing: border-box;
-		background: #6d8ac4;
-		-webkit-border-radius: 0;
-		   -moz-border-radius: 0;
-		        border-radius: 0;
-		color: #fff;
-		text-shadow: none;
-		width: 33.333333%;
-		padding: 15px;
-		font-size: 16px;
-		margin-bottom: 1.5em;
-
-		@media @screen-small {
-			width: 100%;
-		}
-	}
-
-	.update-form-modal {
-		ol {
-			list-style: none;
-			margin: 0;
-		}
-
-        .close {
-            position: absolute;
-            top: 0;
-            right: 0;
-            z-index: 10;
-            color: #fff;
-            background: #666;
-            width: 44px;
-            height: 44px;
-            line-height: 44px;
-            text-align: center;
-            font-weight: normal;
-            font-size: 24px;
-            vertical-align: middle;
-        }
-
-        @media @screen-tiny {
-            top: 0;
-            bottom: 0;
-            right: 0;
-            left: 0;
-            border-radius: 0;
-
-            &.fade.in {
-                top: 0;
-            }
-            .modal-body {
-                box-sizing: border-box;
-                padding-bottom: 100px;
-            }
-
-            .modal-footer {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-            }
-        }
-	}
-    .modal-body { -webkit-overflow-scrolling:touch; }
-}
-
 
 // Cube ad
 .adwrapper { zoom: 1; padding: 0 0 12px 0; }
@@ -183,6 +115,51 @@ header {
 
 // Content
 section.the-goods { margin-top: 44px; }
+
+.playground-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    
+    a {
+        display: block;
+        margin-bottom: 2px;
+    }
+    > li {
+        margin-bottom: 11px;
+        color: #555;
+        font-size: 15px;
+    }
+    .description {
+        display: block;
+        font-size: 12px;
+        padding-bottom: 11px;
+    }
+    .distance {
+        display: block;
+        font-size: 12px;
+    }
+    .distance + .description {
+        margin-top: 3px;
+    }
+    .map-letter {
+        float: left;
+        display: block;
+        background-color: #ff6706;
+        border-radius: 10px;
+        overflow: hidden;
+        width: 20px;
+        color: #fff;
+        text-align: center;
+        font-weight: bold;
+        font-size: 12px;
+    }
+    .map-result {
+        margin-left: 30px;
+    }
+}
+
+
 .index {
     h3#help-title {
         margin-top: 55px;
@@ -257,6 +234,19 @@ section.the-goods { margin-top: 44px; }
             }
         }
     }
+    #search-results {
+        display: none;
+        
+        /*
+
+        > li {
+            margin-bottom: 11px;
+        }
+        .distance {
+            margin-bottom: 3px;
+        }
+        */
+    }
     #search-results-wrapper {
         display: none;
     }
@@ -297,47 +287,6 @@ section.the-goods { margin-top: 44px; }
             border-top: none;
         }
     }
-    ul#search-results {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        display: none;
-        
-        > li {
-            margin-bottom: 22px;
-            color: #555;
-            font-size: 15px;
-        }
-        .description {
-            display: block;
-            font-size: 12px;
-        }
-        .distance {
-            margin-bottom: 3px;
-            display: block;
-            font-size: 12px;
-        }
-        .map-letter {
-            float: left;
-            display: block;
-            background-color: #ff6706;
-            border-radius: 10px;
-            overflow: hidden;
-            width: 20px;
-            color: #fff;
-            text-align: center;
-            font-weight: bold;
-            font-size: 12px;
-        }
-        .map-result {
-            margin-left: 30px;
-            
-            a {
-                display: block;
-                margin-bottom: 2px;
-            }
-        }
-    }
     #search-help-prompt {
         margin: 44px 0 22px 0;
         padding: 11px;
@@ -358,6 +307,94 @@ section.the-goods { margin-top: 44px; }
     #search-again {
         display: none;
     }
+}
+
+
+.playground {
+    h3 {
+        margin: 0 0 11px 0;
+        font-size: 18px;
+    }
+    p, li {
+        font-size: 15px;
+        line-height: 1.4;
+    }
+    ul {
+	    margin: 0;
+	    padding: 0;
+	    list-style-type: none;
+    }
+    .about,
+    .address,
+    .comments,
+    .features,
+    .social {
+        margin-bottom: 33px;
+    }
+	.btn-edit,
+	a.btn-edit {
+		width: 33.333333%;
+		font-size: 14px;
+		margin-bottom: 33px;
+
+		@media @screen-small {
+			width: 100%;
+		}
+	}
+	.map {
+	    display: block;
+	    margin-bottom: 11px;
+	}
+	.meta {
+	}
+	.social {
+	}
+	.update-form-modal {
+		ol {
+			list-style: none;
+			margin: 0;
+		}
+
+        .close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 10;
+            color: #fff;
+            background: #666;
+            width: 44px;
+            height: 44px;
+            line-height: 44px;
+            text-align: center;
+            font-weight: normal;
+            font-size: 24px;
+            vertical-align: middle;
+        }
+
+        @media @screen-tiny {
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            border-radius: 0;
+
+            &.fade.in {
+                top: 0;
+            }
+            .modal-body {
+                box-sizing: border-box;
+                padding-bottom: 100px;
+            }
+
+            .modal-footer {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+            }
+        }
+	}
+    .modal-body { -webkit-overflow-scrolling:touch; }
 }
 
 
