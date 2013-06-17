@@ -511,9 +511,9 @@ def local_bootstrap():
 
 def bootstrap():
     require('settings', provided_by=[production, staging])
-        update_copy()
-        download_data()
-        load_data()
+    update_copy()
+    download_data()
+    load_data()
 
 def update_records():
     """
