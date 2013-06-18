@@ -129,7 +129,8 @@ PUBLIC_FIELDS = [
     "owner",
     "remarks",
     "url",
-    'id'
+    "id",
+    "slug"
 ]
 
 """
