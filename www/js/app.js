@@ -211,6 +211,12 @@ function search() {
     hide_search();
 }
 
+function reset_zoom() {
+    zoom = RESULTS_DEFAULT_ZOOM;
+    $zoom_in.removeAttr('disabled');
+    $zoom_out.removeAttr('disabled');
+}
+
 function show_search() {
     $search_form.show();
     $search_results_wrapper.hide();
@@ -255,6 +261,7 @@ $(function() {
     }
 
     $geolocate_button.click(function() {
+        reset_zoom();
         navigator.geolocation.getCurrentPosition(function(position) {
             hide_search();
             $search_help.hide();
@@ -335,6 +342,7 @@ $(function() {
     });
 
     $search_form.submit(function() {
+        reset_zoom();
         hide_search();
         $search_help.hide();
         $search_results.empty();
