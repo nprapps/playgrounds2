@@ -342,71 +342,73 @@ $(function() {
     });
 
     $search_form.submit(function() {
-        reset_zoom();
-        hide_search();
-        $search_help.hide();
-        $search_results.empty();
-        $search_results_map_wrapper.hide();
-        $results_address.hide();
-        $no_geocode.hide();
-        $search_results_wrapper.show();
+        if ($search_query.val() != '' || $search_address.val() != '') {
+            reset_zoom();
+            hide_search();
+            $search_help.hide();
+            $search_results.empty();
+            $search_results_map_wrapper.hide();
+            $results_address.hide();
+            $no_geocode.hide();
+            $search_results_wrapper.show();
 
-        var address = $search_address.val();
+            var address = $search_address.val();
 
-        if (address) {
-            $results_loading.show();
+            if (address) {
+                $results_loading.show();
 
-            $.ajax({
-                'url': 'http://open.mapquestapi.com/geocoding/v1/address',
-                'data': { 'location': address },
-                'dataType': 'jsonp',
-                'contentType': 'application/json',
-                'success': function(data) {
-                    var locales = data['results'][0]['locations'];
+                $.ajax({
+                    'url': 'http://open.mapquestapi.com/geocoding/v1/address',
+                    'data': { 'location': address },
+                    'dataType': 'jsonp',
+                    'contentType': 'application/json',
+                    'success': function(data) {
+                        var locales = data['results'][0]['locations'];
 
-                    locales = _.filter(locales, function(locale) {
-                        return locale['adminArea1'] == 'US';
-                    });
-
-                    $results_loading.hide();
-
-                    if (locales.length == 0) {
-                        $did_you_mean.append('<li>No results</li>');
-
-                        $no_geocode.show();
-                    } else if (locales.length == 1) {
-                        var locale = locales[0];
-
-                        $search_latitude.val(locale['latLng']['lat']);
-                        $search_longitude.val(locale['latLng']['lng']);
-
-                        $results_address.html('Showing results near ' + formatMapQuestAddress(locale));
-
-                        $results_loading.show();
-                        search();
-                    } else {
-                        $did_you_mean.empty();
-
-                        _.each(locales, function(locale) {
-                            var context = $.extend(APP_CONFIG, locale);
-                            context['address'] = formatMapQuestAddress(locale);
-
-                            var html = JST.did_you_mean_item(context);
-
-                            $did_you_mean.append(html);
-
+                        locales = _.filter(locales, function(locale) {
+                            return locale['adminArea1'] == 'US';
                         });
 
-                        $search_help.show();
-                        $search_help_us.hide();
+                        $results_loading.hide();
+
+                        if (locales.length == 0) {
+                            $did_you_mean.append('<li>No results</li>');
+
+                            $no_geocode.show();
+                        } else if (locales.length == 1) {
+                            var locale = locales[0];
+
+                            $search_latitude.val(locale['latLng']['lat']);
+                            $search_longitude.val(locale['latLng']['lng']);
+
+                            $results_address.html('Showing results near ' + formatMapQuestAddress(locale));
+
+                            $results_loading.show();
+                            search();
+                        } else {
+                            $did_you_mean.empty();
+
+                            _.each(locales, function(locale) {
+                                var context = $.extend(APP_CONFIG, locale);
+                                context['address'] = formatMapQuestAddress(locale);
+
+                                var html = JST.did_you_mean_item(context);
+
+                                $did_you_mean.append(html);
+
+                            });
+
+                            $search_help.show();
+                            $search_help_us.hide();
+                        }
                     }
-                }
-            });
-        } else {
-            $search_latitude.val('');
-            $search_longitude.val('');
-            $results_loading.show();
-            search();
+                });
+            } else {
+                $search_latitude.val('');
+                $search_longitude.val('');
+                $results_loading.show();
+                search();
+            }
         }
         return false;
     });
