@@ -40,7 +40,7 @@
     </div>
     <input type="hidden" name="latitude" />
     <input type="hidden" name="longitude" />
-    <input type="submit" id="search-btn" value="Search" class="btn btn-blue btn-block" />
+    <button type="submit" id="search-btn" class="btn btn-blue btn-block"><i class="icon-search"></i> Search</button>
 </form>
 
 <div id="search-help">
@@ -49,7 +49,7 @@
     <h6 class="divider">OR</h6>
 </div>
 
-<div id="no-results">
+<div id="no-geocode">
     <h4>Sorry, we couldn't locate that address.</h4>
 </div>
 
@@ -68,11 +68,11 @@
 
     <div class="help-prompt">
         <p class="prompt">Are we missing something? Help us out:</p>
-        <p><a href="playground/create/" class="btn btn-blue btn-block">Add A Playground</a></p> 
+        <p><a href="playground/create/" class="btn btn-blue btn-block"><i class="icon-plus-sign"></i> Add A Playground</a></p> 
     </div>
 </div>
 
-<button type="button" id="search-again" class="btn btn-blue btn-block">Try Another Search</button>
+<button type="button" id="search-again" class="btn btn-blue btn-block"><i class="icon-search"></i> Try Another Search</button>
 
 
 <h3 id="help-title">{{ COPY.content.help_title }}</h3>
