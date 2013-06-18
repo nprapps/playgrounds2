@@ -262,7 +262,14 @@ def tests():
     """
     Run Python unit tests.
     """
-    local('nosetests')
+    local('mv playgrounds.db playgrounds.db.bak')
+    local('mv data/updates.json data/updates.json.bak')
+
+    with settings(warn_only=True):
+        local('nosetests')
+
+    local('mv playgrounds.db.bak playgrounds.db')
+    local('mv data/updates.json.bak data/updates.json')
 
 """
 Setup
