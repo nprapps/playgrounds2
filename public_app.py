@@ -53,8 +53,8 @@ def _dynamic_page():
     return datetime.datetime.now().isoformat()
 
 
-@app.route('/%s/api/' % app_config.PROJECT_SLUG, methods=['POST'])
-def _api():
+@app.route('/%s/edit-playground/' % app_config.PROJECT_SLUG, methods=['POST'])
+def edit_playground():
 
     # Get the current state of the request global.
     from flask import request

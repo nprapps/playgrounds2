@@ -321,8 +321,14 @@ section.the-goods { margin-top: 44px; }
             text-align: center;
             vertical-align: top;
             color: #555;
-            background-color: rgba(255,255,255,0.8);
+            background: #fff;
+            background: rgba(255,255,255,0.8);
             border: 1px solid #aaa;
+
+            &[disabled=disabled] {
+                color: #ccc;
+                opacity: .6;
+            }
         }
         #zoom-in {
             border-radius: 4px 4px 0 0;
