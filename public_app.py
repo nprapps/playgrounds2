@@ -5,7 +5,7 @@ import json
 import os
 import time
 
-from flask import Flask
+from flask import Flask, redirect
 
 import app_config
 import data
@@ -129,8 +129,13 @@ def edit_playground():
             # Can you believe r+ won't create a file? That's turrible.
             write_data(payload, 'w')
 
-        # For the moment, let's return the payload JSON. Will probably do something else.
-        return json.dumps(payload)
+        if app_config.DEPLOYMENT_TARGET in ['production', 'staging']:
+            url = app_config.S3_BASE_URL + '/' + app_config.PROJECT_SLUG
+
+        else:
+            url = app_config.S3_BASE_URL
+
+        return redirect(url + '/playground/%s.html?action=editing_thanks' % payload['playground']['slug'])
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8001, debug=app_config.DEBUG)
