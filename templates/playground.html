@@ -63,7 +63,7 @@
 
 <!-- Categories / key features -->
 <div class="playground-features">
-    <h3>Key Features</h3>
+    <h4>Key Features</h4>
     <ul>
         <li>Ramps to play components <i class="icon icon-question-sign" data-toggle="tooltip" title="Ramps lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">About</i></li>
         <li>Accessible swing <i class="icon icon-question-sign" data-toggle="tooltip" title="Swing lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">About</i></li>
@@ -74,7 +74,7 @@
 <!-- Description -->
 {% if playground.remarks or playground.agency or playground.owner %}
 <div class="about">
-    <h3>About This Playground</h3>
+    <h4>About This Playground</h4>
 {% endif %}
 
     {% if playground.public_remarks %}
@@ -107,14 +107,14 @@
 <!-- disqus -->
 <!-- TODO: add disqus form -->
 <div class="comments">
-    <h3>{{ COPY.content.playground_note_title }}</h3>
+    <h4>{{ COPY.content.playground_note_title }}</h4>
     <p>{{ COPY.content.playground_note_description }}</p>
 </div>
 
 
 <!-- nearby parks -->
 <div class="nearby">
-    <h3>{{ COPY.content.playground_nearby_title }}</h3>
+    <h4>{{ COPY.content.playground_nearby_title }}</h4>
     <ul class="playground-list">
         {% for nearby in playground.nearby(3) %}
         <li>
