@@ -41,11 +41,11 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         with open('data/updates.json') as f:
-            data = json.load(f)
+            updates = json.load(f)
 
-        self.assertEqual(len(data), 1)
-        self.assertEqual(data[0]['playground']['id'], 0)
-        self.assertEqual(data[0]['playground']['name'], 'NEW NAME')
+        self.assertEqual(len(updates), 1)
+        self.assertEqual(updates[0]['playground']['id'], 0)
+        self.assertEqual(updates[0]['playground']['name'], 'NEW NAME')
 
     def test_edit_two_playgrounds(self):
         try:
@@ -66,13 +66,13 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         with open('data/updates.json') as f:
-            data = json.load(f)
+            updates = json.load(f)
 
-        self.assertEqual(len(data), 2)
-        self.assertEqual(data[0]['playground']['id'], 0)
-        self.assertEqual(data[0]['playground']['name'], 'NEW NAME')
-        self.assertEqual(data[1]['playground']['id'], 1)
-        self.assertEqual(data[1]['playground']['name'], 'ANOTHER NEW NAME')
+        self.assertEqual(len(updates), 2)
+        self.assertEqual(updates[0]['playground']['id'], 0)
+        self.assertEqual(updates[0]['playground']['name'], 'NEW NAME')
+        self.assertEqual(updates[1]['playground']['id'], 1)
+        self.assertEqual(updates[1]['playground']['name'], 'ANOTHER NEW NAME')
 
     def test_delete_playground(self):
         response = self.client.post(url_for('delete_playground'), data={

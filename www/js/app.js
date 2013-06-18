@@ -152,7 +152,7 @@ function search() {
      */
     var latitude = parseFloat($search_latitude.val());
     var longitude = parseFloat($search_longitude.val());
-            
+
     $search_results.empty();
     $search_results_map_loading.show();
     $search_results_map.css('opacity', '0.25');
@@ -258,6 +258,38 @@ $(function() {
 
     if (is_index) {
         crs = L.CRS.EPSG3857;
+    }
+
+    /* THE THANK YOU MESSAGE BLOCK */
+
+    // This is a function from the internet for parsing the URL location.
+    // Returns undefined if the key doesn't exist; returns the value if it does.
+    function getURLParameter(name) {
+        return decodeURI(
+            (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[null])[1]
+        );
+    }
+
+    // This is the part that Danny or Aly will be making do something interesting.
+    // COPYTEXT[message] will contain the message from the copy spreadsheet.
+    function writeMessage(message) {
+        alert(message);
+    }
+
+    // Fetches the key from the URL. This could easily be undefined or null.
+    var action = getURLParameter('action');
+
+    // If the URL parameter doesn't exist or is blank, don't do anything.
+    // If it does exist, pass to write_message.
+    // This block handles looking up the key from the URL and the message from the copy text.
+    if ((action !== "undefined") && (action !== null)) {
+        // Look up the message in the copy text.
+        var message = COPYTEXT[action];
+
+        // Only if the message exists should writeMessage() get called.
+        if ((message !== "undefined") && (message !== null)) {
+            writeMessage(message);
+        }
     }
 
     $geolocate_button.click(function() {
@@ -418,13 +450,6 @@ $(function() {
         $search_divider.show();
     }
 
-    $search_results_map.width(RESULTS_MAP_WIDTH);
-    $search_results_map.height(RESULTS_MAP_HEIGHT);
-    $search_results_map_loading.css({
-        'left': RESULTS_MAP_WIDTH / 2 - 8,
-        'top': RESULTS_MAP_HEIGHT / 2 - 8
-    });
-    
     if (is_playground) {
         $('.playground-features i').tooltip( { trigger: 'click' } );
     }

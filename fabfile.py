@@ -14,6 +14,7 @@ import requests
 
 import app
 import app_config
+import copytext
 import data
 from etc import github
 
@@ -128,6 +129,18 @@ def app_config_js():
     with open('www/js/app_config.js', 'w') as f:
         f.write(js)
 
+def copy_text_js():
+    """
+    Render copy_text messages to a js file.
+    """
+    copy = {}
+
+    for message in ['editing_thanks', 'creating_thanks', 'deleting_thanks']:
+        copy[message] = unicode(getattr(copytext.Copy().content, message))
+
+    with open('www/js/copy_text.js', 'w') as f:
+        f.write('window.COPYTEXT = %s' % json.dumps(copy))
+
 def render():
     """
     Render HTML templates and compile assets.
@@ -143,6 +156,7 @@ def render():
     app_config.configure_targets(env.get('settings', None))
 
     app_config_js()
+    copy_text_js()
 
     compiled_includes = []
 
@@ -208,6 +222,7 @@ def render_playgrounds(playgrounds=None):
     app_config.configure_targets(env.get('settings', None))
 
     app_config_js()
+    copy_text_js()
 
     compiled_includes = []
 

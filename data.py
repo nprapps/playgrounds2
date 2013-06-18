@@ -88,15 +88,12 @@ class Playground(Model):
 
         super(Playground, self).save(*args, **kwargs)
 
-
     @property
     def features(self):
         features = []
         for feature in PlaygroundFeature.select().where(PlaygroundFeature.playground == self.id):
             features.append(feature.__dict__['_data'])
         return features
-
-
 
     def slugify(self):
         bits = []
@@ -176,7 +173,7 @@ class Playground(Model):
             field_value = self.__dict__['_data'][field]
             if field_value == None:
                 field_value = ''
-            if field == 'id':
+            if field in ['slug', 'id']:
                 field_dict['display'] = 'style="display:none"'
                 field_dict['widget'] = '<input class="input" type="text" name="%s" value="%s" data-changed="true"></input>' % (field, field_value)
             elif field == 'remarks':
