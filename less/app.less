@@ -139,6 +139,7 @@ section.the-goods { margin-top: 44px; }
     display: none;
 }
 
+
 .help-prompt {
     margin: 44px 0 22px 0;
     padding: 11px;
@@ -155,8 +156,18 @@ section.the-goods { margin-top: 44px; }
             margin-bottom: 6px;
         }
     }
+    
+    &.help-prompt-primary {
+        margin-top: -11px;
+    }
 }
 .playground #main-content .help-prompt p.prompt { font-size: 13px; }
+
+
+.icon-pencil,
+.icon-road {
+    margin-right: 5px;
+}
 
 
 .playground-list {
@@ -361,11 +372,9 @@ section.the-goods { margin-top: 44px; }
 	.btn-edit,
 	a.btn-edit {
 		width: 33.333333%;
-		font-size: 14px;
-		margin-bottom: 33px;
 
 		@media @screen-small {
-			width: 100%;
+			width: auto;
 		}
 	}
 	.playground-features {

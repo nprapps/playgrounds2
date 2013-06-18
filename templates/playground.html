@@ -22,11 +22,12 @@
     {{ COPY.content.form_remove_confirm }}
 </div>
 
-<a href="#edit-playground" role="button" class="btn btn-blue btn-block btn-edit" data-toggle="modal"><i class="icon-pencil"></i> Edit This Playground</a>
+<div class="help-prompt help-prompt-primary">
+    <p class="prompt">{{ COPY.content.playground_help_primary_title }}</p>
+    <a href="#edit-playground" role="button" class="btn btn-blue btn-block btn-edit" data-toggle="modal"><i class="icon-pencil"></i> {{ COPY.content.playground_help_button }}</a>
+</div>
 
 <h1>{{ playground.display_name }}</h1>
-
-<!-- Photos -->
 
 <!-- Map / Address -->
 <div class="address">
@@ -61,7 +62,6 @@
 </ul>
 
 <!-- Categories / key features -->
-<!-- TODO: If categories/key features have been logged for this playground, list them -->
 <div class="playground-features">
     <h3>Key Features</h3>
     <ul>
@@ -131,7 +131,7 @@
 
 <div class="help-prompt">
     <p class="prompt">{{ COPY.content.playground_help_title }}</p>
-    <p><a href="#edit-playground" class="btn btn-blue btn-block" data-toggle="modal">Edit This Page</a></p>
+    <p><a href="#edit-playground" class="btn btn-blue btn-block" data-toggle="modal"><i class="icon-pencil"></i> {{ COPY.content.playground_help_button }}</a></p>
 </div>
 
 <p class="removal">Is this listing inappropriate? <a href="#remove-playground" role="button" data-toggle="modal">Suggest this playground for removal.</a></p>
