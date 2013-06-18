@@ -17,10 +17,17 @@
 
 {% block content %}
 
-<a href="#edit-playground" role="button" class="btn btn-blue btn-block btn-edit" data-toggle="modal">Edit This Playground</a>
-<h1>{{ playground.display_name }}</h1>
+<div class="alert alert-remove">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ COPY.content.form_remove_confirm }}
+</div>
 
-<!-- Photos -->
+<div class="help-prompt help-prompt-primary">
+    <p class="prompt">{{ COPY.content.playground_help_primary_title }}</p>
+    <a href="#edit-playground" role="button" class="btn btn-blue btn-block btn-edit" data-toggle="modal"><i class="icon-pencil"></i> {{ COPY.content.playground_help_button }}</a>
+</div>
+
+<h1>{{ playground.display_name }}</h1>
 
 <!-- Map / Address -->
 <div class="address">
@@ -36,13 +43,13 @@
     {% if playground.address %}{{ playground.address }}<br />{% endif %}
     {% if playground.city %}{{ playground.city }}, {% endif %}
     {% if playground.state %}{{ playground.state }} {% endif %}
-    {% if playground.zip %}{{ playground.zip }}{% endif %}
+    {% if playground.zip_code %}{{ playground.zip_code }}{% endif %}
     {% if playground.url %}<br /><a href="{{ playground.url }}">Website</a>{% endif %}
     </p>
 
     <!-- Directions -->
     {% if playground.address %}
-    <p><a href="https://maps.google.com/maps?saddr=&daddr={{ playground.address }}+{{ playground.city }}+{{ playground.state }}+{{ playground.zip }}&z=16" target="_blank" class="btn btn-blue">Get Driving Directions</a></p>
+    <p><a href="https://maps.google.com/maps?saddr=&daddr={{ playground.address }}+{{ playground.city }}+{{ playground.state }}+{{ playground.zip }}&z=16" target="_blank" class="btn btn-blue"><i class="icon-road"></i> Get Driving Directions</a></p>
     {% elif playground.latitude and playground.longitude %}
     <p><a href="https://maps.google.com/maps?saddr=&daddr={{ playground.latitude }},{{ playground.longitude }}&z=16" target="_blank" class="btn btn-blue">Get Driving Directions</a></p>
     {% endif %}
@@ -55,9 +62,8 @@
 </ul>
 
 <!-- Categories / key features -->
-<!-- TODO: If categories/key features have been logged for this playground, list them -->
 <div class="playground-features">
-    <h3>Key Features</h3>
+    <h4>Key Features</h4>
     <ul>
         <li>Ramps to play components <i class="icon icon-question-sign" data-toggle="tooltip" title="Ramps lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">About</i></li>
         <li>Accessible swing <i class="icon icon-question-sign" data-toggle="tooltip" title="Swing lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">About</i></li>
@@ -68,7 +74,7 @@
 <!-- Description -->
 {% if playground.remarks or playground.agency or playground.owner %}
 <div class="about">
-    <h3>About This Playground</h3>
+    <h4>About This Playground</h4>
 {% endif %}
 
     {% if playground.public_remarks %}
@@ -101,14 +107,14 @@
 <!-- disqus -->
 <!-- TODO: add disqus form -->
 <div class="comments">
-    <h3>{{ COPY.content.playground_note_title }}</h3>
+    <h4>{{ COPY.content.playground_note_title }}</h4>
     <p>{{ COPY.content.playground_note_description }}</p>
 </div>
 
 
 <!-- nearby parks -->
 <div class="nearby">
-    <h3>{{ COPY.content.playground_nearby_title }}</h3>
+    <h4>{{ COPY.content.playground_nearby_title }}</h4>
     <ul class="playground-list">
         {% for nearby in playground.nearby(3) %}
         <li>
@@ -125,16 +131,21 @@
 
 <div class="help-prompt">
     <p class="prompt">{{ COPY.content.playground_help_title }}</p>
-    <p><a href="#edit-playground" class="btn btn-blue btn-block" data-toggle="modal">Edit This Page</a></p>
+    <p><a href="#edit-playground" class="btn btn-blue btn-block" data-toggle="modal"><i class="icon-pencil"></i> {{ COPY.content.playground_help_button }}</a></p>
 </div>
-<p class="removal">Is this listing inappropriate? <a href="">Suggest this playground for removal.</a></p>
+
+<p class="removal">Is this listing inappropriate? <a href="#remove-playground" role="button" data-toggle="modal">Suggest this playground for removal.</a></p>
 <p class="learn-more"><a href="../about/">Learn more about NPR's accessible playgrounds project</a></p>
 
 
 <!-- update form -->
 <div id="edit-playground" class="update-form-modal modal hide fade">
-    
 	{% include "_form.html" %}
+</div>
+
+<!-- update form -->
+<div id="remove-playground" class="remove-form-modal modal hide fade">
+	{% include "_form-remove.html" %}
 </div>
 {% endblock %}
 

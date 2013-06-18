@@ -20,6 +20,7 @@ var $search_results_wrapper = null;
 var $search_results = null;
 var $search_results_map_wrapper = null;
 var $search_results_map = null;
+var $search_results_map_loading = null;
 var $zoom_in = null;
 var $zoom_out = null;
 var $search_help = null;
@@ -27,6 +28,7 @@ var $search_help_us = null;
 var $did_you_mean = null;
 var $results_address = null;
 var $no_geocode = null;
+var $results_loading = null;
 
 var is_index = false;
 var is_playground = false;
@@ -151,12 +153,16 @@ function search() {
     var latitude = parseFloat($search_latitude.val());
     var longitude = parseFloat($search_longitude.val());
 
+    $search_results.empty();
+    $search_results_map_loading.show();
+    $search_results_map.css('opacity', '0.25');
+
     $.ajax({
         url: APP_CONFIG.CLOUD_SEARCH_PROXY_BASE_URL + '/cloudsearch/2011-02-01/search',
         data: buildCloudSearchParams(),
         dataType: 'jsonp',
         success: function(data) {
-            $search_results.empty();
+            $results_loading.hide();
 
             var markers = [];
 
@@ -182,6 +188,13 @@ function search() {
             if (latitude) {
                 markers.push(buildMapboxPin('l', 'circle', '006633', latitude, longitude));
 
+                $search_results_map.on('load', function() {
+                    $search_results_map_loading.hide();
+                    $search_results_map.css('opacity', '1.0');
+
+                    $search_results_map.off('load');
+                });
+
                 $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + APP_CONFIG.MAPBOX_BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + RESULTS_MAP_WIDTH + 'x' + RESULTS_MAP_HEIGHT + '.png');
 
                 $search_results_map_wrapper.show();
@@ -196,6 +209,12 @@ function search() {
     });
 
     hide_search();
+}
+
+function reset_zoom() {
+    zoom = RESULTS_DEFAULT_ZOOM;
+    $zoom_in.removeAttr('disabled');
+    $zoom_out.removeAttr('disabled');
 }
 
 function show_search() {
@@ -224,6 +243,7 @@ $(function() {
     $search_results = $('#search-results');
     $search_results_map_wrapper = $('#search-results-map-wrapper');
     $search_results_map = $('#search-results-map');
+    $search_results_map_loading = $('#search-results-map-loading');
     $zoom_in = $('#zoom-in');
     $zoom_out = $('#zoom-out');
     $search_help = $('#search-help');
@@ -231,6 +251,7 @@ $(function() {
     $search_help_us = $('#search-help-prompt');
     $results_address = $('#results-address');
     $no_geocode = $('#no-geocode');
+    $results_loading = $('#results-loading');
 
     is_index = $('body').hasClass('index');
     is_playground = $('body').hasClass('playground');
@@ -272,6 +293,7 @@ $(function() {
     }
 
     $geolocate_button.click(function() {
+        reset_zoom();
         navigator.geolocation.getCurrentPosition(function(position) {
             hide_search();
             $search_help.hide();
@@ -284,6 +306,7 @@ $(function() {
 
             $search_latitude.val(position.coords.latitude);
             $search_longitude.val(position.coords.longitude);
+            $results_loading.show();
             search();
         });
         $results_address.html('Showing results nearby');
@@ -342,6 +365,7 @@ $(function() {
         $search_help.hide();
         $search_help_us.show();
 
+        $results_loading.show();
         search();
     });
 
@@ -350,6 +374,7 @@ $(function() {
     });
 
     $search_form.submit(function() {
+        reset_zoom();
         hide_search();
         $search_help.hide();
         $search_results.empty();
@@ -361,6 +386,8 @@ $(function() {
         var address = $search_address.val();
 
         if (address) {
+            $results_loading.show();
+
             $.ajax({
                 'url': 'http://open.mapquestapi.com/geocoding/v1/address',
                 'data': { 'location': address },
@@ -372,6 +399,8 @@ $(function() {
                     locales = _.filter(locales, function(locale) {
                         return locale['adminArea1'] == 'US';
                     });
+
+                    $results_loading.hide();
 
                     if (locales.length == 0) {
                         $did_you_mean.append('<li>No results</li>');
@@ -385,6 +414,7 @@ $(function() {
 
                         $results_address.html('Showing results near ' + formatMapQuestAddress(locale));
 
+                        $results_loading.show();
                         search();
                     } else {
                         $did_you_mean.empty();
@@ -407,6 +437,7 @@ $(function() {
         } else {
             $search_latitude.val('');
             $search_longitude.val('');
+            $results_loading.show();
             search();
         }
         return false;

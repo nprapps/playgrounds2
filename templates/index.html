@@ -40,7 +40,7 @@
     </div>
     <input type="hidden" name="latitude" />
     <input type="hidden" name="longitude" />
-    <input type="submit" id="search-btn" value="Search" class="btn btn-blue btn-block" />
+    <button type="submit" id="search-btn" class="btn btn-blue btn-block"><i class="icon-search"></i> Search</button>
 </form>
 
 <div id="search-help">
@@ -53,10 +53,14 @@
     <h4>Sorry, we couldn't locate that address.</h4>
 </div>
 
+<div id="results-loading">Loading...</div>
+
 <div id="search-results-wrapper">
     <h4 id="results-address"></h4>
     <div id="search-results-map-wrapper">
         <img id="search-results-map" src="" />
+        <img id="search-results-map-loading" src="img/loading.gif" />
+
         <div class="zoom-buttons">
             <button type="button" id="zoom-in" class="btn-zoom">+</button>
             <button type="button" id="zoom-out" class="btn-zoom">-</button>
@@ -67,12 +71,12 @@
     </ul>
 
     <div class="help-prompt">
-        <p class="prompt">Are we missing something? Help us out:</p>
-        <p><a href="playground/create/" class="btn btn-blue btn-block">Add A Playground</a></p> 
+        <p class="prompt">{{ COPY.content.search_help_title }}</p>
+        <p><a href="playground/create/" class="btn btn-blue btn-block"><i class="icon-plus-sign"></i> {{ COPY.content.search_help_button }}</a></p> 
     </div>
 </div>
 
-<button type="button" id="search-again" class="btn btn-blue btn-block">Try Another Search</button>
+<button type="button" id="search-again" class="btn btn-blue btn-block"><i class="icon-search"></i> Try Another Search</button>
 
 
 <h3 id="help-title">{{ COPY.content.help_title }}</h3>
