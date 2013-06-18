@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import json
-import os
 import unittest
 
 import boto
@@ -12,6 +11,7 @@ from flask import url_for
 import app_config
 import data
 import public_app
+import tests.utils as utils
 
 class ApiTestCase(unittest.TestCase):
     """
@@ -21,60 +21,71 @@ class ApiTestCase(unittest.TestCase):
         public_app.app.config['TESTING'] = True
         self.client = public_app.app.test_client()
 
+        utils.backup_updates_json()
+
         self.request_context = public_app.app.test_request_context()
         self.request_context.push()
 
     def tearDown(self):
         self.request_context.pop()
 
+        utils.restore_updates_json()
+
     def test_edit_playground(self):
-        try:
-            os.remove('data/updates.json')
-        except:
-            pass
-        
+        utils.load_test_playgrounds()
+
         response = self.client.post(url_for('edit_playground'), data={
-            'id': 0,
+            'id': 1,
             'name': 'NEW NAME'
         })
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
+
+        redirect_url = '%s/playground/%s.html' % (app_config.S3_BASE_URL, data.Playground.get(id=1).slug)
+        self.assertEqual(response.headers['Location'].split('?')[0], redirect_url)
 
         with open('data/updates.json') as f:
             updates = json.load(f)
 
         self.assertEqual(len(updates), 1)
-        self.assertEqual(updates[0]['playground']['id'], 0)
+        self.assertEqual(updates[0]['playground']['id'], 1)
         self.assertEqual(updates[0]['playground']['name'], 'NEW NAME')
 
     def test_edit_two_playgrounds(self):
-        try:
-            os.remove('data/updates.json')
-        except:
-            pass
-        
-        response = self.client.post(url_for('edit_playground'), data={
-            'id': 0,
-            'name': 'NEW NAME'
-        })
+        utils.load_test_playgrounds()
 
         response = self.client.post(url_for('edit_playground'), data={
             'id': 1,
+            'name': 'NEW NAME'
+        })
+
+        self.assertEqual(response.status_code, 302)
+
+        redirect_url = '%s/playground/%s.html' % (app_config.S3_BASE_URL, data.Playground.get(id=1).slug)
+        self.assertEqual(response.headers['Location'].split('?')[0], redirect_url)
+
+        response = self.client.post(url_for('edit_playground'), data={
+            'id': 2,
             'name': 'ANOTHER NEW NAME' 
         })
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
+
+        redirect_url = '%s/playground/%s.html' % (app_config.S3_BASE_URL, data.Playground.get(id=2).slug)
+        self.assertEqual(response.headers['Location'].split('?')[0], redirect_url)
 
         with open('data/updates.json') as f:
             updates = json.load(f)
 
         self.assertEqual(len(updates), 2)
-        self.assertEqual(updates[0]['playground']['id'], 0)
+        self.assertEqual(updates[0]['playground']['id'], 1)
         self.assertEqual(updates[0]['playground']['name'], 'NEW NAME')
-        self.assertEqual(updates[1]['playground']['id'], 1)
+        self.assertEqual(updates[1]['playground']['id'], 2)
         self.assertEqual(updates[1]['playground']['name'], 'ANOTHER NEW NAME')
 
     def test_delete_playground(self):
+        utils.load_test_playgrounds()
+
         response = self.client.post(url_for('delete_playground'), data={
             'id': 0
         })
@@ -86,6 +97,8 @@ class ApiTestCase(unittest.TestCase):
         self.assertGreaterEqual(data.DeleteRequest.select().where(data.DeleteRequest.playground == 0).count(), 1)
 
     def test_delete_playground_confirm(self):
+        utils.load_test_playgrounds()
+
         app_config.configure_targets('staging')
         
         s3 = boto.connect_s3()

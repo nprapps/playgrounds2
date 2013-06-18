@@ -64,7 +64,8 @@ def edit_playground():
 
         # How to know what fields are on this model?
         # Pick a single instance from the DB and serialize it.
-        playground_fields = data.Playground.select()[0].__dict__['_data'].keys()
+        playground = data.Playground.get(id=request.form.get('id'))
+        playground_fields = playground.__dict__['_data'].keys()
 
         # Prep the payload.
         payload = {}
@@ -129,13 +130,7 @@ def edit_playground():
             # Can you believe r+ won't create a file? That's turrible.
             write_data(payload, 'w')
 
-        if app_config.DEPLOYMENT_TARGET in ['production', 'staging']:
-            url = app_config.S3_BASE_URL + '/' + app_config.PROJECT_SLUG
-
-        else:
-            url = app_config.S3_BASE_URL
-
-        return redirect(url + '/playground/%s.html?action=editing_thanks' % payload['playground']['slug'])
+        return redirect('%s/playground/%s.html?action=editing_thanks' % (app_config.S3_BASE_URL, playground.slug))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8001, debug=app_config.DEBUG)

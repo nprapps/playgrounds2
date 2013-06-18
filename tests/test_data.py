@@ -6,6 +6,7 @@ from csvkit import CSVKitDictReader
 import peewee
 
 import data
+import tests.utils as utils
 
 class UpdatesTestCase(unittest.TestCase):
     """
@@ -18,18 +19,13 @@ class UpdatesTestCase(unittest.TestCase):
         pass
 
     def test_load_playgrounds(self):
-        try:
-            data.clear_playgrounds()
-        except:
-            pass
-        
-        with open('data/playgrounds.csv') as f:
+        with open('tests/data/test_playgrounds.csv') as f:
             reader = CSVKitDictReader(f)
             rows = list(reader)
 
         non_duplicate = filter(lambda r: r['Duplicate'] != 'TRUE', rows)
 
-        data.load_playgrounds()
+        utils.load_test_playgrounds()
 
         playgrounds = data.Playground.select()
 
@@ -41,18 +37,20 @@ class EmailTestCase(unittest.TestCase):
     """
     def setUp(self):
         peewee.logger.setLevel(100)
-
+        
     def tearDown(self):
         pass
 
     def test_prepare_email(self):
+        utils.load_test_playgrounds()
+
         playground = data.Playground.get(id=1)
         
         log = '''[{
             "field": "name",
-            "from": "Strong Reach Playground",
+            "from": "%s",
             "to": "Test Playground" 
-        }]'''
+        }]''' % playground.name
 
         data.Revision(
             playground=playground,

@@ -315,7 +315,7 @@ def clear_playgrounds():
     except:
         pass
 
-def load_playgrounds():
+def load_playgrounds(path='data/playgrounds.csv'):
     """
     Load playground data from the CSV into sqlite.
     """
@@ -323,7 +323,7 @@ def load_playgrounds():
     PlaygroundFeature.create_table()
     Revision.create_table()
 
-    with open('data/playgrounds.csv') as f:
+    with open(path) as f:
         rows = CSVKitDictReader(f)
 
         for row in rows:
