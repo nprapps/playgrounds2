@@ -123,7 +123,7 @@ PUBLIC_FIELDS = [
     "facility",
     "address",
     "city",
-    "state",
+    # "state",
     "zip_code",
     "agency",
     "owner",
@@ -190,13 +190,13 @@ def configure_targets(deployment_target):
         SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
 
     else:
-        S3_BUCKETS = None 
-        SERVERS = None 
+        S3_BUCKETS = None
+        SERVERS = None
         DEBUG = True
 
         CLOUD_SEARCH_PROXY_BASE_URL = 'http://127.0.0.1:8000'
         S3_BASE_URL = 'http://127.0.0.1:8000'
-        SERVER_BASE_URL = 'http://127.0.0.1:8001/%s'
+        SERVER_BASE_URL = 'http://127.0.0.1:8001/%s' % PROJECT_SLUG
 
     DEPLOYMENT_TARGET = deployment_target
 
