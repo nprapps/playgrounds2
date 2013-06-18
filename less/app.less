@@ -1,4 +1,5 @@
-@import "less/mixins";
+@import "less/bootstrap/bootstrap";
+@import "less/bootstrap/responsive";
 @import "less/font-awesome/font-awesome";
 
 // Global variables
@@ -515,7 +516,7 @@ section.the-goods { margin-top: 44px; }
                         left:0;
                         top: 0;
                         z-index: 1;
-                        border: 2px solid lighten(#4774cc, 30%);
+                        border: 2px solid lighten(@deepBlue, 20%);
                         width: 30px;
                         height: 30px;
 
@@ -527,7 +528,7 @@ section.the-goods { margin-top: 44px; }
 
                 input[type="checkbox"]:checked ~ .checkbox {
                     &:before {
-                        background: lighten(#4774cc, 10%);
+                        background: lighten(@deepBlue, 5%);
                         box-shadow: inset 0 0 0 1px #fff;
                         .icon-FontAwesome();
                         content: @ok;
