@@ -108,8 +108,10 @@ header {
     padding-bottom: 22px;
 
     h1 { 
-        font-size: 16px; 
+        font-size: 20px; 
         margin-bottom: 0;
+        
+        a { color: #555; }
     }
 }
 
@@ -325,7 +327,7 @@ section.the-goods { margin-top: 44px; }
         font-size: 18px;
     }
     p, li {
-        font-size: 15px;
+        font-size: 14px;
         line-height: 1.4;
         
         &.learn-more {
@@ -345,7 +347,7 @@ section.the-goods { margin-top: 44px; }
     .about,
     .address,
     .comments,
-    .features,
+    .playground-features,
     .social {
         margin-bottom: 33px;
     }
@@ -359,11 +361,26 @@ section.the-goods { margin-top: 44px; }
 			width: 100%;
 		}
 	}
+	.playground-features {
+	    ul li {
+            background: url(http://media.npr.org/chrome/news/bullet_5x5.png) no-repeat 0 .6em;
+            padding-left: 16px;
+            margin-top: 6px;
+            
+            &:first-child {
+                margin-top: 0;
+            }
+	    }
+	    .icon {
+	        text-indent: -9999px;
+	        font-style: normal;
+	        opacity: .6;
+	        cursor: pointer;
+	    }
+	}
 	.map {
 	    display: block;
 	    margin-bottom: 11px;
-	}
-	.meta {
 	}
 	.social {
 	    li { 
@@ -443,7 +460,6 @@ section.the-goods { margin-top: 44px; }
         }
 
         .features {
-
             .feature {
                 position: relative;
                 padding-bottom: 10px;
@@ -577,6 +593,24 @@ footer {
 		padding: 33px 20px;
 		h1 { font-size: 36px; }
 	}
+	.playground {
+	    nav .social-links {
+	        display: none;
+	    }
+        header {
+            padding: 0;
+            background: none;
+            position: absolute;
+            top: 13px;
+            left: 117px;
+            border: none;
+        
+            h1 {
+                font-size: 16px;
+            }
+        }
+    }
+	
 	footer { border-top: 1px solid #CCC; margin-top: 24px; }
 	.playground #main-content .social li { 
 	    span { display: none; }

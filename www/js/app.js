@@ -28,6 +28,9 @@ var $did_you_mean = null;
 var $results_address = null;
 var $no_geocode = null;
 
+var is_index = false;
+var is_playground = false;
+
 var zoom = RESULTS_DEFAULT_ZOOM;
 var crs = null;
 
@@ -229,7 +232,12 @@ $(function() {
     $results_address = $('#results-address');
     $no_geocode = $('#no-geocode');
 
-    crs = L.CRS.EPSG3857;
+    is_index = $('body').hasClass('index');
+    is_playground = $('body').hasClass('playground');
+
+    if (is_index) {
+        crs = L.CRS.EPSG3857;
+    }
 
     $geolocate_button.click(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -376,6 +384,8 @@ $(function() {
         $geolocate_button.show();
         $search_divider.show();
     }
-
-//    $('#newyork').trigger('click');
+    
+    if (is_playground) {
+        $('.playground-features i').tooltip( { trigger: 'click' } );
+    }
 });
