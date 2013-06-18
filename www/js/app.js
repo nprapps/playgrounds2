@@ -284,7 +284,7 @@ $(function() {
     // This block handles looking up the key from the URL and the message from the copy text.
     if ((action !== "undefined") && (action !== null)) {
         // Look up the message in the copy text.
-        var message = COPYTEXT[message];
+        var message = COPYTEXT[action];
 
         // Only if the message exists should writeMessage() get called.
         if ((message !== "undefined") && (message !== null)) {
