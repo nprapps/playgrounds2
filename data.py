@@ -88,6 +88,16 @@ class Playground(Model):
 
         super(Playground, self).save(*args, **kwargs)
 
+
+    @property
+    def features(self):
+        features = []
+        for feature in PlaygroundFeature.select().where(PlaygroundFeature.playground == self.id):
+            features.append(feature.__dict__['_data'])
+        return features
+
+
+
     def slugify(self):
         bits = []
 
