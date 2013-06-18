@@ -88,6 +88,16 @@ class Playground(Model):
 
         super(Playground, self).save(*args, **kwargs)
 
+
+    @property
+    def features(self):
+        features = []
+        for feature in PlaygroundFeature.select().where(PlaygroundFeature.playground == self.id):
+            features.append(feature.__dict__['_data'])
+        return features
+
+
+
     def slugify(self):
         bits = []
 
@@ -143,14 +153,14 @@ class Playground(Model):
             field_dict['name'] = unfield(field)
             if field == 'id':
                 field_dict['display'] = 'style="display:none"'
-                field_dict['widget'] = '<input type="text" name="%s" value=""></input>' % field
+                field_dict['widget'] = '<input class="input" type="text" name="%s" value=""></input>' % field
             elif field == 'remarks':
-                field_dict['widget'] = '<textarea class="input-block-level" name="%s" rows="10">%s</textarea>' % (field, field_value)
-            elif field == 'state':
-                options = ''
-                for abbrev, name in US_STATES:
-                    options += '<option value="%s" >%s</option>' % (abbrev, abbrev)
-                field_dict['widget'] = '<select name="state">%s</select>' % options
+                field_dict['widget'] = '<textarea class="input-block-level input" name="%s" rows="10">%s</textarea>' % (field, field_value)
+            # elif field == 'state':
+            #     options = ''
+            #     for abbrev, name in US_STATES:
+            #         options += '<option class="input" value="%s" >%s</option>' % (abbrev, abbrev)
+            #     field_dict['widget'] = '<select name="state">%s</select>' % options
             if field in app_config.PUBLIC_FIELDS:
                 fields.append(field_dict)
         return fields
@@ -168,19 +178,19 @@ class Playground(Model):
                 field_value = ''
             if field == 'id':
                 field_dict['display'] = 'style="display:none"'
-                field_dict['widget'] = '<input type="text" name="%s" value="%s" data-changed="true"></input>' % (field, field_value)
+                field_dict['widget'] = '<input class="input" type="text" name="%s" value="%s" data-changed="true"></input>' % (field, field_value)
             elif field == 'remarks':
-                field_dict['widget'] = '<textarea class="input-block-level" name="%s" data-changed="true" rows="10">%s</textarea>' % (field, field_value)
-            elif field == 'state':
-                options = ''
-                for abbrev, name in US_STATES:
-                    if self.state == abbrev:
-                        options += '<option value="%s" selected>%s</option>' % (abbrev, abbrev)
-                    else:
-                        options += '<option value="%s">%s</option>' % (abbrev, abbrev)
-                field_dict['widget'] = '<select name="state">%s</select>' % options
+                field_dict['widget'] = '<textarea class="input-block-level input" name="%s" rows="10">%s</textarea>' % (field, field_value)
+            # elif field == 'state':
+            #     options = ''
+            #     for abbrev, name in US_STATES:
+            #         if self.state == abbrev:
+            #             options += '<option class="input" value="%s" selected>%s</option>' % (abbrev, abbrev)
+            #         else:
+            #             options += '<option class="input" value="%s">%s</option>' % (abbrev, abbrev)
+            #     field_dict['widget'] = '<select name="state">%s</select>' % options
             else:
-                field_dict['widget'] = '<input class="input-block-level" type="text" name="%s" value="%s"></input>' % (field, field_value)
+                field_dict['widget'] = '<input class="input-block-level input" type="text" name="%s" value="%s"></input>' % (field, field_value)
             if field in app_config.PUBLIC_FIELDS:
                 fields.append(field_dict)
         return fields
