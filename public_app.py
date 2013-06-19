@@ -37,7 +37,7 @@ def write_data(path, payload):
     else:
         # Set up a blank list, since the file doesn't exist.
         f = open(path, 'w')
-        
+
         output = []
 
     # Append our payload to the list we have created.
@@ -197,6 +197,39 @@ def new_playground():
 
         return redirect('%s/playground/create.html?action=create_thanks' % (app_config.S3_BASE_URL))
 
+@app.route('/%s/request-delete/' % app_config.PROJECT_SLUG, methods=['POST'])
+def delete_playground():
+    """
+    Recommend a playground for deletion.
+    """
+    from flask import request
+
+    playground_slug = request.form.get('slug', None)
+
+    if playground_id and playground_slug:
+
+        # Prep the payload.
+        payload = {}
+        payload['playground'] = {}
+        payload['request'] = {}
+        payload['request']['headers'] = {}
+
+        # Write the request headers to the payload.
+        # It's nicer when they use underscores instead of dashes.
+        for key, value in request.headers:
+            payload['request']['headers'][key.lower().replace('-', '_')] = value
+
+        # Write the request cookies to the payload.
+        payload['request']['cookies'] = request.cookies
+
+        # Write the playground info to the payload.
+        payload['playground']['slug'] = playground_slug
+        payload['playground']['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
+
+        # Write to the deletes.json file.
+        write_data('data/deletes.json', payload)
+
+        return redirect('%s/playground/%s.html?action=editing_thanks' % (app_config.S3_BASE_URL, playground_slug))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8001, debug=app_config.DEBUG)
