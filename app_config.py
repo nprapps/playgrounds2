@@ -143,10 +143,12 @@ def get_secrets():
     env_var_prefix = PROJECT_SLUG.replace('-', '')
 
     secrets = [
-        '%s_TUMBLR_APP_KEY' % env_var_prefix,
-        '%s_TUMBLR_OAUTH_TOKEN' % env_var_prefix,
-        '%s_TUMBLR_OAUTH_TOKEN_SECRET' % env_var_prefix,
-        '%s_TUMBLR_APP_SECRET' % env_var_prefix
+        # '%s_TUMBLR_APP_KEY' % env_var_prefix,
+        # '%s_TUMBLR_OAUTH_TOKEN' % env_var_prefix,
+        # '%s_TUMBLR_OAUTH_TOKEN_SECRET' % env_var_prefix,
+        # '%s_TUMBLR_APP_SECRET' % env_var_prefix
+        'AWS_ACCESS_KEY_ID',
+        'AWS_SECRET_ACCESS_KEY'
     ]
 
     secrets_dict = {}
