@@ -89,7 +89,7 @@ class Playground(Model):
         if not self.slug:
             self.slugify()
 
-        if not self.latitude:
+        if (not self.latitude or not self.longitude):
             self.geocode()
 
         super(Playground, self).save(*args, **kwargs)
@@ -150,10 +150,16 @@ class Playground(Model):
         return features
 
     def geocode(self):
-        """
+        '''
         Geocodes an instance of a model.
-        """
-        pass
+        '''
+        g = geocoders.GoogleV3()
+        place, (lat, lng) = g.geocode('%s %s %s %s') % (
+            self.address, 
+            self.city, 
+            self.state, 
+            self.zip_code)
+        print(lat, lng)
 
     def slugify(self):
         bits = []
