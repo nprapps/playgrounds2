@@ -97,8 +97,35 @@ class InsertsTestCase(unittest.TestCase):
         pass
 
     def test_process_inserts(self):
-        # TKTK
-        pass
+        data.delete_tables()
+        data.create_tables()
+
+        new_playground_slugs, revision_group = data.process_updates('tests/data/test_inserts.json')
+
+        self.assertEqual(len(new_playground_slugs), 1)
+
+        playground = data.Playground.select().where(data.Playground.slug == new_playground_slugs[0])[0]
+        self.assertEqual(playground.name, 'NEW NAME')
+
+        revisions = data.Revision.select().where(data.Revision.revision_group == revision_group)
+
+        self.assertEqual(revisions.count(), 1)
+
+        revision = revisions[0]
+        self.assertEqual(revision.playground.id, playground.id)
+
+        log = revision.get_log()
+        self.assertEqual(len(log), 1)
+        self.assertEqual(log[0]['field'], 'name')
+        self.assertEqual(log[0]['from'], None)
+        self.assertEqual(log[0]['to'], 'NEW NAME')
+
+        headers = revision.get_headers()
+        self.assertEqual(headers['content_length'], '18')
+        self.assertEqual(headers['host'], 'localhost')
+
+        cookies = revision.get_cookies()
+        self.assertEqual(len(cookies), 0)
 
 class EmailTestCase(unittest.TestCase):
     """
