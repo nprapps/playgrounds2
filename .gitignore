@@ -50,6 +50,8 @@ www/test/test.html
 inserts.json
 updates-in-progress.json
 data/updates.json
+data/inserts.json
+data/deletes.json
 www/sitemap.xml
 *.un~
 .playgrounds_html
