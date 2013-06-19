@@ -7,6 +7,7 @@ import re
 import time
 from sets import Set
 
+import boto
 from csvkit import CSVKitDictReader
 from jinja2 import Template
 from peewee import *
@@ -91,18 +92,50 @@ class Playground(Model):
         super(Playground, self).save(*args, **kwargs)
 
     def remove_from_s3(self):
-        print "REMOVED FROM S3"
-        pass
+        '''
+        Removes file for this model instance from S3
+        '''
+
+        # fetch secrets from app_config
+        secrets = app_config.get_secrets()
+
+        # connect to S3
+        conn = boto.S3Connection(secrets['AWS_ACCESS_KEY_ID'],secrets['AWS_SECRET_ACCESS_KEY'])
+        
+        # loop over buckets, we have more than one, and remove this playground
+        for bucket in app_config.S3_BUCKETS:
+            b = boto.Bucket(conn, bucket)
+            k = boto.Key(b)
+            k.key = '/playground/%s.html' % (self.slug)
+            b.delete_key(k)
 
     def remove_from_search_index(self):
-        print "REMOVED FROM INDEX"
-        pass
+        '''
+        Removes a playground from search index
+        '''
+
+        # connect to AWS Cloudsearch
+        cloudsearch = boto.cloudsearch.connect_to_region(app_config.CLOUD_SEARCH_REGION)
+        
+        # identify our index, get the object so we can play with it
+        doc_service = cloudsearch.get_document_service()
+        
+        # delete this object from the index
+        doc_service.delete('%s_%i' % (app_config.DEPLOYMENT_TARGET, self.id), int(time.mktime(datetime.utcnow().timetuple())))
+        
+        # commit the delete
+        doc_service.commit()
 
     def deactivate(self):
+        '''
+        Deactivates a model instance by calling deletes from S3 and Cloudsearch
+        '''
 
+        # Deactivate playgrounds flagged for removal and commit it to the database
         self.active = False
         self.save()
 
+        # Reach into the bowels of S3 and Cloudsearch 
         self.remove_from_s3()
         self.remove_from_search_index()
 
@@ -334,7 +367,7 @@ def get_active_playgrounds():
     return Playground.select().where(Playground.active == True)
 
 
-def clear_playgrounds():
+def delete_tables():
     """
     Clear playground data from sqlite.
     """
@@ -345,14 +378,15 @@ def clear_playgrounds():
     except:
         pass
 
-def load_playgrounds(path='data/playgrounds.csv'):
-    """
-    Load playground data from the CSV into sqlite.
-    """
+def create_tables():
     Playground.create_table()
     PlaygroundFeature.create_table()
     Revision.create_table()
 
+def load_playgrounds(path='data/playgrounds.csv'):
+    """
+    Load playground data from the CSV into sqlite.
+    """
     with open(path) as f:
         rows = CSVKitDictReader(f)
 
@@ -413,8 +447,11 @@ def prepare_email(revision_group):
 
     return payload.render(**context)
 
-def parse_updates():
-
+def process_updates(path='updates-in-process.json'):
+    """
+    Iterate over the updates json file, update playgrounds and features,
+    and generate Revision models.
+    """
     # The revision_group is a single pass of this cron job.
     # This is a grouping of all updates made in one run of the function.
     revision_group = time.mktime((datetime.datetime.utcnow()).timetuple())
@@ -423,7 +460,7 @@ def parse_updates():
     updates = []
 
     # Open the updates file and load the JSON as the updates list.
-    with open('updates-in-progress.json', 'r') as jsonfile:
+    with open(path, 'r') as jsonfile:
         updates = json.loads(jsonfile.read())
 
     # Set up a blank list of updated playgrounds.
@@ -433,8 +470,10 @@ def parse_updates():
     # Loop through the updates.
     for record in updates:
 
+        playground_id = record['playground']['id']
+
         # First, capture the old data from this playground.
-        old_data = Playground.get(id=record['playground']['id']).__dict__['_data']
+        old_data = Playground.get(id=playground_id).__dict__['_data']
 
         # This is an intermediate data store for this record.
         record_dict = {}
@@ -455,8 +494,10 @@ def parse_updates():
 
         # Run the update query against this playground.
         # Pushes any updates in the record_dict to the model.
-        playground = Playground.get(id=int(record['playground']['id']))
-        playground.update(**record_dict)
+        playground = Playground.get(id=playground_id)
+
+        if (record_dict):
+            playground.update(**record_dict).execute()
 
         # Add this playground to the updated_playgrounds list.
         updated_playgrounds.append(playground.slug)
@@ -467,11 +508,11 @@ def parse_updates():
         old_features = []
 
         # Append the old features to the list.
-        for feature in PlaygroundFeature.select().where(PlaygroundFeature.playground == record['playground']['id']):
+        for feature in PlaygroundFeature.select().where(PlaygroundFeature.playground == playground_id):
             old_features.append(feature.slug)
 
         # Delete any features attached to this playground.
-        PlaygroundFeature.delete().where(PlaygroundFeature.playground == record['playground']['id']).execute()
+        PlaygroundFeature.delete().where(PlaygroundFeature.playground == playground_id).execute()
 
         # Check to see if we have any incoming features from the updates.json.
         # If we don't, set up an empty list.
@@ -497,7 +538,7 @@ def parse_updates():
                         if feature == slug:
 
                             # Get the playground object.
-                            p = Playground.get(id=record['playground']['id'])
+                            p = Playground.get(id=playground_id)
 
                             # Create a new playground feature object.
                             pf = PlaygroundFeature(slug=slug, name=f, playground=p)
@@ -569,7 +610,7 @@ def parse_updates():
                         revisions.append({"field": slug, "from": 0, "to": 1})
 
         Revision(
-            playground=Playground.get(id=record['playground']['id']),
+            playground=Playground.get(id=playground_id),
             timestamp=int(record['playground']['timestamp']),
             log=json.dumps(revisions),
             headers=json.dumps(record['request']['headers']),
@@ -578,3 +619,7 @@ def parse_updates():
         ).save()
 
     return (updated_playgrounds, revision_group)
+
+def process_inserts():
+    # TKTK
+    pass

@@ -119,5 +119,24 @@ class ApiTestCase(unittest.TestCase):
 
         # cs = boto.cloudsearch.connect_to_region('us-west-2')
 
+    def test_add_playground(self):
+        data.delete_tables()
+        data.create_tables()
+
+        response = self.client.post(url_for('new_playground'), data={
+            'name': 'NEW PLAYGROUND'
+        })
+
+        self.assertEqual(response.status_code, 302)
+
+        redirect_url = '%s/playground/create.html' % (app_config.S3_BASE_URL)
+        self.assertEqual(response.headers['Location'].split('?')[0], redirect_url)
+
+        with open('data/inserts.json') as f:
+            inserts = json.load(f)
+
+        self.assertEqual(len(inserts), 1)
+        self.assertEqual(inserts[0]['playground']['name'], 'NEW PLAYGROUND')
+
 if __name__ == '__main__':
     unittest.main()
