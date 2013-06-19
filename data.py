@@ -9,6 +9,7 @@ from sets import Set
 
 import boto
 from csvkit import CSVKitDictReader
+import geopy
 from jinja2 import Template
 from peewee import *
 from playhouse.sqlite_ext import SqliteExtDatabase
