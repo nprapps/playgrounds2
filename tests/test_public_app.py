@@ -21,8 +21,7 @@ class ApiTestCase(unittest.TestCase):
         public_app.app.config['TESTING'] = True
         self.client = public_app.app.test_client()
 
-        utils.backup_updates_json()
-        utils.backup_inserts_json()
+        utils.backup_changes_json()
 
         self.request_context = public_app.app.test_request_context()
         self.request_context.push()
@@ -30,13 +29,12 @@ class ApiTestCase(unittest.TestCase):
     def tearDown(self):
         self.request_context.pop()
 
-        utils.restore_updates_json()
-        utils.restore_inserts_json()
+        utils.restore_changes_json()
 
-    def test_edit_playground(self):
+    def test_update_playground(self):
         utils.load_test_playgrounds()
 
-        response = self.client.post(url_for('edit_playground'), data={
+        response = self.client.post(url_for('update_playground'), data={
             'id': 1,
             'name': 'NEW NAME'
         })
@@ -46,17 +44,18 @@ class ApiTestCase(unittest.TestCase):
         redirect_url = '%s/playground/%s.html' % (app_config.S3_BASE_URL, data.Playground.get(id=1).slug)
         self.assertEqual(response.headers['Location'].split('?')[0], redirect_url)
 
-        with open('data/updates.json') as f:
+        with open('data/changes.json') as f:
             updates = json.load(f)
 
         self.assertEqual(len(updates), 1)
+        self.assertEqual(updates[0]['action'], 'update')
         self.assertEqual(updates[0]['playground']['id'], 1)
         self.assertEqual(updates[0]['playground']['name'], 'NEW NAME')
 
-    def test_edit_two_playgrounds(self):
+    def test_update_two_playgrounds(self):
         utils.load_test_playgrounds()
 
-        response = self.client.post(url_for('edit_playground'), data={
+        response = self.client.post(url_for('update_playground'), data={
             'id': 1,
             'name': 'NEW NAME'
         })
@@ -66,7 +65,7 @@ class ApiTestCase(unittest.TestCase):
         redirect_url = '%s/playground/%s.html' % (app_config.S3_BASE_URL, data.Playground.get(id=1).slug)
         self.assertEqual(response.headers['Location'].split('?')[0], redirect_url)
 
-        response = self.client.post(url_for('edit_playground'), data={
+        response = self.client.post(url_for('update_playground'), data={
             'id': 2,
             'name': 'ANOTHER NEW NAME'
         })
@@ -76,12 +75,14 @@ class ApiTestCase(unittest.TestCase):
         redirect_url = '%s/playground/%s.html' % (app_config.S3_BASE_URL, data.Playground.get(id=2).slug)
         self.assertEqual(response.headers['Location'].split('?')[0], redirect_url)
 
-        with open('data/updates.json') as f:
+        with open('data/changes.json') as f:
             updates = json.load(f)
 
         self.assertEqual(len(updates), 2)
+        self.assertEqual(updates[0]['action'], 'update')
         self.assertEqual(updates[0]['playground']['id'], 1)
         self.assertEqual(updates[0]['playground']['name'], 'NEW NAME')
+        self.assertEqual(updates[1]['action'], 'update')
         self.assertEqual(updates[1]['playground']['id'], 2)
         self.assertEqual(updates[1]['playground']['name'], 'ANOTHER NEW NAME')
 
@@ -125,7 +126,7 @@ class ApiTestCase(unittest.TestCase):
         data.delete_tables()
         data.create_tables()
 
-        response = self.client.post(url_for('new_playground'), data={
+        response = self.client.post(url_for('insert_playground'), data={
             'name': 'NEW PLAYGROUND'
         })
 
@@ -134,10 +135,11 @@ class ApiTestCase(unittest.TestCase):
         redirect_url = '%s/playground/create.html' % (app_config.S3_BASE_URL)
         self.assertEqual(response.headers['Location'].split('?')[0], redirect_url)
 
-        with open('data/inserts.json') as f:
+        with open('data/changes.json') as f:
             inserts = json.load(f)
 
         self.assertEqual(len(inserts), 1)
+        self.assertEqual(inserts[0]['action'], 'insert')
         self.assertEqual(inserts[0]['playground']['name'], 'NEW PLAYGROUND')
 
 if __name__ == '__main__':

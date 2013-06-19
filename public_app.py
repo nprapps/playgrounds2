@@ -13,9 +13,9 @@ import data
 app = Flask(app_config.PROJECT_NAME)
 
 
-def write_data(path, payload):
+def write_data(payload, path='data/changes.json'):
     """
-    DRYs out the process of editing/creating the updates/added/deletes.json file.
+    DRYs out the process of editing/creating the changes.json file.
     It sucks that there is no single mode for read/edit/create a file.
     """
     if os.path.exists(path):
@@ -56,8 +56,8 @@ def _dynamic_page():
     return datetime.datetime.now().isoformat()
 
 
-@app.route('/%s/edit-playground/' % app_config.PROJECT_SLUG, methods=['POST'])
-def edit_playground():
+@app.route('/%s/update-playground/' % app_config.PROJECT_SLUG, methods=['POST'])
+def update_playground():
 
     from flask import request
 
@@ -71,6 +71,8 @@ def edit_playground():
 
         # Prep the payload.
         payload = {}
+        payload['action'] = 'update'
+        payload['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
         payload['playground'] = {}
         payload['request'] = {}
         payload['request']['headers'] = {}
@@ -108,9 +110,6 @@ def edit_playground():
         except KeyError:
             pass
 
-        # Append a timestamp.
-        payload['playground']['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
-
         # Set up a list for features.
         payload['playground']['features'] = []
 
@@ -123,13 +122,13 @@ def edit_playground():
         if len(payload['playground']['features']) == 0:
             del(payload['playground']['features'])
 
-        # Write to the updates.json file.
-        write_data('data/updates.json', payload)
+        # Write to the changes.json file.
+        write_data(payload)
 
         return redirect('%s/playground/%s.html?action=editing_thanks' % (app_config.S3_BASE_URL, playground.slug))
 
-@app.route('/%s/new-playground/' % app_config.PROJECT_SLUG, methods=['POST'])
-def new_playground():
+@app.route('/%s/insert-playground/' % app_config.PROJECT_SLUG, methods=['POST'])
+def insert_playground():
     """
     Create a new playground with data cross-posted from the app.
     """
@@ -140,6 +139,8 @@ def new_playground():
 
         # Prep the payload.
         payload = {}
+        payload['action'] = 'insert'
+        payload['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
         payload['playground'] = {}
         payload['request'] = {}
         payload['request']['headers'] = {}
@@ -176,9 +177,6 @@ def new_playground():
         except KeyError:
             pass
 
-        # Append a timestamp.
-        payload['playground']['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
-
         # Set up a list for features.
         payload['playground']['features'] = []
 
@@ -191,8 +189,8 @@ def new_playground():
         if len(payload['playground']['features']) == 0:
             del(payload['playground']['features'])
 
-        # Write to the inserts.json file.
-        write_data('data/inserts.json', payload)
+        # Write to the changes.json file.
+        write_data(payload)
 
         return redirect('%s/playground/create.html?action=create_thanks' % (app_config.S3_BASE_URL))
 
@@ -214,6 +212,8 @@ def delete_playground():
 
         # Prep the payload.
         payload = {}
+        payload['action'] = 'delete'
+        payload['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
         payload['playground'] = {}
         payload['request'] = {}
         payload['request']['headers'] = {}
@@ -228,11 +228,10 @@ def delete_playground():
 
         # Write the playground info to the payload.
         payload['playground']['slug'] = playground_slug
-        payload['playground']['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
         payload['playground']['text'] = text
 
-        # Write to the deletes.json file.
-        write_data('data/deletes.json', payload)
+        # Write to the changes.json file.
+        write_data(payload)
 
         return redirect('%s/playground/%s.html?action=deleting_thanks' % (app_config.S3_BASE_URL, playground_slug))
 

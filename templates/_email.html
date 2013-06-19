@@ -1,5 +1,12 @@
 {{ playgrounds|length }} playgrounds were changed.
 {{ total_revisions }} total revisions were made.
+<!-- Switch between plural and singular? -->
+Summary
+-------
+{{ playgrounds|length }} playgrounds were changed, with {{ total_revisions }} distinct edits.
+TKTK playgrounds were requested to be added.
+TKTK playground
+>>>>>>> 6a375100eef494eaf6204c0f53215bdfca26f620
 {% for playground in playgrounds %}
 {{ playground.name }} 
 {{ playground.site_url }}
