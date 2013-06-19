@@ -7,7 +7,8 @@ import data
 TEST_PLAYGROUNDS_CSV = 'tests/data/test_playgrounds.csv'
 
 def load_test_playgrounds():
-    data.clear_playgrounds()
+    data.delete_tables()
+    data.create_tables()
     data.load_playgrounds(TEST_PLAYGROUNDS_CSV)
 
 def backup_updates_json():

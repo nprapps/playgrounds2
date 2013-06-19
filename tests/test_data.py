@@ -39,7 +39,13 @@ class UpdatesTestCase(unittest.TestCase):
         pass
 
     def test_process_updates(self):
-        pass
+        utils.load_test_playgrounds()
+
+        updated_playgrounds, revision_group = data.process_updates('tests/data/test_updates.json')
+
+        self.assertEqual(len(updated_playgrounds), 1)
+        
+        
 
 class InsertsTestCase(unittest.TestCase):
     def setUp(self):

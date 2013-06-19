@@ -120,7 +120,8 @@ class ApiTestCase(unittest.TestCase):
         # cs = boto.cloudsearch.connect_to_region('us-west-2')
 
     def test_add_playground(self):
-        data.clear_playgrounds()
+        data.delete_tables()
+        data.create_tables()
 
         response = self.client.post(url_for('new_playground'), data={
             'name': 'NEW PLAYGROUND'
