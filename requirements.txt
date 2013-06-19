@@ -17,3 +17,4 @@ csvkit==0.5.0
 -e git+git://github.com/boto/boto.git#egg=boto
 -e git+git://github.com/coleifer/peewee.git#egg=peewee
 coverage==3.6
+geopy==0.95.1

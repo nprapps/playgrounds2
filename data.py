@@ -89,6 +89,9 @@ class Playground(Model):
         if not self.slug:
             self.slugify()
 
+        if not self.latitude:
+            self.geocode()
+
         super(Playground, self).save(*args, **kwargs)
 
     def remove_from_s3(self):
@@ -101,7 +104,7 @@ class Playground(Model):
 
         # connect to S3
         conn = boto.S3Connection(secrets['AWS_ACCESS_KEY_ID'],secrets['AWS_SECRET_ACCESS_KEY'])
-        
+
         # loop over buckets, we have more than one, and remove this playground
         for bucket in app_config.S3_BUCKETS:
             b = boto.Bucket(conn, bucket)
@@ -116,13 +119,13 @@ class Playground(Model):
 
         # connect to AWS Cloudsearch
         cloudsearch = boto.cloudsearch.connect_to_region(app_config.CLOUD_SEARCH_REGION)
-        
+
         # identify our index, get the object so we can play with it
         doc_service = cloudsearch.get_document_service()
-        
+
         # delete this object from the index
         doc_service.delete('%s_%i' % (app_config.DEPLOYMENT_TARGET, self.id), int(time.mktime(datetime.utcnow().timetuple())))
-        
+
         # commit the delete
         doc_service.commit()
 
@@ -135,7 +138,7 @@ class Playground(Model):
         self.active = False
         self.save()
 
-        # Reach into the bowels of S3 and Cloudsearch 
+        # Reach into the bowels of S3 and Cloudsearch
         self.remove_from_s3()
         self.remove_from_search_index()
 
@@ -145,6 +148,12 @@ class Playground(Model):
         for feature in PlaygroundFeature.select().where(PlaygroundFeature.playground == self.id):
             features.append(feature.__dict__['_data'])
         return features
+
+    def geocode(self):
+        """
+        Geocodes an instance of a model.
+        """
+        pass
 
     def slugify(self):
         bits = []
@@ -666,7 +675,7 @@ def process_inserts(path='inserts-in-process.json'):
 
             # Set up the data for this revision.
             revision_dict['field'] = key
-            revision_dict['from'] = '' 
+            revision_dict['from'] = ''
             revision_dict['to'] = new_data[key]
 
             # Append it to the revisions list.
