@@ -8,7 +8,7 @@ import peewee
 import data
 import tests.utils as utils
 
-class UpdatesTestCase(unittest.TestCase):
+class PlaygroundsTestCase(unittest.TestCase):
     """
     Test the index page.
     """
@@ -30,6 +30,26 @@ class UpdatesTestCase(unittest.TestCase):
         playgrounds = data.Playground.select()
 
         self.assertEqual(len(non_duplicate), playgrounds.count())
+
+class UpdatesTestCase(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def test_process_updates(self):
+        pass
+
+class InsertsTestCase(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def test_process_inserts(self):
+        pass
 
 class EmailTestCase(unittest.TestCase):
     """
