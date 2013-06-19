@@ -92,8 +92,17 @@ class Playground(Model):
         super(Playground, self).save(*args, **kwargs)
 
     def remove_from_s3(self):
+        '''
+        Removes file for this model instance from S3
+        '''
+
+        # fetch secrets from app_config
         secrets = app_config.get_secrets()
+
+        # connect to S3
         conn = boto.S3Connection(secrets['AWS_ACCESS_KEY_ID'],secrets['AWS_SECRET_ACCESS_KEY'])
+        
+        # loop over buckets, we have more than one, and remove this playground
         for bucket in app_config.S3_BUCKETS:
             b = boto.Bucket(conn, bucket)
             k = boto.Key(b)
@@ -101,14 +110,32 @@ class Playground(Model):
             b.delete_key(k)
 
     def remove_from_search_index(self):
-        print "REMOVED FROM INDEX"
-        pass
+        '''
+        Removes a playground from search index
+        '''
+
+        # connect to AWS Cloudsearch
+        cloudsearch = boto.cloudsearch.connect_to_region(app_config.CLOUD_SEARCH_REGION)
+        
+        # identify our index, get the object so we can play with it
+        doc_service = cloudsearch.get_document_service()
+        
+        # delete this object from the index
+        doc_service.delete('%s_%i' % (app_config.DEPLOYMENT_TARGET, self.id), int(time.mktime(datetime.utcnow().timetuple())))
+        
+        # commit the delete
+        doc_service.commit()
 
     def deactivate(self):
+        '''
+        Deactivates a model instance by calling deletes from S3 and Cloudsearch
+        '''
 
+        # Deactivate playgrounds flagged for removal and commit it to the database
         self.active = False
         self.save()
 
+        # Reach into the bowels of S3 and Cloudsearch 
         self.remove_from_s3()
         self.remove_from_search_index()
 
