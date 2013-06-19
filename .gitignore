@@ -51,6 +51,7 @@ inserts.json
 updates-in-progress.json
 data/updates.json
 www/sitemap.xml
-*.un~ # Save file from vim, I think.
+*.un~
 .playgrounds_html
 .playgrounds_gzip
+*.bak
