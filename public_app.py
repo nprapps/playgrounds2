@@ -56,7 +56,6 @@ def _dynamic_page():
 @app.route('/%s/edit-playground/' % app_config.PROJECT_SLUG, methods=['POST'])
 def edit_playground():
 
-    # Get the current state of the request global.
     from flask import request
 
     # Only handle POST requests.
@@ -131,6 +130,18 @@ def edit_playground():
             write_data(payload, 'w')
 
         return redirect('%s/playground/%s.html?action=editing_thanks' % (app_config.S3_BASE_URL, playground.slug))
+
+@app.route('/%s/delete-playground/' % app_config.PROJECT_SLUG, methods=['POST'])
+def delete_playground():
+    from flask import request
+
+    # Only handle POST requests.
+    if request.method == 'POST':
+
+        # From the HTTP request, pull the id of the playground
+        playground_id = request.form.get('id')
+        # Run the id through Playground and flag it as deactivated
+        Playground.get(id=plyaground_id).deactivate()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8001, debug=app_config.DEBUG)

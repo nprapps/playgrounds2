@@ -1,5 +1,9 @@
-{{ playgrounds|length }} playgrounds were changed.
-{{ total_revisions }} total revisions were made.
+<!-- Switch between plural and singular? -->
+Summary
+-------
+{{ playgrounds|length }} playgrounds were changed, with {{ total_revisions }} distinct edits.
+{{}} playgrounds were requested to be added.
+{{}} playground
 {% for playground in playgrounds %}
 {{ playground.name }} 
 {{ playground.site_url }}
