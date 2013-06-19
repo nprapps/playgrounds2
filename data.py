@@ -90,6 +90,22 @@ class Playground(Model):
 
         super(Playground, self).save(*args, **kwargs)
 
+    def remove_from_s3(self):
+        print "REMOVED FROM S3"
+        pass
+
+    def remove_from_search_index(self):
+        print "REMOVED FROM INDEX"
+        pass
+
+    def deactivate(self):
+
+        self.active = False
+        self.save()
+
+        self.remove_from_s3()
+        self.remove_from_search_index()
+
     @property
     def features(self):
         features = []
