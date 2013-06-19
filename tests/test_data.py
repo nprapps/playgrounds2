@@ -32,10 +32,24 @@ class PlaygroundsTestCase(unittest.TestCase):
         self.assertEqual(len(non_duplicate), playgrounds.count())
 
 class UpdatesTestCase(unittest.TestCase):
-    pass
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def test_process_updates(self):
+        pass
 
 class InsertsTestCase(unittest.TestCase):
-    pass
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def test_process_inserts(self):
+        pass
 
 class EmailTestCase(unittest.TestCase):
     """
