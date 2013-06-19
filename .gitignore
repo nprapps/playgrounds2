@@ -19,6 +19,7 @@ pip-log.txt
 
 # Unit test / coverage reports
 .coverage
+.coverage-html
 .tox
 
 #Translations
@@ -50,6 +51,8 @@ www/test/test.html
 inserts.json
 updates-in-progress.json
 data/updates.json
+data/inserts.json
+data/deletes.json
 www/sitemap.xml
 *.un~
 .playgrounds_html
