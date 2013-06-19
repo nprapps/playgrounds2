@@ -79,6 +79,8 @@ class Playground(Model):
     entry = CharField(null=True)
     source = CharField(null=True)
 
+    active = BooleanField(default=True)
+
     class Meta:
         database = database
 
@@ -302,6 +304,18 @@ class Revision(Model):
 
     def get_cookies(self):
         return json.loads(self.cookies)
+
+
+def get_active_playgrounds():
+    """
+    A function which acts like a Django model manger.
+    Returns only active playgrounds.
+    Can chain .where() clauses against this, e.g.,
+    all active playgrounds in NY:
+
+        get_active_playgrounds().where(Playground.state == 'NY')
+    """
+    return Playground.select().where(Playground.active == True)
 
 
 def clear_playgrounds():
