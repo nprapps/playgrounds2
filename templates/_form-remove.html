@@ -1,33 +1,12 @@
-<div class="modal-body">
-    <h2>{{ COPY.content.form_remove_title }}</h2>
-    <p class="muted">{{ COPY.content.form_remove_description }}</p>
-    <form id="remove-form" class="row-fluid" method="post" enctype="multipart/form-data" action="http://{{ SERVERS[0] }}/{{ PROJECT_SLUG }}/api/">
-        <textarea></textarea>
-    </form>
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-large" data-dismiss="modal" aria-hidden="true">Cancel</button>
-    <button id="playground-update" class="btn btn-large btn-success">Save</button>
-</div>
-<script type="text/javascript">
-    /*
-    * We only want to submit changed formfields to the server for processing.
-    * Script marks each changed field base on blur/change.
-    * Could alert with a warning about what fields you've changed before POSTing.
-    */
-    $('#playground-form input').blur(function(){
-        $(this).attr('data-changed', 'true');
-    });
-    $('#playground-form input').change(function(){
-        $(this).attr('data-changed', 'true');
-    });
-    $('#playground-update').on('click', function(){
-        $.each($('#playground-form input'), function(index, item){
-            if ($(item).attr('data-changed') != 'true') {
-                $(item).removeAttr('name');
-            }
-        });
-        $('#playground-form').submit();
-        return false;
-    });
-</script>
+<form id="remove-form" class="row-fluid" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/request-delete-playground/">
+    <div class="modal-body">
+        <h2>{{ COPY.content.form_remove_title }}</h2>
+        <p class="muted">{{ COPY.content.form_remove_description }}</p>
+        <textarea name="text"></textarea>
+        <input style="display:none" name="slug" value="{{ playground.slug }}"></input>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-large" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button id="playground-update" class="btn btn-large btn-success">Save</button>
+    </div>
+</form>

@@ -196,16 +196,21 @@ def new_playground():
 
         return redirect('%s/playground/create.html?action=create_thanks' % (app_config.S3_BASE_URL))
 
-@app.route('/%s/request-delete/' % app_config.PROJECT_SLUG, methods=['POST'])
+@app.route('/%s/request-delete-playground/' % app_config.PROJECT_SLUG, methods=['POST'])
 def delete_playground():
     """
     Recommend a playground for deletion.
     """
     from flask import request
 
+    # Two things required for a removal request.
+    # 1.) A slug so that we can do the lookup.
+    # 2.) Some text so that you can justify yourself.
     playground_slug = request.form.get('slug', None)
+    text = request.form.get('text', None)
 
-    if playground_slug:
+    # Only do this if we have both.
+    if playground_slug and text:
 
         # Prep the payload.
         payload = {}
@@ -224,14 +229,19 @@ def delete_playground():
         # Write the playground info to the payload.
         payload['playground']['slug'] = playground_slug
         payload['playground']['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
+        payload['playground']['text'] = text
 
         # Write to the deletes.json file.
         write_data('data/deletes.json', payload)
 
-        return redirect('%s/playground/%s.html?action=editing_thanks' % (app_config.S3_BASE_URL, playground_slug))
+        return redirect('%s/playground/%s.html?action=deleting_thanks' % (app_config.S3_BASE_URL, playground_slug))
+
+    # Otherwise, bork. A 400 error should do nicely.
+    else:
+        abort(400)
 
 @app.route('/%s/delete-playground/' % app_config.PROJECT_SLUG, methods=['POST'])
-def delete_playground():
+def delete_playground_confirm():
     from flask import request
 
     # Only handle POST requests.
