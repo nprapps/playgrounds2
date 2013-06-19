@@ -480,7 +480,7 @@ def process_changes(path='changes-in-process.json'):
             pass
 
         Revision.create(
-            timestamp=int(record['playground']['timestamp']),
+            timestamp=int(record['timestamp']),
             action=record['action'],
             playground=playground,
             log=json.dumps(revisions),
@@ -508,7 +508,7 @@ def process_update(record):
     for key, value in record['playground'].items():
 
         # Ignore some keys because they aren't really what we want to update.
-        if key not in ['id', 'timestamp', 'features']:
+        if key not in ['id', 'features']:
 
             # If the value is blank, make it null.
             # Life is too short for many different kinds of emptyness.
@@ -537,8 +537,7 @@ def process_update(record):
     # Delete any features attached to this playground.
     PlaygroundFeature.delete().where(PlaygroundFeature.playground == playground_id).execute()
 
-    # Check to see if we have any incoming features from the updates.json.
-    # If we don't, set up an empty list.
+    # Check to see if we have any incoming features.
     try:
         features = record['playground']['features']
     except KeyError:
@@ -627,7 +626,7 @@ def process_insert(record):
     for key, value in record['playground'].items():
 
         # Ignore some keys because they aren't really what we want to update.
-        if key not in ['id', 'timestamp', 'features']:
+        if key not in ['id', 'features']:
 
             # If the value is blank, make it null.
             # Life is too short for many different kinds of emptyness.
@@ -665,8 +664,7 @@ def process_insert(record):
         # Append it to the revisions list.
         revisions.append(revision_dict)
 
-    # Check to see if we have any incoming features from the updates.json.
-    # If we don't, set up an empty list.
+    # Check to see if we have any incoming features.
     try:
         features = record['playground']['features']
     except KeyError:
@@ -682,3 +680,6 @@ def process_insert(record):
 
     return (playground, revisions)
 
+def process_delete(record):
+    # TKTK
+    pass
