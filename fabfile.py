@@ -545,8 +545,8 @@ def process_updates():
     """
     local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.utcnow()).timetuple()))
     local('cp data/updates.json updates-in-progress.json && rm -f data/updates.json')
-    updated_playgrounds, revision_group = data.process_updates()
-    render_playgrounds(updated_playgrounds)
+    updated_playground_slugs, revision_group = data.process_updates()
+    render_playgrounds(updated_playground_slugs)
     _send_revision_email(revision_group)
     local('rm -f updates-in-progress.json')
 

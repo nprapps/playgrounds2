@@ -468,7 +468,7 @@ def process_updates(path='updates-in-process.json'):
         # Run the update query against this playground.
         # Pushes any updates in the record_dict to the model.
         playground = Playground.get(id=playground_id)
-        playground.update(**record_dict)
+        playground.update(**record_dict).execute()
 
         # Add this playground to the updated_playgrounds list.
         updated_playgrounds.append(playground.slug)

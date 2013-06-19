@@ -38,13 +38,40 @@ class UpdatesTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_process_updates(self):
+    def test_process_updates_simple(self):
         utils.load_test_playgrounds()
 
-        updated_playgrounds, revision_group = data.process_updates('tests/data/test_updates.json')
+        updated_playground_slugs, revision_group = data.process_updates('tests/data/test_updates.json')
 
-        self.assertEqual(len(updated_playgrounds), 1)
-        
+        self.assertEqual(len(updated_playground_slugs), 1)
+
+        playground = data.Playground.select().where(data.Playground.slug == updated_playground_slugs[0])[0]
+        self.assertEqual(playground.id, 1) 
+        self.assertEqual(playground.name, 'NEW NAME')
+
+        revisions = data.Revision.select().where(data.Revision.revision_group == revision_group)
+
+        self.assertEqual(revisions.count(), 1)
+
+        revision = revisions[0]
+        self.assertEqual(revision.playground.id, playground.id)
+
+        log = revision.get_log()
+        self.assertEqual(len(log), 1)
+        self.assertEqual(log[0]['field'], 'name')
+        self.assertEqual(log[0]['from'], 'Strong Reach Playground')
+        self.assertEqual(log[0]['to'], 'NEW NAME')
+
+        headers = revision.get_headers()
+        self.assertEqual(headers['content_length'], '18')
+        self.assertEqual(headers['host'], 'localhost')
+
+        cookies = revision.get_cookies()
+        self.assertEqual(len(cookies), 0)
+
+    def test_process_updates_features(self):
+        # TKTK
+        pass
         
 
 class InsertsTestCase(unittest.TestCase):
@@ -55,6 +82,7 @@ class InsertsTestCase(unittest.TestCase):
         pass
 
     def test_process_inserts(self):
+        # TKTK
         pass
 
 class EmailTestCase(unittest.TestCase):
