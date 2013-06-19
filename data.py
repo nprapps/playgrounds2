@@ -7,6 +7,7 @@ import re
 import time
 from sets import Set
 
+import boto
 from csvkit import CSVKitDictReader
 from jinja2 import Template
 from peewee import *
@@ -91,8 +92,13 @@ class Playground(Model):
         super(Playground, self).save(*args, **kwargs)
 
     def remove_from_s3(self):
-        print "REMOVED FROM S3"
-        pass
+        secrets = app_config.get_secrets()
+        conn = boto.S3Connection(secrets['AWS_ACCESS_KEY_ID'],secrets['AWS_SECRET_ACCESS_KEY'])
+        for bucket in app_config.S3_BUCKETS:
+            b = boto.Bucket(conn, bucket)
+            k = boto.Key(b)
+            k.key = '/playground/%s.html' % (self.slug)
+            b.delete_key(k)
 
     def remove_from_search_index(self):
         print "REMOVED FROM INDEX"
