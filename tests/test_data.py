@@ -73,7 +73,6 @@ class UpdatesTestCase(unittest.TestCase):
         utils.load_test_playgrounds()
 
         data.PlaygroundFeature.create(
-            name='Transfer stations to play components',
             slug='transfer-stations-to-play-components',
             playground=data.Playground.get(id=1)
         )

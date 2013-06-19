@@ -116,7 +116,7 @@ def edit_playground():
         payload['playground']['features'] = []
 
         # Loop over all of the possible features to see if they're present in the POST.
-        for f, slug in app_config.FEATURE_LIST:
+        for slug in app_config.FEATURES.keys():
             if request.form.get(slug, None):
                 payload['playground']['features'].append(slug)
 
@@ -184,7 +184,7 @@ def new_playground():
         payload['playground']['features'] = []
 
         # Loop over all of the possible features to see if they're present in the POST.
-        for f, slug in app_config.FEATURE_LIST:
+        for slug in app_config.FEATURES.keys():
             if request.form.get(slug, None):
                 payload['playground']['features'].append(slug)
 

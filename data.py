@@ -176,19 +176,20 @@ class Playground(Model):
         Shows the current state of attached features, if any exist.
         """
         fields = []
-        for f, slug in app_config.FEATURE_LIST:
-            feature = PlaygroundFeature.select().where(
+
+        for slug, details in app_config.FEATURES.items():
+            instances = PlaygroundFeature.select().where(
                 PlaygroundFeature.playground == self.id,
-                PlaygroundFeature.name == f)
-            if feature.count() > 0:
-                fields.append("""
-                    <input type="checkbox" name="%s" checked="checked">
-                    <label class="checkbox">%s
-                    </label>""" % (f.replace(' ', '-').lower(), f))
-            else:
-                fields.append("""
-                    <input type="checkbox" name="%s">
-                    <label class="checkbox">%s</label>""" % (f.replace(' ', '-').lower(), f))
+                PlaygroundFeature.slug == slug)
+
+            checked = 'checked="checked"' if instances.count() > 0 else ''
+
+            fields.append("""
+                <input type="checkbox" name="%s" %s>
+                <label class="checkbox">%s
+                </label>
+            """ % (slug, checked, details['name']))
+
         return fields
 
     def create_form(self):
@@ -306,11 +307,9 @@ class Playground(Model):
 class PlaygroundFeature(Model):
     """
     A feature at a single playground.
-    Feature names should be limited to app_config.FEATURE_LIST
+    Feature names should be limited to app_config.FEATURES.keys()
     """
-    name = TextField()
-    slug = TextField()
-    description = TextField(null=True)
+    slug = CharField()
     playground = ForeignKeyField(Playground, cascade=False)
 
     class Meta:
@@ -521,24 +520,11 @@ def process_updates(path='updates-in-process.json'):
         except KeyError:
             features = []
 
-        # Loop over the features list.
-        for feature in features:
-
-                # Loop over the entire set of features from app_config.
-                # This makes sure people don't submit random features.
-                # And it lets us look up by slug, which is what we're kinda doing.
-                for f, slug in app_config.FEATURE_LIST:
-
-                    # If this feature matches the slug of something from the app_config
-                    # feature list, attach it to the playground.
-                    if feature == slug:
-
-                        # Create a new playground feature object.
-                        PlaygroundFeature.create(
-                            slug=slug,
-                            name=f,
-                            playground=playground
-                        )
+        for slug in features:
+            PlaygroundFeature.create(
+                slug=slug,
+                playground=playground
+            )
 
         # Now, let's set up some revisions.
         # Create a list of revisions to apply.
@@ -585,7 +571,7 @@ def process_updates(path='updates-in-process.json'):
             # Since the Web can both add new features and remove old features,
             # we have to prepare for each path.
             # First, let's loop over the list of features that are available.
-            for f, slug in app_config.FEATURE_LIST:
+            for slug in app_config.FEATURES.keys():
 
                 # If the slug is in the old feature set, let's check it against the new.
                 if slug in old_features:
@@ -693,26 +679,13 @@ def process_inserts(path='inserts-in-process.json'):
         except KeyError:
             features = []
 
-        # Loop over the features list.
         for feature in features:
+            PlaygroundFeature.create(
+                slug=slug,
+                playground=playground
+            )
 
-                # Loop over the entire set of features from app_config.
-                # This makes sure people don't submit random features.
-                # And it lets us look up by slug, which is what we're kinda doing.
-                for f, slug in app_config.FEATURE_LIST:
-
-                    # If this feature matches the slug of something from the app_config
-                    # feature list, attach it to the playground.
-                    if feature == slug:
-
-                        # Create a new playground feature object.
-                        PlaygroundFeature.create(
-                            slug=slug,
-                            name=f,
-                            playground=playground
-                        )
-
-                        revisions.append({'field': slug, 'from': '0', 'to': '1'})
+            revisions.append({'field': slug, 'from': '0', 'to': '1'})
 
         Revision(
             playground=playground,

@@ -107,16 +107,40 @@ ADMIN_EMAILS = [
     'grich@npr.org'
 ]
 
-FEATURE_LIST = [
-    ("Smooth surface throughout", "smooth-surface-throughout"),
-    ("Ramps to play components", "ramps-to-play-components"),
-    ("Transfer stations to play components", "transfer-stations-to-play-components"),
-    ("Accessible swing", "accessible-swing"),
-    ("Sound play components", "sound-play-components"),
-    ("Sight-impaired play components", "sight-impaired-play-components"),
-    ("Safety fence", "safety-fence"),
-    ("Single entrance", "single-entrance")
-]
+FEATURES = {
+    'smooth-surface-throughout': {
+        'name': 'Smooth surface throughout',
+        'description': 'TKTK'
+    },
+    'ramps-to-play-components': {
+        'name': 'Ramps to play components',
+        'description': 'TKTK'
+    },
+    'transfer-stations-to-play-components': {
+        'name': 'Transfer stations to play components',
+        'description': 'TKTK'
+    },
+    'accessible-swing': {
+        'name': 'Accessible swing',
+        'description': 'TKTK'
+    },
+    'sound-play-components': {
+        'name': 'Sound play components',
+        'description': 'TKTK'
+    },
+    'sight-impaired-play-components': {
+        'name': 'Sight-impaired play components',
+        'description': 'TKTK'
+    },
+    'safety-fence': {
+        'name': 'Safety fence',
+        'description': 'TKTK'
+    },
+    'single-entrance': {
+        'name': 'Single entrance',
+        'description': 'TKTK'
+    }
+}
 
 PUBLIC_FIELDS = [
     "name",
