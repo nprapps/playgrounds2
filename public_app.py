@@ -13,12 +13,12 @@ import data
 app = Flask(app_config.PROJECT_NAME)
 
 
-def write_data(payload, write_mode):
+def write_data(payload, write_mode, file_path):
     """
-    DRYs out the process of editing/creating the updates.json file.
+    DRYs out the process of editing/creating the updates/added/deletes.json file.
     It sucks that there is no single mode for read/edit/create a file.
     """
-    with open('data/updates.json', write_mode) as f:
+    with open(file_path, write_mode) as f:
 
         if write_mode == 'r+':
             # If the mode is r+, read the file into a list before doing other things.
@@ -124,11 +124,11 @@ def edit_playground():
         # Write to the updates.json file.
         if os.path.exists("data/updates.json"):
             # If the file already exists, load it as r+ so we can read AND write it.
-            write_data(payload, 'r+')
+            write_data(payload, 'r+', 'data/updates.json')
         else:
             # If the file doesn't exist, load it as w so that we can create it.
             # Can you believe r+ won't create a file? That's turrible.
-            write_data(payload, 'w')
+            write_data(payload, 'w', 'data/updates.json')
 
         return redirect('%s/playground/%s.html?action=editing_thanks' % (app_config.S3_BASE_URL, playground.slug))
 
