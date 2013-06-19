@@ -15,7 +15,7 @@ app = Flask(app_config.PROJECT_NAME)
 
 def write_data(path, payload):
     """
-    DRYs out the process of editing/creating the updates.json file.
+    DRYs out the process of editing/creating the updates/added/deletes.json file.
     It sucks that there is no single mode for read/edit/create a file.
     """
     if os.path.exists(path):
