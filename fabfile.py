@@ -266,7 +266,7 @@ def tests():
         local('mv playgrounds.db playgrounds.db.bak')
         local('mv data/updates.json data/updates.json.bak')
 
-        local('nosetests')
+        local('nosetests --with-coverage --cover-html --cover-html-dir=.coverage-html --cover-package=data,public_app')
 
         local('mv playgrounds.db.bak playgrounds.db')
         local('mv data/updates.json.bak data/updates.json')
