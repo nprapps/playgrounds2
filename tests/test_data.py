@@ -41,7 +41,7 @@ class UpdatesTestCase(unittest.TestCase):
     def test_process_updates_simple(self):
         utils.load_test_playgrounds()
 
-        updated_playground_slugs, revision_group = data.process_updates('tests/data/test_updates.json')
+        updated_playground_slugs, revision_group = data.process_updates('tests/data/test_updates_simple.json')
 
         self.assertEqual(len(updated_playground_slugs), 1)
 
@@ -70,8 +70,23 @@ class UpdatesTestCase(unittest.TestCase):
         self.assertEqual(len(cookies), 0)
 
     def test_process_updates_features(self):
-        # TKTK
-        pass
+        utils.load_test_playgrounds()
+
+        data.PlaygroundFeature.create(
+            name='Transfer stations to play components',
+            slug='transfer-stations-to-play-components',
+            playground=data.Playground.get(id=1)
+        )
+
+        # JSON adds one feature and removes the one just created
+        updated_playground_slugs, revision_group = data.process_updates('tests/data/test_updates_features.json')
+
+        features = data.PlaygroundFeature.select().where(data.PlaygroundFeature.playground == 1)
+
+        self.assertEqual(features.count(), 1)
+
+        feature = features[0]
+        self.assertEqual(feature.slug, 'smooth-surface-throughout')
         
 
 class InsertsTestCase(unittest.TestCase):

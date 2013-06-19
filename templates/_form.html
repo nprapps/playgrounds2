@@ -1,7 +1,7 @@
 <div class="modal-body">
     <h2>Edit Playground</h2>
     <p class="muted">Changes will be submitted for review and posted within 24 hours.</p>
-    <form id="playground-form" class="row-fluid" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/api/">
+    <form id="playground-form" class="row-fluid" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/edit-playground/">
             <div class="basic-info span6">
             {% for field in fields %}
                 <div class="control-group"{% if field.display %} {{ field.display|safe }}{% endif %}>
