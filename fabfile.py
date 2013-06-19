@@ -264,12 +264,12 @@ def tests():
     """
     with settings(warn_only=True):
         local('mv playgrounds.db playgrounds.db.bak')
-        local('mv data/updates.json data/updates.json.bak')
+        local('mv data/changes.json data/changes.json.bak')
 
         local('nosetests --with-coverage --cover-html --cover-html-dir=.coverage-html --cover-package=data,public_app')
 
         local('mv playgrounds.db.bak playgrounds.db')
-        local('mv data/updates.json.bak data/updates.json')
+        local('mv data/changes.json.bak data/changes.json')
 
 """
 Setup

@@ -41,7 +41,7 @@ class UpdatesTestCase(unittest.TestCase):
     def test_process_updates_simple(self):
         utils.load_test_playgrounds()
 
-        updated_playground_slugs, revision_group = data.process_updates('tests/data/test_updates_simple.json')
+        updated_playground_slugs, revision_group = data.process_changes('tests/data/test_updates_simple.json')
 
         self.assertEqual(len(updated_playground_slugs), 1)
 
@@ -78,7 +78,7 @@ class UpdatesTestCase(unittest.TestCase):
         )
 
         # JSON adds one feature and removes the one just created
-        updated_playground_slugs, revision_group = data.process_updates('tests/data/test_updates_features.json')
+        updated_playground_slugs, revision_group = data.process_changes('tests/data/test_updates_features.json')
 
         features = data.PlaygroundFeature.select().where(data.PlaygroundFeature.playground == 1)
 
@@ -99,7 +99,7 @@ class InsertsTestCase(unittest.TestCase):
         data.delete_tables()
         data.create_tables()
 
-        new_playground_slugs, revision_group = data.process_inserts('tests/data/test_inserts.json')
+        new_playground_slugs, revision_group = data.process_changes('tests/data/test_inserts.json')
 
         self.assertEqual(len(new_playground_slugs), 1)
 
@@ -148,8 +148,9 @@ class EmailTestCase(unittest.TestCase):
         }]''' % playground.name
 
         data.Revision(
-            playground=playground,
+            action='update',
             timestamp=0,
+            playground=playground,
             log=log,
             headers='',
             cookies='',
