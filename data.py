@@ -521,30 +521,24 @@ def process_updates(path='updates-in-process.json'):
         except KeyError:
             features = []
 
-        # If we have an empty list, give up and go home.
-        # Otherwise, continue to the promised land.
-        if len(features) > 0:
+        # Loop over the features list.
+        for feature in features:
 
-            # Loop over the features list.
-            for feature in features:
+                # Loop over the entire set of features from app_config.
+                # This makes sure people don't submit random features.
+                # And it lets us look up by slug, which is what we're kinda doing.
+                for f, slug in app_config.FEATURE_LIST:
 
-                    # Loop over the entire set of features from app_config.
-                    # This makes sure people don't submit random features.
-                    # And it lets us look up by slug, which is what we're kinda doing.
-                    for f, slug in app_config.FEATURE_LIST:
+                    # If this feature matches the slug of something from the app_config
+                    # feature list, attach it to the playground.
+                    if feature == slug:
 
-                        # If this feature matches the slug of something from the app_config
-                        # feature list, attach it to the playground.
-                        if feature == slug:
-
-                            # Get the playground object.
-                            p = Playground.get(id=playground_id)
-
-                            # Create a new playground feature object.
-                            pf = PlaygroundFeature(slug=slug, name=f, playground=p)
-
-                            # Save it like it's hot.
-                            pf.save()
+                        # Create a new playground feature object.
+                        PlaygroundFeature.create(
+                            slug=slug,
+                            name=f,
+                            playground=playground
+                        )
 
         # Now, let's set up some revisions.
         # Create a list of revisions to apply.
@@ -620,6 +614,114 @@ def process_updates(path='updates-in-process.json'):
 
     return (updated_playgrounds, revision_group)
 
-def process_inserts():
-    # TKTK
-    pass
+def process_inserts(path='inserts-in-process.json'):
+    """
+    Iterate over the inserts json file, create playgrounds and features,
+    and generate Revision models.
+    """
+    # The revision_group is a single pass of this cron job.
+    # This is a grouping of all inserts made in one run of the function.
+    revision_group = time.mktime((datetime.datetime.utcnow()).timetuple())
+
+    # Set up a blank list of inserts.
+    inserts = []
+
+    # Open the inserts file and load the JSON as the inserts list.
+    with open(path, 'r') as jsonfile:
+        inserts = json.loads(jsonfile.read())
+
+    # Set up a blank list of updated playgrounds.
+    inserted_playgrounds = []
+
+    # Okay, the fun part.
+    # Loop through the inserts.
+    for record in inserts:
+
+        playground = Playground()
+
+        record_dict = {}
+
+        # Loop through each of the key/value pairs in the playground record.
+        for key, value in record['playground'].items():
+
+            # Ignore some keys because they aren't really what we want to update.
+            if key not in ['id', 'timestamp', 'features']:
+
+                # If the value is blank, make it null.
+                # Life is too short for many different kinds of emptyness.
+                if value == u'':
+                    value = None
+
+                # Update the record_dict with our new key/value pair.
+                record_dict[key] = value
+                setattr(playground, key, value)
+
+        playground.save()
+
+        # Add this playground to the inserted_playgrounds list.
+        inserted_playgrounds.append(playground.slug)
+
+        # Create a list of revisions that were applied.
+        revisions = []
+
+        # Our old data was captured up top. It's called old_data.
+        # This is the new data. It's just the record_dict from above.
+        new_data = record_dict
+
+        # Loop over the key/value pairs in the new data we have.
+        for key, value in new_data.items():
+
+            # Fix the variety of None that we bother maintaining.
+            if value is None:
+                new_data[key] = ''
+
+            # Set up an intermediate data structure for the revision.
+            revision_dict = {}
+
+            # Set up the data for this revision.
+            revision_dict['field'] = key
+            revision_dict['from'] = '' 
+            revision_dict['to'] = new_data[key]
+
+            # Append it to the revisions list.
+            revisions.append(revision_dict)
+
+        # Check to see if we have any incoming features from the updates.json.
+        # If we don't, set up an empty list.
+        try:
+            features = record['playground']['features']
+        except KeyError:
+            features = []
+
+        # Loop over the features list.
+        for feature in features:
+
+                # Loop over the entire set of features from app_config.
+                # This makes sure people don't submit random features.
+                # And it lets us look up by slug, which is what we're kinda doing.
+                for f, slug in app_config.FEATURE_LIST:
+
+                    # If this feature matches the slug of something from the app_config
+                    # feature list, attach it to the playground.
+                    if feature == slug:
+
+                        # Create a new playground feature object.
+                        PlaygroundFeature.create(
+                            slug=slug,
+                            name=f,
+                            playground=playground
+                        )
+
+                        revisions.append({'field': slug, 'from': '0', 'to': '1'})
+
+        Revision(
+            playground=playground,
+            timestamp=int(record['playground']['timestamp']),
+            log=json.dumps(revisions),
+            headers=json.dumps(record['request']['headers']),
+            cookies=json.dumps(record['request']['cookies']),
+            revision_group=revision_group
+        ).save()
+
+    return (inserted_playgrounds, revision_group)
+

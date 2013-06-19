@@ -100,7 +100,7 @@ class InsertsTestCase(unittest.TestCase):
         data.delete_tables()
         data.create_tables()
 
-        new_playground_slugs, revision_group = data.process_updates('tests/data/test_inserts.json')
+        new_playground_slugs, revision_group = data.process_inserts('tests/data/test_inserts.json')
 
         self.assertEqual(len(new_playground_slugs), 1)
 
@@ -117,7 +117,7 @@ class InsertsTestCase(unittest.TestCase):
         log = revision.get_log()
         self.assertEqual(len(log), 1)
         self.assertEqual(log[0]['field'], 'name')
-        self.assertEqual(log[0]['from'], None)
+        self.assertEqual(log[0]['from'], '')
         self.assertEqual(log[0]['to'], 'NEW NAME')
 
         headers = revision.get_headers()
