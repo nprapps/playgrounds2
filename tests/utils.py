@@ -19,6 +19,18 @@ def backup_updates_json():
 
 def restore_updates_json():
     try:
-        os.rename('data/updates.json/bak', 'data/updates.json')
+        os.rename('data/updates.json.bak', 'data/updates.json')
+    except OSError:
+        pass
+
+def backup_inserts_json():
+    try:
+        os.rename('data/inserts.json',  'data/inserts.json.bak')
+    except OSError:
+        pass
+
+def restore_inserts_json():
+    try:
+        os.rename('data/inserts.json.bak', 'data/inserts.json')
     except OSError:
         pass

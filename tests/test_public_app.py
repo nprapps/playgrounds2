@@ -22,6 +22,7 @@ class ApiTestCase(unittest.TestCase):
         self.client = public_app.app.test_client()
 
         utils.backup_updates_json()
+        utils.backup_inserts_json()
 
         self.request_context = public_app.app.test_request_context()
         self.request_context.push()
@@ -30,6 +31,7 @@ class ApiTestCase(unittest.TestCase):
         self.request_context.pop()
 
         utils.restore_updates_json()
+        utils.restore_inserts_json()
 
     def test_edit_playground(self):
         utils.load_test_playgrounds()
