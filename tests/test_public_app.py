@@ -66,7 +66,7 @@ class ApiTestCase(unittest.TestCase):
 
         response = self.client.post(url_for('edit_playground'), data={
             'id': 2,
-            'name': 'ANOTHER NEW NAME' 
+            'name': 'ANOTHER NEW NAME'
         })
 
         self.assertEqual(response.status_code, 302)
@@ -93,14 +93,14 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
         redirect_url = '%s/playground/%s.html' % (app_config.S3_URL, data.Playground.get(id=0).slug)
         self.assertEqual(response.headers['location'],redirect_url)
-        
+
         self.assertGreaterEqual(data.DeleteRequest.select().where(data.DeleteRequest.playground == 0).count(), 1)
 
     def test_delete_playground_confirm(self):
         utils.load_test_playgrounds()
 
         app_config.configure_targets('staging')
-        
+
         s3 = boto.connect_s3()
         bucket = s3.get_bucket(app_config.S3_BUCKETS[0])
         k = Key(bucket)
@@ -112,11 +112,11 @@ class ApiTestCase(unittest.TestCase):
         })
 
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(data.Playground.get(id=0).deleted)
+        self.assertFalse(data.Playground.get(id=0).active)
 
         self.assertIsNone(bucket.get_key(k.key))
         app_config.configure_targets(None)
-        
+
         # cs = boto.cloudsearch.connect_to_region('us-west-2')
 
 if __name__ == '__main__':
