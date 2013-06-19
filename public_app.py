@@ -206,7 +206,7 @@ def delete_playground():
 
     playground_slug = request.form.get('slug', None)
 
-    if playground_id and playground_slug:
+    if playground_slug:
 
         # Prep the payload.
         payload = {}
