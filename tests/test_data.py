@@ -35,10 +35,6 @@ class PlaygroundsTestCase(unittest.TestCase):
         self.assertEqual(len(non_duplicate), playgrounds.count())
 
     def test_remove_from_search_index(self):
-        """
-        In theory this tests that a document gets removed, but it doesn't
-        work because cloudsearch deletes are asynchronous.
-        """
         app_config.configure_targets('staging')
 
         utils.load_test_playgrounds()
