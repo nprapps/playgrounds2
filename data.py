@@ -14,6 +14,7 @@ from boto.s3.bucket import Bucket
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 from csvkit import CSVKitDictReader
+from geopy import geocoders
 from jinja2 import Template
 from peewee import *
 from playhouse.sqlite_ext import SqliteExtDatabase
@@ -95,8 +96,8 @@ class Playground(Model):
         if not self.slug:
             self.slugify()
 
-        if not self.latitude:
-            self.geocode()
+        # if (not self.latitude or self.longitude):
+        #     self.geocode()
 
         super(Playground, self).save(*args, **kwargs)
 
@@ -163,7 +164,13 @@ class Playground(Model):
         """
         Geocodes an instance of a model.
         """
-        pass
+        g = geocoders.GoogleV3()
+        address = self.address
+        city = self.city
+        state = self.state
+        zip_code = self.zip_code
+        place, (lat, lng) = g.geocode('{0} {1} {3} {3}').format(address, city, state, zip_code)
+        print '%.5f, %.5f' % (lat, lng)
 
     def slugify(self):
         bits = []
