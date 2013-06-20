@@ -134,7 +134,14 @@
     <ul>
         {% for revision in revisions %}
         <li>
-        {{ revision.timestamp }} - changed {% for change in revision.get_log() %} {{ change.field }}, {% endfor %}
+            {{ revision.timestamp }}
+            <ul>
+                {% for change in revision.get_log() %}
+                <li>
+                <strong>{{ change.field }}</strong> changed from "{{ change.from }}" to "{{ change.to }}"
+                </li>
+                {% endfor %}
+            </ul>
         </li>
         {% endfor %}
     </ul>
