@@ -5,7 +5,7 @@ import json
 import os
 import time
 
-from flask import Flask, redirect
+from flask import Flask, redirect, abort
 
 import app_config
 import data
@@ -252,8 +252,9 @@ def delete_playground_confirm():
 
         # From the HTTP request, pull the id of the playground
         playground_id = request.form.get('id')
+
         # Run the id through Playground and flag it as deactivated
-        Playground.get(id=plyaground_id).deactivate()
+        data.Playground.get(id=playground_id).deactivate()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8001, debug=app_config.DEBUG)

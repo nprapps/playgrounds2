@@ -8,6 +8,10 @@ import time
 from sets import Set
 
 import boto
+from boto import cloudsearch
+from boto.s3.bucket import Bucket
+from boto.s3.connection import S3Connection
+from boto.s3.key import Key
 from csvkit import CSVKitDictReader
 from jinja2 import Template
 from peewee import *
@@ -103,12 +107,12 @@ class Playground(Model):
         secrets = app_config.get_secrets()
 
         # connect to S3
-        conn = boto.S3Connection(secrets['AWS_ACCESS_KEY_ID'],secrets['AWS_SECRET_ACCESS_KEY'])
+        conn = S3Connection(secrets['AWS_ACCESS_KEY_ID'],secrets['AWS_SECRET_ACCESS_KEY'])
 
         # loop over buckets, we have more than one, and remove this playground
         for bucket in app_config.S3_BUCKETS:
-            b = boto.Bucket(conn, bucket)
-            k = boto.Key(b)
+            b = Bucket(conn, bucket)
+            k = Key(b)
             k.key = '/playground/%s.html' % (self.slug)
             b.delete_key(k)
 
@@ -118,10 +122,12 @@ class Playground(Model):
         '''
 
         # connect to AWS Cloudsearch
-        cloudsearch = boto.cloudsearch.connect_to_region(app_config.CLOUD_SEARCH_REGION)
+        conn = cloudsearch.connect_to_region(app_config.CLOUD_SEARCH_REGION)
+
+        domain = Domain(conn, conn.create_domain(CLOUD_SEARCH_INDEX_NAME))
 
         # identify our index, get the object so we can play with it
-        doc_service = cloudsearch.get_document_service()
+        doc_service = cs.get_document_service()
 
         # delete this object from the index
         doc_service.delete('%s_%i' % (app_config.DEPLOYMENT_TARGET, self.id), int(time.mktime(datetime.utcnow().timetuple())))
@@ -659,7 +665,7 @@ def process_insert(record):
 
         # Set up the data for this revision.
         revision_dict['field'] = key
-        revision_dict['from'] = '' 
+        revision_dict['from'] = ''
         revision_dict['to'] = new_data[key]
 
         # Append it to the revisions list.
