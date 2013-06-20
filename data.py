@@ -9,6 +9,7 @@ from sets import Set
 
 import boto
 from boto import cloudsearch
+from boto.cloudsearch.domain import Domain
 from boto.s3.bucket import Bucket
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
@@ -121,18 +122,28 @@ class Playground(Model):
         Removes a playground from search index
         '''
 
-        # connect to AWS Cloudsearch
+        # Set up a cloudsearch connection.
         conn = cloudsearch.connect_to_region(app_config.CLOUD_SEARCH_REGION)
 
-        domain = Domain(conn, conn.create_domain(CLOUD_SEARCH_INDEX_NAME))
+        # Loop over our domains and find the one with the matching document  endpoint.
+        for domain in conn.describe_domains():
+            if domain['doc_service']['endpoint'] == app_config.CLOUD_SEARCH_DOC_DOMAIN:
+                d = domain
 
-        # identify our index, get the object so we can play with it
-        doc_service = cs.get_document_service()
+        # Make an object of our domain.
+        domain = Domain(conn, d)
 
-        # delete this object from the index
-        doc_service.delete('%s_%i' % (app_config.DEPLOYMENT_TARGET, self.id), int(time.mktime(datetime.utcnow().timetuple())))
+        # Domain objects have a get_document_service() function, which we need.
+        doc_service = domain.get_document_service()
 
-        # commit the delete
+        # Get a timestamp.
+        now = int(time.mktime(datetime.datetime.utcnow().timetuple()))
+
+        # Call the delete function. Pass the constructed id and the timestamp.
+        # Objects are only removed if this timestamp is higher than the one in the index.
+        doc_service.delete('%s_%s' % (app_config.DEPLOYMENT_TARGET, self.id), now)
+
+        # Commit it!
         doc_service.commit()
 
     def deactivate(self):
