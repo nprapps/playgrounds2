@@ -129,6 +129,18 @@
 </div>
 
 
+<div class="changelog">
+    <h4>Changelog</h4>
+    <ul>
+        {% for revision in revisions %}
+        <li>
+        {{ revision.timestamp }} - changed {% for change in revision.get_log() %} {{ change.field }}, {% endfor %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+
 <div class="help-prompt">
     <p class="prompt">{{ COPY.content.playground_help_title }}</p>
     <p><a href="#edit-playground" class="btn btn-blue btn-block" data-toggle="modal"><i class="icon-pencil"></i> {{ COPY.content.playground_help_button }}</a></p>
