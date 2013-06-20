@@ -1,1 +1,1 @@
-[{"request": {"headers": {"content_length": "18", "host": "localhost", "content_type": "application/x-www-form-urlencoded"}, "cookies": {}}, "action": "insert", "playground": {"timestamp": 1371610246.0, "name": "NEW NAME" }}]
+[{"request": {"headers": {"content_length": "18", "host": "localhost", "content_type": "application/x-www-form-urlencoded"}, "cookies": {}}, "action": "insert", "timestamp": 1371610246.0, "playground": {"name": "NEW NAME" }}]

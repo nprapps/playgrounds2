@@ -72,6 +72,7 @@ def update_playground():
         # Prep the payload.
         payload = {}
         payload['action'] = 'update'
+        payload['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
         payload['playground'] = {}
         payload['request'] = {}
         payload['request']['headers'] = {}
@@ -108,9 +109,6 @@ def update_playground():
             payload['playground']['zip_code'] = str(payload['playground']['zip_code'])
         except KeyError:
             pass
-
-        # Append a timestamp.
-        payload['playground']['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
 
         # Set up a list for features.
         payload['playground']['features'] = []
@@ -142,6 +140,7 @@ def insert_playground():
         # Prep the payload.
         payload = {}
         payload['action'] = 'insert'
+        payload['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
         payload['playground'] = {}
         payload['request'] = {}
         payload['request']['headers'] = {}
@@ -177,9 +176,6 @@ def insert_playground():
             payload['playground']['zip_code'] = str(payload['playground']['zip_code'])
         except KeyError:
             pass
-
-        # Append a timestamp.
-        payload['playground']['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
 
         # Set up a list for features.
         payload['playground']['features'] = []
@@ -217,6 +213,7 @@ def delete_playground():
         # Prep the payload.
         payload = {}
         payload['action'] = 'delete'
+        payload['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
         payload['playground'] = {}
         payload['request'] = {}
         payload['request']['headers'] = {}
@@ -231,7 +228,6 @@ def delete_playground():
 
         # Write the playground info to the payload.
         payload['playground']['slug'] = playground_slug
-        payload['playground']['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
         payload['playground']['text'] = text
 
         # Write to the changes.json file.

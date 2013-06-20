@@ -539,16 +539,16 @@ def bootstrap():
     local_bootstrap()
     put(local_path='playgrounds.db', remote_path='%(repo_path)s/playgrounds.db' % env)
 
-def process_updates():
+def process_changes():
     """
     Parse any updates waiting to be processed, rerender playgrounds and send notification emails.
     """
     local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.utcnow()).timetuple()))
-    local('cp data/updates.json updates-in-progress.json && rm -f data/updates.json')
-    updated_playground_slugs, revision_group = data.process_updates()
-    render_playgrounds(updated_playground_slugs)
+    local('cp data/changes.json changes-in-progress.json && rm -f data/changes.json')
+    changed_playground_slugs, revision_group = data.process_changes()
+    render_playgrounds(changed_playground_slugs)
     _send_revision_email(revision_group)
-    local('rm -f updates-in-progress.json')
+    local('rm -f changes-in-progress.json')
 
 def update_search_index():
     """
