@@ -296,7 +296,7 @@ def process_insert(record):
             playground=playground
         )
 
-        revisions.append({'field': slug, 'from': '0', 'to': '1'})
+        revisions.append({'field': slug, 'from': 0, 'to': 1})
 
     return (playground, revisions)
 
