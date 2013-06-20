@@ -100,9 +100,9 @@ class Playground(Model):
         super(Playground, self).save(*args, **kwargs)
 
     def remove_from_s3(self):
-        '''
+        """
         Removes file for this model instance from S3
-        '''
+        """
 
         # fetch secrets from app_config
         secrets = app_config.get_secrets()
@@ -118,9 +118,9 @@ class Playground(Model):
             b.delete_key(k)
 
     def remove_from_search_index(self):
-        '''
+        """
         Removes a playground from search index
-        '''
+        """
 
         # Set up a cloudsearch connection.
         conn = cloudsearch.connect_to_region(app_config.CLOUD_SEARCH_REGION)
@@ -147,9 +147,9 @@ class Playground(Model):
         doc_service.commit()
 
     def deactivate(self):
-        '''
+        """
         Deactivates a model instance by calling deletes from S3 and Cloudsearch
-        '''
+        """
 
         # Deactivate playgrounds flagged for removal and commit it to the database
         self.active = False
@@ -161,6 +161,10 @@ class Playground(Model):
 
     @property
     def features(self):
+        """
+        Return an iterable containing features.
+        Empty list if none.
+        """
         features = []
         for feature in PlaygroundFeature.select().where(PlaygroundFeature.playground == self.id):
             features.append(feature.__dict__['_data'])
