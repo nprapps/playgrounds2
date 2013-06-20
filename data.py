@@ -7,14 +7,10 @@ import re
 import time
 from sets import Set
 
-import boto
-from boto import cloudsearch
-from boto.cloudsearch.domain import Domain
 from boto.s3.bucket import Bucket
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 from csvkit import CSVKitDictReader
-from geopy import geocoders
 from jinja2 import Template
 from peewee import *
 from playhouse.sqlite_ext import SqliteExtDatabase
@@ -112,7 +108,6 @@ class Playground(Model):
         conn = S3Connection(secrets['AWS_ACCESS_KEY_ID'],secrets['AWS_SECRET_ACCESS_KEY'])
 
         # loop over buckets, we have more than one, and remove this playground.
-        print app_config.S3_BUCKETS
         for bucket in app_config.S3_BUCKETS:
             b = Bucket(conn, bucket)
             k = Key(b)
@@ -124,13 +119,13 @@ class Playground(Model):
         Removes a playground from search index
         """
         sdf = self.delete_sdf()
-        payload = json.dumps(sdf)
+        payload = json.dumps([sdf])
 
         if len(payload) > 5000 * 1024:
             print 'Exceeded 5MB limit for SDF uploads!'
             return
 
-        response = requests.post('http://%s/2011-02-01/documents/batch' % app_config.CLOUD_SEARCH_DOC_DOMAIN, data=payload, headers={ 'Content-Type': 'application/json' })
+        requests.post('http://%s/2011-02-01/documents/batch' % app_config.CLOUD_SEARCH_DOC_DOMAIN, data=payload, headers={ 'Content-Type': 'application/json' })
 
     def deactivate(self):
         """
