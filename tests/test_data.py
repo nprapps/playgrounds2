@@ -48,6 +48,7 @@ class DeletesTestCase(unittest.TestCase):
         updated_playground_slugs, revision_group = data.process_changes('tests/data/test_deletes.json')
 
         self.assertEqual(len(updated_playground_slugs), 1)
+
     def test_remove_from_search_index(self):
         app_config.configure_targets('staging')
 
