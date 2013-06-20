@@ -88,20 +88,45 @@ class Playground(Model):
     class Meta:
         database = database
 
+    @property
+    def display_name(self):
+        """
+        Generate a display-friendly name for this playground.
+        """
+        if self.name:
+            return self.name
+
+        if self.facility:
+            return 'Playground at %s'  % self.facility
+
+        return 'Unnamed Playground'
+
     def save(self, *args, **kwargs):
+        """
+        Slugify before saving!
+        """
         if not self.slug:
             self.slugify()
-        # if (not self.latitude or self.longitude):
-        #     self.geocode()
 
         super(Playground, self).save(*args, **kwargs)
+
+    def deactivate(self):
+        """
+        Deactivate (instead of deleting) a model instance. Also delete from
+        S3 and CloudSearch.
+        """
+        # Deactivate playgrounds flagged for removal and commit it to the database
+        self.active = False
+        self.save()
+
+        # Reach into the bowels of S3 and Cloudsearch
+        self.remove_from_s3()
+        self.remove_from_search_index()
 
     def remove_from_s3(self):
         """
         Removes file for this model instance from S3
         """
-
-        # fetch secrets from app_config
         secrets = app_config.get_secrets()
 
         # connect to S3
@@ -127,31 +152,10 @@ class Playground(Model):
 
         requests.post('http://%s/2011-02-01/documents/batch' % app_config.CLOUD_SEARCH_DOC_DOMAIN, data=payload, headers={ 'Content-Type': 'application/json' })
 
-    def deactivate(self):
-        """
-        Deactivates a model instance by calling deletes from S3 and Cloudsearch
-        """
-
-        # Deactivate playgrounds flagged for removal and commit it to the database
-        self.active = False
-        self.save()
-
-        # Reach into the bowels of S3 and Cloudsearch
-        self.remove_from_s3()
-        self.remove_from_search_index()
-
-    @property
-    def features(self):
-        """
-        Return an iterable containing features.
-        Empty list if none.
-        """
-        features = []
-        for feature in PlaygroundFeature.select().where(PlaygroundFeature.playground == self.id):
-            features.append(feature.__dict__['_data'])
-        return features
-
     def slugify(self):
+        """
+        Generate a slug for this playground.
+        """
         bits = []
 
         for field in ['display_name', 'city', 'state']:
@@ -205,6 +209,7 @@ class Playground(Model):
         for field in self.__dict__['_data'].keys():
             field_dict = {}
             field_dict['name'] = unfield(field)
+            field_value = ''
             if field == 'id':
                 field_dict['display'] = 'style="display:none"'
                 field_dict['widget'] = '<input class="input" type="text" name="%s" value=""></input>' % field
@@ -284,6 +289,9 @@ class Playground(Model):
         return sdf
 
     def delete_sdf(self):
+        """
+        Create a CloudSearch SDF payload suitable for deleting this playground.
+        """
         sdf = {
             'type': 'delete',
             'id': '%s_%i' % (app_config.DEPLOYMENT_TARGET, self.id),
@@ -292,17 +300,10 @@ class Playground(Model):
 
         return sdf
 
-    @property
-    def display_name(self):
-        if self.name:
-            return self.name
-
-        if self.facility:
-            return 'Playground at %s'  % self.facility
-
-        return 'Unnamed Playground'
-
     def nearby(self, n):
+        """
+        Return a list of playgrounds near this one.
+        """
         if not self.latitude or not self.longitude:
             return []
 
