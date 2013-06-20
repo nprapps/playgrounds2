@@ -17,6 +17,7 @@ from csvkit import CSVKitDictReader
 from jinja2 import Template
 from peewee import *
 from playhouse.sqlite_ext import SqliteExtDatabase
+import requests
 
 import app_config
 
@@ -110,41 +111,29 @@ class Playground(Model):
         # connect to S3
         conn = S3Connection(secrets['AWS_ACCESS_KEY_ID'],secrets['AWS_SECRET_ACCESS_KEY'])
 
-        # loop over buckets, we have more than one, and remove this playground
+        # loop over buckets, we have more than one, and remove this playground.
+        print app_config.S3_BUCKETS
         for bucket in app_config.S3_BUCKETS:
             b = Bucket(conn, bucket)
             k = Key(b)
-            k.key = '/playground/%s.html' % (self.slug)
+            k.key = '%s/playground/%s.html' % (app_config.PROJECT_SLUG, self.slug)
+
+            print k.key
+
             b.delete_key(k)
 
     def remove_from_search_index(self):
         """
         Removes a playground from search index
         """
+        sdf = self.delete_sdf()
+        payload = json.dumps(sdf)
 
-        # Set up a cloudsearch connection.
-        conn = cloudsearch.connect_to_region(app_config.CLOUD_SEARCH_REGION)
+        if len(payload) > 5000 * 1024:
+            print 'Exceeded 5MB limit for SDF uploads!'
+            return
 
-        # Loop over our domains and find the one with the matching document  endpoint.
-        for domain in conn.describe_domains():
-            if domain['doc_service']['endpoint'] == app_config.CLOUD_SEARCH_DOC_DOMAIN:
-                d = domain
-
-        # Make an object of our domain.
-        domain = Domain(conn, d)
-
-        # Domain objects have a get_document_service() function, which we need.
-        doc_service = domain.get_document_service()
-
-        # Get a timestamp.
-        now = int(time.mktime(datetime.datetime.utcnow().timetuple()))
-
-        # Call the delete function. Pass the constructed id and the timestamp.
-        # Objects are only removed if this timestamp is higher than the one in the index.
-        doc_service.delete('%s_%s' % (app_config.DEPLOYMENT_TARGET, self.id), now)
-
-        # Commit it!
-        doc_service.commit()
+        response = requests.post('http://%s/2011-02-01/documents/batch' % app_config.CLOUD_SEARCH_DOC_DOMAIN, data=payload, headers={ 'Content-Type': 'application/json' })
 
     def deactivate(self):
         """
