@@ -3,12 +3,13 @@
 import os
 
 import data
+import models
 
 TEST_PLAYGROUNDS_CSV = 'tests/data/test_playgrounds.csv'
 
 def load_test_playgrounds():
-    data.delete_tables()
-    data.create_tables()
+    models.delete_tables()
+    models.create_tables()
     data.load_playgrounds(TEST_PLAYGROUNDS_CSV)
 
 def backup_changes_json():

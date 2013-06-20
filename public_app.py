@@ -8,7 +8,7 @@ import time
 from flask import Flask, redirect, abort
 
 import app_config
-import data
+from models import Playground
 
 app = Flask(app_config.PROJECT_NAME)
 
@@ -66,7 +66,7 @@ def update_playground():
 
         # How to know what fields are on this model?
         # Pick a single instance from the DB and serialize it.
-        playground = data.Playground.get(id=request.form.get('id'))
+        playground = Playground.get(id=request.form.get('id'))
         playground_fields = playground.__dict__['_data'].keys()
 
         # Prep the payload.
@@ -135,7 +135,7 @@ def insert_playground():
     from flask import request
 
     if request.method == 'POST':
-        playground_fields = data.Playground._meta.get_field_names()
+        playground_fields = Playground._meta.get_field_names()
 
         # Prep the payload.
         payload = {}
@@ -250,7 +250,7 @@ def delete_playground_confirm():
         playground_id = request.form.get('id')
 
         # Run the id through Playground and flag it as deactivated
-        data.Playground.get(id=playground_id).deactivate()
+        Playground.get(id=playground_id).deactivate()
 
         return json.dumps({"id": playground_id, "action": "delete", "success": True})
 

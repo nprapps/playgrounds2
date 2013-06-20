@@ -4,12 +4,12 @@ import json
 import unittest
 
 import boto
-# import boto.cloudsearch
 from boto.s3.key import Key
 from flask import url_for
 
 import app_config
-import data
+import models
+from models import Playground
 import public_app
 import tests.utils as utils
 
@@ -41,7 +41,7 @@ class ApiTestCase(unittest.TestCase):
 
         self.assertEqual(response.status_code, 302)
 
-        redirect_url = '%s/playground/%s.html' % (app_config.S3_BASE_URL, data.Playground.get(id=1).slug)
+        redirect_url = '%s/playground/%s.html' % (app_config.S3_BASE_URL, Playground.get(id=1).slug)
         self.assertEqual(response.headers['Location'].split('?')[0], redirect_url)
 
         with open('data/changes.json') as f:
@@ -62,7 +62,7 @@ class ApiTestCase(unittest.TestCase):
 
         self.assertEqual(response.status_code, 302)
 
-        redirect_url = '%s/playground/%s.html' % (app_config.S3_BASE_URL, data.Playground.get(id=1).slug)
+        redirect_url = '%s/playground/%s.html' % (app_config.S3_BASE_URL, Playground.get(id=1).slug)
         self.assertEqual(response.headers['Location'].split('?')[0], redirect_url)
 
         response = self.client.post(url_for('update_playground'), data={
@@ -72,7 +72,7 @@ class ApiTestCase(unittest.TestCase):
 
         self.assertEqual(response.status_code, 302)
 
-        redirect_url = '%s/playground/%s.html' % (app_config.S3_BASE_URL, data.Playground.get(id=2).slug)
+        redirect_url = '%s/playground/%s.html' % (app_config.S3_BASE_URL, Playground.get(id=2).slug)
         self.assertEqual(response.headers['Location'].split('?')[0], redirect_url)
 
         with open('data/changes.json') as f:
@@ -106,7 +106,7 @@ class ApiTestCase(unittest.TestCase):
         s3 = boto.connect_s3()
         bucket = s3.get_bucket(app_config.S3_BUCKETS[0])
         k = Key(bucket)
-        k.key = '%s/playground/%s.html' % (app_config.PROJECT_SLUG, data.Playground.get(id=1).slug)
+        k.key = '%s/playground/%s.html' % (app_config.PROJECT_SLUG, Playground.get(id=1).slug)
         k.set_contents_from_string('foo')
 
         response = self.client.post(url_for('delete_playground_confirm'), data={
@@ -114,14 +114,14 @@ class ApiTestCase(unittest.TestCase):
         })
 
         self.assertEqual(response.status_code, 200)
-        self.assertFalse(data.Playground.get(id=1).active)
+        self.assertFalse(Playground.get(id=1).active)
 
         self.assertIsNone(bucket.get_key(k.key))
         app_config.configure_targets(None)
 
     def test_add_playground(self):
-        data.delete_tables()
-        data.create_tables()
+        models.delete_tables()
+        models.create_tables()
 
         response = self.client.post(url_for('insert_playground'), data={
             'name': 'NEW PLAYGROUND'

@@ -17,6 +17,7 @@ import app_config
 import copytext
 import data
 from etc import github
+import models
 
 
 """
@@ -214,7 +215,7 @@ def render_playgrounds(playgrounds=None):
     if not playgrounds:
         playgrounds = []
 
-        for playground in data.Playground.select():
+        for playground in models.Playground.select():
             playgrounds.append(playground.slug)
 
     # Fake out deployment target
@@ -561,7 +562,7 @@ def update_search_index():
     app_config.configure_targets(env.get('settings', None))
 
     print 'Generating SDF batch...'
-    sdf = [playground.sdf() for playground in data.Playground.select()]
+    sdf = [playground.sdf() for playground in models.Playground.select()]
     payload = json.dumps(sdf)
 
     if len(payload) > 5000 * 1024:
@@ -587,7 +588,7 @@ def clear_search_index():
     app_config.configure_targets(env.get('settings', None))
 
     print 'Generating SDF batch...'
-    sdf = [playground.delete_sdf() for playground in data.Playground.select()]
+    sdf = [playground.delete_sdf() for playground in models.Playground.select()]
     payload = json.dumps(sdf)
 
     if len(payload) > 5000 * 1024:

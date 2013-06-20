@@ -9,6 +9,8 @@ import requests
 
 import app_config
 import data
+import models
+from models import Playground, PlaygroundFeature, Revision
 import tests.utils as utils
 
 class PlaygroundsTestCase(unittest.TestCase):
@@ -30,7 +32,7 @@ class PlaygroundsTestCase(unittest.TestCase):
 
         utils.load_test_playgrounds()
 
-        playgrounds = data.Playground.select()
+        playgrounds = Playground.select()
 
         self.assertEqual(len(non_duplicate), playgrounds.count())
 
@@ -53,7 +55,7 @@ class DeletesTestCase(unittest.TestCase):
 
         utils.load_test_playgrounds()
 
-        playground = data.Playground.select()[0]
+        playground = Playground.select()[0]
 
         sdf = playground.sdf()
         sdf['id'] = 'test_%i' % playground.id
@@ -97,11 +99,11 @@ class UpdatesTestCase(unittest.TestCase):
 
         self.assertEqual(len(updated_playground_slugs), 1)
 
-        playground = data.Playground.select().where(data.Playground.slug == updated_playground_slugs[0])[0]
+        playground = Playground.select().where(Playground.slug == updated_playground_slugs[0])[0]
         self.assertEqual(playground.id, 1)
         self.assertEqual(playground.name, 'NEW NAME')
 
-        revisions = data.Revision.select().where(data.Revision.revision_group == revision_group)
+        revisions = Revision.select().where(Revision.revision_group == revision_group)
 
         self.assertEqual(revisions.count(), 1)
 
@@ -124,15 +126,15 @@ class UpdatesTestCase(unittest.TestCase):
     def test_process_updates_features(self):
         utils.load_test_playgrounds()
 
-        data.PlaygroundFeature.create(
+        PlaygroundFeature.create(
             slug='transfer-stations-to-play-components',
-            playground=data.Playground.get(id=1)
+            playground=Playground.get(id=1)
         )
 
         # JSON adds one feature and removes the one just created
         updated_playground_slugs, revision_group = data.process_changes('tests/data/test_updates_features.json')
 
-        features = data.PlaygroundFeature.select().where(data.PlaygroundFeature.playground == 1)
+        features = PlaygroundFeature.select().where(PlaygroundFeature.playground == 1)
 
         self.assertEqual(features.count(), 1)
 
@@ -148,17 +150,17 @@ class InsertsTestCase(unittest.TestCase):
         pass
 
     def test_process_inserts(self):
-        data.delete_tables()
-        data.create_tables()
+        models.delete_tables()
+        models.create_tables()
 
         new_playground_slugs, revision_group = data.process_changes('tests/data/test_inserts.json')
 
         self.assertEqual(len(new_playground_slugs), 1)
 
-        playground = data.Playground.select().where(data.Playground.slug == new_playground_slugs[0])[0]
+        playground = Playground.select().where(Playground.slug == new_playground_slugs[0])[0]
         self.assertEqual(playground.name, 'NEW NAME')
 
-        revisions = data.Revision.select().where(data.Revision.revision_group == revision_group)
+        revisions = Revision.select().where(Revision.revision_group == revision_group)
 
         self.assertEqual(revisions.count(), 1)
 
@@ -191,7 +193,7 @@ class EmailTestCase(unittest.TestCase):
     def test_prepare_email(self):
         utils.load_test_playgrounds()
 
-        playground = data.Playground.get(id=1)
+        playground = Playground.get(id=1)
 
         log = '''[{
             "field": "name",
@@ -199,7 +201,7 @@ class EmailTestCase(unittest.TestCase):
             "to": "Test Playground"
         }]''' % playground.name
 
-        data.Revision(
+        Revision(
             action='update',
             timestamp=0,
             playground=playground,

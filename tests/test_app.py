@@ -7,7 +7,7 @@ from flask import url_for
 
 import app
 import app_config
-import data
+from models import Playground
 import tests.utils as utils
 
 class ViewsTestCase(unittest.TestCase):
@@ -29,17 +29,23 @@ class ViewsTestCase(unittest.TestCase):
         assert app_config.PROJECT_NAME in response.data
 
     def test_sitemap_exists(self):
-        self.client.get(url_for('sitemap'))
+        response = self.client.get(url_for('sitemap'))
+
+        assert app_config.PROJECT_SLUG in response.data
 
     def test_playground_exists(self):
         utils.load_test_playgrounds()
 
-        playground = data.Playground.get(id=1)
+        playground = Playground.get(id=1)
 
-        self.client.get(url_for('_playground', playground_slug=playground.slug))
+        response = self.client.get(url_for('_playground', playground_slug=playground.slug))
+
+        assert playground.display_name in response.data
 
     def test_playground_create_exists(self):
-        self.client.get(url_for('_playground_create'))
+        response = self.client.get(url_for('_playground_create'))
+
+        assert 'playground' in response.data 
 
 class AppConfigTestCase(unittest.TestCase):
     """

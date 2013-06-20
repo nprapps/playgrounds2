@@ -10,7 +10,7 @@ from flask import Flask, Markup, abort, render_template, url_for
 import requests
 
 import app_config
-import data
+from models import Playground
 from render_utils import flatten_app_config, make_context
 
 import argparse
@@ -24,7 +24,7 @@ def index():
     Playgrounds index page.
     """
     context = make_context()
-    context['playgrounds'] = data.Playground.select().limit(10)
+    context['playgrounds'] = Playground.select().limit(10)
 
     return render_template('index.html', **context)
 
@@ -40,7 +40,7 @@ def sitemap():
 
     context['pages'].append(('/', now))
 
-    for playground in data.Playground.select():
+    for playground in Playground.select():
         context['pages'].append((url_for('_playground', playground_slug=playground.slug), now))
 
     sitemap = render_template('sitemap.xml', **context)
@@ -53,7 +53,7 @@ def _playground(playground_slug):
     Playground detail page.
     """
     context = make_context()
-    context['playground'] = data.Playground.get(slug=playground_slug)
+    context['playground'] = Playground.get(slug=playground_slug)
     context['fields'] = context['playground'].update_form()
     context['features'] = context['playground'].feature_form()
 
@@ -61,7 +61,7 @@ def _playground(playground_slug):
 
 @app.route('/playground/create/')
 def _playground_create():
-    p = data.Playground().select()[0]
+    p = Playground().select()[0]
     context = make_context()
     context['fields'] = p.create_form()
     context['features'] = p.feature_form()
