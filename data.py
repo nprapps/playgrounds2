@@ -457,9 +457,9 @@ def prepare_email(revision_group):
 
     return payload.render(**context)
 
-def process_changes(path='changes-in-process.json'):
+def process_changes(path='changes-in-progress.json'):
     """
-    Iterate over changes.json and process it's contents.
+    Iterate over changes.json and process its contents.
     """
     revision_group = time.mktime((datetime.datetime.utcnow()).timetuple())
 
@@ -476,9 +476,9 @@ def process_changes(path='changes-in-process.json'):
         elif record['action'] == 'insert':
             playground, revisions = process_insert(record)
             changed_playgrounds.append(playground.slug)
-        elif record['action'] == 'delete':
-            #playground, revisions = process_delete(record)
-            pass
+        elif record['action'] == 'delete-request':
+            playground, revisions = process_delete(record)
+            changed_playgrounds.append(playground.slug)
 
         Revision.create(
             timestamp=int(record['timestamp']),
@@ -682,5 +682,13 @@ def process_insert(record):
     return (playground, revisions)
 
 def process_delete(record):
-    # TKTK
-    pass
+    """
+    Create a revision from the delete requests.
+    """
+    playground_slug = record['playground']['slug']
+
+    playground = Playground.get(slug=playground_slug)
+
+    revisions = [{"field": "active", "from": True, "to": False}, {"field": "reason", "from": "", "to": record['playground']['text']}]
+
+    return playground, revisions

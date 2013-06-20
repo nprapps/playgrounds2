@@ -31,6 +31,20 @@ class PlaygroundsTestCase(unittest.TestCase):
 
         self.assertEqual(len(non_duplicate), playgrounds.count())
 
+class DeletesTestCase(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def test_process_deletes(self):
+        utils.load_test_playgrounds()
+
+        updated_playground_slugs, revision_group = data.process_changes('tests/data/test_deletes.json')
+
+        self.assertEqual(len(updated_playground_slugs), 1)
+
 class UpdatesTestCase(unittest.TestCase):
     def setUp(self):
         pass
@@ -46,7 +60,7 @@ class UpdatesTestCase(unittest.TestCase):
         self.assertEqual(len(updated_playground_slugs), 1)
 
         playground = data.Playground.select().where(data.Playground.slug == updated_playground_slugs[0])[0]
-        self.assertEqual(playground.id, 1) 
+        self.assertEqual(playground.id, 1)
         self.assertEqual(playground.name, 'NEW NAME')
 
         revisions = data.Revision.select().where(data.Revision.revision_group == revision_group)
@@ -86,7 +100,7 @@ class UpdatesTestCase(unittest.TestCase):
 
         feature = features[0]
         self.assertEqual(feature.slug, 'smooth-surface-throughout')
-        
+
 
 class InsertsTestCase(unittest.TestCase):
     def setUp(self):
@@ -132,7 +146,7 @@ class EmailTestCase(unittest.TestCase):
     """
     def setUp(self):
         peewee.logger.setLevel(100)
-        
+
     def tearDown(self):
         pass
 
@@ -140,11 +154,11 @@ class EmailTestCase(unittest.TestCase):
         utils.load_test_playgrounds()
 
         playground = data.Playground.get(id=1)
-        
+
         log = '''[{
             "field": "name",
             "from": "%s",
-            "to": "Test Playground" 
+            "to": "Test Playground"
         }]''' % playground.name
 
         data.Revision(
@@ -158,7 +172,7 @@ class EmailTestCase(unittest.TestCase):
         ).save()
 
         body = data.prepare_email(1)
-        
+
         self.assertTrue(body.find(playground.name) >= 0)
 
 if __name__ == '__main__':

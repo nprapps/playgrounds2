@@ -212,7 +212,7 @@ def delete_playground():
 
         # Prep the payload.
         payload = {}
-        payload['action'] = 'delete'
+        payload['action'] = 'delete-request'
         payload['timestamp'] = time.mktime((datetime.datetime.utcnow()).timetuple())
         payload['playground'] = {}
         payload['request'] = {}
