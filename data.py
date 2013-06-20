@@ -117,9 +117,6 @@ class Playground(Model):
             b = Bucket(conn, bucket)
             k = Key(b)
             k.key = '%s/playground/%s.html' % (app_config.PROJECT_SLUG, self.slug)
-
-            print k.key
-
             b.delete_key(k)
 
     def remove_from_search_index(self):
