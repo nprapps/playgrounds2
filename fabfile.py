@@ -213,10 +213,9 @@ def render_playgrounds(playgrounds=None):
     jst()
 
     if not playgrounds:
-        playgrounds = []
+        playgrounds = models.Playground.select()
 
-        for playground in models.Playground.select():
-            playgrounds.append(playground.slug)
+    slugs = [p.slug for p in playgrounds]
 
     # Fake out deployment target
     deployment_target = app_config.DEPLOYMENT_TARGET
@@ -227,7 +226,7 @@ def render_playgrounds(playgrounds=None):
 
     compiled_includes = []
 
-    for slug in playgrounds:
+    for slug in slugs:
         # Silly fix because url_for require a context
         with app.app.test_request_context():
             path = url_for('_playground', playground_slug=slug)
@@ -544,14 +543,17 @@ def process_changes():
     """
     Parse any updates waiting to be processed, rerender playgrounds and send notification emails.
     """
+    require('settings', provided_by=[production, staging])
+
     local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.utcnow()).timetuple()))
     local('cp data/changes.json changes-in-progress.json && rm -f data/changes.json')
-    changed_playground_slugs, revision_group = data.process_changes()
-    render_playgrounds(changed_playground_slugs)
+    changed_playgrounds, revision_group = data.process_changes()
+    render_playgrounds(changed_playgrounds)
+    update_search_index(changed_playgrounds)
     _send_revision_email(revision_group)
     local('rm -f changes-in-progress.json')
 
-def update_search_index():
+def update_search_index(playgrounds=None):
     """
     Batch upload playgrounds to CloudSearch as SDF.
     """
@@ -561,8 +563,11 @@ def update_search_index():
     deployment_target = app_config.DEPLOYMENT_TARGET
     app_config.configure_targets(env.get('settings', None))
 
+    if not playgrounds:
+        playgrounds = models.Playground.select()
+
     print 'Generating SDF batch...'
-    sdf = [playground.sdf() for playground in models.Playground.select()]
+    sdf = [playground.sdf() for playground in playgrounds]
     payload = json.dumps(sdf)
 
     if len(payload) > 5000 * 1024:

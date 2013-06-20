@@ -86,19 +86,18 @@ def process_changes(path='changes-in-progress.json'):
     with open(path) as f:
         changes = json.load(f)
 
-    # A list of slugs of new or updated playgrounds
+    # A list new or updated playgrounds
     changed_playgrounds = []
 
     for record in changes:
         if record['action'] == 'update':
             playground, revisions = process_update(record)
-            changed_playgrounds.append(playground.slug)
+            changed_playgrounds.append(playground)
         elif record['action'] == 'insert':
             playground, revisions = process_insert(record)
-            changed_playgrounds.append(playground.slug)
+            changed_playgrounds.append(playground)
         elif record['action'] == 'delete-request':
             playground, revisions = process_delete(record)
-            changed_playgrounds.append(playground.slug)
 
         Revision.create(
             timestamp=int(record['timestamp']),
