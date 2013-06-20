@@ -8,6 +8,11 @@ import time
 from sets import Set
 
 import boto
+from boto import cloudsearch
+from boto.cloudsearch.domain import Domain
+from boto.s3.bucket import Bucket
+from boto.s3.connection import S3Connection
+from boto.s3.key import Key
 from csvkit import CSVKitDictReader
 from geopy import geocoders
 from jinja2 import Template
@@ -89,51 +94,62 @@ class Playground(Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slugify()
-
-        # if (not self.latitude and not self.longitude):
+        # if (not self.latitude or self.longitude):
         #     self.geocode()
 
         super(Playground, self).save(*args, **kwargs)
 
     def remove_from_s3(self):
-        '''
+        """
         Removes file for this model instance from S3
-        '''
+        """
 
         # fetch secrets from app_config
         secrets = app_config.get_secrets()
 
         # connect to S3
-        conn = boto.S3Connection(secrets['AWS_ACCESS_KEY_ID'],secrets['AWS_SECRET_ACCESS_KEY'])
+        conn = S3Connection(secrets['AWS_ACCESS_KEY_ID'],secrets['AWS_SECRET_ACCESS_KEY'])
 
         # loop over buckets, we have more than one, and remove this playground
         for bucket in app_config.S3_BUCKETS:
-            b = boto.Bucket(conn, bucket)
-            k = boto.Key(b)
+            b = Bucket(conn, bucket)
+            k = Key(b)
             k.key = '/playground/%s.html' % (self.slug)
             b.delete_key(k)
 
     def remove_from_search_index(self):
-        '''
+        """
         Removes a playground from search index
-        '''
+        """
 
-        # connect to AWS Cloudsearch
-        cloudsearch = boto.cloudsearch.connect_to_region(app_config.CLOUD_SEARCH_REGION)
+        # Set up a cloudsearch connection.
+        conn = cloudsearch.connect_to_region(app_config.CLOUD_SEARCH_REGION)
 
-        # identify our index, get the object so we can play with it
-        doc_service = cloudsearch.get_document_service()
+        # Loop over our domains and find the one with the matching document  endpoint.
+        for domain in conn.describe_domains():
+            if domain['doc_service']['endpoint'] == app_config.CLOUD_SEARCH_DOC_DOMAIN:
+                d = domain
 
-        # delete this object from the index
-        doc_service.delete('%s_%i' % (app_config.DEPLOYMENT_TARGET, self.id), int(time.mktime(datetime.utcnow().timetuple())))
+        # Make an object of our domain.
+        domain = Domain(conn, d)
 
-        # commit the delete
+        # Domain objects have a get_document_service() function, which we need.
+        doc_service = domain.get_document_service()
+
+        # Get a timestamp.
+        now = int(time.mktime(datetime.datetime.utcnow().timetuple()))
+
+        # Call the delete function. Pass the constructed id and the timestamp.
+        # Objects are only removed if this timestamp is higher than the one in the index.
+        doc_service.delete('%s_%s' % (app_config.DEPLOYMENT_TARGET, self.id), now)
+
+        # Commit it!
         doc_service.commit()
 
     def deactivate(self):
-        '''
+        """
         Deactivates a model instance by calling deletes from S3 and Cloudsearch
-        '''
+        """
 
         # Deactivate playgrounds flagged for removal and commit it to the database
         self.active = False
@@ -145,6 +161,10 @@ class Playground(Model):
 
     @property
     def features(self):
+        """
+        Return an iterable containing features.
+        Empty list if none.
+        """
         features = []
         for feature in PlaygroundFeature.select().where(PlaygroundFeature.playground == self.id):
             features.append(feature.__dict__['_data'])
@@ -156,9 +176,11 @@ class Playground(Model):
         '''
         g = geocoders.GoogleV3()
         address = self.address
+        city = self.city
+        state = self.state
         zip_code = self.zip_code
-        place, (lat, lng) = g.geocode('%s %s') % (address, zip_code)
-        print lat, lng
+        place, (lat, lng) = g.geocode('{0} {1} {3} {3}').format(address, city, state, zip_code)
+        print '%.5f, %.5f' % (lat, lng)
 
     def slugify(self):
         bits = []
@@ -663,7 +685,7 @@ def process_insert(record):
 
         # Set up the data for this revision.
         revision_dict['field'] = key
-        revision_dict['from'] = '' 
+        revision_dict['from'] = ''
         revision_dict['to'] = new_data[key]
 
         # Append it to the revisions list.

@@ -90,14 +90,13 @@ class ApiTestCase(unittest.TestCase):
         utils.load_test_playgrounds()
 
         response = self.client.post(url_for('delete_playground'), data={
-            'id': 0
+            "slug": "strong-reach-playground-bowdon-ga",
+            "text": "TEST TEXT FOR REASONING."
         })
 
         self.assertEqual(response.status_code, 302)
-        redirect_url = '%s/playground/%s.html' % (app_config.S3_URL, data.Playground.get(id=0).slug)
+        redirect_url = '%s/playground/%s.html?action=deleting_thanks' % (app_config.S3_BASE_URL, "strong-reach-playground-bowdon-ga")
         self.assertEqual(response.headers['location'],redirect_url)
-
-        self.assertGreaterEqual(data.DeleteRequest.select().where(data.DeleteRequest.playground == 0).count(), 1)
 
     def test_delete_playground_confirm(self):
         utils.load_test_playgrounds()
@@ -107,15 +106,15 @@ class ApiTestCase(unittest.TestCase):
         s3 = boto.connect_s3()
         bucket = s3.get_bucket(app_config.S3_BUCKETS[0])
         k = Key(bucket)
-        k.key = '%s/playground/%s.html' % (app_config.PROJECT_SLUG, data.Playground.get(id=0).slug)
+        k.key = '%s/playground/%s.html' % (app_config.PROJECT_SLUG, data.Playground.get(id=1).slug)
         k.set_contents_from_string('foo')
 
         response = self.client.post(url_for('delete_playground_confirm'), data={
-            'id': 0
+           "id": 1
         })
 
         self.assertEqual(response.status_code, 200)
-        self.assertFalse(data.Playground.get(id=0).active)
+        self.assertFalse(data.Playground.get(id=1).active)
 
         self.assertIsNone(bucket.get_key(k.key))
         app_config.configure_targets(None)
