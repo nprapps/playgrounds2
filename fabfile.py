@@ -522,8 +522,8 @@ def load_data():
     """
     Clear and reload playground data from CSV into sqlite.
     """
-    data.delete_tables()
-    data.create_tables()
+    models.delete_tables()
+    models.create_tables()
     data.load_playgrounds()
 
 def local_bootstrap():
