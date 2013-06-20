@@ -5,8 +5,8 @@ import math
 import re
 import time
 
+import boto
 from boto.s3.bucket import Bucket
-from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 from peewee import *
 from playhouse.sqlite_ext import SqliteExtDatabase
@@ -115,10 +115,7 @@ class Playground(Model):
         """
         Removes file for this model instance from S3
         """
-        secrets = app_config.get_secrets()
-
-        # connect to S3
-        conn = S3Connection(secrets['AWS_ACCESS_KEY_ID'],secrets['AWS_SECRET_ACCESS_KEY'])
+        conn = boto.connect_s3() 
 
         # loop over buckets, we have more than one, and remove this playground.
         for bucket in app_config.S3_BUCKETS:

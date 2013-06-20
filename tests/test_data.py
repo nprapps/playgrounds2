@@ -47,9 +47,10 @@ class DeletesTestCase(unittest.TestCase):
     def test_process_deletes(self):
         utils.load_test_playgrounds()
 
-        updated_playground_slugs, revision_group = data.process_changes('tests/data/test_deletes.json')
+        deleted_playgrounds, revision_group = data.process_changes('tests/data/test_deletes.json')
 
-        self.assertEqual(len(updated_playground_slugs), 1)
+        # Deleted playgrounds do not get returned from process_changes
+        self.assertEqual(len(deleted_playgrounds), 0)
 
     def test_remove_from_search_index(self):
         app_config.configure_targets('staging')
@@ -96,11 +97,11 @@ class UpdatesTestCase(unittest.TestCase):
     def test_process_updates_simple(self):
         utils.load_test_playgrounds()
 
-        updated_playground_slugs, revision_group = data.process_changes('tests/data/test_updates_simple.json')
+        updated_playgrounds, revision_group = data.process_changes('tests/data/test_updates_simple.json')
 
-        self.assertEqual(len(updated_playground_slugs), 1)
+        self.assertEqual(len(updated_playgrounds), 1)
 
-        playground = Playground.select().where(Playground.slug == updated_playground_slugs[0])[0]
+        playground = Playground.select().where(Playground.id == updated_playgrounds[0].id)[0]
         self.assertEqual(playground.id, 1)
         self.assertEqual(playground.name, 'NEW NAME')
 
@@ -133,7 +134,7 @@ class UpdatesTestCase(unittest.TestCase):
         )
 
         # JSON adds one feature and removes the one just created
-        updated_playground_slugs, revision_group = data.process_changes('tests/data/test_updates_features.json')
+        updated_playgrounds, revision_group = data.process_changes('tests/data/test_updates_features.json')
 
         features = PlaygroundFeature.select().where(PlaygroundFeature.playground == 1)
 
@@ -154,11 +155,11 @@ class InsertsTestCase(unittest.TestCase):
         models.delete_tables()
         models.create_tables()
 
-        new_playground_slugs, revision_group = data.process_changes('tests/data/test_inserts.json')
+        new_playgrounds, revision_group = data.process_changes('tests/data/test_inserts.json')
 
-        self.assertEqual(len(new_playground_slugs), 1)
+        self.assertEqual(len(new_playgrounds), 1)
 
-        playground = Playground.select().where(Playground.slug == new_playground_slugs[0])[0]
+        playground = Playground.select().where(Playground.id == new_playgrounds[0].id)[0]
         self.assertEqual(playground.name, 'NEW NAME')
 
         revisions = Revision.select().where(Revision.revision_group == revision_group)
