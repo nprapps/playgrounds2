@@ -310,4 +310,4 @@ def process_delete(record):
 
     revisions = [{"field": "active", "from": True, "to": False}, {"field": "reason", "from": "", "to": record['playground']['text']}]
 
-    return playground, revisions
+    return (playground, revisions)

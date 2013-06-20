@@ -45,12 +45,31 @@ class DeletesTestCase(unittest.TestCase):
         pass
 
     def test_process_deletes(self):
+        """
+        Test the process_deletes bits.
+        """
+
+        # Test process_changes()
         utils.load_test_playgrounds()
 
         deleted_playgrounds, revision_group = data.process_changes('tests/data/test_deletes.json')
 
-        # Deleted playgrounds do not get returned from process_changes
         self.assertEqual(len(deleted_playgrounds), 0)
+
+        # Test process_delete() itself.
+        with open('tests/data/test_deletes.json', 'r') as jsonfile:
+            test_deletes = json.loads(jsonfile.read())
+
+        playground, revisions = data.process_delete(test_deletes[0])
+
+        expected_id = 1
+        expected_revisions = [
+            {"field": "active", "from": True, "to": False},
+            {"field": "reason", "from": "", "to": "This playground doesn't appear to be accessible in any way whatsoever."}
+        ]
+
+        self.assertEqual(playground.id, expected_id)
+        self.assertEqual(revisions, expected_revisions)
 
     def test_remove_from_search_index(self):
         app_config.configure_targets('staging')
