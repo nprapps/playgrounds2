@@ -119,8 +119,6 @@ class ApiTestCase(unittest.TestCase):
         self.assertIsNone(bucket.get_key(k.key))
         app_config.configure_targets(None)
 
-        # cs = boto.cloudsearch.connect_to_region('us-west-2')
-
     def test_add_playground(self):
         data.delete_tables()
         data.create_tables()

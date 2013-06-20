@@ -3,21 +3,43 @@
 import json
 import unittest
 
+from flask import url_for
+
 import app
 import app_config
+import data
+import tests.utils as utils
 
-class IndexTestCase(unittest.TestCase):
+class ViewsTestCase(unittest.TestCase):
     """
     Test the index page.
     """
     def setUp(self):
         app.app.config['TESTING'] = True
         self.client = app.app.test_client()
+        self.request_context = app.app.test_request_context()
+        self.request_context.push()
+
+    def tearDown(self):
+        self.request_context.pop()
 
     def test_index_exists(self):
-        response = self.client.get('/')
+        response = self.client.get(url_for('index'))
 
         assert app_config.PROJECT_NAME in response.data
+
+    def test_sitemap_exists(self):
+        self.client.get(url_for('sitemap'))
+
+    def test_playground_exists(self):
+        utils.load_test_playgrounds()
+
+        playground = data.Playground.get(id=1)
+
+        self.client.get(url_for('_playground', playground_slug=playground.slug))
+
+    def test_playground_create_exists(self):
+        self.client.get(url_for('_playground_create'))
 
 class AppConfigTestCase(unittest.TestCase):
     """

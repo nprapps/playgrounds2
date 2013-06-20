@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 
+import json
 import unittest
 
 from csvkit import CSVKitDictReader
 import peewee
+import requests
 
+import app_config
 import data
 import tests.utils as utils
 
@@ -31,6 +34,7 @@ class PlaygroundsTestCase(unittest.TestCase):
 
         self.assertEqual(len(non_duplicate), playgrounds.count())
 
+
 class DeletesTestCase(unittest.TestCase):
     def setUp(self):
         pass
@@ -44,6 +48,40 @@ class DeletesTestCase(unittest.TestCase):
         updated_playground_slugs, revision_group = data.process_changes('tests/data/test_deletes.json')
 
         self.assertEqual(len(updated_playground_slugs), 1)
+    def test_remove_from_search_index(self):
+        app_config.configure_targets('staging')
+
+        utils.load_test_playgrounds()
+
+        playground = data.Playground.select()[0]
+
+        sdf = playground.sdf()
+        sdf['id'] = 'test_%i' % playground.id
+        sdf['fields']['name'] = 'THIS IS NOT A PLAYGROUND NAME axerqwak'
+        sdf['fields']['deployment_target'] = 'test'
+
+        response = requests.post('http://%s/2011-02-01/documents/batch' % app_config.CLOUD_SEARCH_DOC_DOMAIN, data=json.dumps([sdf]), headers={ 'Content-Type': 'application/json' })
+
+        self.assertEqual(response.status_code, 200)
+
+        # Monkey patch delete_sdf to so it return test id
+        delete_sdf = playground.delete_sdf()
+        delete_sdf['id'] = 'test_%i' % playground.id
+        delete_sdf['version'] = sdf['version'] + 1
+
+        old_func = playground.delete_sdf
+        playground.delete_sdf = lambda: delete_sdf
+
+        playground.remove_from_search_index()
+
+        playground.delete_sdf = old_func
+
+        response = requests.get('http://%s/2011-02-01/search' % app_config.CLOUD_SEARCH_DOMAIN, params={ 'q': 'axerqwak' }, headers={ 'Cache-Control': 'revalidate' })
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['hits']['found'], 0)
+
+        app_config.configure_targets(None)
 
 class UpdatesTestCase(unittest.TestCase):
     def setUp(self):
