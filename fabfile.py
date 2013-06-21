@@ -495,17 +495,27 @@ Application specific
 def _send_email(addresses, payload):
     connection = boto.ses.connect_to_region('us-east-1')
     connection.send_email(
-        'grich@npr.org',
+        'NPR News Apps <nprapps@npr.org>',
         'Playgrounds Edits (%s)' % (datetime.datetime.utcnow().strftime('%m/%d %H:%M%p')),
-        payload,
-        addresses)
+        None,
+        addresses,
+        html_body=payload,
+        format='html')
 
 def send_test_email():
     payload = """
-    Howdy! This is a test email.
+    <html>
+        <head></head>
+        <body>
+            <h1>Howdy!</h1>
+            <p><a href="http://www.npr.org/">This is a test</a> email.</p>
+            <p><a href="http://www.npr.org/">Delete</a></p>
+        </body>
+    </html>
     """
     addresses = app_config.ADMIN_EMAILS
     _send_email(addresses, payload)
+
 
 def _send_revision_email(revision_group):
     payload = data.prepare_email(revision_group)
