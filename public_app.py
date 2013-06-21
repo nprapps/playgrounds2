@@ -248,7 +248,7 @@ def delete_playground_confirm(playground_slug=None):
         # Run the id through Playground and flag it as deactivated
         Playground.get(slug=playground_slug).deactivate()
 
-        return json.dumps({"id": playground_id, "action": "delete", "success": True})
+        return json.dumps({"slug": playground_slug, "action": "delete", "success": True})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8001, debug=app_config.DEBUG)

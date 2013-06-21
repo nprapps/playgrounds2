@@ -9,6 +9,7 @@ import peewee
 import requests
 
 import app_config
+import app
 import data
 import models
 from models import Playground, PlaygroundFeature, Revision
@@ -233,7 +234,7 @@ class EmailTestCase(unittest.TestCase):
             revision_group=1
         ).save()
 
-        body = data.prepare_email(1)
+        body = app._prepare_email(1)
 
         self.assertTrue(body.find(playground.name) >= 0)
 
