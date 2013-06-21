@@ -25,7 +25,7 @@ def load_playgrounds(path='data/playgrounds.csv'):
                 #print 'Skipping duplicate: %s' % row['NAME']
                 continue
 
-            Playground.create(
+            playground = Playground.create(
                 nprid=row['NPRID'],
                 name=row['NAME'],
                 facility=row['FACILITY'],
@@ -45,6 +45,16 @@ def load_playgrounds(path='data/playgrounds.csv'):
                 url=row['url'],
                 entry=row['Entry'],
                 source=row['Source']
+            )
+
+            Revision.create(
+                timestamp=datetime.datetime.utcnow(),
+                action='insert',
+                playground=playground,
+                log=json.dumps([]),
+                headers='',
+                cookies='',
+                revision_group=1
             )
 
 def process_changes(path='changes-in-progress.json'):

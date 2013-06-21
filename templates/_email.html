@@ -39,13 +39,13 @@
         <a href="{{ playground.delete_url }}" target="_blank" class="delete">Delete</a><br/>
     {% endfor %}
     </p>{% endif %}
-    {% if inserts.playgrounds|length > 0 %}<h2 style="color: #468847;">inserts ({{ inserts.playgrounds|length }})</h2>
+    {% if inserts.playgrounds|length > 0 %}<h2 style="color: #468847;">Inserts ({{ inserts.playgrounds|length }})</h2>
     <p>
     {% for playground in inserts.playgrounds %}
         <a href="{{ playground.site_url }}" target="_blank">{{ playground.name }}</a><br/>
     {% endfor %}
     </p>{% endif %}
-    {% if updates.playgrounds|length > 0 %}<h2 style="color: #f89406;">updates ({{ updates.playgrounds|length }})</h2>
+    {% if updates.playgrounds|length > 0 %}<h2 style="color: #f89406;">Updates ({{ updates.playgrounds|length }})</h2>
     <p>
     {% for playground in updates.playgrounds %}<a href="{{ playground.site_url }}" target="_blank">{{ playground.name }}</a>
         <ul>{% for revision in playground.revisions %}

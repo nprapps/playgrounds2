@@ -251,3 +251,8 @@ You can also deploy the configuration files independently of the setup command b
 ```
 fab deploy_confs
 ```
+
+Add fake changelog data
+---------------------
+
+Call ```fab create_test_revisions``` and look at this playground: http://localhost:8000/playground/strong-reach-playground-bowdon-ga.html
