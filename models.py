@@ -322,7 +322,7 @@ def display_field_name(field_name):
     a display-friendly version.
     """
     try:
-        getattr(Playground, field_name).verbose_name
+        return getattr(Playground, field_name).verbose_name
     except AttributeError:
         return app_config.FEATURES[field_name]['name'];
 
