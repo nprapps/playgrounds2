@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 
 <head>
-    <title>{{ PROJECT_NAME }}</title>
+    <title>{% block page_title %}{% endblock page_title %}{{ PROJECT_NAME }} : NPR</title>
 
     <meta name="description" content="{{ PROJECT_DESCRIPTION }}">
     <meta http-equiv="X-UA-Compatible" content="IE=8" />

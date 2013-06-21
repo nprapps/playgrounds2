@@ -81,6 +81,9 @@ class Playground(Model):
         """
         Generate a display-friendly name for this playground.
         """
+        if self.name and self.facility:
+            return '%s at %s' % (self.name, self.facility)
+        
         if self.name:
             return self.name
 

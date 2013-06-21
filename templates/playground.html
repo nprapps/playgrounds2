@@ -1,5 +1,7 @@
 {% extends '_base.html' %}
 
+{% block page_title %}{{ playground.display_name }} | {% endblock page_title %}
+
 {% block body_class %}playground{% endblock body_class %}
 
 {% block header_content %}
@@ -35,11 +37,6 @@
     <img src="http://api.tiles.mapbox.com/v3/{{ MAPBOX_BASE_LAYER }}/pin-m-star+ff6633({{ playground.longitude }},{{ playground.latitude }})/{{ playground.longitude }},{{ playground.latitude }},15/300x120.png" class="map"/>
     {% endif %}
     <p>
-    {% if playground.facility %}
-        {{ playground.facility }}
-        {% if playground.facility_type %}({{ playground.facility_type }}){% endif %}
-        <br />
-    {% endif %}
     {% if playground.address %}{{ playground.address }}<br />{% endif %}
     {% if playground.city %}{{ playground.city }}, {% endif %}
     {% if playground.state %}{{ playground.state }} {% endif %}
