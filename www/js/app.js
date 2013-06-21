@@ -29,6 +29,8 @@ var $did_you_mean = null;
 var $results_address = null;
 var $no_geocode = null;
 var $results_loading = null;
+var $playground_meta_hdr = null;
+var $playground_meta_items = null;
 
 var is_index = false;
 var is_playground = false;
@@ -252,6 +254,8 @@ $(function() {
     $results_address = $('#results-address');
     $no_geocode = $('#no-geocode');
     $results_loading = $('#results-loading');
+    $playground_meta_hdr = $('#main-content').find('.about').find('h5.meta');
+    $playground_meta_items = $('#main-content').find('.about').find('ul.meta');
 
     is_index = $('body').hasClass('index');
     is_playground = $('body').hasClass('playground');
@@ -452,5 +456,12 @@ $(function() {
 
     if (is_playground) {
         $('.playground-features i').tooltip( { trigger: 'click' } );
+        
+        $playground_meta_hdr.html($playground_meta_hdr.html() + ' &rsaquo;');
+        $playground_meta_items.hide();
+        
+        $playground_meta_hdr.on('click', function() {
+            $playground_meta_items.slideToggle('fast');
+        });
     }
 });

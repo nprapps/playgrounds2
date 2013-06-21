@@ -69,36 +69,39 @@
 </div>
 
 <!-- Description -->
-{% if playground.public_remarks or playground.agency or playground.owner %}
 <div class="about">
     <h4>About This Playground</h4>
-{% endif %}
 
+    <p class="description">
     {% if playground.public_remarks %}
-    <p class="description">{{ playground.public_remarks }}</p>
+        {{ playground.public_remarks }}
+    {% else %} 
+        Description not available.
     {% endif %}
-
-    {% if playground.agency or playground.owner  %}
+    </p>
+    
+    <h5 class="meta">More Info</h5>
     <ul class="meta">
-        {% if playground.agency %}
         <li class="agency">
-                <strong>Agency:</strong>
+            <strong>Agency:</strong>
+            {% if playground.agency %}
                 {{ playground.agency }}
                 {% if playground.agencytype %} ({{ playground.agencytype }}){% endif %}
+            {% else %}
+                Unavailable
+            {% endif %}
         </li>
-        {% endif %}
-        {% if playground.owner %}
         <li class="owner">
             <strong>Owner:</strong>
-            {{ playground.owner }}
-            {% if playground.owner_type %} ({{ playground.owner_type }}){% endif %}
+            {% if playground.owner %}
+                {{ playground.owner }}
+                {% if playground.owner_type %} ({{ playground.owner_type }}){% endif %}
+            {% else %}
+                Unavailable
+            {% endif %}
         </li>
-        {% endif %}
     </ul>
-    {% endif %}
-{% if playground.public_remarks or playground.agency or playground.owner %}
 </div>
-{% endif %}
 
 
 <!-- disqus -->
