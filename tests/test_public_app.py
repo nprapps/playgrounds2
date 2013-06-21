@@ -109,9 +109,7 @@ class ApiTestCase(unittest.TestCase):
         k.key = '%s/playground/%s.html' % (app_config.PROJECT_SLUG, Playground.get(id=1).slug)
         k.set_contents_from_string('foo')
 
-        response = self.client.post(url_for('delete_playground_confirm'), data={
-           "id": 1
-        })
+        response = self.client.get(url_for('delete_playground_confirm', playground_slug=Playground.get(id=1).slug))
 
         self.assertEqual(response.status_code, 200)
         self.assertFalse(Playground.get(id=1).active)

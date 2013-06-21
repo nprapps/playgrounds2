@@ -1,18 +1,65 @@
-{{ playgrounds|length }} playgrounds were changed.
-{{ total_revisions }} total revisions were made.
-<!-- Switch between plural and singular? -->
-Summary
--------
-{{ playgrounds|length }} playgrounds were changed, with {{ total_revisions }} distinct edits.
-TKTK playgrounds were requested to be added.
-TKTK playground
->>>>>>> 6a375100eef494eaf6204c0f53215bdfca26f620
-{% for playground in playgrounds %}
-{{ playground.name }} 
-{{ playground.site_url }}
-{% for revision in playground.revisions %}
-Revision: {{ revision.revision_group }}
-{% for field in revision.fields %} * {{ field.field }} changed from {{ field.from }} to {{ field.to }}
-{% endfor %}
-{% endfor %}
-{% endfor %}
+<html>
+<head>
+    <style type="text/css">
+        * { color: #444444; }
+        p { font-size: 16px; font-family: sans-serif; padding: none; margin: 5px; }
+        h2 { border-bottom: 1px solid #cccccc; }
+        p.summary { background-color: #dddddd; color: #333333; }
+    </style>
+</head>
+<body>
+
+    <h1>Summary</h1>
+    <p><!-- REFACTOR AS A TABLE -->
+        {% if deletes|length > 0 %}
+            {% if deletes|length == 1 %} 1 delete request requires
+            {% else %}{{ deletes|length }} delete requests require{% endif %}
+            your attention.
+        {% endif %}<br/>
+        {% if inserts|length > 0 %}
+            {% if inserts|length == 1 %} 1 playground was
+            {% else %}{{ inserts|length }} playgrounds were{% endif %}
+            added.
+        {% endif %}<br/>
+        {% if updates|length > 0 %}
+            {% if updates|length == 1 %} 1 playground was
+            {% else %}{{ updates|length }} playgrounds were{% endif %}
+            edited.
+        {% endif %}<br/>
+        {{ total_revisions }} total revisions were made.
+    </p>
+
+    <h1>Details</h1>
+    {% if deletes|length > 0 %}<h2 style="color: #b94a48;">Deletes ({{ deletes.playgrounds|length }})</h2>
+    <p>
+        <ul>{% for playground in deletes.playgrounds %}
+            <li><a href="{{ playground.site_url }}" target="_blank">{{ playground.name }}</a> |
+                <a href="{{ playground.delete_url }}" target="_blank"><strong>Delete</strong></li>
+        {% endfor %}</ul>
+    </p>{% endif %}
+    {% if inserts|length > 0 %}<h2 style="color: #468847;">inserts ({{ inserts.playgrounds|length }})</h2>
+    <p>
+        <ul>{% for playground in inserts.playgrounds %}
+            <li><a href="{{ playground.site_url }}" target="_blank">{{ playground.name }}</a></li>
+        {% endfor %}</ul>
+    </p>{% endif %}
+    {% if updates|length > 0 %}<h2 style="color: #3a87ad;">updates ({{ updates.playgrounds|length }})</h2>
+    <p class="summary">
+        <p>
+            {{ updates.playgrounds|length }} <strong>playgrounds</strong> were changed.<br/>
+            {{ updates.total_revisions }} <strong>revisions</strong> were submitted.
+        </p>
+    </p>
+    <p>
+        {% for playground in updates.playgrounds %}
+        <a href="{{ playground.site_url }}" target="_blank">{{ playground.name }}</a>
+        <ul>{% for revision in playground.revisions %}
+            <li>Revision group #{{ revision.revision_group }}
+                <ul>{% for field in revision.fields %}
+                    <li>{{ field.field }} changed from {{ field.from }} to {{ field.to }}</li>
+                {% endfor %}</ul>
+            {% endfor %}</li>
+        {% endfor %}</ul>
+    </p>{% endif %}
+</body>
+</html>

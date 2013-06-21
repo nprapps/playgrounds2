@@ -52,11 +52,26 @@ def prepare_email(revision_group):
     revisions = Revision.select().where(Revision.revision_group == int(revision_group))
     context = {}
     context['total_revisions'] = revisions.count()
-    context['playgrounds'] = []
+    context['deletes'] = []
+    context['inserts'] = []
+    context['updates'] = []
+
+    for revision in revisions.where(Revision.action == 'insert'):
+        playground_dict = playground_dict = p.__dict__['_data']
+        playground_dict['site_url'] = 'http://%s/playground/%s.html' % (app_config.S3_BASE_URL, playground_slug)
+        playground_dict['revision_group'] = int(revision_group)
+        context['inserts'].append(playground_dict)
+
+    for revision in revisions.where(Revision.action == 'delete-request'):
+        playground_dict = playground_dict = p.__dict__['_data']
+        playground_dict['site_url'] = 'http://%s/playground/%s.html' % (app_config.S3_BASE_URL, playground_slug)
+        playground_dict['delete_url'] = 'http://%s/delete-playground/%s/' % (app_config.S3_BASE_URL, playground_slug)
+        playground_dict['revision_group'] = int(revision_group)
+        context['deletes'].append(playground_dict)
 
     updated_playgrounds = Set([])
 
-    for revision in revisions:
+    for revision in revisions.select(Revision.action == 'update'):
         updated_playgrounds.add(revision.playground.slug)
 
     for playground_slug in updated_playgrounds:
@@ -70,7 +85,12 @@ def prepare_email(revision_group):
                 revision_dict['revision_group'] = revision_group
                 revision_dict['fields'] = revision.get_log()
                 playground_dict['revisions'].append(revision_dict)
-        context['playgrounds'].append(playground_dict)
+
+        context['updates'].append(playground_slug)
+
+    context['deletes']['playgrounds'] = sorted(context['deletes']['playgrounds'], key=lambda playground: playground['name'])
+    context['inserts']['playgrounds'] = sorted(context['inserts']['playgrounds'], key=lambda playground: playground['name'])
+    context['updates']['playgrounds'] = sorted(context['updates']['playgrounds'], key=lambda playground: playground['name'])
 
     with open('templates/_email.html', 'rb') as read_template:
         payload = Template(read_template.read())

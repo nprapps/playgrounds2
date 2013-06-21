@@ -239,18 +239,15 @@ def delete_playground():
     else:
         abort(400)
 
-@app.route('/%s/delete-playground/' % app_config.PROJECT_SLUG, methods=['POST'])
-def delete_playground_confirm():
+@app.route('/%s/delete-playground/<str:playground_slug>/' % app_config.PROJECT_SLUG, methods=['GET'])
+def delete_playground_confirm(playground_slug=None):
     from flask import request
 
     # Only handle POST requests.
-    if request.method == 'POST':
-
-        # From the HTTP request, pull the id of the playground
-        playground_id = request.form.get('id')
+    if request.method == 'GET' and playground_slug:
 
         # Run the id through Playground and flag it as deactivated
-        Playground.get(id=playground_id).deactivate()
+        Playground.get(slug=playground_slug).deactivate()
 
         return json.dumps({"id": playground_id, "action": "delete", "success": True})
 

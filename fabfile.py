@@ -496,7 +496,7 @@ def _send_email(addresses, payload):
     connection = boto.ses.connect_to_region('us-east-1')
     connection.send_email(
         'NPR News Apps <nprapps@npr.org>',
-        'Playgrounds Edits (%s)' % (datetime.datetime.utcnow().strftime('%m/%d %H:%M%p')),
+        'Playgrounds: %s' % (datetime.datetime.utcnow().strftime('%m/%d')),
         None,
         addresses,
         html_body=payload,
