@@ -56,7 +56,7 @@ def _playground(playground_slug):
     context['playground'] = Playground.get(slug=playground_slug)
     context['fields'] = context['playground'].update_form()
     context['features'] = context['playground'].update_features_form()
-    context['revisions'] = Revision.select().where(Revision.playground == context['playground'].id).order_by(Revision.timestamp.desc())
+    context['revisions'] = Revision.select().where(Revision.playground == context['playground'].id, Revision.action == 'update').order_by(Revision.timestamp.desc())
     context['display_field_name'] = display_field_name
 
     return render_template('playground.html', **context)
