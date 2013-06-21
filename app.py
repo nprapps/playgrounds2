@@ -48,6 +48,7 @@ def _prepare_email(revision_group):
             playground_dict['revision_group'] = int(revision_group)
             playground_dict['headers'] = revision.get_headers()
             context['inserts']['playgrounds'].append(playground_dict)
+        context['inserts']['playgrounds'] = sorted(context['inserts']['playgrounds'], key=lambda p: p['name'])
 
     deletes = revisions.where(Revision.action == 'delete-request')
     if deletes.count() > 0:
@@ -60,6 +61,7 @@ def _prepare_email(revision_group):
             playground_dict['revision_group'] = int(revision_group)
             playground_dict['headers'] = revision.get_headers()
             context['deletes']['playgrounds'].append(playground_dict)
+        context['deletes']['playgrounds'] = sorted(context['deletes']['playgrounds'], key=lambda p: p['name'])
 
     updates = revisions.where(Revision.action == 'update')
     if updates.count() > 0:
@@ -83,10 +85,7 @@ def _prepare_email(revision_group):
                     playground_dict['revisions'].append(revision_dict)
 
             context['updates']['playgrounds'].append(playground_dict)
-
-    # context['deletes']['playgrounds'] = sorted(context['deletes']['playgrounds'], key=lambda playground: playground['name'])
-    # context['inserts']['playgrounds'] = sorted(context['inserts']['playgrounds'], key=lambda playground: playground['name'])
-    # context['updates']['playgrounds'] = sorted(context['updates']['playgrounds'], key=lambda playground: playground['name'])
+        context['updates']['playgrounds'] = sorted(context['updates']['playgrounds'], key=lambda p: p['name'])
 
     with open('templates/_email.html', 'rb') as read_template:
         payload = Template(read_template.read())
