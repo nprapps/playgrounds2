@@ -496,7 +496,7 @@ def _send_email(addresses, payload):
     connection = boto.ses.connect_to_region('us-east-1')
     connection.send_email(
         'NPR News Apps <nprapps@npr.org>',
-        'Playgrounds Edits (%s)' % (datetime.datetime.utcnow().strftime('%m/%d %H:%M%p')),
+        'Playgrounds: %s' % (datetime.datetime.utcnow().strftime('%m/%d')),
         None,
         addresses,
         html_body=payload,
@@ -637,13 +637,23 @@ def create_test_revisions():
     playground = models.Playground.get(id=1)
 
     models.Revision.create(
+        timestamp=datetime.datetime.utcnow() - datetime.timedelta(days=3),
+        action='insert',
+        playground=playground,
+        log='[{ "field": "name", "from": "", "to": "Strong Reach Playground" }]',
+        headers='',
+        cookies='',
+        revision_group=1
+    )
+
+    models.Revision.create(
         timestamp=datetime.datetime.utcnow() - datetime.timedelta(hours=1),
         action='update',
         playground=playground,
         log='[{ "field": "name", "from": "Strong Reach Playground", "to": "Not So Strong Playground" }, { "field": "safety-fence", "from": 0, "to": 1 }]',
         headers='',
         cookies='',
-        revision_group=1
+        revision_group=2
     )
     
     models.Revision.create(
@@ -653,7 +663,7 @@ def create_test_revisions():
         log='[{ "field": "facility", "from": "", "to": "Park for Weak Children" }, { "field": "url", "from": "#http://www.bowdon.net/recreation-and-culture/recreation/#", "to": "" }, { "field": "smooth-surface-throughout", "from": 0, "to": 1 }, { "field": "safety-fence", "from": 1, "to": 0 }]',
         headers='',
         cookies='',
-        revision_group=1
+        revision_group=2
     )
 
     models.Revision.create(
@@ -663,7 +673,7 @@ def create_test_revisions():
         log='[{ "field": "safety-fence", "from": 0, "to": 1 }]',
         headers='',
         cookies='',
-        revision_group=1
+        revision_group=2
     )
 
 
