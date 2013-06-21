@@ -3,10 +3,12 @@
 from datetime import date
 import json
 from mimetypes import guess_type
+from sets import Set
 import urllib
 
 import envoy
 from flask import Flask, Markup, abort, render_template, url_for
+from jinja2 import Template
 import requests
 
 import app_config
@@ -17,6 +19,79 @@ import argparse
 
 app = Flask(app_config.PROJECT_NAME)
 
+
+@app.route('/email/<revision_group>/')
+def _prepare_email(revision_group):
+    revisions = Revision.select().where(Revision.revision_group == int(revision_group))
+
+    context = {}
+    context['total_revisions'] = revisions.count()
+    context['deletes'] = {}
+    context['deletes']['playgrounds'] = []
+    context['deletes']['total_revisions'] = 0
+
+    context['inserts'] = {}
+    context['inserts']['playgrounds'] = []
+    context['inserts']['total_revisions'] = 0
+
+    context['updates'] = {}
+    context['updates']['playgrounds'] = []
+    context['updates']['total_revisions'] = 0
+
+    inserts = revisions.where(Revision.action == 'insert')
+    if inserts.count() > 0:
+        context['inserts']['total_revisions'] = inserts.count()
+        for revision in inserts:
+            p = Playground.get(slug=revision.playground.slug)
+            playground_dict = p.__dict__['_data']
+            playground_dict['site_url'] = 'http://%s/playground/%s.html' % (app_config.S3_BASE_URL, revision.playground.slug)
+            playground_dict['revision_group'] = int(revision_group)
+            playground_dict['headers'] = revision.get_headers()
+            context['inserts']['playgrounds'].append(playground_dict)
+
+    deletes = revisions.where(Revision.action == 'delete-request')
+    if deletes.count() > 0:
+        context['deletes']['total_revisions'] = deletes.count()
+        for revision in deletes:
+            p = Playground.get(slug=revision.playground.slug)
+            playground_dict = playground_dict = p.__dict__['_data']
+            playground_dict['site_url'] = 'http://%s/playground/%s.html' % (app_config.S3_BASE_URL, revision.playground.slug)
+            playground_dict['delete_url'] = 'http://%s/delete-playground/%s/' % (app_config.S3_BASE_URL, revision.playground.slug)
+            playground_dict['revision_group'] = int(revision_group)
+            playground_dict['headers'] = revision.get_headers()
+            context['deletes']['playgrounds'].append(playground_dict)
+
+    updates = revisions.where(Revision.action == 'update')
+    if updates.count() > 0:
+        context['updates']['total_revisions'] = updates.count()
+        updated_playgrounds = Set([])
+
+        for revision in updates:
+            updated_playgrounds.add(revision.playground.slug)
+
+        for playground_slug in updated_playgrounds:
+            p = Playground.get(slug=playground_slug)
+            playground_dict = p.__dict__['_data']
+            playground_dict['site_url'] = 'http://%s/playground/%s.html' % (app_config.S3_BASE_URL, playground_slug)
+            playground_dict['revisions'] = []
+            for revision in updates:
+                if revision.playground.id == p.id:
+                    revision_dict = {}
+                    revision_dict['revision_group'] = revision_group
+                    revision_dict['fields'] = revision.get_log()
+                    revision_dict['headers'] = revision.get_headers()
+                    playground_dict['revisions'].append(revision_dict)
+
+            context['updates']['playgrounds'].append(playground_dict)
+
+    # context['deletes']['playgrounds'] = sorted(context['deletes']['playgrounds'], key=lambda playground: playground['name'])
+    # context['inserts']['playgrounds'] = sorted(context['inserts']['playgrounds'], key=lambda playground: playground['name'])
+    # context['updates']['playgrounds'] = sorted(context['updates']['playgrounds'], key=lambda playground: playground['name'])
+
+    with open('templates/_email.html', 'rb') as read_template:
+        payload = Template(read_template.read())
+
+    return payload.render(**context)
 
 @app.route('/')
 def index():

@@ -516,9 +516,13 @@ def send_test_email():
     addresses = app_config.ADMIN_EMAILS
     _send_email(addresses, payload)
 
+def send_fake_revision_email(revision_group=2):
+    payload = app._prepare_email(revision_group)
+    addresses = app_config.ADMIN_EMAILS
+    _send_email(addresses, payload)
 
-def _send_revision_email(revision_group):
-    payload = data.prepare_email(revision_group)
+def send_revision_email(revision_group):
+    payload = app._prepare_email(revision_group)
     addresses = app_config.ADMIN_EMAILS
     _send_email(addresses, payload)
 
@@ -560,7 +564,7 @@ def process_changes():
     changed_playgrounds, revision_group = data.process_changes()
     render_playgrounds(changed_playgrounds)
     update_search_index(changed_playgrounds)
-    _send_revision_email(revision_group)
+    send_revision_email(revision_group)
     local('rm -f changes-in-progress.json')
 
 def update_search_index(playgrounds=None):
@@ -635,13 +639,14 @@ def create_test_revisions():
     Doesn't actually modify the playground instance.
     """
     playground = models.Playground.get(id=1)
+    playground2 = models.Playground.get(id=2)
 
     models.Revision.create(
         timestamp=datetime.datetime.utcnow() - datetime.timedelta(days=3),
         action='insert',
         playground=playground,
         log='[{ "field": "name", "from": "", "to": "Strong Reach Playground" }]',
-        headers='',
+        headers='{"content_length": "18", "host": "111.203.119.43", "content_type": "application/x-www-form-urlencoded"}',
         cookies='',
         revision_group=1
     )
@@ -651,27 +656,47 @@ def create_test_revisions():
         action='update',
         playground=playground,
         log='[{ "field": "name", "from": "Strong Reach Playground", "to": "Not So Strong Playground" }, { "field": "safety-fence", "from": 0, "to": 1 }]',
-        headers='',
+        headers='{"content_length": "18", "host": "26.240.97.59", "content_type": "application/x-www-form-urlencoded"}',
         cookies='',
         revision_group=2
     )
-    
+
     models.Revision.create(
         timestamp=datetime.datetime.utcnow() - datetime.timedelta(minutes=30),
         action='update',
-        playground=playground,
+        playground=playground2,
         log='[{ "field": "facility", "from": "", "to": "Park for Weak Children" }, { "field": "url", "from": "#http://www.bowdon.net/recreation-and-culture/recreation/#", "to": "" }, { "field": "smooth-surface-throughout", "from": 0, "to": 1 }, { "field": "safety-fence", "from": 1, "to": 0 }]',
-        headers='',
+        headers='{"content_length": "18", "host": "41.202.99.140", "content_type": "application/x-www-form-urlencoded"}',
+        cookies='',
+        revision_group=2
+    )
+
+    models.Revision.create(
+        timestamp=datetime.datetime.utcnow() - datetime.timedelta(minutes=15),
+        action='update',
+        playground=playground,
+        log='[{ "field": "safety-fence", "from": 0, "to": 1 }]',
+        headers='{"content_length": "18", "host": "117.204.56.109", "content_type": "application/x-www-form-urlencoded"}',
+        cookies='',
+        revision_group=2
+    )
+
+    models.Revision.create(
+        timestamp=datetime.datetime.utcnow() - datetime.timedelta(hours=4),
+        action='insert',
+        playground=playground2,
+        log='[{ "field": "safety-fence", "from": 0, "to": 1 }]',
+        headers='{"content_length": "18", "host": "117.204.56.109", "content_type": "application/x-www-form-urlencoded"}',
         cookies='',
         revision_group=2
     )
 
     models.Revision.create(
         timestamp=datetime.datetime.utcnow(),
-        action='update',
+        action='delete-request',
         playground=playground,
         log='[{ "field": "safety-fence", "from": 0, "to": 1 }]',
-        headers='',
+        headers='{"content_length": "18", "host": "117.204.56.109", "content_type": "application/x-www-form-urlencoded"}',
         cookies='',
         revision_group=2
     )

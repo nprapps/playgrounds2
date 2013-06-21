@@ -115,7 +115,7 @@ class Playground(Model):
         """
         Removes file for this model instance from S3
         """
-        conn = boto.connect_s3() 
+        conn = boto.connect_s3()
 
         # loop over buckets, we have more than one, and remove this playground.
         for bucket in app_config.S3_BUCKETS:
@@ -182,7 +182,7 @@ class Playground(Model):
                 field_value = getattr(playground, field)
             else:
                 field_value = ''
-            
+
             if field == 'id':
                 field_dict['display'] = 'style="display:none"'
 
@@ -195,11 +195,11 @@ class Playground(Model):
             #     field_dict['widget'] = '<select name="state">%s</select>' % options
             else:
                 field_dict['widget'] = '<input class="input-block-level input" type="text" name="%s" value="%s"></input>' % (field, field_value)
-                                        
+
 
             if field in app_config.PUBLIC_FIELDS:
                 fields.append(field_dict)
-        
+
         return fields
 
     def update_form(self):
@@ -286,7 +286,7 @@ class Playground(Model):
     def nearby(self, n):
         """
         Return a list of playgrounds near this one.o
-        
+
         See below for the implementation of the SQL distance algorithm.
         """
         if not self.latitude or not self.longitude:
@@ -379,11 +379,19 @@ class Revision(Model):
         database = database
 
     def get_log(self):
-        return json.loads(self.log)
+        try:
+            return json.loads(self.log)
+        except:
+            return None
 
     def get_headers(self):
-        return json.loads(self.headers)
+        try:
+            return json.loads(self.headers)
+        except:
+            return None
 
     def get_cookies(self):
-        return json.loads(self.cookies)
-
+        try:
+            return json.loads(self.cookies)
+        except:
+            return None
