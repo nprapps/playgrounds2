@@ -164,7 +164,52 @@ class Playground(Model):
 
         self.slug = slug
 
-    def feature_form(self):
+    @classmethod
+    def form(cls, playground=None):
+        """
+        Construct the form for a playground.
+        """
+        fields = []
+
+        for field in cls._meta.get_field_names():
+            if field in ['slug', 'remarks', 'entry', 'source', 'longitude', 'latitude']:
+                continue
+
+            field_dict = {}
+            field_dict['name'] = display_field_name(field)
+
+            if playground:
+                field_value = getattr(playground, field)
+            else:
+                field_value = ''
+            
+            if field == 'id':
+                field_dict['display'] = 'style="display:none"'
+
+            if field == 'public_remarks':
+                field_dict['widget'] = '<textarea class="input-block-level input" name="%s" rows="10">%s</textarea>' % (field, field_value)
+            # elif field == 'state':
+            #     options = ''
+            #     for abbrev, name in US_STATES:
+            #         options += '<option class="input" value="%s" >%s</option>' % (abbrev, abbrev)
+            #     field_dict['widget'] = '<select name="state">%s</select>' % options
+            else:
+                field_dict['widget'] = '<input class="input-block-level input" type="text" name="%s" value="%s"></input>' % (field, field_value)
+                                        
+
+            if field in app_config.PUBLIC_FIELDS:
+                fields.append(field_dict)
+        
+        return fields
+
+    def update_form(self):
+        """
+        Construct the update form for this playground.
+        """
+        return Playground.form(self)
+
+    @classmethod
+    def features_form(cls, playground=None):
         """
         Constructs the features form for this playground.
         Shows the current state of attached features, if any exist.
@@ -172,11 +217,14 @@ class Playground(Model):
         fields = []
 
         for slug, details in app_config.FEATURES.items():
-            instances = PlaygroundFeature.select().where(
-                PlaygroundFeature.playground == self.id,
-                PlaygroundFeature.slug == slug)
+            if playground:
+                instances = PlaygroundFeature.select().where(
+                    PlaygroundFeature.playground == playground.id,
+                    PlaygroundFeature.slug == slug)
 
-            checked = 'checked="checked"' if instances.count() > 0 else ''
+                checked = 'checked="checked"' if instances.count() > 0 else ''
+            else:
+                checked = ''
 
             fields.append("""
                 <input type="checkbox" name="%s" %s>
@@ -186,58 +234,8 @@ class Playground(Model):
 
         return fields
 
-    def create_form(self):
-        """
-        Construct the creation form for this playground.
-        """
-        fields = []
-        for field in self._meta.get_field_names():
-            field_dict = {}
-            field_dict['name'] = display_field_name(field)
-            field_value = ''
-            if field == 'id':
-                field_dict['display'] = 'style="display:none"'
-                field_dict['widget'] = '<input class="input" type="text" name="%s" value=""></input>' % field
-            elif field == 'remarks':
-                field_dict['widget'] = '<textarea class="input-block-level input" name="%s" rows="10">%s</textarea>' % (field, field_value)
-            # elif field == 'state':
-            #     options = ''
-            #     for abbrev, name in US_STATES:
-            #         options += '<option class="input" value="%s" >%s</option>' % (abbrev, abbrev)
-            #     field_dict['widget'] = '<select name="state">%s</select>' % options
-            if field in app_config.PUBLIC_FIELDS:
-                fields.append(field_dict)
-        return fields
-
-    def update_form(self):
-        """
-        Construct the update form for this playground.
-        """
-        fields = []
-        for field in self._meta.get_field_names():
-            field_dict = {}
-            field_dict['name'] = display_field_name(field)
-            field_value = self.__dict__['_data'][field]
-            if field_value == None:
-                field_value = ''
-            if field in ['slug', 'id']:
-                field_dict['display'] = 'style="display:none"'
-                field_dict['widget'] = '<input class="input" type="text" name="%s" value="%s" data-changed="true"></input>' % (field, field_value)
-            elif field == 'remarks':
-                field_dict['widget'] = '<textarea class="input-block-level input" name="%s" rows="10">%s</textarea>' % (field, field_value)
-            # elif field == 'state':
-            #     options = ''
-            #     for abbrev, name in US_STATES:
-            #         if self.state == abbrev:
-            #             options += '<option class="input" value="%s" selected>%s</option>' % (abbrev, abbrev)
-            #         else:
-            #             options += '<option class="input" value="%s">%s</option>' % (abbrev, abbrev)
-            #     field_dict['widget'] = '<select name="state">%s</select>' % options
-            else:
-                field_dict['widget'] = '<input class="input-block-level input" type="text" name="%s" value="%s"></input>' % (field, field_value)
-            if field in app_config.PUBLIC_FIELDS:
-                fields.append(field_dict)
-        return fields
+    def update_features_form(self):
+        return Playground.features_form(self)
 
     def sdf(self):
         """
