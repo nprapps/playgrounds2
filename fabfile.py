@@ -628,6 +628,55 @@ def set_default_search_field():
     cloudsearch = boto.cloudsearch.connect_to_region(app_config.CLOUD_SEARCH_REGION)
     cloudsearch.update_default_search_field(app_config.CLOUD_SEARCH_INDEX_NAME, app_config.CLOUD_SEARCH_DEFAULT_SEARCH_FIELD)
 
+def create_test_revisions():
+    """
+    Create a series of dummy revisions for local styling and such.
+
+    Doesn't actually modify the playground instance.
+    """
+    playground = models.Playground.get(id=1)
+
+    models.Revision.create(
+        timestamp=datetime.datetime.utcnow() - datetime.timedelta(days=3),
+        action='insert',
+        playground=playground,
+        log='[{ "field": "name", "from": "", "to": "Strong Reach Playground" }]',
+        headers='',
+        cookies='',
+        revision_group=1
+    )
+
+    models.Revision.create(
+        timestamp=datetime.datetime.utcnow() - datetime.timedelta(hours=1),
+        action='update',
+        playground=playground,
+        log='[{ "field": "name", "from": "Strong Reach Playground", "to": "Not So Strong Playground" }, { "field": "safety-fence", "from": 0, "to": 1 }]',
+        headers='',
+        cookies='',
+        revision_group=2
+    )
+    
+    models.Revision.create(
+        timestamp=datetime.datetime.utcnow() - datetime.timedelta(minutes=30),
+        action='update',
+        playground=playground,
+        log='[{ "field": "facility", "from": "", "to": "Park for Weak Children" }, { "field": "url", "from": "#http://www.bowdon.net/recreation-and-culture/recreation/#", "to": "" }, { "field": "smooth-surface-throughout", "from": 0, "to": 1 }, { "field": "safety-fence", "from": 1, "to": 0 }]',
+        headers='',
+        cookies='',
+        revision_group=2
+    )
+
+    models.Revision.create(
+        timestamp=datetime.datetime.utcnow(),
+        action='update',
+        playground=playground,
+        log='[{ "field": "safety-fence", "from": 0, "to": 1 }]',
+        headers='',
+        cookies='',
+        revision_group=2
+    )
+
+
 """
 Cron jobs
 """

@@ -38,7 +38,11 @@
         $(this).attr('data-changed', 'true');
     });
     $('#playground-update').on('click', function(){
-        $.each($('#playground-form .input'), function(index, item){
+        $.each($('#playground-form .input'), function(index, item) {
+            if ($(item).attr('name')) {
+                return;
+            }
+
             if ($(item).attr('data-changed') != 'true') {
                 $(item).removeAttr('name');
             }
