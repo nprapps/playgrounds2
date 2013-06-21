@@ -10,7 +10,7 @@ from flask import Flask, Markup, abort, render_template, url_for
 import requests
 
 import app_config
-from models import Playground, Revision
+from models import Playground, Revision, display_field_name
 from render_utils import flatten_app_config, make_context
 
 import argparse
@@ -56,7 +56,8 @@ def _playground(playground_slug):
     context['playground'] = Playground.get(slug=playground_slug)
     context['fields'] = context['playground'].update_form()
     context['features'] = context['playground'].feature_form()
-    context['revisions'] = Revision.select().where(Revision.playground == context['playground'].id)
+    context['revisions'] = Revision.select().where(Revision.playground == context['playground'].id).order_by(Revision.timestamp.desc())
+    context['display_field_name'] = display_field_name
 
     return render_template('playground.html', **context)
 

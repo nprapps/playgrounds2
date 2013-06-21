@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import datetime
 import json
 import unittest
 
@@ -224,7 +225,7 @@ class EmailTestCase(unittest.TestCase):
 
         Revision(
             action='update',
-            timestamp=0,
+            timestamp=datetime.datetime.utcnow(),
             playground=playground,
             log=log,
             headers='',
