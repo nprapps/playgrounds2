@@ -238,6 +238,7 @@ def delete_playground():
     # Otherwise, bork. A 400 error should do nicely.
     else:
         abort(400)
+
 @app.route('/%s/delete-playground/<playground_slug>/' % app_config.PROJECT_SLUG, methods=['GET'])
 def delete_playground_confirm(playground_slug=None):
     from flask import request
