@@ -99,8 +99,10 @@ def process_changes(path='changes-in-progress.json'):
         elif record['action'] == 'delete-request':
             playground, revisions = process_delete(record)
 
+        timestamp = datetime.datetime.strptime(record['timestamp'], '%Y-%m-%dT%H:%M:%S.%f')
+
         Revision.create(
-            timestamp=int(record['timestamp']),
+            timestamp=timestamp,
             action=record['action'],
             playground=playground,
             log=json.dumps(revisions),

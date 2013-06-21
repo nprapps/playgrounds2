@@ -369,7 +369,7 @@ class Revision(Model):
         "to": 1
     }]
     """
-    timestamp = IntegerField()
+    timestamp = DateTimeField()
     action = CharField()
     log = TextField()
     playground = ForeignKeyField(Playground, cascade=False)
