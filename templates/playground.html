@@ -72,7 +72,7 @@
 </div>
 
 <!-- Description -->
-{% if playground.remarks or playground.agency or playground.owner %}
+{% if playground.public_remarks or playground.agency or playground.owner %}
 <div class="about">
     <h4>About This Playground</h4>
 {% endif %}
@@ -99,7 +99,7 @@
         {% endif %}
     </ul>
     {% endif %}
-{% if playground.remarks or playground.agency or playground.owner %}
+{% if playground.public_remarks or playground.agency or playground.owner %}
 </div>
 {% endif %}
 
@@ -129,13 +129,23 @@
 </div>
 
 
+<div class="help-prompt">
+    <p class="prompt">{{ COPY.content.playground_help_title }}</p>
+    <p><a href="#edit-playground" class="btn btn-blue btn-block" data-toggle="modal"><i class="icon-pencil"></i> {{ COPY.content.playground_help_button }}</a></p>
+</div>
+
+<p class="removal">Is this listing inappropriate? <a href="#remove-playground" role="button" data-toggle="modal">Suggest this playground for removal.</a></p>
+
+<p class="learn-more"><a href="../about/">Learn more about NPR's accessible playgrounds project</a></p>
+
+
+{% if revisions.count() > 0 %}
 <div class="changelog">
-    <h4>Changelog</h4>
+    <h5>Changelog</h5>
     <ul>
         {% for revision in revisions %}
         <li>
-            {{ revision.timestamp.strftime('%B %d, %Y %I:%M %p') }}
-
+            <span class="timestamp">{{ revision.timestamp.strftime('%B %d, %Y %I:%M %p') }}</span>
             <ul>
                 {% for change in revision.get_log() %}
                 <li>
@@ -144,19 +154,10 @@
                 {% endfor %}
             </ul>
         </li>
-        <li>&nbsp;</li>
         {% endfor %}
     </ul>
 </div>
-
-
-<div class="help-prompt">
-    <p class="prompt">{{ COPY.content.playground_help_title }}</p>
-    <p><a href="#edit-playground" class="btn btn-blue btn-block" data-toggle="modal"><i class="icon-pencil"></i> {{ COPY.content.playground_help_button }}</a></p>
-</div>
-
-<p class="removal">Is this listing inappropriate? <a href="#remove-playground" role="button" data-toggle="modal">Suggest this playground for removal.</a></p>
-<p class="learn-more"><a href="../about/">Learn more about NPR's accessible playgrounds project</a></p>
+{% endif %}
 
 
 <!-- update form -->
