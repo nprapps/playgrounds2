@@ -138,7 +138,7 @@
             <ul>
                 {% for change in revision.get_log() %}
                 <li>
-                <strong>{{ change.field }}</strong> changed from "{{ change.from }}" to "{{ change.to }}"
+                <strong>{{ display_field_name(change.field) }}</strong> changed from "{{ change.from }}" to "{{ change.to }}"
                 </li>
                 {% endfor %}
             </ul>

@@ -48,26 +48,26 @@ class Playground(Model):
     """
     slug = CharField()
 
-    name = CharField()
-    facility = CharField(null=True)
-    facility_type = CharField(null=True)
+    name = CharField(verbose_name='Name')
+    facility = CharField(verbose_name='Facility', null=True)
+    facility_type = CharField(verbose_name='Facility type', null=True)
 
-    address = CharField(null=True)
-    city = CharField(null=True)
-    state = CharField(null=True)
-    zip_code = CharField(null=True)
-    latitude = FloatField(null=True)
-    longitude = FloatField(null=True)
+    address = CharField(verbose_name='Address', null=True)
+    city = CharField(verbose_name='City', null=True)
+    state = CharField(verbose_name='State', null=True)
+    zip_code = CharField(verbose_name='Zip code', null=True)
+    latitude = FloatField(verbose_name='Latitude', null=True)
+    longitude = FloatField(verbose_name='Longitude', null=True)
 
-    agency = CharField(null=True)
-    agency_type = CharField(null=True)
+    agency = CharField(verbose_name='Agency', null=True)
+    agency_type = CharField(verbose_name='Agency type', null=True)
 
-    owner = CharField(null=True)
-    owner_type = CharField(null=True)
+    owner = CharField(verbose_name='Owner', null=True)
+    owner_type = CharField(verbose_name='Owner type', null=True)
     remarks = TextField(null=True)
-    public_remarks = TextField(null=True)
+    public_remarks = TextField(verbose_name='Remarks', null=True)
 
-    url = CharField(null=True)
+    url = CharField(verbose_name='Url', null=True)
     entry = CharField(null=True)
     source = CharField(null=True)
 
@@ -191,9 +191,9 @@ class Playground(Model):
         Construct the creation form for this playground.
         """
         fields = []
-        for field in self.__dict__['_data'].keys():
+        for field in self._meta.get_field_names():
             field_dict = {}
-            field_dict['name'] = unfield(field)
+            field_dict['name'] = display_field_name(field)
             field_value = ''
             if field == 'id':
                 field_dict['display'] = 'style="display:none"'
@@ -214,9 +214,9 @@ class Playground(Model):
         Construct the update form for this playground.
         """
         fields = []
-        for field in self.__dict__['_data'].keys():
+        for field in self._meta.get_field_names():
             field_dict = {}
-            field_dict['name'] = unfield(field)
+            field_dict['name'] = display_field_name(field)
             field_value = self.__dict__['_data'][field]
             if field_value == None:
                 field_value = ''
@@ -316,15 +316,15 @@ def distance(lat1, lng1, lat2, lng2):
     return 3958.761 * math.acos(math.sin(lat1_rad) * math.sin(lat2_rad) + math.cos(lat1_rad) * math.cos(lat2_rad) * math.cos(lng2_rad - lng1_rad))
 
 
-def unfield(field_name):
+def display_field_name(field_name):
     """
-    Turn field names into pretty titles.
+    Convert any field or feature on a playground to
+    a display-friendly version.
     """
-    return field_name\
-        .replace('_', ' ')\
-        .capitalize()\
-        .replace('Zip ', 'ZIP ')\
-        .replace('Url ', 'URL ')
+    try:
+        getattr(Playground, field_name).verbose_name
+    except AttributeError:
+        return app_config.FEATURES[field_name]['name'];
 
 
 def get_active_playgrounds():
