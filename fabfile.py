@@ -233,6 +233,8 @@ def render_playgrounds(playgrounds=None):
 
     compiled_includes = []
 
+    updated_paths = []
+
     for slug in slugs:
         # Silly fix because url_for require a context
         with app.app.test_request_context():
@@ -264,8 +266,32 @@ def render_playgrounds(playgrounds=None):
         with open(path, 'w') as f:
             f.write(content.encode('utf-8'))
 
+        updated_paths.append(path)
+
     # Un-fake-out deployment target
     app_config.configure_targets(deployment_target)
+
+    for path in updated_paths:
+        for bucket in env.s3_buckets:
+            conn = boto.connect_s3()
+            bucket = conn.get_bucket(bucket)
+            key = boto.s3.key.Key(bucket)
+            key.key = '%s/%s' % (app_config.PROJECT_SLUG, path)
+
+            # with open(path, 'rb') as f:
+            #     key.send_file(f, headers={
+            #         'Cache-Control': 'max-age=5 no-cache no-store must-revalidate',
+            #         'Content-Encoding': 'text/plain'
+            #     })
+
+            # key.set_contents_from_filename(
+            #     path,
+            #     policy='public-read',
+            #     headers={
+            #         'Cache-Control': 'max-age=5 no-cache no-store must-revalidate',
+            #         'Content-Encoding': 'text/plain'
+            #     }
+            # )
 
 def tests():
     """
@@ -569,7 +595,7 @@ def process_changes():
     require('settings', provided_by=[production, staging])
 
     local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.now(pytz.utc)).timetuple()))
-    local('cp data/changes.json changes-in-progress.json && rm -f data/changes.json')
+    local('mv data/changes.json changes-in-progress.json')
     changed_playgrounds, revision_group = data.process_changes()
     render_playgrounds(changed_playgrounds)
     update_search_index(changed_playgrounds)
