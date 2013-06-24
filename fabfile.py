@@ -60,11 +60,17 @@ def production():
     env.settings = 'production'
     env.s3_buckets = app_config.PRODUCTION_S3_BUCKETS
     env.hosts = app_config.PRODUCTION_SERVERS
+    env.cloud_search_proxy_base_url = 'http://%s/%s' % (env.hosts[0], app_config.PROJECT_SLUG)
+    env.s3_base_url = 'http://%s/%s' % (env.s3_buckets[0], app_config.PROJECT_SLUG)
+    env.server_base_url = 'http://%s/%s' % (env.hosts[0], app_config.PROJECT_SLUG)
 
 def staging():
     env.settings = 'staging'
     env.s3_buckets = app_config.STAGING_S3_BUCKETS
     env.hosts = app_config.STAGING_SERVERS
+    env.cloud_search_proxy_base_url = 'http://%s/%s' % (env.hosts, app_config.PROJECT_SLUG)
+    env.s3_base_url = 'http://%s/%s' % (env.s3_buckets, app_config.PROJECT_SLUG)
+    env.server_base_url = 'http://%s/%s' % (env.hosts, app_config.PROJECT_SLUG)
 
 """
 Branches
@@ -243,7 +249,9 @@ def render_playgrounds(playgrounds=None):
 
             compiled_includes = g.compiled_includes
 
-        path = '.playgrounds_html%s' % path
+        # Why is this pointing to a .playgrounds_html directory?
+        # path = '.playgrounds_html%s' % path
+        path = 'www%s' % path
 
         # Ensure path exists
         head = os.path.split(path)[0]
