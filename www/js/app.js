@@ -301,7 +301,14 @@ $(function() {
     // This is the part that Danny or Aly will be making do something interesting.
     // COPYTEXT[message] will contain the message from the copy spreadsheet.
     function writeMessage(message) {
-        alert(message);
+        var messageTemplate = _.template('<div class="alert"><%= message %></div>')
+        $('#alerts').html('');
+        $('#alerts').append(messageTemplate({'text': text, 'klass': klass}));
+        var t = setTimeout(function(){
+            $('#alerts .alert').fadeOut(500, function(){
+                $('#alerts').html('');
+            });
+        }, 10000)
     }
 
     // Fetches the key from the URL. This could easily be undefined or null.
