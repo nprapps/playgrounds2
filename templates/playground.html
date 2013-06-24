@@ -1,5 +1,7 @@
 {% extends '_base.html' %}
 
+{% block page_title %}{{ playground.display_name }} | {% endblock page_title %}
+
 {% block body_class %}playground{% endblock body_class %}
 
 {% block header_content %}
@@ -22,11 +24,6 @@
     {{ COPY.content.form_remove_confirm }}
 </div>
 
-<div class="help-prompt help-prompt-primary">
-    <p class="prompt">{{ COPY.content.playground_help_primary_title }}</p>
-    <a href="#edit-playground" role="button" class="btn btn-blue btn-block btn-edit" data-toggle="modal"><i class="icon-pencil"></i> {{ COPY.content.playground_help_button }}</a>
-</div>
-
 <h1>{{ playground.display_name }}</h1>
 
 <!-- Map / Address -->
@@ -35,11 +32,6 @@
     <img src="http://api.tiles.mapbox.com/v3/{{ MAPBOX_BASE_LAYER }}/pin-m-star+ff6633({{ playground.longitude }},{{ playground.latitude }})/{{ playground.longitude }},{{ playground.latitude }},15/300x120.png" class="map"/>
     {% endif %}
     <p>
-    {% if playground.facility %}
-        {{ playground.facility }}
-        {% if playground.facility_type %}({{ playground.facility_type }}){% endif %}
-        <br />
-    {% endif %}
     {% if playground.address %}{{ playground.address }}<br />{% endif %}
     {% if playground.city %}{{ playground.city }}, {% endif %}
     {% if playground.state %}{{ playground.state }} {% endif %}
@@ -69,39 +61,47 @@
         <li>Accessible swing <i class="icon icon-question-sign" data-toggle="tooltip" title="Swing lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">About</i></li>
         <li>Smooth surface throughout <i class="icon icon-question-sign" data-toggle="tooltip" title="Surface lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">About</i></li>
     </ul>
+
+    <div class="help-prompt help-prompt-features">
+        <p class="prompt">{{ COPY.content.playground_help_key_features }}</p>
+        <a href="#edit-playground" role="button" class="btn btn-blue btn-block btn-edit" data-toggle="modal"><i class="icon-pencil"></i> {{ COPY.content.playground_help_button }}</a>
+    </div>
 </div>
 
 <!-- Description -->
-{% if playground.public_remarks or playground.agency or playground.owner %}
 <div class="about">
     <h4>About This Playground</h4>
-{% endif %}
 
+    <p class="description">
     {% if playground.public_remarks %}
-    <p class="description">{{ playground.public_remarks }}</p>
+        {{ playground.public_remarks }}
+    {% else %} 
+        Description not available.
     {% endif %}
-
-    {% if playground.agency or playground.owner  %}
+    </p>
+    
+    <h5 class="meta">More Info</h5>
     <ul class="meta">
-        {% if playground.agency %}
         <li class="agency">
-                <strong>Agency:</strong>
+            <strong>Agency:</strong>
+            {% if playground.agency %}
                 {{ playground.agency }}
                 {% if playground.agencytype %} ({{ playground.agencytype }}){% endif %}
+            {% else %}
+                Unavailable
+            {% endif %}
         </li>
-        {% endif %}
-        {% if playground.owner %}
         <li class="owner">
             <strong>Owner:</strong>
-            {{ playground.owner }}
-            {% if playground.owner_type %} ({{ playground.owner_type }}){% endif %}
+            {% if playground.owner %}
+                {{ playground.owner }}
+                {% if playground.owner_type %} ({{ playground.owner_type }}){% endif %}
+            {% else %}
+                Unavailable
+            {% endif %}
         </li>
-        {% endif %}
     </ul>
-    {% endif %}
-{% if playground.public_remarks or playground.agency or playground.owner %}
 </div>
-{% endif %}
 
 
 <!-- disqus -->

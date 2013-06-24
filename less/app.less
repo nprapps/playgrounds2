@@ -162,8 +162,8 @@ section.the-goods { margin-top: 44px; }
         }
     }
     
-    &.help-prompt-primary {
-        margin-top: -11px;
+    &.help-prompt-features {
+        margin-top: 11px;
     }
 }
 .playground #main-content .help-prompt p.prompt { font-size: 13px; }
@@ -359,10 +359,23 @@ section.the-goods { margin-top: 44px; }
         margin: 0 0 11px 0;
         font-size: 16px;
     }
+    h5.meta {
+        font-size: 12px;
+        margin: 0 0 6px 0;
+        cursor: pointer;
+        color: #4774cc;
+        
+        &:hover {
+            opacity: 0.7;
+        }
+    }
     p, li {
         font-size: 14px;
         line-height: 1.4;
         
+        &.description {
+            margin-bottom: 15px;
+        }
         &.learn-more {
             font-size: 12px;
         }
@@ -376,6 +389,19 @@ section.the-goods { margin-top: 44px; }
 	    margin: 0;
 	    padding: 0;
 	    list-style-type: none;
+	    
+	    &.meta {
+	        li {
+                font-size: 12px;
+                color: #888;
+                margin-bottom: 3px;
+                
+                strong { 
+                    width: 55px;
+                    display: inline-block;
+                }
+            }
+	    }
     }
     .about,
     .address,
