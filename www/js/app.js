@@ -10,8 +10,8 @@ var RESULTS_DEFAULT_ZOOM = 14;
 var RETINA = window.devicePixelRatio > 1;
 if (RETINA) {
     BASE_LAYER = APP_CONFIG.MAPBOX_BASE_LAYER_RETINA;
-    // LOCATOR_DEFAULT_ZOOM += 1;
-    // RESULTS_DEFAULT_ZOOM += 1;
+    LOCATOR_DEFAULT_ZOOM += 1;
+    RESULTS_DEFAULT_ZOOM += 1;
 }
 
 var LETTERS = 'abcdefghijklmnopqrstuvwxyz';
