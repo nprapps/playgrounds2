@@ -85,7 +85,7 @@ class Playground(Model):
         """
         if self.name and self.facility:
             return '%s at %s' % (self.name, self.facility)
-        
+
         if self.name:
             return self.name
 
@@ -372,7 +372,10 @@ class Revision(Model):
         "to": 1
     }]
     """
+    # For some reason, these are stored as unicode strings instead of datetime objects.
+    # We're parsing them below in the get_timestamp() and get_est_time_formatted() functions.
     timestamp = DateTimeField()
+
     action = CharField()
     log = TextField()
     playground = ForeignKeyField(Playground, cascade=False)
@@ -383,25 +386,22 @@ class Revision(Model):
     class Meta:
         database = database
 
-    def get_est_time_formatted(self):
-        try:
-            est = pytz.timezone('US/Eastern')
-            timestamp = self.timestamp.strftime('%Y-%m-%d %H:%M:%S')
-            try:
-                timestamp = timestamp.replace(tzinfo=pytz.utc)
-            except TypeError:
-                fmt = '%Y-%m-%d %H:%M:%S'
-                timestamp = datetime.datetime.strptime(timestamp, fmt).replace(tzinfo=pytz.utc)
-            timestamp = timestamp.astimezone(est)
-            return timestamp.strftime('%B %d, %Y %I:%M %p')
-        except:
-            return '%s' % self.timestamp
+    def get_timestamp(self):
+        """
+        Returns a UTC tz-aware datetime object.
+        """
+        timestamp = self.timestamp.replace('+00:00', '')
+        timestamp = datetime.datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S.%f')
+        timestamp = timestamp.replace(tzinfo=pytz.utc)
+        return timestamp
 
-    def get_utc_time_formatted(self):
-        try:
-            return self.timestamp.strftime('%B %d, %Y %I:%M %p')
-        except:
-            return '%s' % self.timestamp
+    def get_est_time_formatted(self):
+        """
+        Converts a UTC tz-aware datetime object to EST and outputs a string.
+        """
+        timestamp = self.get_timestamp()
+        timestamp = timestamp.astimezone(pytz.timezone('US/Eastern'))
+        return timestamp.strftime('%B %d, %Y %I:%M %p')
 
     def get_log(self):
         try:

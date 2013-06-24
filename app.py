@@ -127,6 +127,7 @@ def _playground(playground_slug):
     Playground detail page.
     """
     context = make_context()
+
     context['playground'] = Playground.get(slug=playground_slug)
     context['fields'] = context['playground'].update_form()
     context['features'] = context['playground'].update_features_form()

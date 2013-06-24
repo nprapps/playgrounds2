@@ -234,4 +234,3 @@ def configure_targets(deployment_target):
 Run automated configuration
 """
 configure_targets(os.environ.get('DEPLOYMENT_TARGET', None))
-

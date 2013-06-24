@@ -60,11 +60,17 @@ def production():
     env.settings = 'production'
     env.s3_buckets = app_config.PRODUCTION_S3_BUCKETS
     env.hosts = app_config.PRODUCTION_SERVERS
+    env.cloud_search_proxy_base_url = 'http://%s/%s' % (env.hosts[0], app_config.PROJECT_SLUG)
+    env.s3_base_url = 'http://%s/%s' % (env.s3_buckets[0], app_config.PROJECT_SLUG)
+    env.server_base_url = 'http://%s/%s' % (env.hosts[0], app_config.PROJECT_SLUG)
 
 def staging():
     env.settings = 'staging'
     env.s3_buckets = app_config.STAGING_S3_BUCKETS
     env.hosts = app_config.STAGING_SERVERS
+    env.cloud_search_proxy_base_url = 'http://%s/%s' % (env.hosts, app_config.PROJECT_SLUG)
+    env.s3_base_url = 'http://%s/%s' % (env.s3_buckets, app_config.PROJECT_SLUG)
+    env.server_base_url = 'http://%s/%s' % (env.hosts, app_config.PROJECT_SLUG)
 
 """
 Branches
@@ -243,7 +249,9 @@ def render_playgrounds(playgrounds=None):
 
             compiled_includes = g.compiled_includes
 
-        path = '.playgrounds_html%s' % path
+        # Why is this pointing to a .playgrounds_html directory?
+        # path = '.playgrounds_html%s' % path
+        path = 'www%s' % path
 
         # Ensure path exists
         head = os.path.split(path)[0]
@@ -497,7 +505,7 @@ def _send_email(addresses, payload):
     connection = boto.ses.connect_to_region('us-east-1')
     connection.send_email(
         'NPR News Apps <nprapps@npr.org>',
-        'Playgrounds: %s' % (datetime.datetime.utcnow().replace(tzinfo=pytz.utc).strftime('%m/%d')),
+        'Playgrounds: %s' % (datetime.datetime.now(pytz.utc).replace(tzinfo=pytz.utc).strftime('%m/%d')),
         None,
         addresses,
         html_body=payload,
@@ -560,7 +568,7 @@ def process_changes():
     """
     require('settings', provided_by=[production, staging])
 
-    local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.utcnow().replace(tzinfo=pytz.utc)).timetuple()))
+    local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.now(pytz.utc)).timetuple()))
     local('cp data/changes.json changes-in-progress.json && rm -f data/changes.json')
     changed_playgrounds, revision_group = data.process_changes()
     render_playgrounds(changed_playgrounds)
@@ -642,9 +650,7 @@ def create_test_revisions():
     playground = models.Playground.get(id=1)
     playground2 = models.Playground.get(id=2)
 
-    now = datetime.datetime.utcnow()
-    now = now.replace(tzinfo=pytz.utc)
-
+    now = datetime.datetime.now(pytz.utc)
 
     models.Revision.create(
         timestamp=now ,
