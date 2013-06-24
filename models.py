@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
+import datetime
 import json
 import math
+import pytz
 import re
 import time
 
@@ -377,6 +379,26 @@ class Revision(Model):
 
     class Meta:
         database = database
+
+    def get_est_time_formatted(self):
+        try:
+            est = pytz.timezone('US/Eastern')
+            timestamp = self.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+            try:
+                timestamp = timestamp.replace(tzinfo=pytz.utc)
+            except TypeError:
+                fmt = '%Y-%m-%d %H:%M:%S'
+                timestamp = datetime.datetime.strptime(timestamp, fmt).replace(tzinfo=pytz.utc)
+            timestamp = timestamp.astimezone(est)
+            return timestamp.strftime('%B %d, %Y %I:%M %p')
+        except:
+            return '%s' % self.timestamp
+
+    def get_utc_time_formatted(self):
+        try:
+            return self.timestamp.strftime('%B %d, %Y %I:%M %p')
+        except:
+            return '%s' % self.timestamp
 
     def get_log(self):
         try:

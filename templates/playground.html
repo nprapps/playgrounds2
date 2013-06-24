@@ -145,7 +145,7 @@
     <ul>
         {% for revision in revisions %}
         <li>
-            <span class="timestamp">{{ revision.timestamp.strftime('%B %d, %Y %I:%M %p') }}</span>
+            <span class="timestamp">{{ revision.get_est_time_formatted() }}</span>
             <ul>
                 {% if revision.action == 'update' %}
                     {% for change in revision.get_log() %}

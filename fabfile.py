@@ -11,6 +11,7 @@ import boto.ses
 from fabric.api import *
 from jinja2 import Template
 import requests
+import pytz
 
 import app
 import app_config
@@ -496,7 +497,7 @@ def _send_email(addresses, payload):
     connection = boto.ses.connect_to_region('us-east-1')
     connection.send_email(
         'NPR News Apps <nprapps@npr.org>',
-        'Playgrounds: %s' % (datetime.datetime.utcnow().strftime('%m/%d')),
+        'Playgrounds: %s' % (datetime.datetime.utcnow().replace(tzinfo=pytz.utc).strftime('%m/%d')),
         None,
         addresses,
         html_body=payload,
@@ -559,7 +560,7 @@ def process_changes():
     """
     require('settings', provided_by=[production, staging])
 
-    local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.utcnow()).timetuple()))
+    local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.utcnow().replace(tzinfo=pytz.utc)).timetuple()))
     local('cp data/changes.json changes-in-progress.json && rm -f data/changes.json')
     changed_playgrounds, revision_group = data.process_changes()
     render_playgrounds(changed_playgrounds)
@@ -641,8 +642,12 @@ def create_test_revisions():
     playground = models.Playground.get(id=1)
     playground2 = models.Playground.get(id=2)
 
+    now = datetime.datetime.utcnow()
+    now = now.replace(tzinfo=pytz.utc)
+
+
     models.Revision.create(
-        timestamp=datetime.datetime.utcnow() - datetime.timedelta(days=3),
+        timestamp=now ,
         action='insert',
         playground=playground,
         log='[{ "field": "name", "from": "", "to": "Strong Reach Playground" }]',
@@ -652,7 +657,7 @@ def create_test_revisions():
     )
 
     models.Revision.create(
-        timestamp=datetime.datetime.utcnow() - datetime.timedelta(hours=1),
+        timestamp=now,
         action='update',
         playground=playground,
         log='[{ "field": "name", "from": "Strong Reach Playground", "to": "Not So Strong Playground" }, { "field": "safety-fence", "from": 0, "to": 1 }]',
@@ -662,7 +667,7 @@ def create_test_revisions():
     )
 
     models.Revision.create(
-        timestamp=datetime.datetime.utcnow() - datetime.timedelta(minutes=30),
+        timestamp=now,
         action='update',
         playground=playground2,
         log='[{ "field": "facility", "from": "", "to": "Park for Weak Children" }, { "field": "url", "from": "#http://www.bowdon.net/recreation-and-culture/recreation/#", "to": "" }, { "field": "smooth-surface-throughout", "from": 0, "to": 1 }, { "field": "safety-fence", "from": 1, "to": 0 }]',
@@ -672,7 +677,7 @@ def create_test_revisions():
     )
 
     models.Revision.create(
-        timestamp=datetime.datetime.utcnow() - datetime.timedelta(minutes=15),
+        timestamp=now,
         action='update',
         playground=playground,
         log='[{ "field": "safety-fence", "from": 0, "to": 1 }]',
@@ -682,7 +687,7 @@ def create_test_revisions():
     )
 
     models.Revision.create(
-        timestamp=datetime.datetime.utcnow() - datetime.timedelta(hours=4),
+        timestamp=now,
         action='insert',
         playground=playground2,
         log='[{ "field": "safety-fence", "from": 0, "to": 1 }]',
@@ -692,7 +697,7 @@ def create_test_revisions():
     )
 
     models.Revision.create(
-        timestamp=datetime.datetime.utcnow(),
+        timestamp=now,
         action='delete-request',
         playground=playground,
         log='[{ "field": "safety-fence", "from": 0, "to": 1 }]',
