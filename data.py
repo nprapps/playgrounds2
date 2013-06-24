@@ -8,6 +8,7 @@ from sets import Set
 from csvkit import CSVKitDictReader
 from jinja2 import Template
 from peewee import *
+import pytz
 
 import app_config
 from models import Playground, PlaygroundFeature, Revision
@@ -48,7 +49,7 @@ def load_playgrounds(path='data/playgrounds.csv'):
             )
 
             Revision.create(
-                timestamp=datetime.datetime.utcnow(),
+                timestamp=datetime.datetime.now(pytz.utc),
                 action='insert',
                 playground=playground,
                 log=json.dumps([]),
@@ -61,7 +62,7 @@ def process_changes(path='changes-in-progress.json'):
     """
     Iterate over changes.json and process its contents.
     """
-    revision_group = time.mktime((datetime.datetime.utcnow()).timetuple())
+    revision_group = time.mktime((datetime.datetime.now(pytz.utc)).timetuple())
 
     with open(path) as f:
         changes = json.load(f)

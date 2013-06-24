@@ -72,7 +72,7 @@ def update_playground():
         # Prep the payload.
         payload = {}
         payload['action'] = 'update'
-        payload['timestamp'] = datetime.datetime.utcnow().isoformat()
+        payload['timestamp'] = datetime.datetime.now(pytz.utc)
         payload['playground'] = {}
         payload['request'] = {}
         payload['request']['headers'] = {}
@@ -140,7 +140,7 @@ def insert_playground():
         # Prep the payload.
         payload = {}
         payload['action'] = 'insert'
-        payload['timestamp'] = datetime.datetime.utcnow().isoformat()
+        payload['timestamp'] = datetime.datetime.now(pytz.utc)
         payload['playground'] = {}
         payload['request'] = {}
         payload['request']['headers'] = {}
@@ -213,7 +213,7 @@ def delete_playground():
         # Prep the payload.
         payload = {}
         payload['action'] = 'delete-request'
-        payload['timestamp'] = datetime.datetime.utcnow().isoformat()
+        payload['timestamp'] = datetime.datetime.now(pytz.utc)
         payload['playground'] = {}
         payload['request'] = {}
         payload['request']['headers'] = {}
