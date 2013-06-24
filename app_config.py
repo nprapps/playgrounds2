@@ -94,7 +94,8 @@ DATA_GOOGLE_DOC_KEY = '0AlXMOHKxzQVRdGxsTklpUnBHV3NSRHFZaDVFWnQ5VVE'
 GEOCODED_DATA_GOOGLE_DOC_KEY = '0Antez86oOXPndEpJWGxnYVY0aDFKSTh2bDFhLUFKbHc'
 DATA_URL = 'https://docs.google.com/spreadsheet/pub?key=%s&single=true&gid=0&output=csv' % GEOCODED_DATA_GOOGLE_DOC_KEY
 
-MAPBOX_BASE_LAYER = 'examples.map-4l7djmvo'
+MAPBOX_BASE_LAYER = 'npr.map-s5q5dags'
+MAPBOX_BASE_LAYER_RETINA = 'npr.map-u1zkdj0e'
 
 CLOUD_SEARCH_REGION = 'us-west-2'
 CLOUD_SEARCH_INDEX_NAME = 'nprapps-playgrounds'
@@ -105,7 +106,8 @@ CLOUD_SEARCH_DEG_OFFSET = 180
 CLOUD_SEARCH_DEG_SCALE = 10000
 
 ADMIN_EMAILS = [
-    'jbowers@npr.org'
+    'jbowers@npr.org',
+    'grich@npr.org'
 ]
 
 FEATURES = {
