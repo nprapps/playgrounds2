@@ -1,6 +1,7 @@
 var BASE_LAYER = APP_CONFIG.MAPBOX_BASE_LAYER;
-var GEOLOCATE = Modernizr.geolocation;
 var CONTENT_WIDTH;
+var GEOLOCATE = Modernizr.geolocation;
+var LOCATOR_DEFAULT_ZOOM = 15;
 var RESULTS_MAP_WIDTH = 500;
 var RESULTS_MAP_HEIGHT = 500;
 var RESULTS_MAX_ZOOM = 16;
@@ -9,6 +10,8 @@ var RESULTS_DEFAULT_ZOOM = 14;
 var RETINA = window.devicePixelRatio > 1;
 if (RETINA) {
     BASE_LAYER = APP_CONFIG.MAPBOX_BASE_LAYER_RETINA;
+    LOCATOR_DEFAULT_ZOOM += 1;
+    RESULTS_DEFAULT_ZOOM += 1;
 }
 
 var LETTERS = 'abcdefghijklmnopqrstuvwxyz';
@@ -194,6 +197,20 @@ function search() {
             }
 
             if (latitude) {
+                var search_map_width = RESULTS_MAP_WIDTH;
+                var search_map_height = RESULTS_MAP_HEIGHT;
+
+                if (RETINA) {
+                    search_map_width = search_map_width * 2;
+                    search_map_height = search_map_height * 2;
+                    if (search_map_width > 640) {
+                        search_map_width = 640;
+                    }
+                    if (search_map_height > 640) {
+                        search_map_height = 640;
+                    }
+                }
+
                 markers.push(buildMapboxPin('l', 'circle', '006633', latitude, longitude));
 
                 $search_results_map.on('load', function() {
@@ -201,13 +218,7 @@ function search() {
                     $search_results_map.css('opacity', '1.0');
                     $search_results_map.off('load');
                 });
-                
-                if (RETINA) {
-                    $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + (RESULTS_MAP_WIDTH * 2) + 'x' + (RESULTS_MAP_HEIGHT * 2) + '.png');
-                } else {
-                    $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + RESULTS_MAP_WIDTH + 'x' + RESULTS_MAP_HEIGHT + '.png');
-                }
-
+                $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + search_map_width + 'x' + search_map_height + '.png');
                 $search_results_map_wrapper.show();
                 $results_address.show();
             }
@@ -472,11 +483,20 @@ $(function() {
         if ($map) {
             var lat = $map.data('latitude');
             var lon = $map.data('longitude');
+            var new_width = CONTENT_WIDTH;
+            var new_height = Math.floor(CONTENT_WIDTH / 3);
+
             if (RETINA) {
-                $map.attr('src', 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/pin-m-star+ff6633(' + lon + ',' + lat + ')/' + lon + ',' + lat + ',15/' + (CONTENT_WIDTH * 2) + 'x' + Math.floor((CONTENT_WIDTH / 3) * 2) + '.png');
-            } else {
-                $map.attr('src', 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/pin-m-star+ff6633(' + lon + ',' + lat + ')/' + lon + ',' + lat + ',15/' + CONTENT_WIDTH + 'x' + Math.floor(CONTENT_WIDTH / 3) + '.png');
+                new_width = new_width * 2;
+                new_height = new_height * 2;
+                if (new_width > 640) {
+                    new_width = 640;
+                }
+                if (new_height > 640) {
+                    new_height = 640;
+                }
             }
+            $map.attr('src', 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/pin-m-star+ff6633(' + lon + ',' + lat + ')/' + lon + ',' + lat + ',' + LOCATOR_DEFAULT_ZOOM + '/' + new_width + 'x' + new_height + '.png');
         }
     
         $('.playground-features i').tooltip( { trigger: 'click' } );
