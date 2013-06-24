@@ -80,7 +80,7 @@ def process_changes(path='changes-in-progress.json'):
         elif record['action'] == 'delete-request':
             playground, revisions = process_delete(record)
 
-        timestamp = datetime.datetime.strptime(record['timestamp'], '%Y-%m-%dT%H:%M:%S.%f')
+        timestamp = datetime.datetime.fromtimestamp(record['timestamp']).replace(tzinfo=pytz.utc)
 
         Revision.create(
             timestamp=timestamp,

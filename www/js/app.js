@@ -10,8 +10,8 @@ var RESULTS_DEFAULT_ZOOM = 14;
 var RETINA = window.devicePixelRatio > 1;
 if (RETINA) {
     BASE_LAYER = APP_CONFIG.MAPBOX_BASE_LAYER_RETINA;
-    // LOCATOR_DEFAULT_ZOOM += 1;
-    // RESULTS_DEFAULT_ZOOM += 1;
+    LOCATOR_DEFAULT_ZOOM += 1;
+    RESULTS_DEFAULT_ZOOM += 1;
 }
 
 var LETTERS = 'abcdefghijklmnopqrstuvwxyz';
@@ -495,13 +495,10 @@ $(function() {
 
             if (RETINA) {
                 new_width = new_width * 2;
-                new_height = new_height * 2;
                 if (new_width > 640) {
                     new_width = 640;
                 }
-                if (new_height > 640) {
-                    new_height = 640;
-                }
+                new_height = Math.floor(new_width / 3);
             }
             $map.attr('src', 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/pin-m-star+ff6633(' + lon + ',' + lat + ')/' + lon + ',' + lat + ',' + LOCATOR_DEFAULT_ZOOM + '/' + new_width + 'x' + new_height + '.png');
         }

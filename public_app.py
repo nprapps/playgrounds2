@@ -6,6 +6,7 @@ import os
 import time
 
 from flask import Flask, redirect, abort
+import pytz
 
 import app_config
 from models import Playground
@@ -29,7 +30,11 @@ def write_data(payload, path='data/changes.json'):
         f.seek(0)
 
         # Load the file -- it's a list.
-        output = json.loads(filedata)
+        try:
+            output = json.loads(filedata)
+
+        except ValueError:
+            output = []
 
         # Nuke the file contents.
         f.truncate()
@@ -72,7 +77,7 @@ def update_playground():
         # Prep the payload.
         payload = {}
         payload['action'] = 'update'
-        payload['timestamp'] = datetime.datetime.now(pytz.utc)
+        payload['timestamp'] = time.mktime(datetime.datetime.now(pytz.utc).timetuple())
         payload['playground'] = {}
         payload['request'] = {}
         payload['request']['headers'] = {}
