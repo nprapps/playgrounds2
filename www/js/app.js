@@ -310,14 +310,22 @@ $(function() {
         var message = COPYTEXT[action];
         // Only if the message exists should writeMessage() get called.
         if ((message !== "undefined") && (message !== null)) {
-            // _.templateSettings = {
-            //     interpolate: /\{\{(.+?)\}\}/g
-            // };
+            // Use mustache for insertions
+            _.templateSettings = {
+                interpolate: /\{\{(.+?)\}\}/g
+            };
+            // Colorize the alert
+            var klass = 'alert-info';
+            // Add a close button; timeOut instead?
+            var button = '<button type="button" class="close" data-dismiss="alert">&times;</button>';
+            // Template up the alert
             var messageTemplate = _.template(
-                '<div class="alert alert-info"><button type="button" class="close" data-dismiss="alert">&times;</button><%= text %></div>'
+                '<div class="alert {{ klass }}">{{ button }}{{ text }}</div>'
             );
-            $alerts.append(messageTemplate({text: message}));
-            $(".alert").alert();
+            // Pass it to the div
+            $alerts.append(messageTemplate({
+                klass: klass, button: button, text: message
+            }));
         }
     }
 
