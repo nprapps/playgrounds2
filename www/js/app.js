@@ -276,6 +276,7 @@ $(function() {
     $results_loading = $('#results-loading');
     $playground_meta_hdr = $('#main-content').find('.about').find('h5.meta');
     $playground_meta_items = $('#main-content').find('.about').find('ul.meta');
+    $alerts = $('.alerts')
 
     CONTENT_WIDTH = $('#main-content').width();
     RESULTS_MAP_WIDTH = CONTENT_WIDTH;
@@ -298,19 +299,6 @@ $(function() {
         );
     }
 
-    // This is the part that Danny or Aly will be making do something interesting.
-    // COPYTEXT[message] will contain the message from the copy spreadsheet.
-    function writeMessage(message) {
-        var messageTemplate = _.template('<div class="alert"><%= message %></div>')
-        $('#alerts').html('');
-        $('#alerts').append(messageTemplate({'text': text, 'klass': klass}));
-        var t = setTimeout(function(){
-            $('#alerts .alert').fadeOut(500, function(){
-                $('#alerts').html('');
-            });
-        }, 10000)
-    }
-
     // Fetches the key from the URL. This could easily be undefined or null.
     var action = getURLParameter('action');
 
@@ -320,10 +308,16 @@ $(function() {
     if ((action !== "undefined") && (action !== null)) {
         // Look up the message in the copy text.
         var message = COPYTEXT[action];
-
         // Only if the message exists should writeMessage() get called.
         if ((message !== "undefined") && (message !== null)) {
-            writeMessage(message);
+            // _.templateSettings = {
+            //     interpolate: /\{\{(.+?)\}\}/g
+            // };
+            var messageTemplate = _.template(
+                '<div class="alert alert-info"><button type="button" class="close" data-dismiss="alert">&times;</button><%= text %></div>'
+            );
+            $alerts.append(messageTemplate({text: message}));
+            $(".alert").alert();
         }
     }
 
