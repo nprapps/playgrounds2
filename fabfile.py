@@ -573,7 +573,8 @@ def process_changes():
     """
     require('settings', provided_by=[production, staging])
 
-    now = time.mktime((datetime.datetime.now(pytz.utc)).timetuple()))
+    now = datetime.datetime.now(pytz.utc)
+    now = time.mktime(now.timetuple())
 
     if exists('data/changes.json'):
 
@@ -581,8 +582,8 @@ def process_changes():
         with settings(warn_only=True):
             local('rm -rf .playgrounds_html')
             local('rm -rf .playgrounds_gzip')
-            local('cp playgrounds.db data/%s-playgrounds.db' % now
-            local('cp data/changes.json data/%s-changes.json' % now
+            local('cp playgrounds.db data/%s-playgrounds.db' % now)
+            local('cp data/changes.json data/%s-changes.json' % now)
             local('mv data/changes.json changes-in-progress.json')
 
         # Create our list of changed items and a revision group.
