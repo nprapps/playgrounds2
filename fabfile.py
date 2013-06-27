@@ -576,12 +576,7 @@ def process_changes():
     now = datetime.datetime.now(pytz.utc)
     now = time.mktime(now.timetuple())
 
-    changes_path = 'data/changes.json'
-
-    if env.settings in ['staging', 'production']:
-        changes_path = '%s/data/changes.json' % env.repo_path
-
-    if exists(changes_path):
+    if exists('%s/data/changes.json' % env.repo_path) or exists('data/changes.json'):
 
         # Set up our necessary files and remove old state.
         with settings(warn_only=True):
