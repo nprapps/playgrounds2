@@ -60,7 +60,7 @@ def load_playgrounds(path='data/playgrounds.csv'):
 
 def process_changes(path='changes-in-progress.json'):
     """
-    Iterate over changes.json and process its contents.
+    Iterate over changes-in-progress.json and process its contents.
     """
     revision_group = time.mktime((datetime.datetime.now(pytz.utc)).timetuple())
 

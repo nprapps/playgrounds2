@@ -2,6 +2,7 @@
 
 import datetime
 from glob import glob
+import gzip
 import json
 import os
 import time
@@ -9,6 +10,7 @@ import time
 import boto.cloudsearch
 import boto.ses
 from fabric.api import *
+from fabric.contrib.files import exists
 from jinja2 import Template
 import requests
 import pytz
@@ -251,9 +253,7 @@ def render_playgrounds(playgrounds=None):
 
             compiled_includes = g.compiled_includes
 
-        # Why is this pointing to a .playgrounds_html directory?
-        # path = '.playgrounds_html%s' % path
-        path = 'www%s' % path
+        path = '.playgrounds_html%s' % path
 
         # Ensure path exists
         head = os.path.split(path)[0]
@@ -271,27 +271,7 @@ def render_playgrounds(playgrounds=None):
     # Un-fake-out deployment target
     app_config.configure_targets(deployment_target)
 
-    for path in updated_paths:
-        for bucket in env.s3_buckets:
-            conn = boto.connect_s3()
-            bucket = conn.get_bucket(bucket)
-            key = boto.s3.key.Key(bucket)
-            key.key = '%s/%s' % (app_config.PROJECT_SLUG, path)
-
-            # with open(path, 'rb') as f:
-            #     key.send_file(f, headers={
-            #         'Cache-Control': 'max-age=5 no-cache no-store must-revalidate',
-            #         'Content-Encoding': 'text/plain'
-            #     })
-
-            # key.set_contents_from_filename(
-            #     path,
-            #     policy='public-read',
-            #     headers={
-            #         'Cache-Control': 'max-age=5 no-cache no-store must-revalidate',
-            #         'Content-Encoding': 'text/plain'
-            #     }
-            # )
+    return updated_paths
 
 def tests():
     """
@@ -523,7 +503,6 @@ def deploy_playgrounds():
     _gzip('.playgrounds_html', '.playgrounds_gzip')
     _deploy_to_s3('.playgrounds_gzip')
 
-
 """
 Application specific
 """
@@ -594,13 +573,58 @@ def process_changes():
     """
     require('settings', provided_by=[production, staging])
 
-    local('cp playgrounds.db data/%s-playgrounds.db' % time.mktime((datetime.datetime.now(pytz.utc)).timetuple()))
-    local('mv data/changes.json changes-in-progress.json')
-    changed_playgrounds, revision_group = data.process_changes()
-    render_playgrounds(changed_playgrounds)
-    update_search_index(changed_playgrounds)
-    send_revision_email(revision_group)
-    local('rm -f changes-in-progress.json')
+    now = time.mktime((datetime.datetime.now(pytz.utc)).timetuple()))
+
+    if exists('data/changes.json'):
+
+        # Set up our necessary files and remove old state.
+        with settings(warn_only=True):
+            local('rm -rf .playgrounds_html')
+            local('rm -rf .playgrounds_gzip')
+            local('cp playgrounds.db data/%s-playgrounds.db' % now
+            local('cp data/changes.json data/%s-changes.json' % now
+            local('mv data/changes.json changes-in-progress.json')
+
+        # Create our list of changed items and a revision group.
+        changed_playgrounds, revision_group = data.process_changes()
+
+        # Render and deploy.
+        render_playgrounds(changed_playgrounds)
+        _gzip('.playgrounds_html', '.playgrounds_gzip')
+        _deploy_to_s3('.playgrounds_gzip')
+
+        # Update the search index.
+        update_search_index(changed_playgrounds)
+
+        # Send the revision email.
+        send_revision_email(revision_group)
+
+        # Remove files and old state.
+        with settings(warn_only=True):
+            local('rm -f changes-in-progress.json')
+            local('rm -rf .playgrounds_html')
+            local('rm -rf .playgrounds_gzip')
+
+    else:
+        print "No updates to process."
+        context = {}
+        context['total_revisions'] = 0
+        context['deletes'] = {}
+        context['deletes']['playgrounds'] = []
+        context['deletes']['total_revisions'] = 0
+        context['inserts'] = {}
+        context['inserts']['playgrounds'] = []
+        context['inserts']['total_revisions'] = 0
+        context['updates'] = {}
+        context['updates']['playgrounds'] = []
+        context['updates']['total_revisions'] = 0
+
+        with open('templates/_email.html', 'rb') as read_template:
+            payload = Template(read_template.read())
+
+        payload = payload.render(**context)
+        addresses = app_config.ADMIN_EMAILS
+        _send_email(addresses, payload)
 
 def update_search_index(playgrounds=None):
     """

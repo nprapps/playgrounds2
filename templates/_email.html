@@ -59,5 +59,8 @@
     {% endfor %}
     </p>
     {% endif %}
+    {% if deletes.playgrounds|length == inserts.playgrounds|length == updates.playgrounds|length == 0 %}
+    <p>There were no updates processed in this cycle.</p>
+    {% endif %}
 </body>
 </html>

@@ -27,13 +27,13 @@ def main():
                 continue
 
             file_path = os.path.join(path, filename)
-            
+
             f_in = open(file_path, 'rb')
             contents = f_in.readlines()
             f_in.close()
             f_out = gzip.open(file_path, 'wb')
             f_out.writelines(contents)
-            f_out.close();
+            f_out.close()
 
 if __name__ == '__main__':
     main()
