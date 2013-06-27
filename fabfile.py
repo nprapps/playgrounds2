@@ -576,7 +576,7 @@ def process_changes():
     now = datetime.datetime.now(pytz.utc)
     now = time.mktime(now.timetuple())
 
-    changes+path = 'data/changes.json'
+    changes_path = 'data/changes.json'
 
     if env.settings in ['staging', 'production']:
         changes_path = '%s/data/changes.json' % env.repo_path
