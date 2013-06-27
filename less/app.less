@@ -55,7 +55,7 @@ nav {
 	background-color: #e0e0e0;
 	height: 44px;
 	overflow: hidden;
-	border-bottom: 2px solid #fff;
+	// border-bottom: 2px solid #fff;
 
 	ul { list-style: none; margin: 0; padding: 0; }
 	ul li { float: left; height: 44px; line-height: 44px; margin-left: 22px; font-size: 12px; }
@@ -72,7 +72,6 @@ nav {
     ul.social-links { 
         position: absolute;
         right: 0;
-        top: 0;
         background-color: white;
         span { margin-right: 20px; }
         a {
@@ -95,7 +94,7 @@ header {
 	background-color: #ebebeb;
 	padding: 50px 30px 30px 30px;
 	margin: 0;
-	border-bottom: 2px solid #fff;
+	// border-bottom: 2px solid #fff;
 	
 	h1 { 
 	    font-size: 48px; 
@@ -141,9 +140,9 @@ section.the-goods { margin-top: 44px; }
 .alert {
     font-size: 14px;
     line-height: 1.4;
-    display: none;
+    text-align:center;
+    margin-bottom: 0px
 }
-
 
 .help-prompt {
     margin: 44px 0 22px 0;
@@ -665,7 +664,7 @@ footer {
 	}
 }
 @media @screen-small {
-	nav, header, footer { margin-left: -20px; margin-right: -20px; }
+	nav, header, footer, .alert { margin-left: -20px; margin-right: -20px; }
 	nav .site-links { margin-left: 20px; }
 	footer { 
 		.primary { display: none; }

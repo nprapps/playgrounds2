@@ -276,6 +276,7 @@ $(function() {
     $results_loading = $('#results-loading');
     $playground_meta_hdr = $('#main-content').find('.about').find('h5.meta');
     $playground_meta_items = $('#main-content').find('.about').find('ul.meta');
+    $alerts = $('.alerts')
 
     CONTENT_WIDTH = $('#main-content').width();
     RESULTS_MAP_WIDTH = CONTENT_WIDTH;
@@ -298,12 +299,6 @@ $(function() {
         );
     }
 
-    // This is the part that Danny or Aly will be making do something interesting.
-    // COPYTEXT[message] will contain the message from the copy spreadsheet.
-    function writeMessage(message) {
-        alert(message);
-    }
-
     // Fetches the key from the URL. This could easily be undefined or null.
     var action = getURLParameter('action');
 
@@ -313,10 +308,24 @@ $(function() {
     if ((action !== "undefined") && (action !== null)) {
         // Look up the message in the copy text.
         var message = COPYTEXT[action];
-
         // Only if the message exists should writeMessage() get called.
         if ((message !== "undefined") && (message !== null)) {
-            writeMessage(message);
+            // Use mustache for insertions
+            _.templateSettings = {
+                interpolate: /\{\{(.+?)\}\}/g
+            };
+            // Colorize the alert
+            var klass = 'alert-info';
+            // Add a close button; timeOut instead?
+            var button = '<button type="button" class="close" data-dismiss="alert">&times;</button>';
+            // Template up the alert
+            var messageTemplate = _.template(
+                '<div class="alert {{ klass }}">{{ button }}{{ text }}</div>'
+            );
+            // Pass it to the div
+            $alerts.append(messageTemplate({
+                klass: klass, button: button, text: message
+            }));
         }
     }
 
