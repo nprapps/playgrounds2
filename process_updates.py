@@ -17,7 +17,7 @@ def main():
 
     path = '/home/ubuntu/apps/%s/repository' % app_config.PROJECT_SLUG
 
-    if os.path.exists('data/changes.json' % path):
+    if os.path.exists('%s/data/changes.json' % path):
 
         os.system('rm -rf %s/.playgrounds_html' % path)
         os.system('rm -rf %s/.playgrounds_gzip' % path)
