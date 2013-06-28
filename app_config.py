@@ -154,7 +154,7 @@ PUBLIC_FIELDS = [
     "zip_code",
     "agency",
     "owner",
-    "remarks",
+    "public_remarks",
     "url",
     "id",
     "slug"

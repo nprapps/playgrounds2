@@ -57,7 +57,7 @@ class Playground(Model):
     address = CharField(verbose_name='Address', null=True)
     city = CharField(verbose_name='City', null=True)
     state = CharField(verbose_name='State', null=True)
-    zip_code = CharField(verbose_name='Zip code', null=True)
+    zip_code = CharField(verbose_name='Zip Code', null=True)
     latitude = FloatField(verbose_name='Latitude', null=True)
     longitude = FloatField(verbose_name='Longitude', null=True)
 
@@ -69,7 +69,7 @@ class Playground(Model):
     remarks = TextField(null=True)
     public_remarks = TextField(verbose_name='Remarks', null=True)
 
-    url = CharField(verbose_name='Url', null=True)
+    url = CharField(verbose_name='URL', null=True)
     entry = CharField(null=True)
     source = CharField(null=True)
 
@@ -177,7 +177,7 @@ class Playground(Model):
         fields = []
 
         for field in cls._meta.get_field_names():
-            if field in ['slug', 'remarks', 'entry', 'source', 'longitude', 'latitude']:
+            if field in ['slug', 'entry', 'source', 'longitude', 'latitude']:
                 continue
 
             field_dict = {}
@@ -204,6 +204,23 @@ class Playground(Model):
 
             if field in app_config.PUBLIC_FIELDS:
                 fields.append(field_dict)
+
+            print fields
+
+            order = [
+                "Name",
+                "Facility",
+                "Address",
+                "City",
+                "Zip Code",
+                "URL",
+                "Agency",
+                "Owner",
+                "Remarks",
+                "Id",
+                "Slug"
+            ]
+            fields = sorted(fields, key=lambda x: order.index(x['name']))
 
         return fields
 
