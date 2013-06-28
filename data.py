@@ -48,8 +48,8 @@ def deploy_to_s3(src):
     s3cmd_gzip = 's3cmd -P --add-header=Cache-Control:max-age=5 --add-header=Content-encoding:gzip --guess-mime-type --recursive --exclude "*" --include-from gzip_types.txt sync %s/ %s'
 
     for bucket in app_config.S3_BUCKETS:
-        local(s3cmd % (src, 's3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
-        local(s3cmd_gzip % (src, 's3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
+        os.system(s3cmd % (src, 's3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
+        os.system(s3cmd_gzip % (src, 's3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
 
 
 def gzip(src, dst):
@@ -107,10 +107,6 @@ def render_playgrounds(playgrounds=None):
 
     slugs = [p.slug for p in playgrounds]
 
-    # Fake out deployment target
-    deployment_target = app_config.DEPLOYMENT_TARGET
-    app_config.configure_targets(os.environ.get('DEPLOYMENT_TARGET', None))
-
     app_config_js()
     copy_text_js()
 
@@ -148,9 +144,6 @@ def render_playgrounds(playgrounds=None):
             f.write(content.encode('utf-8'))
 
         updated_paths.append(path)
-
-    # Un-fake-out deployment target
-    app_config.configure_targets(deployment_target)
 
     return updated_paths
 

@@ -397,9 +397,16 @@ def deploy(remote='origin'):
     if (env.settings == 'production' and env.branch != 'stable'):
         _confirm("You are trying to deploy the '%(branch)s' branch to production.\nYou should really only deploy a stable branch.\nDo you know what you're doing?" % env)
 
+    # Fake out deployment target
+    deployment_target = app_config.DEPLOYMENT_TARGET
+    app_config.configure_targets(env.get('settings', None))
+
     render()
     _gzip()
     _deploy_to_s3()
+
+    # Un-fake-out deployment target
+    app_config.configure_targets(deployment_target)
 
     if env['deploy_to_servers']:
         checkout_latest(remote)
@@ -416,9 +423,22 @@ def deploy_playgrounds():
     if (env.settings == 'production' and env.branch != 'stable'):
         _confirm("You are trying to deploy the '%(branch)s' branch to production.\nYou should really only deploy a stable branch.\nDo you know what you're doing?" % env)
 
+    # Fake out deployment target
+    deployment_target = app_config.DEPLOYMENT_TARGET
+    app_config.configure_targets(env.get('settings', None))
+
+    os.system('rm -rf .playgrounds_html')
+    os.system('rm -rf .playgrounds_gzip')
+
     render_playgrounds()
     _gzip('.playgrounds_html', '.playgrounds_gzip')
     _deploy_to_s3('.playgrounds_gzip')
+
+    os.system('rm -rf .playgrounds_html')
+    os.system('rm -rf .playgrounds_gzip')
+
+    # Un-fake-out deployment target
+    app_config.configure_targets(deployment_target)
 
 """
 Application specific
