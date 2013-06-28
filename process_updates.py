@@ -21,8 +21,8 @@ def main():
 
         os.system('rm -rf %s/.playgrounds_html' % path)
         os.system('rm -rf %s/.playgrounds_gzip' % path)
-        os.system('cp %s/playgrounds.db data/%s-playgrounds.db' % path, now)
-        os.system('cp %s/data/changes.json data/%s-changes.json' % path, now)
+        os.system('cp %s/playgrounds.db data/%s-playgrounds.db' % (path, now))
+        os.system('cp %s/data/changes.json data/%s-changes.json' % (path, now))
         os.system('mv %s/data/changes.json changes-in-progress.json' % path)
 
         # Create our list of changed items and a revision group.
