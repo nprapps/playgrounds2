@@ -12,8 +12,8 @@ import boto.ses
 from fabric.api import *
 from fabric.contrib.files import exists
 from jinja2 import Template
-import requests
 import pytz
+import requests
 
 import app
 import app_config
@@ -108,48 +108,34 @@ def less():
     """
     Render LESS files to CSS.
     """
-    for path in glob('less/*.less'):
-        filename = os.path.split(path)[-1]
-        name = os.path.splitext(filename)[0]
-        out_path = 'www/css/%s.less.css' % name
-
-        local('node_modules/.bin/lessc %s %s' % (path, out_path))
+    data.less()
 
 def jst():
     """
     Render Underscore templates to a JST package.
     """
-    local('node_modules/.bin/jst --template underscore jst www/js/templates.js')
+    data.jst()
 
 def update_copy():
     """
     Fetches the latest Google Doc and updates local JSON.
     """
-    local('curl -o data/copy.xls "%s"' % app_config.COPY_URL)
+    data.update_copy()
 
 def app_config_js():
     """
     Render app_config.js to file.
     """
-    from app import _app_config_js
-
-    response = _app_config_js()
-    js = response[0]
-
-    with open('www/js/app_config.js', 'w') as f:
-        f.write(js)
+    data.app_config_js()
 
 def copy_text_js():
     """
     Render copy_text messages to a js file.
     """
-    copy = {}
+    data.copy_text_js()
 
-    for message in ['editing_thanks', 'creating_thanks', 'deleting_thanks']:
-        copy[message] = unicode(getattr(copytext.Copy().content, message))
-
-    with open('www/js/copy_text.js', 'w') as f:
-        f.write('window.COPYTEXT = %s' % json.dumps(copy))
+def render_playgrounds():
+    data.render_playgrounds()
 
 def render():
     """
@@ -210,68 +196,6 @@ def render():
 
     # Un-fake-out deployment target
     app_config.configure_targets(deployment_target)
-
-def render_playgrounds(playgrounds=None):
-    """
-    Render the playgrounds pages.
-    """
-    from flask import g, url_for
-
-    update_copy()
-    less()
-    jst()
-
-    if not playgrounds:
-        playgrounds = models.Playground.select()
-
-    slugs = [p.slug for p in playgrounds]
-
-    # Fake out deployment target
-    deployment_target = app_config.DEPLOYMENT_TARGET
-    app_config.configure_targets(env.get('settings', None))
-
-    app_config_js()
-    copy_text_js()
-
-    compiled_includes = []
-
-    updated_paths = []
-
-    for slug in slugs:
-        # Silly fix because url_for require a context
-        with app.app.test_request_context():
-            path = url_for('_playground', playground_slug=slug)
-
-        with app.app.test_request_context(path=path):
-            print 'Rendering %s' % path
-
-            g.compile_includes = True
-            g.compiled_includes = compiled_includes
-
-            view = app.__dict__['_playground']
-            content = view(slug)
-
-            compiled_includes = g.compiled_includes
-
-        path = '.playgrounds_html%s' % path
-
-        # Ensure path exists
-        head = os.path.split(path)[0]
-
-        try:
-            os.makedirs(head)
-        except OSError:
-            pass
-
-        with open(path, 'w') as f:
-            f.write(content.encode('utf-8'))
-
-        updated_paths.append(path)
-
-    # Un-fake-out deployment target
-    app_config.configure_targets(deployment_target)
-
-    return updated_paths
 
 def tests():
     """
@@ -394,20 +318,13 @@ def _deploy_to_s3(src='gzip'):
     """
     Deploy the gzipped stuff to S3.
     """
-    s3cmd = 's3cmd -P --add-header=Cache-Control:max-age=5 --guess-mime-type --recursive --exclude-from gzip_types.txt sync %s/ %s'
-    s3cmd_gzip = 's3cmd -P --add-header=Cache-Control:max-age=5 --add-header=Content-encoding:gzip --guess-mime-type --recursive --exclude "*" --include-from gzip_types.txt sync %s/ %s'
-
-    for bucket in env.s3_buckets:
-        env.s3_bucket = bucket
-        local(s3cmd % (src, 's3://%(s3_bucket)s/%(project_slug)s/' % env))
-        local(s3cmd_gzip % (src, 's3://%(s3_bucket)s/%(project_slug)s/' % env))
+    data.deploy_to_s3(src)
 
 def _gzip(src='www', dst='gzip'):
     """
     Gzips everything in www and puts it all in gzip
     """
-    local('python gzip_www.py %s %s' % (src, dst))
-    local('rm -rf %s/live-data' % dst)
+    data.gzip(src, dst)
 
 
 def render_confs():
@@ -506,40 +423,6 @@ def deploy_playgrounds():
 """
 Application specific
 """
-def _send_email(addresses, payload):
-    connection = boto.ses.connect_to_region('us-east-1')
-    connection.send_email(
-        'NPR News Apps <nprapps@npr.org>',
-        'Playgrounds: %s' % (datetime.datetime.now(pytz.utc).replace(tzinfo=pytz.utc).strftime('%m/%d')),
-        None,
-        addresses,
-        html_body=payload,
-        format='html')
-
-def send_test_email():
-    payload = """
-    <html>
-        <head></head>
-        <body>
-            <h1>Howdy!</h1>
-            <p><a href="http://www.npr.org/">This is a test</a> email.</p>
-            <p><a href="http://www.npr.org/">Delete</a></p>
-        </body>
-    </html>
-    """
-    addresses = app_config.ADMIN_EMAILS
-    _send_email(addresses, payload)
-
-def send_fake_revision_email(revision_group=2):
-    payload = app._prepare_email(revision_group)
-    addresses = app_config.ADMIN_EMAILS
-    _send_email(addresses, payload)
-
-def send_revision_email(revision_group):
-    payload = app._prepare_email(revision_group)
-    addresses = app_config.ADMIN_EMAILS
-    _send_email(addresses, payload)
-
 def download_data():
     """
     Download the latest playgrounds data CSV.
@@ -567,44 +450,36 @@ def bootstrap():
     local_bootstrap()
     put(local_path='playgrounds.db', remote_path='%(repo_path)s/playgrounds.db' % env)
 
-def process_changes():
+def run_update_cron():
+    require('settings', provided_by=[production, staging])
+    run('cd %s && source ../virtualenv/bin/activate && ../virtualenv/bin/python process_updates.py' % env.repo_path)
+
+def local_process_changes():
     """
     Parse any updates waiting to be processed, rerender playgrounds and send notification emails.
     """
-    require('settings', provided_by=[production, staging])
 
     now = datetime.datetime.now(pytz.utc)
     now = time.mktime(now.timetuple())
 
-    if exists('%s/data/changes.json' % env.repo_path) or exists('data/changes.json'):
+    if os.path.exists('data/changes.json'):
 
-        # Set up our necessary files and remove old state.
-        with settings(warn_only=True):
-            local('rm -rf .playgrounds_html')
-            local('rm -rf .playgrounds_gzip')
-            local('cp playgrounds.db data/%s-playgrounds.db' % now)
-            local('cp data/changes.json data/%s-changes.json' % now)
-            local('mv data/changes.json changes-in-progress.json')
+        os.system('rm -rf .playgrounds_html')
+        os.system('cp playgrounds.db data/%s-playgrounds.db' % now)
+        os.system('cp data/changes.json data/%s-changes.json' % now)
+        os.system('mv data/changes.json changes-in-progress.json')
 
         # Create our list of changed items and a revision group.
         changed_playgrounds, revision_group = data.process_changes()
 
         # Render and deploy.
-        render_playgrounds(changed_playgrounds)
-        _gzip('.playgrounds_html', '.playgrounds_gzip')
-        _deploy_to_s3('.playgrounds_gzip')
-
-        # Update the search index.
-        update_search_index(changed_playgrounds)
+        data.render_playgrounds(changed_playgrounds)
 
         # Send the revision email.
-        send_revision_email(revision_group)
+        data.send_revision_email(revision_group)
 
         # Remove files and old state.
-        with settings(warn_only=True):
-            local('rm -f changes-in-progress.json')
-            local('rm -rf .playgrounds_html')
-            local('rm -rf .playgrounds_gzip')
+        os.system('rm -f changes-in-progress.json')
 
     else:
         print "No updates to process."
@@ -625,7 +500,7 @@ def process_changes():
 
         payload = payload.render(**context)
         addresses = app_config.ADMIN_EMAILS
-        _send_email(addresses, payload)
+        data.send_email(addresses, payload)
 
 def update_search_index(playgrounds=None):
     """
@@ -637,22 +512,7 @@ def update_search_index(playgrounds=None):
     deployment_target = app_config.DEPLOYMENT_TARGET
     app_config.configure_targets(env.get('settings', None))
 
-    if not playgrounds:
-        playgrounds = models.Playground.select()
-
-    print 'Generating SDF batch...'
-    sdf = [playground.sdf() for playground in playgrounds]
-    payload = json.dumps(sdf)
-
-    if len(payload) > 5000 * 1024:
-        print 'Exceeded 5MB limit for SDF uploads!'
-        return
-
-    print 'Uploading to CloudSearch...'
-    response = requests.post('http://%s/2011-02-01/documents/batch' % app_config.CLOUD_SEARCH_DOC_DOMAIN, data=payload, headers={ 'Content-Type': 'application/json' })
-
-    print response.status_code
-    print response.text
+    data.update_search_index(playgrounds)
 
     # Un-fake-out deployment target
     app_config.configure_targets(deployment_target)

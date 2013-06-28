@@ -50,7 +50,7 @@ www/playground
 www/test/test.html
 inserts.json
 updates-in-progress.json
-data/changes.json
+data/*changes.json
 www/sitemap.xml
 *.un~
 .playgrounds_html
