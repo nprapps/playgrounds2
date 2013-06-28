@@ -191,6 +191,9 @@ class Playground(Model):
             if field == 'id':
                 field_dict['display'] = 'style="display:none"'
 
+            if field == 'facility':
+                field_dict['name'] = 'At (is this in a park or school?)'
+
             if field == 'public_remarks':
                 field_dict['widget'] = '<textarea class="input-block-level input" name="%s" rows="10">%s</textarea>' % (field, field_value)
             # elif field == 'state':
@@ -207,7 +210,7 @@ class Playground(Model):
 
             order = [
                 "Name",
-                "Facility",
+                "At (is this in a park or school?)",
                 "Address",
                 "City",
                 "Zip Code",
