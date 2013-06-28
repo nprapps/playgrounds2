@@ -1,17 +1,168 @@
 #!/usr/bin/env python
 
 import datetime
+from glob import glob
+import gzip
 import json
+import os
 import time
 from sets import Set
 
+import boto.cloudsearch
+import boto.ses
 from csvkit import CSVKitDictReader
 from jinja2 import Template
+import requests
 from peewee import *
 import pytz
 
+import app
 import app_config
+import copytext
+import data
+from etc import github
 from models import Playground, PlaygroundFeature, Revision
+
+
+def update_search_index(playgrounds):
+    if not playgrounds:
+        playgrounds = Playground.select()
+
+    print 'Generating SDF batch...'
+    sdf = [playground.sdf() for playground in playgrounds]
+    payload = json.dumps(sdf)
+
+    if len(payload) > 5000 * 1024:
+        print 'Exceeded 5MB limit for SDF uploads!'
+        return
+
+    print 'Uploading to CloudSearch...'
+    response = requests.post('http://%s/2011-02-01/documents/batch' % app_config.CLOUD_SEARCH_DOC_DOMAIN, data=payload, headers={ 'Content-Type': 'application/json' })
+
+    print response.status_code
+    print response.text
+
+
+def deploy_to_s3(src):
+    s3cmd = 's3cmd -P --add-header=Cache-Control:max-age=5 --guess-mime-type --recursive --exclude-from gzip_types.txt sync %s/ %s'
+    s3cmd_gzip = 's3cmd -P --add-header=Cache-Control:max-age=5 --add-header=Content-encoding:gzip --guess-mime-type --recursive --exclude "*" --include-from gzip_types.txt sync %s/ %s'
+
+    for bucket in app_config.S3_BUCKETS:
+        os.system(s3cmd % (src, 's3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
+        os.system(s3cmd_gzip % (src, 's3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
+
+
+def gzip(src, dst):
+    os.system('python gzip_www.py %s %s' % (src, dst))
+    os.system('rm -rf %s/live-data' % dst)
+
+def copy_text_js():
+    copy = {}
+
+    for message in ['editing_thanks', 'creating_thanks', 'deleting_thanks']:
+        copy[message] = unicode(getattr(copytext.Copy().content, message))
+
+    with open('www/js/copy_text.js', 'w') as f:
+        f.write('window.COPYTEXT = %s' % json.dumps(copy))
+
+def app_config_js():
+    from app import _app_config_js
+
+    response = _app_config_js()
+    js = response[0]
+
+    with open('www/js/app_config.js', 'w') as f:
+        f.write(js)
+
+
+def update_copy():
+    os.system('curl -o data/copy.xls "%s"' % app_config.COPY_URL)
+
+
+def less():
+    for path in glob('less/*.less'):
+        filename = os.path.split(path)[-1]
+        name = os.path.splitext(filename)[0]
+        out_path = 'www/css/%s.less.css' % name
+
+    os.system('node_modules/.bin/lessc %s %s' % (path, out_path))
+
+
+def jst():
+    os.system('node_modules/.bin/jst --template underscore jst www/js/templates.js')
+
+
+def render_playgrounds(playgrounds=None):
+    """
+    Render the playgrounds pages.
+    """
+    from flask import g, url_for
+
+    update_copy()
+    less()
+    jst()
+
+    if not playgrounds:
+        playgrounds = Playground.select()
+
+    slugs = [p.slug for p in playgrounds]
+
+    app_config_js()
+    copy_text_js()
+
+    compiled_includes = []
+
+    updated_paths = []
+
+    for slug in slugs:
+        # Silly fix because url_for require a context
+        with app.app.test_request_context():
+            path = url_for('_playground', playground_slug=slug)
+
+        with app.app.test_request_context(path=path):
+            print 'Rendering %s' % path
+
+            g.compile_includes = True
+            g.compiled_includes = compiled_includes
+
+            view = app.__dict__['_playground']
+            content = view(slug)
+
+            compiled_includes = g.compiled_includes
+
+        path = '.playgrounds_html%s' % path
+
+        # Ensure path exists
+        head = os.path.split(path)[0]
+
+        try:
+            os.makedirs(head)
+        except OSError:
+            pass
+
+        with open(path, 'w') as f:
+            f.write(content.encode('utf-8'))
+
+        updated_paths.append(path)
+
+    return updated_paths
+
+
+def send_revision_email(revision_group):
+    payload = app._prepare_email(revision_group)
+    addresses = app_config.ADMIN_EMAILS
+    send_email(addresses, payload)
+
+
+def send_email(addresses, payload):
+    connection = boto.ses.connect_to_region('us-east-1')
+    connection.send_email(
+        'NPR News Apps <nprapps@npr.org>',
+        'Playgrounds: %s' % (datetime.datetime.now(pytz.utc).replace(tzinfo=pytz.utc).strftime('%m/%d')),
+        None,
+        addresses,
+        html_body=payload,
+        format='html')
 
 
 def load_playgrounds(path='data/playgrounds.csv'):
