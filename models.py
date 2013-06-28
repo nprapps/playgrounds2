@@ -205,8 +205,6 @@ class Playground(Model):
             if field in app_config.PUBLIC_FIELDS:
                 fields.append(field_dict)
 
-            print fields
-
             order = [
                 "Name",
                 "Facility",
