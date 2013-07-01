@@ -4,6 +4,7 @@ var $search_address = null;
 var $search_help = null;
 var $did_you_mean = null;
 var $no_geocode = null;
+var $geolocate_button = null;
 
 $(function() {
     $address = $('#address');
@@ -11,13 +12,14 @@ $(function() {
     $search_help = $('#search-help');
     $did_you_mean = $('#did-you-mean-edit');
     $no_geocode = $('#no-geocode');
+    $geolocate_button = $('#geolocate')
 
     map = L.map('edit-map').setView([38.9, -77], 7);
-    map_layer = L.mapbox.tileLayer('geraldrich.map-wow338yo', {
+    map_layer = L.mapbox.tileLayer('geraldrich.map-h0glukvl', {
         detectRetina: true,
-        retinaVersion: 'geraldrich.map-y6mt2diq'
+        retinaVersion: 'geraldrich.map-bmvyaxm2'
     }).addTo(map);
-    grid_layer = L.mapbox.gridLayer('geraldrich.map-wow338yo').addTo(map);
+    grid_layer = L.mapbox.gridLayer('geraldrich.map-h0glukvl').addTo(map);
     map.addControl(L.mapbox.gridControl(grid_layer));
 
     $search_address.click(function() {
@@ -45,9 +47,7 @@ $(function() {
                     } else if (locales.length == 1) {
                         var locale = locales[0];
 
-                        // $search_latitude.val(locale['latLng']['lat']);
-                        // $search_longitude.val(locale['latLng']['lng']);
-                        console.log('Found it');
+                        map.setView([locale['latLng']['lat'], locale['latLng']['lng']], 12);
 
                         // $results_address.html('Showing results near ' + formatMapQuestAddress(locale));
                     } else {
@@ -76,7 +76,7 @@ $(function() {
         var latitude = $this.data('latitude');
         var longitude = $this.data('longitude');
 
-        console.log(latitude);
+        map.setView([latitude, longitude], 12);
 
         // $search_latitude.val(latitude);
         // $search_longitude.val(longitude);
@@ -84,7 +84,16 @@ $(function() {
 
         $search_help.hide();
         // $search_help_us.show();
+    });
 
+    $geolocate_button.click(function() {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            $search_help.hide();
+
+            // $search_latitude.val(position.coords.latitude);
+            // $search_longitude.val(position.coords.longitude);
+            map.setView([position.coords.latitude, position.coords.longitude], 12);
+        });
     });
 
 });
