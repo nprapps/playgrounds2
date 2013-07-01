@@ -44,7 +44,7 @@ def _prepare_email(revision_group):
         for revision in inserts:
             p = Playground.get(slug=revision.playground.slug)
             playground_dict = p.__dict__['_data']
-            playground_dict['site_url'] = 'http://%s/playground/%s.html' % (app_config.S3_BASE_URL, revision.playground.slug)
+            playground_dict['site_url'] = '%s/playground/%s.html' % (app_config.S3_BASE_URL, revision.playground.slug)
             playground_dict['revision_group'] = int(revision_group)
             playground_dict['headers'] = revision.get_headers()
             context['inserts']['playgrounds'].append(playground_dict)
@@ -56,8 +56,8 @@ def _prepare_email(revision_group):
         for revision in deletes:
             p = Playground.get(slug=revision.playground.slug)
             playground_dict = playground_dict = p.__dict__['_data']
-            playground_dict['site_url'] = 'http://%s/playground/%s.html' % (app_config.S3_BASE_URL, revision.playground.slug)
-            playground_dict['delete_url'] = 'http://%s/delete-playground/%s/' % (app_config.S3_BASE_URL, revision.playground.slug)
+            playground_dict['site_url'] = '%s/playground/%s.html' % (app_config.S3_BASE_URL, revision.playground.slug)
+            playground_dict['delete_url'] = '%s/delete-playground/%s/' % (app_config.S3_BASE_URL, revision.playground.slug)
             playground_dict['revision_group'] = int(revision_group)
             playground_dict['headers'] = revision.get_headers()
             context['deletes']['playgrounds'].append(playground_dict)
@@ -74,7 +74,7 @@ def _prepare_email(revision_group):
         for playground_slug in updated_playgrounds:
             p = Playground.get(slug=playground_slug)
             playground_dict = p.__dict__['_data']
-            playground_dict['site_url'] = 'http://%s/playground/%s.html' % (app_config.S3_BASE_URL, playground_slug)
+            playground_dict['site_url'] = '%s/playground/%s.html' % (app_config.S3_BASE_URL, playground_slug)
             playground_dict['revisions'] = []
             for revision in updates:
                 if revision.playground.id == p.id:
