@@ -1,6 +1,20 @@
 <div class="modal-body">
     <h2>Edit Playground</h2>
     <p class="muted">Changes will be submitted for review and posted within 24 hours.</p>
+    <input type="text" id="address"/>
+    <input type="button" id="search-address"/>
+    <div id="search-help">
+        <h4>Did you mean...?</h4>
+        <ul></ul>
+        <h6 class="divider">OR</h6>
+    </div>
+
+    <div id="no-geocode">
+        <h4>Sorry, we couldn't locate that address.</h4>
+    </div>
+
+    <div id="results-loading">Loading...</div>
+
     <div id="edit-map"></div>
     <div id="edit-marker">
         <i class="icon-screenshot"></i>
