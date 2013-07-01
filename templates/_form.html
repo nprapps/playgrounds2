@@ -7,7 +7,7 @@
                 <div class="control-group"{% if field.display %} {{ field.display|safe }}{% endif %}>
                     <label class="control-label">{{ field.name }}</label>
                     <div class="controls">
-                    	{{ field.widget|safe }}
+                        {{ field.widget|safe }}
                     </div>
                 </div>
             {% endfor %}
@@ -25,7 +25,6 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-large" data-dismiss="modal" aria-hidden="true">Cancel</button>
-
     <button id="playground-update" class="btn btn-large btn-success">Save</button>
 </div>
 <script type="text/javascript">
@@ -37,17 +36,33 @@
     $('#playground-form .input').blur(function(){
         $(this).attr('data-changed', 'true');
     });
-    $('#playground-update').on('click', function(){
-        $.each($('#playground-form .input'), function(index, item) {
-            if ($(item).attr('name')) {
-                return;
-            }
 
+    // Fire on button click. Not on enter.
+    $('#playground-update').on('click', function(){
+
+        // Loop over the inputs inside the form.
+        $.each($('#playground-form .input'), function(index, item) {
+
+            // I removed this bit and replaced it in the form HTML.
+            // This was still submitting every item in the form, which
+            // Isn't what we want; only the stuff that's changed
+            // should have a 'name' attribute.
+
+            // if ($(item).attr('name')) {
+            //     return;
+            // }
+
+            // Check to see if this item has changed.
+            // If it has not changed, remove its name attribute
+            // so that it will not submit with the form.
             if ($(item).attr('data-changed') != 'true') {
                 $(item).removeAttr('name');
             }
         });
+
+        // Submit the form.
         $('#playground-form').submit();
+
         return false;
     });
 </script>

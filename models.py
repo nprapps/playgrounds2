@@ -188,22 +188,21 @@ class Playground(Model):
             else:
                 field_value = ''
 
+            # Made some changes here to support the form validation JS.
+            # specifically, ID needs a special widget.
+            # Everything else should be an if/elif/else instead of if/if/else.
             if field == 'id':
                 field_dict['display'] = 'style="display:none"'
+                field_dict['widget'] = '<input type="text" name="%s" value="%s" data-changed="true"></input>' % (field, field_value)
 
-            if field == 'facility':
+            elif field == 'facility':
                 field_dict['name'] = 'At (is this in a park or school?)'
 
-            if field == 'public_remarks':
+            elif field == 'public_remarks':
                 field_dict['widget'] = '<textarea class="input-block-level input" name="%s" rows="10">%s</textarea>' % (field, field_value)
-            # elif field == 'state':
-            #     options = ''
-            #     for abbrev, name in US_STATES:
-            #         options += '<option class="input" value="%s" >%s</option>' % (abbrev, abbrev)
-            #     field_dict['widget'] = '<select name="state">%s</select>' % options
+
             else:
                 field_dict['widget'] = '<input class="input-block-level input" type="text" name="%s" value="%s"></input>' % (field, field_value)
-
 
             if field in app_config.PUBLIC_FIELDS:
                 fields.append(field_dict)
