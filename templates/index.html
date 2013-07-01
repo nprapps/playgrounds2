@@ -87,7 +87,10 @@
 
 {% block wide_content %}
 {% endblock %}
-
+{% block extra_foot_js %}
+    {{ JS.push('js/app.js') }}
+    {{ JS.push('js/utils.js') }}
+{% endblock %}
 {% block extra_foot %}
 <!--[if lte IE 8]>
     <link href='css/mapbox.ie.css' rel='stylesheet' />

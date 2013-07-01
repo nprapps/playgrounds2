@@ -4,15 +4,13 @@ var $search_address = null;
 var $search_help = null;
 var $did_you_mean = null;
 var $no_geocode = null;
-var $results_loading = null;
 
 $(function() {
     $address = $('#address');
     $search_address = $('#search-address');
     $search_help = $('#search-help');
-    $did_you_mean = $('#search-help ul');
+    $did_you_mean = $('#did-you-mean-edit');
     $no_geocode = $('#no-geocode');
-    $results_loading = $('#results-loading');
 
     map = L.map('edit-map').setView([38.9, -77], 7);
     map_layer = L.mapbox.tileLayer('geraldrich.map-wow338yo', {
@@ -25,7 +23,8 @@ $(function() {
     $search_address.click(function() {
         var address = $address.val();
         if (address) {
-            $results_loading.show();
+            $search_help.hide();
+            $no_geocode.hide();
 
             $.ajax({
                 'url': 'http://open.mapquestapi.com/geocoding/v1/address',
@@ -39,8 +38,6 @@ $(function() {
                         return locale['adminArea1'] == 'US';
                     });
 
-                    $results_loading.hide();
-
                     if (locales.length == 0) {
                         $did_you_mean.append('<li>No results</li>');
 
@@ -53,8 +50,6 @@ $(function() {
                         console.log('Found it');
 
                         // $results_address.html('Showing results near ' + formatMapQuestAddress(locale));
-
-                        $results_loading.show();
                     } else {
                         $did_you_mean.empty();
 
@@ -70,7 +65,26 @@ $(function() {
                         $search_help.show();
                         // $search_help_us.hide();
                     }
+                }
             });
         }  
     });
+
+    $did_you_mean.on('click', 'li', function() {
+        var $this = $(this);
+        var address = $this.data('address');
+        var latitude = $this.data('latitude');
+        var longitude = $this.data('longitude');
+
+        console.log(latitude);
+
+        // $search_latitude.val(latitude);
+        // $search_longitude.val(longitude);
+        // $results_address.html('Showing results near ' + address);
+
+        $search_help.hide();
+        // $search_help_us.show();
+
+    });
+
 });
