@@ -37,7 +37,7 @@ DEPLOY_TO_SERVERS = True
 
 # Should the crontab file be installed on the servers?
 # If True, DEPLOY_TO_SERVERS must also be True
-DEPLOY_CRONTAB = False
+DEPLOY_CRONTAB = True
 
 # Should the service configurations be installed on the servers?
 # If True, DEPLOY_TO_SERVERS must also be True
