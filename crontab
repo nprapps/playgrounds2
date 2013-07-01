@@ -1,1 +1,1 @@
-* * * * * bash /home/ubuntu/apps/playgrounds2/repository/cron.sh process_updates.py > /var/log/playgrounds2-crontab.log 2>&1
+* * * * * bash /home/ubuntu/apps/playgrounds2/repository/cron.sh /home/ubuntu/apps/playgrounds2/repository/process_updates.py >> /var/log/playgrounds2-crontab.log 2>&1
