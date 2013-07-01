@@ -4,6 +4,10 @@
 
 {% block body_class %}playground{% endblock body_class %}
 
+{% block extra_css %}
+    {{ CSS.push('css/mapbox.css') }}
+{% endblock %}
+
 {% block header_content %}
 <header>
     <div class="container">
@@ -179,3 +183,14 @@
 
     </script>
 {% endblock %}
+
+{% block extra_foot %}
+<!--[if lte IE 8]>
+    <link href='../../css/mapbox.ie.css' rel='stylesheet' />
+<![endif]-->
+<script type="text/javascript" src="../../js/lib/mapbox.js"> </script>
+{% endblock extra_foot %}
+
+{% block extra_foot_js %}
+    {{ JS.push('js/edit.js') }}
+{% endblock extra_foot_js %}
