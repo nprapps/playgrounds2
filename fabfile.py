@@ -21,6 +21,7 @@ import copytext
 import data
 from etc import github
 import models
+from process_updates import process_updates
 
 
 """
@@ -478,49 +479,7 @@ def local_process_changes():
     """
     Parse any updates waiting to be processed, rerender playgrounds and send notification emails.
     """
-
-    now = datetime.datetime.now(pytz.utc)
-    now = time.mktime(now.timetuple())
-
-    if os.path.exists('data/changes.json'):
-
-        os.system('rm -rf .playgrounds_html')
-        os.system('cp playgrounds.db data/%s-playgrounds.db' % now)
-        os.system('cp data/changes.json data/%s-changes.json' % now)
-        os.system('mv data/changes.json changes-in-progress.json')
-
-        # Create our list of changed items and a revision group.
-        changed_playgrounds, revision_group = data.process_changes()
-
-        # Render and deploy.
-        data.render_playgrounds(changed_playgrounds)
-
-        # Send the revision email.
-        data.send_revision_email(revision_group)
-
-        # Remove files and old state.
-        os.system('rm -f changes-in-progress.json')
-
-    else:
-        print "No updates to process."
-        context = {}
-        context['total_revisions'] = 0
-        context['deletes'] = {}
-        context['deletes']['playgrounds'] = []
-        context['deletes']['total_revisions'] = 0
-        context['inserts'] = {}
-        context['inserts']['playgrounds'] = []
-        context['inserts']['total_revisions'] = 0
-        context['updates'] = {}
-        context['updates']['playgrounds'] = []
-        context['updates']['total_revisions'] = 0
-
-        with open('templates/_email.html', 'rb') as read_template:
-            payload = Template(read_template.read())
-
-        payload = payload.render(**context)
-        addresses = app_config.ADMIN_EMAILS
-        data.send_email(addresses, payload)
+    process_updates(path='./', local=True)
 
 def update_search_index(playgrounds=None):
     """
