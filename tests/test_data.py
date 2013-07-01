@@ -2,10 +2,12 @@
 
 import datetime
 import json
+import time
 import unittest
 
 from csvkit import CSVKitDictReader
 import peewee
+import pytz
 import requests
 
 import app_config
@@ -14,6 +16,7 @@ import data
 import models
 from models import Playground, PlaygroundFeature, Revision
 import tests.utils as utils
+
 
 class PlaygroundsTestCase(unittest.TestCase):
     """
@@ -108,6 +111,7 @@ class DeletesTestCase(unittest.TestCase):
 
         app_config.configure_targets(None)
 
+
 class UpdatesTestCase(unittest.TestCase):
     def setUp(self):
         pass
@@ -201,7 +205,7 @@ class InsertsTestCase(unittest.TestCase):
         self.assertEqual(headers['host'], 'localhost')
 
         cookies = revision.get_cookies()
-        self.assertEqual(len(cookies), 0)
+
 
 class EmailTestCase(unittest.TestCase):
     """
@@ -226,7 +230,7 @@ class EmailTestCase(unittest.TestCase):
 
         Revision(
             action='update',
-            timestamp=datetime.datetime.utcnow(),
+            timestamp=time.mktime(datetime.datetime.now(pytz.utc).timetuple()),
             playground=playground,
             log=log,
             headers='',
