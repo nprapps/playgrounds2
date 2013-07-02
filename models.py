@@ -79,26 +79,53 @@ class Playground(Model):
         database = database
 
     @property
+    def features(self):
+        """
+        Returns the associated features of this playground.
+        """
+
+        # Get a queryset of the features.
+        features = PlaygroundFeature.select().join(Playground).where(Playground.id == self.id)
+
+        # If there aren't any, return none instead of an empty list.
+        # So barbaric, empty lists.
+        if features.count() > 0:
+            return features
+
+        return None
+
+    @property
     def percent_complete(self):
         """
         Figure out how complete this record is.
         Returns a dictionary with a percent string and a css class.
         String is truncated to two decimal points.
         """
-        total = len(self.__dict__['_data'].items())
+
+        # Adds one to the total because we want to penalize playgrounds with no added features.
+        total = len(self.__dict__['_data'].items()) + 1
         completed = 0
 
+        # Loop over the fields. If there are fields with no data, give no credit.
         for key, value in self.__dict__['_data'].items():
             if value and value != '':
                 completed += 1
 
+        # If there's at least a single feature, give this playground one credit.
+        if self.features:
+            completed += 1
+
+        # Get the floating point percentage. *Gak*
+        # Also make a fancy string.
         percent = float(float(completed)/float(total)) * 100
         percent_string = "{0:.2f}".format(percent)
 
+        # Get us a css class. If we're above 70%, we're good. Otherwise, we need help.
         klass = 'help'
         if percent > 70.0:
             klass = 'okay'
 
+        # Return the percent string and the css class.
         return {"percent": percent_string, "class": klass}
 
 
@@ -395,6 +422,10 @@ class PlaygroundFeature(Model):
 
     class Meta:
         database = database
+
+    @property
+    def cleaned(self):
+        return app_config.FEATURES[self.slug]
 
 
 class Revision(Model):
