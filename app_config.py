@@ -156,7 +156,9 @@ PUBLIC_FIELDS = [
     "public_remarks",
     "url",
     "id",
-    "slug"
+    "slug",
+    "latitude",
+    "longitude"
 ]
 
 """

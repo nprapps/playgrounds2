@@ -177,7 +177,7 @@ class Playground(Model):
         fields = []
 
         for field in cls._meta.get_field_names():
-            if field in ['slug', 'entry', 'source', 'longitude', 'latitude']:
+            if field in ['slug', 'entry', 'source']:
                 continue
 
             field_dict = {}
@@ -191,7 +191,7 @@ class Playground(Model):
             # Made some changes here to support the form validation JS.
             # specifically, ID needs a special widget.
             # Everything else should be an if/elif/else instead of if/if/else.
-            if field == 'id':
+            if field in ['id', 'latitude', 'longitude']:
                 field_dict['display'] = 'style="display:none"'
                 field_dict['widget'] = '<input type="text" name="%s" value="%s" data-changed="true"></input>' % (field, field_value)
 
@@ -218,7 +218,9 @@ class Playground(Model):
                 "Owner",
                 "Remarks",
                 "Id",
-                "Slug"
+                "Slug",
+                "Latitude",
+                "Longitude"
             ]
             fields = sorted(fields, key=lambda x: order.index(x['name']))
 

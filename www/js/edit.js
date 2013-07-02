@@ -126,5 +126,7 @@ $(function() {
         $("input[name='city']").val($possible_city.val());
         $("input[name='state']").val($possible_state.val());
         $("input[name='zip_code']").val($possible_zip.val());
+        $("input[name='latitude']").val($possible_latitude.val());
+        $("input[name='longitude']").val($possible_longitude.val());
     })
 });
