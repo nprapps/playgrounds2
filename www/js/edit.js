@@ -44,13 +44,35 @@ $(function() {
     $latitude = $('input[name="latitude"]');
     $longitude = $('input[name="longitude"]');
 
-    map = L.map('edit-map').setView([38.9, -77], 7);
+    map = L.map('edit-map');
     map_layer = L.mapbox.tileLayer('geraldrich.map-h0glukvl', {
         detectRetina: true,
         retinaVersion: 'geraldrich.map-bmvyaxm2'
     }).addTo(map);
     grid_layer = L.mapbox.gridLayer('geraldrich.map-h0glukvl').addTo(map);
     map.addControl(L.mapbox.gridControl(grid_layer));
+
+    if ($latitude.val() !== '' && $longitude.val() !== '') {
+        map.setView([$latitude.val(), $longitude.val()], 12);
+
+        var address_bits = [];
+        if ($address.val()) {
+            address_bits.push($address.val());
+        }
+        if ($city.val()) {
+            address_bits.push($city.val() + ',');
+        }
+        if ($state.val()) {
+            address_bits.push($state.val());
+        }
+        if ($zip_code.val()) {
+            address_bits.push($zip_code.val());
+        }
+
+        $search_address.val(address_bits.join(' '));
+    } else {
+        map.setView([38.9, -77], 12);
+    }
 
     $search_address_button.click(function() {
         var address = $search_address.val();
