@@ -5,6 +5,13 @@ var $search_help = null;
 var $did_you_mean = null;
 var $no_geocode = null;
 var $geolocate_button = null;
+var $possible_street = null;
+var $possible_city = null;
+var $possible_state = null;
+var $possible_zip = null;
+var $possible_latitude = null;
+var $possible_longitude = null;
+var $accept_address = null;
 
 $(function() {
     $address = $('#address');
@@ -12,7 +19,15 @@ $(function() {
     $search_help = $('#search-help');
     $did_you_mean = $('#did-you-mean-edit');
     $no_geocode = $('#no-geocode');
-    $geolocate_button = $('#geolocate')
+    $geolocate_button = $('#geolocate');
+    $possible_street = $('#possible-street');
+    $possible_city = $('#possible-city');
+    $possible_state = $('#possible-state');
+    $possible_zip = $('#possible-zip');
+    $possible_latitude = $('#possible-latitude');
+    $possible_longitude = $('#possible-longitude');
+    $accept_address = $('#accept-address')
+
 
     map = L.map('edit-map').setView([38.9, -77], 7);
     map_layer = L.mapbox.tileLayer('geraldrich.map-h0glukvl', {
@@ -24,6 +39,7 @@ $(function() {
 
     $search_address.click(function() {
         var address = $address.val();
+
         if (address) {
             $search_help.hide();
             $no_geocode.hide();
@@ -48,6 +64,12 @@ $(function() {
                         var locale = locales[0];
 
                         map.setView([locale['latLng']['lat'], locale['latLng']['lng']], 12);
+                        $possible_street.val(locale['street']);
+                        $possible_city.val(locale['adminArea5']);
+                        $possible_state.val(locale['adminArea3']);
+                        $possible_zip.val(locale['postalCode']);
+                        $possible_latitude.val(locale['latLng']['lat']);
+                        $possible_longitude.val(locale['latLng']['lng']);
 
                         // $results_address.html('Showing results near ' + formatMapQuestAddress(locale));
                     } else {
@@ -63,7 +85,6 @@ $(function() {
                         });
 
                         $search_help.show();
-                        // $search_help_us.hide();
                     }
                 }
             });
@@ -72,28 +93,51 @@ $(function() {
 
     $did_you_mean.on('click', 'li', function() {
         var $this = $(this);
-        var address = $this.data('address');
+        var street = $this.data('street');
+        var city = $this.data('city');
+        var state = $this.data('state');
+        var zip = $this.data('zip');
         var latitude = $this.data('latitude');
         var longitude = $this.data('longitude');
 
         map.setView([latitude, longitude], 12);
 
-        // $search_latitude.val(latitude);
-        // $search_longitude.val(longitude);
-        // $results_address.html('Showing results near ' + address);
+        $possible_street.val(street);
+        $possible_city.val(city);
+        $possible_state.val(state);
+        $possible_zip.val(zip);
+        $possible_latitude.val(latitude);
+        $possible_longitude.val(longitude);
 
         $search_help.hide();
-        // $search_help_us.show();
     });
 
     $geolocate_button.click(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
             $search_help.hide();
+            $no_geocode.hide();
 
-            // $search_latitude.val(position.coords.latitude);
-            // $search_longitude.val(position.coords.longitude);
             map.setView([position.coords.latitude, position.coords.longitude], 12);
+
+            reverseGeocode(position.coords.latitude, position.coords.longitude, function(locale) {
+                $possible_street.val(locale['street']);
+                $possible_city.val(locale['adminArea5']);
+                $possible_state.val(locale['adminArea3']);
+                $possible_zip.val(locale['postalCode']);
+                $possible_latitude.val(locale['latLng']['lat']);
+                $possible_longitude.val(locale['latLng']['lng']);
+
+                $address.val(formatMapQuestAddress(locale));
+            })
         });
     });
 
+    $accept_address.click(function() {
+        $("input[name='address']").val($possible_street.val())
+        $("input[name='city']").val($possible_city.val());
+        $("input[name='state']").val($possible_state.val());
+        $("input[name='zip_code']").val($possible_zip.val());
+        $("input[name='latitude']").val($possible_latitude.val());
+        $("input[name='longitude']").val($possible_longitude.val());
+    })
 });

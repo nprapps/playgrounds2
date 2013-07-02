@@ -521,6 +521,31 @@ section.the-goods { margin-top: 44px; }
         &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
     }
     .update-form-modal {
+        #search-help {
+            display: none;
+        }
+
+        #no-geocode {
+            display: none;
+        }
+
+        #search-form {
+            input[type="text"],
+            textarea {
+                line-height: 44px;
+                height: 44px;
+            }
+
+            label {
+                color: #999;
+            }
+
+            textarea {
+                min-height: 200px;
+                line-height: 1.3;
+            }
+        }
+
         #edit-map {
             width: 100%;
             height: 200px;

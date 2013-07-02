@@ -34,3 +34,17 @@ function formatMapQuestAddress(locale) {
         return '';
     }
 }
+
+function reverseGeocode(latitude, longitude, callback) {
+    $.ajax({
+        'url': 'http://open.mapquestapi.com/geocoding/v1/reverse',
+        'data': { 'location': latitude + ',' + longitude },
+        'dataType': 'jsonp',
+        'contentType': 'application/json',
+        'success': function(data) {
+            var locales = data['results'][0]['locations'];
+            var locale = locales[0];
+            callback(locale);
+        }
+    });
+}
