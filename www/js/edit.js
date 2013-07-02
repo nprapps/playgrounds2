@@ -118,6 +118,17 @@ $(function() {
             $no_geocode.hide();
 
             map.setView([position.coords.latitude, position.coords.longitude], 12);
+
+            reverseGeocode(position.coords.latitude, position.coords.longitude, function(locale) {
+                $possible_street.val(locale['street']);
+                $possible_city.val(locale['adminArea5']);
+                $possible_state.val(locale['adminArea3']);
+                $possible_zip.val(locale['postalCode']);
+                $possible_latitude.val(locale['latLng']['lat']);
+                $possible_longitude.val(locale['latLng']['lng']);
+
+                $address.val(formatMapQuestAddress(locale));
+            })
         });
     });
 
