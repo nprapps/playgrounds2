@@ -1,23 +1,18 @@
 #!/usr/bin/env python
 
 import datetime
-from glob import glob
-import gzip
 import json
 import os
-import time
 
 import boto.cloudsearch
 import boto.ses
 from fabric.api import *
-from fabric.contrib.files import exists
 from jinja2 import Template
 import pytz
 import requests
 
 import app
 import app_config
-import copytext
 import data
 from etc import github
 import models
@@ -206,7 +201,7 @@ def tests():
         local('mv playgrounds.db playgrounds.db.bak')
         local('mv data/changes.json data/changes.json.bak')
 
-        local('nosetests --with-coverage --cover-html --cover-html-dir=.coverage-html --cover-package=data,public_app')
+        local('nosetests --with-coverage --cover-html --cover-html-dir=.coverage-html --cover-package=app,data,models,public_app')
 
         local('mv playgrounds.db.bak playgrounds.db')
         local('mv data/changes.json.bak data/changes.json')
