@@ -150,6 +150,17 @@ class UpdatesTestCase(unittest.TestCase):
         cookies = revision.get_cookies()
         self.assertEqual(len(cookies), 0)
 
+    def test_process_update_only_one(self):
+        utils.load_test_playgrounds()
+
+        updated_playgrounds, revision_group = data.process_changes('tests/data/test_updates_simple.json')
+
+        self.assertEqual(len(updated_playgrounds), 1)
+
+        playground = Playground.select().where(Playground.id != updated_playgrounds[0].id)[0]
+        self.assertNotEqual(playground.id, 1)
+        self.assertNotEqual(playground.name, 'NEW NAME')
+
     def test_process_updates_features(self):
         utils.load_test_playgrounds()
 
