@@ -1,19 +1,21 @@
 <div class="modal-body">
     <h2>Edit Playground</h2>
     <p class="muted">Changes will be submitted for review and posted within 24 hours.</p>
-    <div class="search-block">
-        <input type="text" id="address" placeholder="Address"/>
+
+    <form id="search-form">
+        <label class="control-label">Address</label>
+        <input type="text" id="address" />
         <button type="button"id="search-address" class="btn btn-large">
             Search
         </button>
         <button type="button" id="geolocate" class="btn btn-large">
             <i class="icon-screenshot"></i>
         </button>
-    </div>
+    </form>
+
     <div id="search-help">
         <h4>Did you mean...?</h4>
         <ul id='did-you-mean-edit'></ul>
-        <h6 class="divider">OR</h6>
     </div>
 
     <div id="no-geocode">

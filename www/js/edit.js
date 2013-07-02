@@ -24,6 +24,7 @@ $(function() {
 
     $search_address.click(function() {
         var address = $address.val();
+
         if (address) {
             $search_help.hide();
             $no_geocode.hide();
@@ -63,7 +64,6 @@ $(function() {
                         });
 
                         $search_help.show();
-                        // $search_help_us.hide();
                     }
                 }
             });
@@ -78,20 +78,14 @@ $(function() {
 
         map.setView([latitude, longitude], 12);
 
-        // $search_latitude.val(latitude);
-        // $search_longitude.val(longitude);
-        // $results_address.html('Showing results near ' + address);
-
         $search_help.hide();
-        // $search_help_us.show();
     });
 
     $geolocate_button.click(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
             $search_help.hide();
+            $no_geocode.hide();
 
-            // $search_latitude.val(position.coords.latitude);
-            // $search_longitude.val(position.coords.longitude);
             map.setView([position.coords.latitude, position.coords.longitude], 12);
         });
     });

@@ -195,14 +195,14 @@ class Playground(Model):
                 field_dict['display'] = 'style="display:none"'
                 field_dict['widget'] = '<input type="text" name="%s" value="%s" data-changed="true"></input>' % (field, field_value)
 
-            elif field == 'facility':
-                field_dict['name'] = 'At (is this in a park or school?)'
-
             elif field == 'public_remarks':
                 field_dict['widget'] = '<textarea class="input-block-level input" name="%s" rows="10">%s</textarea>' % (field, field_value)
 
             else:
                 field_dict['widget'] = '<input class="input-block-level input" type="text" name="%s" value="%s"></input>' % (field, field_value)
+
+            if field == 'facility':
+                field_dict['name'] = 'At (is this in a park or school?)'
 
             if field in app_config.PUBLIC_FIELDS:
                 fields.append(field_dict)
