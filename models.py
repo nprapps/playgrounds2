@@ -368,7 +368,7 @@ class Playground(Model):
         See below for the implementation of the SQL distance algorithm.
         """
         if not self.latitude or not self.longitude:
-            return None
+            return [] 
 
         return Playground.raw('SELECT *, distance(?, ?, latitude, longitude) as distance FROM playground WHERE distance IS NOT NULL AND id <> ? ORDER BY distance ASC LIMIT ?', self.latitude, self.longitude, self.id, n)
 
