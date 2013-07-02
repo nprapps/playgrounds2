@@ -119,7 +119,7 @@
     <li class="twitter"><a rel="external" href="http://twitter.com/share?text={{ PROJECT_NAME }}%3A+{{ playground.name }}&amp;url={{ TWITTER.URL }}playground%2F{{ playground.id }}.html" alt="Share on Twitter" target="_blank" onclick="_gaq.push(['_trackEvent', 'Social', 'Click Twitter In Navbar', '{{ PROJECT_NAME }}']);"><span>Share This On Twitter</span><b>Tweet This</b></a></li>
 </ul>
 
-
+{% if playground.nearby %}
 <!-- nearby parks -->
 <div class="nearby">
     <h4>{{ COPY.content.playground_nearby_title }}</h4>
@@ -135,7 +135,7 @@
         {% endfor %}
     </ul>
 </div>
-
+{% endif %}
 
 <div class="help-prompt">
     <p class="prompt">{{ COPY.content.playground_help_title }}</p>

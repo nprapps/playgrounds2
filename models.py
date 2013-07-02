@@ -360,15 +360,13 @@ class Playground(Model):
 
     def nearby(self, n):
         """
-        Return a list of playgrounds near this one.o
-
+        Return a list of playgrounds near this one.
         See below for the implementation of the SQL distance algorithm.
         """
         if not self.latitude or not self.longitude:
-            return []
+            return None
 
         return Playground.raw('SELECT *, distance(?, ?, latitude, longitude) as distance FROM playground WHERE distance IS NOT NULL AND id <> ? ORDER BY distance ASC LIMIT ?', self.latitude, self.longitude, self.id, n)
-
 
 @database.func()
 def distance(lat1, lng1, lat2, lng2):
