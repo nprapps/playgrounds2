@@ -79,6 +79,30 @@ class Playground(Model):
         database = database
 
     @property
+    def percent_complete(self):
+        """
+        Figure out how complete this record is.
+        Returns a dictionary with a percent string and a css class.
+        String is truncated to two decimal points.
+        """
+        total = len(self.__dict__['_data'].items())
+        completed = 0
+
+        for key, value in self.__dict__['_data'].items():
+            if value and value != '':
+                completed += 1
+
+        percent = float(float(completed)/float(total)) * 100
+        percent_string = "{0:.2f}".format(percent)
+
+        klass = 'help'
+        if percent > 70.0:
+            klass = 'okay'
+
+        return {"percent": percent_string, "class": klass}
+
+
+    @property
     def display_name(self):
         """
         Generate a display-friendly name for this playground.

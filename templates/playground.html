@@ -23,6 +23,12 @@
 {% block content %}
 
 <h1>{{ playground.display_name }}</h1>
+<h5 class="progress-bar">
+    <span class="progress-label">{{ playground.percent_complete.percent }}% complete</span>
+    <span
+        class="percent-complete {{ playground.percent_complete.class }}"
+        style="width: {{ playground.percent_complete.percent }}%;">&nbsp;</span>
+</h5>
 
 <!-- Map / Address -->
 <div class="address">
@@ -64,15 +70,14 @@
 <!-- Description -->
 <div class="about">
     <h4>About This Playground</h4>
-
     <p class="description">
     {% if playground.public_remarks %}
         {{ playground.public_remarks }}
-    {% else %} 
+    {% else %}
         Description not available.
     {% endif %}
     </p>
-    
+
     <h5 class="meta">More Info</h5>
     <ul class="meta">
         <li class="agency">
