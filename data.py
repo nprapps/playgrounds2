@@ -6,12 +6,10 @@ import gzip
 import json
 import os
 import time
-from sets import Set
 
 import boto.cloudsearch
 import boto.ses
 from csvkit import CSVKitDictReader
-from jinja2 import Template
 import requests
 from peewee import *
 import pytz
@@ -19,8 +17,6 @@ import pytz
 import app
 import app_config
 import copytext
-import data
-from etc import github
 from models import Playground, PlaygroundFeature, Revision
 
 
