@@ -55,16 +55,19 @@
 <!-- Categories / key features -->
 <div class="playground-features">
     <h4>Key Features</h4>
-    <ul>
-        <li>Ramps to play components <i class="icon icon-question-sign" data-toggle="tooltip" title="Ramps lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">About</i></li>
-        <li>Accessible swing <i class="icon icon-question-sign" data-toggle="tooltip" title="Swing lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">About</i></li>
-        <li>Smooth surface throughout <i class="icon icon-question-sign" data-toggle="tooltip" title="Surface lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">About</i></li>
+
+    {% if playground.features %}
+    <ul>{% for feature in playground.features %}
+        <li>{{ feature.cleaned.name }} <i class="icon icon-question-sign" data-toggle="tooltip" title="{{ feature.cleaned.description }}">About</i></li>{% endfor %}
     </ul>
 
+    {% else %}
     <div class="help-prompt help-prompt-features">
         <p class="prompt">{{ COPY.content.playground_help_key_features }}</p>
         <a href="#edit-playground" role="button" class="btn btn-blue btn-block btn-edit" data-toggle="modal"><i class="icon-pencil"></i> {{ COPY.content.playground_help_button }}</a>
     </div>
+    {% endif %}
+
 </div>
 
 <!-- Description -->
@@ -116,7 +119,7 @@
     <li class="twitter"><a rel="external" href="http://twitter.com/share?text={{ PROJECT_NAME }}%3A+{{ playground.name }}&amp;url={{ TWITTER.URL }}playground%2F{{ playground.id }}.html" alt="Share on Twitter" target="_blank" onclick="_gaq.push(['_trackEvent', 'Social', 'Click Twitter In Navbar', '{{ PROJECT_NAME }}']);"><span>Share This On Twitter</span><b>Tweet This</b></a></li>
 </ul>
 
-
+{% if playground.nearby %}
 <!-- nearby parks -->
 <div class="nearby">
     <h4>{{ COPY.content.playground_nearby_title }}</h4>
@@ -132,7 +135,7 @@
         {% endfor %}
     </ul>
 </div>
-
+{% endif %}
 
 <div class="help-prompt">
     <p class="prompt">{{ COPY.content.playground_help_title }}</p>
