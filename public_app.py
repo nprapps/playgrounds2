@@ -95,7 +95,10 @@ def update_playground():
 
             # Transform integers into ints when possible.
             try:
-                payload['playground'][field] = int(request.form.get(field, None))
+                payload['playground'][field] = float(request.form.get(field, None))
+        
+                if payload['playground'][field].is_integer():
+                    payload['playground'][field] = int(payload['playground'][field])
             except ValueError:
                 payload['playground'][field] = request.form.get(field, None)
             except TypeError:
@@ -162,7 +165,11 @@ def insert_playground():
         for field in playground_fields:
             # Transform integers into ints when possible.
             try:
-                payload['playground'][field] = int(request.form.get(field, None))
+                payload['playground'][field] = float(request.form.get(field, None))
+        
+                if payload['playground'][field].is_integer():
+                    payload['playground'][field] = int(payload['playground'][field])
+
             except ValueError:
                 payload['playground'][field] = request.form.get(field, None)
             except TypeError:

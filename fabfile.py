@@ -470,7 +470,7 @@ def run_update_cron():
     require('settings', provided_by=[production, staging])
     run('cd %s && source ../virtualenv/bin/activate && ../virtualenv/bin/python process_updates.py' % env.repo_path)
 
-def local_process_changes():
+def local_process_updates():
     """
     Parse any updates waiting to be processed, rerender playgrounds and send notification emails.
     """
