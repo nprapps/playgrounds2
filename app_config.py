@@ -149,7 +149,7 @@ PUBLIC_FIELDS = [
     "facility",
     "address",
     "city",
-    # "state",
+    "state",
     "zip_code",
     "agency",
     "owner",
