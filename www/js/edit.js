@@ -160,9 +160,11 @@ $(function() {
             $city.val($possible_city.val());
         }
 
-        if ($state.val() != $possible_state.val()) {
+        var state = STATE_NAME_TO_CODE[$possible_state.val()];
+
+        if ($state.val() != state) {
             $state.attr('data-changed', 'true');
-            $state.val($possible_state.val());
+            $state.val(state);
         }
 
         if ($zip_code.val() != $possible_zip_code.val()) {
