@@ -106,7 +106,7 @@ CLOUD_SEARCH_DEG_OFFSET = 180
 CLOUD_SEARCH_DEG_SCALE = 10000
 
 ADMIN_EMAILS = [
-    'jbowers@npr.org'
+    'playgrounds@npr.org'
 ]
 
 FEATURES = {
