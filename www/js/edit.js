@@ -44,6 +44,44 @@ $(function() {
     $latitude = $('input[name="latitude"]');
     $longitude = $('input[name="longitude"]');
 
+    /*
+    * We only want to submit changed formfields to the server for processing.
+    * Script marks each changed field base on blur/change.
+    * Could alert with a warning about what fields you've changed before POSTing.
+    */
+    $('#playground-form .input').blur(function(){
+        $(this).attr('data-changed', 'true');
+    });
+
+    // Fire on button click. Not on enter.
+    $('#playground-update').on('click', function(){
+
+        // Loop over the inputs inside the form.
+        $.each($('#playground-form .input'), function(index, item) {
+
+            // I removed this bit and replaced it in the form HTML.
+            // This was still submitting every item in the form, which
+            // Isn't what we want; only the stuff that's changed
+            // should have a 'name' attribute.
+
+            // if ($(item).attr('name')) {
+            //     return;
+            // }
+
+            // Check to see if this item has changed.
+            // If it has not changed, remove its name attribute
+            // so that it will not submit with the form.
+            if ($(item).attr('data-changed') != 'true') {
+                $(item).removeAttr('name');
+            }
+        });
+
+        // Submit the form.
+        $('#playground-form').submit();
+
+        return false;
+    });
+
     map = L.map('edit-map');
     map_layer = L.mapbox.tileLayer('geraldrich.map-h0glukvl', {
         detectRetina: true,
