@@ -4,13 +4,22 @@
 
     <form id="search-form">
         <label class="control-label">Address</label>
-        <input type="text" id="address" />
+        <input type="text" class="input" id="address" />
+        <input type="hidden" id="possible-street"/>
+        <input type="hidden" id="possible-city"/>
+        <input type="hidden" id="possible-state"/>
+        <input type="hidden" id="possible-zip"/>
+        <input type="hidden" id="possible-latitude"/>
+        <input type="hidden" id="possible-longitude"/>
         <button type="button"id="search-address" class="btn btn-large">
             Search
         </button>
         <button type="button" id="geolocate" class="btn btn-large">
             <i class="icon-screenshot"></i>
         </button>
+        <button type="button" id="accept-address" class="btn btn-large btn-block btn-success">
+            Accept Address
+        </button> 
     </form>
 
     <div id="search-help">
@@ -22,8 +31,10 @@
         <h4>Sorry, we couldn't locate that address.</h4>
     </div>
 
-    <div id="edit-map"><i class="icon-map-marker"></i></div>
-    <div id="edit-marker">  
+    <div id="edit-map">
+        <div id="edit-marker">
+            <i class="icon-map-marker"></i>
+        </div>
     </div>
     <form id="playground-form" class="row-fluid" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/update-playground/">
             <div class="basic-info span6">
