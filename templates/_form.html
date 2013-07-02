@@ -1,6 +1,28 @@
 <div class="modal-body">
     <h2>Edit Playground</h2>
     <p class="muted">Changes will be submitted for review and posted within 24 hours.</p>
+    <div class="search-block">
+        <input type="text" id="address" placeholder="Address"/>
+        <button type="button"id="search-address" class="btn btn-large">
+            Search
+        </button>
+        <button type="button" id="geolocate" class="btn btn-large">
+            <i class="icon-screenshot"></i>
+        </button>
+    </div>
+    <div id="search-help">
+        <h4>Did you mean...?</h4>
+        <ul id='did-you-mean-edit'></ul>
+        <h6 class="divider">OR</h6>
+    </div>
+
+    <div id="no-geocode">
+        <h4>Sorry, we couldn't locate that address.</h4>
+    </div>
+
+    <div id="edit-map"><i class="icon-map-marker"></i></div>
+    <div id="edit-marker">  
+    </div>
     <form id="playground-form" class="row-fluid" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/update-playground/">
             <div class="basic-info span6">
             {% for field in fields %}
