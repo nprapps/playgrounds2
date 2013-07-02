@@ -242,9 +242,13 @@ class Playground(Model):
             # Made some changes here to support the form validation JS.
             # specifically, ID needs a special widget.
             # Everything else should be an if/elif/else instead of if/if/else.
-            if field in ['id', 'latitude', 'longitude']:
+            if field == 'id':
                 field_dict['display'] = 'style="display:none"'
                 field_dict['widget'] = '<input type="text" name="%s" value="%s" data-changed="true"></input>' % (field, field_value)
+
+            elif field in ['latitude', 'longitude']:
+                field_dict['display'] = 'style="display:none"'
+                field_dict['widget'] = '<input type="text" name="%s" value="%s"></input>' % (field, field_value)
 
             elif field == 'public_remarks':
                 field_dict['widget'] = '<textarea class="input-block-level input" name="%s" rows="10">%s</textarea>' % (field, field_value)
@@ -364,7 +368,7 @@ class Playground(Model):
         See below for the implementation of the SQL distance algorithm.
         """
         if not self.latitude or not self.longitude:
-            return None
+            return [] 
 
         return Playground.raw('SELECT *, distance(?, ?, latitude, longitude) as distance FROM playground WHERE distance IS NOT NULL AND id <> ? ORDER BY distance ASC LIMIT ?', self.latitude, self.longitude, self.id, n)
 
@@ -462,9 +466,11 @@ class Revision(Model):
         """
         Returns a UTC tz-aware datetime object.
         """
-        timestamp = self.timestamp.replace('+00:00', '')
-        timestamp = datetime.datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S.%f')
+        # Strip timestamp to just the significant bits (no fractional secs or tz)
+        timestamp = re.match('(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})', self.timestamp).group(1)
+        timestamp = datetime.datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S')
         timestamp = timestamp.replace(tzinfo=pytz.utc)
+
         return timestamp
 
     def get_est_time_formatted(self):

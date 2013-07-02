@@ -273,7 +273,9 @@ def process_update(record):
     playground = Playground.get(id=playground_id)
 
     if (record_dict):
-        playground.update(**record_dict).execute()
+        for k, v in record_dict.items():
+            setattr(playground, k, v)
+            playground.save()
 
     # Set up the list of old features.
     # We're going to remove them all.
