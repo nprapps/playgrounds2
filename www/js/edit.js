@@ -52,6 +52,12 @@ $(function() {
     grid_layer = L.mapbox.gridLayer('geraldrich.map-h0glukvl').addTo(map);
     map.addControl(L.mapbox.gridControl(grid_layer));
 
+    $('#edit-playground').on('shown', function() {
+        var left = $('#edit-map').width()/2 - 8;
+        var top = $('#edit-map').height()/2 - 8;
+        $('#edit-marker').css({'left': left, 'top': top});
+    });
+
     if ($latitude.val() !== '' && $longitude.val() !== '') {
         map.setView([$latitude.val(), $longitude.val()], 12);
 
