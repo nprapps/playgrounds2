@@ -226,7 +226,7 @@ $(function() {
         $possible_longitude.val(locale['latLng']['lng']);
 
         $search_address.val(formatMapQuestAddress(locale));
-    }
+    };
 
     $geolocate_button.click(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -235,14 +235,14 @@ $(function() {
 
             map.setView([position.coords.latitude, position.coords.longitude], 12);
 
-            reverseGeocode(position.coords.latitude, position.coords.longitude, reverseGeocodeCallback)
+            reverseGeocode(position.coords.latitude, position.coords.longitude, reverseGeocodeCallback);
         });
     });
 
     $accept_address.click(function() {
         if ($address.val() != $possible_street.val()) {
             $address.attr('data-changed', 'true');
-            $address.val($possible_street.val())
+            $address.val($possible_street.val());
         }
 
         if ($city.val() != $possible_city.val()) {
