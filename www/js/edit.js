@@ -109,11 +109,8 @@ $(function() {
     });
 
     map = L.map('edit-map');
-    map_layer = L.mapbox.tileLayer(APP_CONFIG.MAPBOX_BASE_LAYER, {
-        detectRetina: true,
-        retinaVersion: APP_CONFIG.MAPBOX_BASE_LAYER_RETINA
-    }).addTo(map);
-    grid_layer = L.mapbox.gridLayer('geraldrich.map-h0glukvl').addTo(map);
+    map_layer = L.mapbox.tileLayer(BASE_LAYER).addTo(map);
+    grid_layer = L.mapbox.gridLayer(BASE_LAYER).addTo(map);
     map.addControl(L.mapbox.gridControl(grid_layer));
 
     $('#edit-playground').on('shown', function() {
