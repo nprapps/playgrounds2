@@ -188,12 +188,10 @@
 {% block wide_content %}{% endblock %}
 
 {% block scripts%}
-    <script type='text/javascript'>
-    </script>
+    <script type='text/javascript' src="http://api.tiles.mapbox.com/mapbox.js/v1.1.0/mapbox.js"></script>
 {% endblock %}
 
 {% block extra_foot_js %}
-    {{ JS.push('js/lib/mapbox.js') }}
     {{ JS.push('js/edit.js') }}
     {{ JS.push('js/lookup_tables.js') }}
     {{ JS.push('js/utils.js') }}
