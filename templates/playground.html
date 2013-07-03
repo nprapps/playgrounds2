@@ -189,18 +189,11 @@
 
 {% block scripts%}
     <script type='text/javascript'>
-
     </script>
 {% endblock %}
 
-{% block extra_foot %}
-<!--[if lte IE 8]>
-    <link href='../../css/mapbox.ie.css' rel='stylesheet' />
-<![endif]-->
-<script type="text/javascript" src="../../js/lib/mapbox.js"> </script>
-{% endblock extra_foot %}
-
 {% block extra_foot_js %}
+    {{ JS.push('js/lib/mapbox.js') }}
     {{ JS.push('js/edit.js') }}
     {{ JS.push('js/lookup_tables.js') }}
     {{ JS.push('js/utils.js') }}

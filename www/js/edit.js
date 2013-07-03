@@ -83,9 +83,9 @@ $(function() {
     });
 
     map = L.map('edit-map');
-    map_layer = L.mapbox.tileLayer('geraldrich.map-h0glukvl', {
+    map_layer = L.mapbox.tileLayer(APP_CONFIG.MAPBOX_BASE_LAYER, {
         detectRetina: true,
-        retinaVersion: 'geraldrich.map-bmvyaxm2'
+        retinaVersion: APP_CONFIG.MAPBOX_BASE_LAYER_RETINA
     }).addTo(map);
     grid_layer = L.mapbox.gridLayer('geraldrich.map-h0glukvl').addTo(map);
     map.addControl(L.mapbox.gridControl(grid_layer));
