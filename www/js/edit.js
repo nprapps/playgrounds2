@@ -114,6 +114,7 @@ $(function() {
     map.addControl(L.mapbox.gridControl(grid_layer));
 
     $('#edit-playground').on('shown', function() {
+        map.invalidateSize(false);
         var left = $('#edit-map').width()/2 - 8;
         var top = $('#edit-map').height()/2 - 8;
         $('#edit-marker').css({'left': left, 'top': top});
@@ -225,7 +226,7 @@ $(function() {
         $possible_longitude.val(locale['latLng']['lng']);
 
         $search_address.val(formatMapQuestAddress(locale));
-    }
+    };
 
     $geolocate_button.click(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -234,14 +235,14 @@ $(function() {
 
             map.setView([position.coords.latitude, position.coords.longitude], 12);
 
-            reverseGeocode(position.coords.latitude, position.coords.longitude, reverseGeocodeCallback)
+            reverseGeocode(position.coords.latitude, position.coords.longitude, reverseGeocodeCallback);
         });
     });
 
     $accept_address.click(function() {
         if ($address.val() != $possible_street.val()) {
             $address.attr('data-changed', 'true');
-            $address.val($possible_street.val())
+            $address.val($possible_street.val());
         }
 
         if ($city.val() != $possible_city.val()) {
