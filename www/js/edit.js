@@ -21,6 +21,24 @@ var $zip_code = null;
 var $latitude = null;
 var $longitude = null;
 
+var BASE_LAYER = APP_CONFIG.MAPBOX_BASE_LAYER;
+var CONTENT_WIDTH;
+var GEOLOCATE = Modernizr.geolocation;
+var LOCATOR_DEFAULT_ZOOM = 15;
+var RESULTS_MAP_WIDTH = 500;
+var RESULTS_MAP_HEIGHT = 500;
+var RESULTS_MAX_ZOOM = 16;
+var RESULTS_MIN_ZOOM = 8;
+var RESULTS_DEFAULT_ZOOM = 14;
+var RETINA = window.devicePixelRatio > 1;
+if (RETINA) {
+    BASE_LAYER = APP_CONFIG.MAPBOX_BASE_LAYER_RETINA;
+    LOCATOR_DEFAULT_ZOOM += 1;
+    RESULTS_DEFAULT_ZOOM += 1;
+}
+
+var is_playground = false;
+
 $(function() {
     $search_address = $('#search-address');
     $search_address_button = $('#search-address-button');
@@ -35,7 +53,7 @@ $(function() {
     $possible_zip_code = $('#possible-zip');
     $possible_latitude = $('#possible-latitude');
     $possible_longitude = $('#possible-longitude');
-    $accept_address = $('#accept-address')
+    $accept_address = $('#accept-address');
 
     $address = $('input[name="address"]');
     $city = $('input[name="city"]');
@@ -43,6 +61,10 @@ $(function() {
     $zip_code = $('input[name="zip_code"]');
     $latitude = $('input[name="latitude"]');
     $longitude = $('input[name="longitude"]');
+
+    is_playground = $('body').hasClass('playground');
+
+    console.log(is_playground);
 
     /*
     * We only want to submit changed formfields to the server for processing.
@@ -137,7 +159,7 @@ $(function() {
                         return locale['adminArea1'] == 'US';
                     });
 
-                    if (locales.length == 0) {
+                    if (locales.length === 0) {
                         $did_you_mean.append('<li>No results</li>');
 
                         $no_geocode.show();
@@ -169,7 +191,7 @@ $(function() {
                     }
                 }
             });
-        }  
+        }
     });
 
     $did_you_mean.on('click', 'li', function() {
@@ -243,7 +265,7 @@ $(function() {
             $latitude.val($possible_latitude.val());
         }
 
-        if ($longitude.val() != $possible_longitude.val()) {   
+        if ($longitude.val() != $possible_longitude.val()) {
             $longitude.attr('data-changed', 'true');
             $longitude.val($possible_longitude.val());
         }
@@ -252,5 +274,38 @@ $(function() {
     map.on('moveend', function() {
         var latlng = map.getCenter();
         reverseGeocode(latlng.lat,latlng.lng, reverseGeocodeCallback);
-    })
+    });
+
+    CONTENT_WIDTH = $('#main-content').width();
+    RESULTS_MAP_WIDTH = CONTENT_WIDTH;
+    RESULTS_MAP_HEIGHT = CONTENT_WIDTH;
+
+    if (is_playground) {
+        var $map = $('#locator-map');
+        if ($map) {
+            var lat = $map.data('latitude');
+            var lon = $map.data('longitude');
+            var new_width = CONTENT_WIDTH;
+            var new_height = Math.floor(CONTENT_WIDTH / 3);
+
+            if (RETINA) {
+                new_width = new_width * 2;
+                if (new_width > 640) {
+                    new_width = 640;
+                }
+                new_height = Math.floor(new_width / 3);
+            }
+            $map.attr('src', 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/pin-m-star+ff6633(' + lon + ',' + lat + ')/' + lon + ',' + lat + ',' + LOCATOR_DEFAULT_ZOOM + '/' + new_width + 'x' + new_height + '.png');
+        }
+
+        $('.playground-features i').tooltip( { trigger: 'click' } );
+
+        $playground_meta_hdr.html($playground_meta_hdr.html() + ' &rsaquo;');
+        $playground_meta_items.hide();
+
+        $playground_meta_hdr.on('click', function() {
+            $playground_meta_items.slideToggle('fast');
+        });
+    }
+
 });

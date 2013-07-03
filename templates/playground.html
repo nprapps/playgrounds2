@@ -37,7 +37,7 @@
 <!-- Map / Address -->
 <div class="address">
     {% if playground.latitude and playground.longitude %}
-    <img src="http://api.tiles.mapbox.com/v3/{{ MAPBOX_BASE_LAYER }}/pin-m-star+ff6633({{ playground.longitude }},{{ playground.latitude }})/{{ playground.longitude }},{{ playground.latitude }},15/300x120.png" id="locator-map" data-longitude="{{ playground.longitude }}" data-latitude="{{ playground.latitude }}" />
+    <img id="locator-map" data-longitude="{{ playground.longitude }}" data-latitude="{{ playground.latitude }}" />
     {% endif %}
     <p>
     {% if playground.address %}{{ playground.address }}<br />{% endif %}
