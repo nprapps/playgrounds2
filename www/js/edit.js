@@ -20,6 +20,8 @@ var $state = null;
 var $zip_code = null;
 var $latitude = null;
 var $longitude = null;
+var $playground_meta_hdr = null;
+var $playground_meta_items = null;
 
 var BASE_LAYER = APP_CONFIG.MAPBOX_BASE_LAYER;
 var CONTENT_WIDTH;
@@ -61,6 +63,8 @@ $(function() {
     $zip_code = $('input[name="zip_code"]');
     $latitude = $('input[name="latitude"]');
     $longitude = $('input[name="longitude"]');
+    $playground_meta_hdr = $('#main-content').find('.about').find('h5.meta');
+    $playground_meta_items = $('#main-content').find('.about').find('ul.meta');
 
     is_playground = $('body').hasClass('playground');
 
