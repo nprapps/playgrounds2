@@ -114,6 +114,7 @@ $(function() {
     map.addControl(L.mapbox.gridControl(grid_layer));
 
     $('#edit-playground').on('shown', function() {
+        map.invalidateSize(false);
         var left = $('#edit-map').width()/2 - 8;
         var top = $('#edit-map').height()/2 - 8;
         $('#edit-marker').css({'left': left, 'top': top});
