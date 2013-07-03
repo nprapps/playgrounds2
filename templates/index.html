@@ -93,6 +93,11 @@
 {% endblock %}
 
 {% block extra_foot_js %}
+    {{ JS.push('js/lib/underscore.js') }}
+    {{ JS.push('js/lib/moment.js') }}
+    {{ JS.push('js/lib/bootstrap.js') }}
+    {{ JS.push('js/templates.js') }}
     {{ JS.push('js/index.js') }}
     {{ JS.push('js/utils.js') }}
+    {{ JS.render('js/app-index-footer.min.js') }}
 {% endblock %}
