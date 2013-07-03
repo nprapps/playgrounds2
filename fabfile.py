@@ -430,6 +430,9 @@ def deploy_playgrounds():
     _gzip('.playgrounds_html', '.playgrounds_gzip')
     _deploy_to_s3('.playgrounds_gzip')
 
+    _gzip()
+    _deploy_to_s3()
+
     os.system('rm -rf .playgrounds_html')
     os.system('rm -rf .playgrounds_gzip')
 
