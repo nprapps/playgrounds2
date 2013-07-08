@@ -39,20 +39,22 @@
     {% if playground.latitude and playground.longitude %}
     <img id="locator-map" data-longitude="{{ playground.longitude }}" data-latitude="{{ playground.latitude }}" />
     {% endif %}
-    <p>
-    {% if playground.address %}{{ playground.address }}<br />{% endif %}
-    {% if playground.city %}{{ playground.city }}, {% endif %}
-    {% if playground.state %}{{ playground.state }} {% endif %}
-    {% if playground.zip_code %}{{ playground.zip_code }}{% endif %}
-    {% if playground.url %}<br /><a href="{{ playground.url }}">Website</a>{% endif %}
-    </p>
+    <div class="address-meta">
+        <p>
+        {% if playground.address %}{{ playground.address }}<br />{% endif %}
+        {% if playground.city %}{{ playground.city }}, {% endif %}
+        {% if playground.state %}{{ playground.state }} {% endif %}
+        {% if playground.zip_code %}{{ playground.zip_code }}{% endif %}
+        {% if playground.url %}<br /><a href="{{ playground.url }}">Website</a>{% endif %}
+        </p>
 
-    <!-- Directions -->
-    {% if playground.address %}
-    <p><a href="https://maps.google.com/maps?saddr=&daddr={{ playground.address }}+{{ playground.city }}+{{ playground.state }}+{{ playground.zip }}&z=16" target="_blank" class="btn btn-blue"><i class="icon-road"></i> Get Driving Directions</a></p>
-    {% elif playground.latitude and playground.longitude %}
-    <p><a href="https://maps.google.com/maps?saddr=&daddr={{ playground.latitude }},{{ playground.longitude }}&z=16" target="_blank" class="btn btn-blue">Get Driving Directions</a></p>
-    {% endif %}
+        <!-- Directions -->
+        {% if playground.address %}
+        <p><a href="https://maps.google.com/maps?saddr=&daddr={{ playground.address }}+{{ playground.city }}+{{ playground.state }}+{{ playground.zip }}&z=16" target="_blank" class="btn btn-blue"><i class="icon-road"></i> Get Driving Directions</a></p>
+        {% elif playground.latitude and playground.longitude %}
+        <p><a href="https://maps.google.com/maps?saddr=&daddr={{ playground.latitude }},{{ playground.longitude }}&z=16" target="_blank" class="btn btn-blue">Get Driving Directions</a></p>
+        {% endif %}
+    </div>
 </div>
 
 <!-- Categories / key features -->
