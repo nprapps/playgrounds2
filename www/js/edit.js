@@ -123,7 +123,7 @@ $(function() {
     });
 
     if ($latitude.val() !== '' && $longitude.val() !== '') {
-        map.setView([$latitude.val(), $longitude.val()], 12);
+        map.setView([$latitude.val(), $longitude.val()], LOCATOR_DEFAULT_ZOOM);
 
         var address_bits = [];
         if ($address.val()) {
@@ -170,7 +170,7 @@ $(function() {
                     } else if (locales.length == 1) {
                         var locale = locales[0];
 
-                        map.setView([locale['latLng']['lat'], locale['latLng']['lng']], 12);
+                        map.setView([locale['latLng']['lat'], locale['latLng']['lng']], LOCATOR_DEFAULT_ZOOM);
                         $possible_street.val(locale['street']);
                         $possible_city.val(locale['adminArea5']);
                         $possible_state.val(locale['adminArea3']);
@@ -207,7 +207,7 @@ $(function() {
         var latitude = $this.data('latitude');
         var longitude = $this.data('longitude');
 
-        map.setView([latitude, longitude], 12);
+        map.setView([latitude, longitude], LOCATOR_DEFAULT_ZOOM);
 
         $possible_street.val(street);
         $possible_city.val(city);
@@ -235,7 +235,7 @@ $(function() {
             $search_help.hide();
             $no_geocode.hide();
 
-            map.setView([position.coords.latitude, position.coords.longitude], 12);
+            map.setView([position.coords.latitude, position.coords.longitude], LOCATOR_DEFAULT_ZOOM);
 
             reverseGeocode(position.coords.latitude, position.coords.longitude, reverseGeocodeCallback);
         });
