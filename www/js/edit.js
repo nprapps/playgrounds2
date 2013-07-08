@@ -108,7 +108,9 @@ $(function() {
         return false;
     });
 
-    map = L.map('edit-map');
+    map = L.map('edit-map', {
+        scrollWheelZoom: false
+    });
     map_layer = L.mapbox.tileLayer(BASE_LAYER).addTo(map);
     grid_layer = L.mapbox.gridLayer(BASE_LAYER).addTo(map);
     map.addControl(L.mapbox.gridControl(grid_layer));
