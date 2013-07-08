@@ -115,7 +115,7 @@ class Playground(Model):
         # Get the floating point percentage. *Gak*
         # Also make a fancy string.
         percent = float(float(completed)/float(total)) * 100
-        percent_string = "{0:.2f}".format(percent)
+        percent_string = "{0:.0f}".format(percent)
 
         # Get us a css class. If we're above 70%, we're good. Otherwise, we need help.
         klass = 'help'
