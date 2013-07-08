@@ -17,7 +17,7 @@
     <div class="container">
         <div class="row">
             <div class="span12">
-                <h1><a href="../../">{{ PROJECT_NAME }}</a></h1>
+                <h1><a href="../">{{ PROJECT_NAME }}</a></h1>
             </div>
         </div>
     </div>
@@ -25,6 +25,12 @@
 {% endblock %}
 
 {% block content %}
+
+<div id="edit-alert" class="alert alert-success alert-block hide">
+    <a href="#" class="close" data-dismiss="alert">&times;</a>
+    <h4>Thanks!</h4>
+    Your changes have been submitted for review.
+</div>
 
 <h1>{{ playground.display_name }}</h1>
 <h5 class="progress-bar">
