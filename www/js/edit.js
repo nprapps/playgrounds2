@@ -23,6 +23,8 @@ var $longitude = null;
 var $playground_meta_hdr = null;
 var $playground_meta_items = null;
 
+var $edit_alert = null;
+
 var BASE_LAYER = APP_CONFIG.MAPBOX_BASE_LAYER;
 var CONTENT_WIDTH;
 var GEOLOCATE = Modernizr.geolocation;
@@ -40,6 +42,13 @@ if (RETINA) {
 }
 
 var is_playground = false;
+
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 
 $(function() {
     $search_address = $('#search-address');
@@ -66,9 +75,17 @@ $(function() {
     $playground_meta_hdr = $('#main-content').find('.about').find('h5.meta');
     $playground_meta_items = $('#main-content').find('.about').find('ul.meta');
 
+    $edit_alert = $('#edit-alert');
+
     is_playground = $('body').hasClass('playground');
 
     console.log(is_playground);
+
+    // Show the success alert if document location has the correct query string flag
+
+    if (getParameterByName('action') === 'editing_thanks'){
+        $edit_alert.toggleClass('hide');
+    }
 
     /*
     * We only want to submit changed formfields to the server for processing.
