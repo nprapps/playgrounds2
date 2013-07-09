@@ -713,6 +713,168 @@ section#the-goods { margin-top: 44px; }
             }
         }
     }
+
+    .create-form {
+        #search-help {
+            display: none;
+        }
+
+        #no-geocode {
+            display: none;
+        }
+
+        #search-form {
+            input[type="text"],
+            textarea {
+                line-height: 44px;
+                height: 44px;
+            }
+
+            label {
+                color: #999;
+            }
+
+            textarea {
+                min-height: 200px;
+                line-height: 1.3;
+            }
+        }
+
+        #edit-map {
+            width: 100%;
+            height: 200px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        #edit-marker {
+            position: absolute;
+            z-index: 9999;
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+            font-size: 24px;
+            text-align: center;
+            color: #ff6633;
+        }
+
+        ol {
+            list-style: none;
+            margin: 0;
+        }
+        .close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 10;
+            color: #fff;
+            background: #666;
+            width: 44px;
+            height: 44px;
+            line-height: 44px;
+            text-align: center;
+            font-weight: normal;
+            font-size: 24px;
+            vertical-align: middle;
+        }
+
+        .checkbox {
+            line-height: 1;
+        }
+
+        .basic-info {
+            input[type="text"],
+            textarea {
+                line-height: 44px;
+                height: 44px;
+            }
+
+            label {
+                color: #999;
+            }
+
+            textarea {
+                min-height: 200px;
+                line-height: 1.3;
+            }
+        }
+
+        .features {
+            .feature {
+                position: relative;
+                padding-bottom: 10px;
+                min-height: 44px;
+
+                input[type="checkbox"] {
+                    opacity: 0;
+                    position: absolute;
+                    left: -2px;
+                    top: -2px;
+                    width: 35px;
+                    height: 35px;
+                    z-index: 10;
+                }
+
+
+                .checkbox {
+                    padding-left: 40px;
+                    cursor: default;
+                    &:before {
+                        content: ' ';
+                        display: block;
+                        position: absolute;
+                        left:0;
+                        top: 0;
+                        z-index: 1;
+                        border: 2px solid lighten(@deepBlue, 20%);
+                        width: 30px;
+                        height: 30px;
+
+                        .lt-ie9 & {
+                            display: none;
+                        }
+                    }
+                }
+
+                input[type="checkbox"]:checked ~ .checkbox {
+                    &:before {
+                        background: lighten(@deepBlue, 5%);
+                        box-shadow: inset 0 0 0 1px #fff;
+                        .icon-FontAwesome();
+                        content: @ok;
+                        color: #fff;
+                        font-size: 30px;
+                        line-height: 30px;
+                    }
+                }
+            }
+        }
+
+        @media @screen-tiny {
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            border-radius: 0;
+
+            &.fade.in {
+                top: 0;
+            }
+            .modal-body {
+                box-sizing: border-box;
+                padding-bottom: 100px;
+            }
+
+            .modal-footer {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+            }
+        }
+        
+    }
+
     .modal-body { -webkit-overflow-scrolling:touch; }
 }
 
