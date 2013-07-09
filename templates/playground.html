@@ -54,7 +54,7 @@
     {% endif %}
     <div class="address-meta">
         <p>
-        {% if playground.address %}{{ playground.address }}{% if playground.address_approximate %}(approximate){% endif %}<br />{% endif %}
+        {% if playground.address %}{{ playground.address }}{% if playground.address_approximate %} (approximate){% endif %}<br />{% endif %}
         {% if playground.city %}{{ playground.city }}, {% endif %}
         {% if playground.state %}{{ playground.state }} {% endif %}
         {% if playground.zip_code %}{{ playground.zip_code }}{% endif %}
@@ -62,7 +62,7 @@
         </p>
 
         <!-- Directions -->
-        {% if playground.latitude and playground.longitude %}
+        {% if playground.address_approximate and playground.latitude and playground.longitude %}
         <p><a href="https://maps.google.com/maps?saddr=&daddr={{ playground.latitude }},{{ playground.longitude }}&z=16" target="_blank" class="btn btn-blue">Get Driving Directions</a></p>
         {% elif playground.address %}
         <p><a href="https://maps.google.com/maps?saddr=&daddr={{ playground.address }}+{{ playground.city }}+{{ playground.state }}+{{ playground.zip }}&z=16" target="_blank" class="btn btn-blue"><i class="icon-road"></i> Get Driving Directions</a></p>
