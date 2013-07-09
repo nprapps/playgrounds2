@@ -28,7 +28,7 @@
     <p class="muted">{{ COPY.content.create_description }}</p>
     <p class="muted bulk-email">{{ COPY.content.create_description_email }}</p>
 
-    <div id="address-editor" class="hide">
+    <div id="address-editor">
 
         <div id="edit-map">
             <div id="edit-marker" class="icon-screenshot"></div>
@@ -86,6 +86,8 @@
             {% endfor %}
             </div>
     </form>
+    <button type="button" class="btn btn-large" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <button id="playground-update" class="btn btn-large btn-success">Save</button>
 </div>
 {% endblock %}
 
