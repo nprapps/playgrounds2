@@ -1,4 +1,6 @@
 var $edit_map = null;
+var $address_editor = null;
+var $address_placeholder = null;
 var $search_address = null;
 var $search_address_button = null;
 var $search_help = null;
@@ -44,14 +46,23 @@ if (RETINA) {
 
 var is_playground = false;
 
-function getParameterByName(name) {
+function get_parameter_by_name(name) {
     name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
         results = regex.exec(location.search);
     return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
+function center_editor_map(){
+    map.invalidateSize(false);
+    var marker_left = $('#edit-map').width()/2 - 8;
+    var marker_top = $('#edit-map').height()/2 - 8;
+    $('#edit-marker').css({'left': marker_left, 'top': marker_top});
+}
+
 $(function() {
+    $address_editor = $('#address-editor');
+    $address_placeholder = $('#address-placeholder');
     $search_address = $('#search-address');
     $search_address_button = $('#search-address-button');
     $search_help = $('#search-help');
@@ -83,10 +94,15 @@ $(function() {
     console.log(is_playground);
 
     // Show the success alert if document location has the correct query string flag
-
-    if (getParameterByName('action') === 'editing_thanks'){
+    if (get_parameter_by_name('action') === 'editing_thanks'){
         $edit_alert.toggleClass('hide');
     }
+
+    // Toggle the address edit interface 
+    $('#edit-address-button, #cancel-address').on('click', function(){
+        $('#address-editor, #address-placeholder').toggleClass('hide');
+        center_editor_map();
+    });
 
     /*
     * We only want to submit changed formfields to the server for processing.
@@ -133,11 +149,8 @@ $(function() {
     grid_layer = L.mapbox.gridLayer(BASE_LAYER).addTo(map);
     map.addControl(L.mapbox.gridControl(grid_layer));
 
-    $('#edit-playground').on('shown', function() {
-        map.invalidateSize(false);
-        var left = $('#edit-map').width()/2 - 8;
-        var top = $('#edit-map').height()/2 - 8;
-        $('#edit-marker').css({'left': left, 'top': top});
+    $('#address-editor').on('shown', function() {
+        centerEditorMap();
     });
 
     if ($latitude.val() !== '' && $longitude.val() !== '') {
@@ -260,6 +273,8 @@ $(function() {
     });
 
     $accept_address.click(function() {
+        var placeholder_text = '';
+
         if ($address.val() != $possible_street.val()) {
             $address.attr('data-changed', 'true');
             $address.val($possible_street.val());
@@ -291,6 +306,12 @@ $(function() {
             $longitude.attr('data-changed', 'true');
             $longitude.val($possible_longitude.val());
         }
+
+        placeholder_text = $address.val() + '<br>' + $city.val() + ', ' + $state.val();
+
+        resize_locator_map($longitude.val(), $latitude.val());
+        $('#address-placeholder p').html(placeholder_text);
+        $('#address-editor, #address-placeholder').toggleClass('hide');
     });
 
     map.on('moveend', function() {
@@ -320,14 +341,15 @@ $(function() {
 
     }
 
-    function resize_locator_map() {
+    function resize_locator_map(longitude, latitude) {
         console.log('resize_locator_map');
         CONTENT_WIDTH = $('#main-content').width();
         PAGE_WIDTH = $('body').outerWidth();
-        
+
         var $map = $('#locator-map');
-        var lat = $map.data('latitude');
-        var lon = $map.data('longitude');
+        var $modal_map = $('#modal-locator-map');
+        var lat = latitude||$map.data('latitude');
+        var lon = longitude||$map.data('longitude');
         var map_path;
         var new_height;
         var new_width = CONTENT_WIDTH;
@@ -344,8 +366,9 @@ $(function() {
             }
             new_height = Math.floor(new_width / 3);
         }
-        
+
         map_path = 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/pin-m-star+ff6633(' + lon + ',' + lat + ')/' + lon + ',' + lat + ',' + LOCATOR_DEFAULT_ZOOM + '/' + new_width + 'x' + new_height + '.png';
         $map.attr('src', map_path);
+        $modal_map.attr('src', map_path);
     }
 });
