@@ -102,6 +102,14 @@ def index():
 
     return render_template('index.html', **context)
 
+@app.route('/create.html')
+def playground_create():
+    context = make_context()
+    context['fields'] = Playground.form()
+    context['features'] = Playground.features_form()
+
+    return render_template('create.html', **context)
+
 @app.route('/sitemap.xml')
 def sitemap():
     """
@@ -135,14 +143,6 @@ def _playground(playground_slug):
     context['display_field_name'] = display_field_name
 
     return render_template('playground.html', **context)
-
-@app.route('/playground/create.html')
-def playground_create():
-    context = make_context()
-    context['fields'] = Playground.form()
-    context['features'] = Playground.features_form()
-
-    return render_template('create.html', **context)
 
 @app.route('/cloudsearch/<path:path>')
 def _cloudsearch_proxy(path):
