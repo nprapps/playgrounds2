@@ -243,6 +243,7 @@ $(function() {
     map_layer = L.mapbox.tileLayer(BASE_LAYER).addTo(map);
     grid_layer = L.mapbox.gridLayer(BASE_LAYER).addTo(map);
     map.addControl(L.mapbox.gridControl(grid_layer));
+    center_editor_map();
 
     $('#address-editor').on('shown', function() {
         centerEditorMap();
