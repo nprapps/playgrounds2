@@ -89,9 +89,9 @@ $(function() {
 
     $edit_alert = $('#edit-alert');
 
-    is_playground = $('body').hasClass('playground');
+    $approximate = $('input[name="address_approximate"]');
 
-    console.log(is_playground);
+    is_playground = $('body').hasClass('playground');
 
     // Show the success alert if document location has the correct query string flag
     if (get_parameter_by_name('action') === 'editing_thanks'){
@@ -278,6 +278,8 @@ $(function() {
         if ($address.val() != $possible_street.val()) {
             $address.attr('data-changed', 'true');
             $address.val($possible_street.val());
+            $approximate.attr('checked', 'checked');
+            $approximate.attr('data-changed', 'true');
         }
 
         if ($city.val() != $possible_city.val()) {
@@ -342,7 +344,6 @@ $(function() {
     }
 
     function resize_locator_map(longitude, latitude) {
-        console.log('resize_locator_map');
         CONTENT_WIDTH = $('#main-content').width();
         PAGE_WIDTH = $('body').outerWidth();
 

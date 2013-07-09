@@ -44,6 +44,13 @@ function reverseGeocode(latitude, longitude, callback) {
         'success': function(data) {
             var locales = data['results'][0]['locations'];
             var locale = locales[0];
+            var zip_list = []
+
+            if (locale['adminArea4'] == 'District of Columbia')  {
+                locale['adminArea5'] = 'Washington';
+                locale['adminArea3'] = 'District of Columbia';
+            }
+
             callback(locale);
         }
     });

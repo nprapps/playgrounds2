@@ -72,6 +72,8 @@ class Playground(Model):
 
     active = BooleanField(default=True)
 
+    address_approximate = BooleanField(verbose_name='Address Approximate', default=False)
+
     class Meta:
         database = database
 
@@ -256,6 +258,10 @@ class Playground(Model):
             if field == 'facility':
                 field_dict['name'] = 'At (is this in a park or school?)'
 
+            if field == 'address_approximate':
+                field_dict['display'] = 'style="display:none"'
+                field_dict['widget'] = '<input type="checkbox" name="%s"></input>' % (field)
+
             if field in app_config.PUBLIC_FIELDS:
                 fields.append(field_dict)
 
@@ -271,12 +277,14 @@ class Playground(Model):
                 "Owner",
                 "Remarks",
                 "Id",
+                "Address Approximate",
                 "Slug",
                 "Latitude",
                 "Longitude"
             ]
-            fields = sorted(fields, key=lambda x: order.index(x['name']))
 
+            fields = sorted(fields, key=lambda x: order.index(x['name']))
+            
         return fields
 
     def update_form(self):
