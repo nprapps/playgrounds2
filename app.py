@@ -136,8 +136,8 @@ def _playground(playground_slug):
 
     return render_template('playground.html', **context)
 
-@app.route('/playground/create/')
-def _playground_create():
+@app.route('/playground/create.html')
+def playground_create():
     context = make_context()
     context['fields'] = Playground.form()
     context['features'] = Playground.features_form()
