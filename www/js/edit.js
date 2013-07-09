@@ -306,7 +306,7 @@ $(function() {
     if (is_playground) {
         if ($('#locator-map')) {
             resize_locator_map();
-//            $(window).resize(resize_locator_map);
+            $(window).resize(_.debounce(resize_locator_map,100));
         }
 
         $('.playground-features i').tooltip( { trigger: 'click' } );
@@ -321,6 +321,7 @@ $(function() {
     }
 
     function resize_locator_map() {
+        console.log('resize_locator_map');
         CONTENT_WIDTH = $('#main-content').width();
         PAGE_WIDTH = $('body').outerWidth();
         
