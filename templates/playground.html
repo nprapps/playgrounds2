@@ -54,7 +54,7 @@
     {% endif %}
     <div class="address-meta">
         <p>
-        {% if playground.address %}{{ playground.address }}<br />{% endif %}
+        {% if playground.address %}{{ playground.address }}{% if playground.address_approximate %}(approximate){% endif %}<br />{% endif %}
         {% if playground.city %}{{ playground.city }}, {% endif %}
         {% if playground.state %}{{ playground.state }} {% endif %}
         {% if playground.zip_code %}{{ playground.zip_code }}{% endif %}
