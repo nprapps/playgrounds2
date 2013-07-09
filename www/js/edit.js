@@ -80,8 +80,6 @@ $(function() {
 
     is_playground = $('body').hasClass('playground');
 
-    console.log(is_playground);
-
     // Show the success alert if document location has the correct query string flag
 
     if (getParameterByName('action') === 'editing_thanks'){
@@ -321,7 +319,6 @@ $(function() {
     }
 
     function resize_locator_map() {
-        console.log('resize_locator_map');
         CONTENT_WIDTH = $('#main-content').width();
         PAGE_WIDTH = $('body').outerWidth();
         
