@@ -96,7 +96,7 @@ def update_playground():
             # Transform integers into ints when possible.
             try:
                 payload['playground'][field] = float(request.form.get(field, None))
-        
+
                 if payload['playground'][field].is_integer():
                     payload['playground'][field] = int(payload['playground'][field])
             except ValueError:
@@ -133,7 +133,8 @@ def update_playground():
         # Write to the changes.json file.
         write_data(payload)
 
-        return redirect('%s/playground/%s.html?action=editing_thanks' % (app_config.S3_BASE_URL, playground.slug))
+        return json.dumps(payload)
+        # return redirect('%s/playground/%s.html?action=editing_thanks' % (app_config.S3_BASE_URL, playground.slug))
 
 @app.route('/%s/insert-playground/' % app_config.PROJECT_SLUG, methods=['POST'])
 def insert_playground():
@@ -166,7 +167,7 @@ def insert_playground():
             # Transform integers into ints when possible.
             try:
                 payload['playground'][field] = float(request.form.get(field, None))
-        
+
                 if payload['playground'][field].is_integer():
                     payload['playground'][field] = int(payload['playground'][field])
 
