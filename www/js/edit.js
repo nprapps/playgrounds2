@@ -130,8 +130,10 @@ $(function() {
     }
 
     // Toggle the address edit interface 
-    $('#edit-address-button, #cancel-address').on('click', function(){
+    $('#toggle-address-button').on('click', function(){
         $('#address-editor, #address-placeholder').toggleClass('hide');
+        var button_text = $(this).text() === 'Edit' ? 'Cancel' : 'Edit';
+        $(this).text(button_text);
         center_editor_map();
     });
 
