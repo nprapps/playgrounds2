@@ -2,6 +2,14 @@
 
 {% block body_class %}playground{% endblock body_class %}
 
+{% block extra_css %}
+    {{ CSS.push('css/mapbox.css') }}
+{% endblock %}
+
+{% block extra_head %}
+    <script type='text/javascript' src="http://api.tiles.mapbox.com/mapbox.js/v1.1.0/mapbox.js"></script>
+{% endblock %}
+
 {% block header_content %}
 <header>
     <div class="container">
@@ -15,9 +23,10 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ COPY.content.create_title }}</h1>
-    <p>{{ COPY.content.create_description }}</p>
-    <p class="bulk-email">{{ COPY.content.create_description_email }}</p>
+<div class="create-form">
+    <h2>{{ COPY.content.create_title }}</h2>
+    <p class="muted">{{ COPY.content.create_description }}</p>
+    <p class="muted bulk-email">{{ COPY.content.create_description_email }}</p>
 
     <div id="address-editor" class="hide">
 
@@ -77,7 +86,7 @@
             {% endfor %}
             </div>
     </form>
-
+</div>
 {% endblock %}
 
 {% block extra_foot_js %}
