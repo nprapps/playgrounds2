@@ -1,6 +1,7 @@
 var $edit_map = null;
 var $locator_map = null;
 var $modal_map = null;
+var $toggle_address_button = null;
 var $address_editor = null;
 var $address_placeholder = null;
 var $search_address = null;
@@ -89,9 +90,18 @@ function resize_locator_map() {
     $modal_map.attr('src', map_path);
 }
 
+function toggle_address_button(){
+    $('#address-editor, #address-placeholder').toggleClass('hide');
+    $toggle_address_button.toggleClass('btn-success');
+    var button_text = $toggle_address_button.text() === 'Edit' ? 'Cancel' : 'Edit';
+    $toggle_address_button.text(button_text);
+    center_editor_map();
+}
+
 $(function() {
     $locator_map = $('#locator-map');
     $modal_map = $('#modal-locator-map');
+    $toggle_address_button = $('#toggle-address-button');
     $address_editor = $('#address-editor');
     $address_placeholder = $('#address-placeholder');
     $search_address = $('#search-address');
@@ -130,11 +140,8 @@ $(function() {
     }
 
     // Toggle the address edit interface 
-    $('#toggle-address-button').on('click', function(){
-        $('#address-editor, #address-placeholder').toggleClass('hide');
-        var button_text = $(this).text() === 'Edit' ? 'Cancel' : 'Edit';
-        $(this).text(button_text);
-        center_editor_map();
+    $toggle_address_button.on('click', function(){
+        toggle_address_button();
     });
 
     /*
@@ -349,7 +356,7 @@ $(function() {
 
         resize_locator_map();
         $('#address-placeholder p').html(placeholder_text);
-        $('#address-editor, #address-placeholder').toggleClass('hide');
+        toggle_address_button();
     });
 
     map.on('moveend', function() {
