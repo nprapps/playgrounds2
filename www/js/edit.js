@@ -98,6 +98,60 @@ function toggle_address_button(){
     center_editor_map();
 }
 
+function search_address(){
+    var address = $search_address.val();
+
+    if (address) {
+        $search_help.hide();
+        $no_geocode.hide();
+
+        $.ajax({
+            'url': 'http://open.mapquestapi.com/geocoding/v1/address',
+            'data': { 'location': address },
+            'dataType': 'jsonp',
+            'contentType': 'application/json',
+            'success': function(data) {
+                var locales = data['results'][0]['locations'];
+
+                locales = _.filter(locales, function(locale) {
+                    return locale['adminArea1'] == 'US';
+                });
+
+                if (locales.length === 0) {
+                    $did_you_mean.append('<li>No results</li>');
+
+                    $no_geocode.show();
+                } else if (locales.length == 1) {
+                    var locale = locales[0];
+
+                    map.setView([locale['latLng']['lat'], locale['latLng']['lng']], LOCATOR_DEFAULT_ZOOM);
+                    $possible_street.val(locale['street']);
+                    $possible_city.val(locale['adminArea5']);
+                    $possible_state.val(locale['adminArea3']);
+                    $possible_zip_code.val(locale['postalCode']);
+                    $possible_latitude.val(locale['latLng']['lat']);
+                    $possible_longitude.val(locale['latLng']['lng']);
+
+                    // $results_address.html('Showing results near ' + formatMapQuestAddress(locale));
+                } else {
+                    $did_you_mean.empty();
+
+                    _.each(locales, function(locale) {
+                        var context = $.extend(APP_CONFIG, locale);
+                        context['address'] = formatMapQuestAddress(locale);
+
+                        var html = JST.did_you_mean_item(context);
+
+                        $did_you_mean.append(html);
+                    });
+
+                    $search_help.show();
+                }
+            }
+        });
+    }
+}
+
 $(function() {
     $locator_map = $('#locator-map');
     $modal_map = $('#modal-locator-map');
@@ -217,57 +271,16 @@ $(function() {
     }
 
     $search_address_button.click(function() {
-        var address = $search_address.val();
+        search_address();
+    });
 
-        if (address) {
-            $search_help.hide();
-            $no_geocode.hide();
-
-            $.ajax({
-                'url': 'http://open.mapquestapi.com/geocoding/v1/address',
-                'data': { 'location': address },
-                'dataType': 'jsonp',
-                'contentType': 'application/json',
-                'success': function(data) {
-                    var locales = data['results'][0]['locations'];
-
-                    locales = _.filter(locales, function(locale) {
-                        return locale['adminArea1'] == 'US';
-                    });
-
-                    if (locales.length === 0) {
-                        $did_you_mean.append('<li>No results</li>');
-
-                        $no_geocode.show();
-                    } else if (locales.length == 1) {
-                        var locale = locales[0];
-
-                        map.setView([locale['latLng']['lat'], locale['latLng']['lng']], LOCATOR_DEFAULT_ZOOM);
-                        $possible_street.val(locale['street']);
-                        $possible_city.val(locale['adminArea5']);
-                        $possible_state.val(locale['adminArea3']);
-                        $possible_zip_code.val(locale['postalCode']);
-                        $possible_latitude.val(locale['latLng']['lat']);
-                        $possible_longitude.val(locale['latLng']['lng']);
-
-                        // $results_address.html('Showing results near ' + formatMapQuestAddress(locale));
-                    } else {
-                        $did_you_mean.empty();
-
-                        _.each(locales, function(locale) {
-                            var context = $.extend(APP_CONFIG, locale);
-                            context['address'] = formatMapQuestAddress(locale);
-
-                            var html = JST.did_you_mean_item(context);
-
-                            $did_you_mean.append(html);
-                        });
-
-                        $search_help.show();
-                    }
-                }
-            });
-        }
+    $('#search-form').bind("keyup", function(e) {
+      var code = e.keyCode || e.which;
+      if (code  == 13) {
+        search_address();
+        e.preventDefault();
+        return false;
+      }
     });
 
     $did_you_mean.on('click', 'li', function() {
@@ -311,6 +324,10 @@ $(function() {
 
             reverseGeocode(position.coords.latitude, position.coords.longitude, reverseGeocodeCallback);
         });
+    });
+
+    $('#search-form').submit(function() {
+      return false;
     });
 
     $accept_address.click(function() {
