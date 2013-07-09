@@ -127,6 +127,7 @@ $(function() {
     });
 
     map = L.map('edit-map', {
+        minZoom: 11,
         scrollWheelZoom: false
     });
     map_layer = L.mapbox.tileLayer(BASE_LAYER).addTo(map);
