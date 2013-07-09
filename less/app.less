@@ -9,7 +9,9 @@
 
 // Breakpoints
 @screen-medium: ~"screen and (max-width: 979px)";
+@screen-small-above: ~"screen and (min-width: 768px)";
 @screen-small: ~"screen and (max-width: 767px)";
+@screen-tiny-above: ~"screen and (min-width: 481px)";
 @screen-tiny: ~"screen and (max-width: 480px)";
 
 
@@ -135,7 +137,7 @@ header {
 
 
 // Content
-section.the-goods { margin-top: 44px; }
+section#the-goods { margin-top: 44px; }
 
 .alert {
     // font-size: 14px;
@@ -447,6 +449,25 @@ section.the-goods { margin-top: 44px; }
     .social {
         margin-bottom: 33px;
     }
+    .address {
+        #locator-map {
+            display: block;
+            margin-bottom: 11px;
+        }
+        
+        @media @screen-tiny-above {
+            #locator-map {
+                display: block;
+                float: left;
+                margin-right: 22px;
+                margin-bottom: 0;
+            }
+            .address-meta {
+                float: left;
+            }
+            &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
+        }
+    }
     .changelog {
         border-top: 1px solid #eee;
         padding-top: 22px;
@@ -484,10 +505,6 @@ section.the-goods { margin-top: 44px; }
             font-size: 12px;
             color: #777;
         }
-    }
-    #locator-map {
-        display: block;
-        margin-bottom: 11px;
     }
     .playground-features {
         ul li {
