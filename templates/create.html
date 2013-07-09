@@ -19,7 +19,27 @@
     <p>{{ COPY.content.create_description }}</p>
     <p class="bulk-email">{{ COPY.content.create_description_email }}</p>
 
-    {% include "_form.html" %}
+    <form id="playground-form" class="row-fluid" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/update-playground/">
+            <div class="basic-info span6">
+            {% for field in fields %}
+                <div class="control-group"{% if field.display %} {{ field.display|safe }}{% endif %}>
+                    <label class="control-label">{{ field.name }}</label>
+                    <div class="controls">
+                        {{ field.widget|safe }}
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+            <div class="features span6">
+            <h4>Features</h4>
+            {% for feature in features %}
+                <div class="feature">
+                    {{ feature|safe }}
+                </div>
+            {% endfor %}
+            </div>
+    </form>
+
 {% endblock %}
 
 {% block extra_foot_js %}
