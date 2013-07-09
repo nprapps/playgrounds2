@@ -118,6 +118,11 @@ def update_playground():
         except KeyError:
             pass
 
+        try:
+            payload['playground']['address_approximate'] = True
+        except KeyError:
+            pass
+
         # Set up a list for features.
         payload['playground']['features'] = []
 
@@ -133,8 +138,8 @@ def update_playground():
         # Write to the changes.json file.
         write_data(payload)
 
-        return json.dumps(payload)
-        # return redirect('%s/playground/%s.html?action=editing_thanks' % (app_config.S3_BASE_URL, playground.slug))
+        # return json.dumps(payload)
+        return redirect('%s/playground/%s.html?action=editing_thanks' % (app_config.S3_BASE_URL, playground.slug))
 
 @app.route('/%s/insert-playground/' % app_config.PROJECT_SLUG, methods=['POST'])
 def insert_playground():

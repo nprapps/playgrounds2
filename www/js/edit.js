@@ -78,6 +78,8 @@ $(function() {
 
     $edit_alert = $('#edit-alert');
 
+    $approximate = $('input[name="address_approximate"]');
+
     is_playground = $('body').hasClass('playground');
 
     // Show the success alert if document location has the correct query string flag
@@ -261,6 +263,8 @@ $(function() {
         if ($address.val() != $possible_street.val()) {
             $address.attr('data-changed', 'true');
             $address.val($possible_street.val());
+            $approximate.attr('checked', 'checked');
+            $approximate.attr('data-changed', 'true');
         }
 
         if ($city.val() != $possible_city.val()) {
