@@ -245,7 +245,7 @@ class Playground(Model):
                 field_dict['display'] = 'style="display:none"'
                 field_dict['widget'] = '<input type="text" name="%s" value="%s" data-changed="true"></input>' % (field, field_value)
 
-            elif field in ['latitude', 'longitude']:
+            elif field in ['latitude', 'longitude', 'address', 'city', 'state', 'zip_code']:
                 field_dict['display'] = 'style="display:none"'
                 field_dict['widget'] = '<input type="text" name="%s" value="%s"></input>' % (field, field_value)
 
