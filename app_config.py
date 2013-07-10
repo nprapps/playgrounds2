@@ -157,7 +157,7 @@ PUBLIC_FIELDS = [
     "public_remarks",
     "url",
     "id",
-    "address_approximate",
+    "reverse_geocoded",
     "slug",
     "latitude",
     "longitude"
