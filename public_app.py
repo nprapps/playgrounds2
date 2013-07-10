@@ -119,7 +119,7 @@ def update_playground():
             pass
 
         try:
-            payload['playground']['address_approximate'] = True
+            payload['playground']['reverse_geocoded'] = True
         except KeyError:
             pass
 

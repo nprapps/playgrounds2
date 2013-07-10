@@ -47,6 +47,8 @@ if (RETINA) {
     RESULTS_DEFAULT_ZOOM += 1;
 }
 
+var REVERSE_GEOCODE = false;
+
 var is_playground = false;
 
 function get_parameter_by_name(name) {
@@ -181,10 +183,11 @@ $(function() {
     $longitude = $('input[name="longitude"]');
     $playground_meta_hdr = $('#main-content').find('.about').find('h5.meta');
     $playground_meta_items = $('#main-content').find('.about').find('ul.meta');
-
+    $reverse = $('input[name="reverse_geocoded"]');
     $edit_alert = $('#edit-alert');
 
-    $approximate = $('input[name="address_approximate"]');
+    $geocode_button = $('#path-geocode');
+    $reverse_geocode_button = $('#path-reverse-geocode');
 
     is_playground = $('body').hasClass('playground');
 
@@ -193,7 +196,7 @@ $(function() {
         $edit_alert.toggleClass('hide');
     }
 
-    // Toggle the address edit interface 
+    // Toggle the address edit interface
     $toggle_address_button.on('click', function(){
         toggle_address_button();
     });
@@ -305,6 +308,11 @@ $(function() {
         $search_help.hide();
     });
 
+    var geocodeCallback = function(locale) {
+        $latitude.val(locale['latLng']['lat']);
+        $longitude.val(locale['latLng']['lng']);
+    };
+
     var reverseGeocodeCallback = function(locale) {
         $possible_street.val(locale['street']);
         $possible_city.val(locale['adminArea5']);
@@ -332,13 +340,24 @@ $(function() {
     });
 
     $accept_address.click(function() {
+
+        if ( REVERSE_GEOCODE == false ) {
+            var address_string = '';
+            address_string += $possible_street.val() + ' ';
+            address_string += $possible_city.val() + ', ';
+            address_string += $possible_state.val() + ' ';
+            address_string += $possible_zip_code.val();
+
+            console.log(address_string);
+
+            geocode(address_string, geocodeCallback);
+        }
+
         var placeholder_text = '';
 
         if ($address.val() != $possible_street.val()) {
             $address.attr('data-changed', 'true');
             $address.val($possible_street.val());
-            $approximate.attr('checked', 'checked');
-            $approximate.attr('data-changed', 'true');
         }
 
         if ($city.val() != $possible_city.val()) {
@@ -401,6 +420,19 @@ $(function() {
         $playground_meta_hdr.on('click', function() {
             $playground_meta_items.slideToggle('fast');
         });
-
     }
+
+    $geocode_button.on('click', function(){
+        REVERSE_GEOCODE = false;
+        $('.address-form').addClass('hidden');
+        $('.path-geocode').removeClass('hidden');
+        $('#accept-address').removeClass('hidden');
+    });
+    $reverse_geocode_button.on('click', function(){
+        REVERSE_GEOCODE = true;
+        $('.address-form').addClass('hidden');
+        $('.path-reverse-geocode').removeClass('hidden');
+        $('#accept-address').removeClass('hidden');
+        center_editor_map();
+    });
 });

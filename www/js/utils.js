@@ -35,6 +35,22 @@ function formatMapQuestAddress(locale) {
     }
 }
 
+
+function geocode(address_string, callback) {
+    $.ajax({
+        'url': 'http://open.mapquestapi.com/geocoding/v1/?inFormat=kvp&location=' + address_string,
+        'dataType': 'jsonp',
+        'contentType': 'application/json',
+        'success': function(data) {
+            var locales = data['results'][0]['locations'];
+            var locale = locales[0];
+            var zip_list = [];
+
+            callback(locale);
+        }
+    });
+}
+
 function reverseGeocode(latitude, longitude, callback) {
     $.ajax({
         'url': 'http://open.mapquestapi.com/geocoding/v1/reverse',
@@ -44,7 +60,7 @@ function reverseGeocode(latitude, longitude, callback) {
         'success': function(data) {
             var locales = data['results'][0]['locations'];
             var locale = locales[0];
-            var zip_list = []
+            var zip_list = [];
 
             if (locale['adminArea4'] == 'District of Columbia')  {
                 locale['adminArea5'] = 'Washington';
