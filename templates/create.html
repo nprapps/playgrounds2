@@ -34,9 +34,17 @@
             <div id="edit-marker" class="icon-screenshot"></div>
         </div>
 
+        <p>Drag the map to update location, or search for an address below.</p>
+
         <form id="search-form">
-            <label class="control-label">Address</label>
             <input type="text" class="input input-block-level" id="search-address" />
+            <div id="no-geocode">
+                <h4>Sorry, we couldn't locate that address.</h4>
+            </div>
+            <div id="search-help">
+                <h4>Did you mean...?</h4>
+                <ul id='did-you-mean-edit'></ul>
+            </div>
             <input type="hidden" id="possible-street"/>
             <input type="hidden" id="possible-city"/>
             <input type="hidden" id="possible-state"/>
@@ -49,20 +57,10 @@
             <button type="button" id="geolocate" class="btn btn-large">
                 <i class="icon-screenshot"></i>
             </button>
-            <button type="button" id="accept-address" class="btn btn-large btn-success">
-                Accept Address
-            </button>
-            <button type="button" id="cancel-address" class="btn btn-large">Cancel</button>
         </form>
-
-        <div id="search-help">
-            <h4>Did you mean...?</h4>
-            <ul id='did-you-mean-edit'></ul>
-        </div>
-
-        <div id="no-geocode">
-            <h4>Sorry, we couldn't locate that address.</h4>
-        </div>
+        <a id="accept-address" class="btn btn-large btn-block btn-success">
+            Done
+        </a>
 
     </div>
 
