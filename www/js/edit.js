@@ -1,4 +1,7 @@
 var $edit_map = null;
+var $locator_map = null;
+var $modal_map = null;
+var $toggle_address_button = null;
 var $address_editor = null;
 var $address_placeholder = null;
 var $search_address = null;
@@ -60,7 +63,99 @@ function center_editor_map(){
     $('#edit-marker').css({'left': marker_left, 'top': marker_top});
 }
 
+function resize_locator_map() {
+    CONTENT_WIDTH = $('#main-content').width();
+    PAGE_WIDTH = $('body').outerWidth();
+    var lat = $locator_map.data('latitude');
+    var lon = $locator_map.data('longitude'); // Because iOS refuses to obey toString()
+    var map_path;
+    var new_height;
+    var new_width = CONTENT_WIDTH;
+
+    if (PAGE_WIDTH > 480) {
+        new_width = Math.floor(new_width / 2) - 22;
+    }
+    new_height = Math.floor(CONTENT_WIDTH / 3);
+
+    if (RETINA) {
+        new_width = new_width * 2;
+        if (new_width > 640) {
+            new_width = 640;
+        }
+        new_height = Math.floor(new_width / 3);
+    }
+
+    map_path = 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/pin-m-star+ff6633(' + lon + ',' + lat + ')/' + lon + ',' + lat + ',' + LOCATOR_DEFAULT_ZOOM + '/' + new_width + 'x' + new_height + '.png';
+    $locator_map.attr('src', map_path);
+    $modal_map.attr('src', map_path);
+}
+
+function toggle_address_button(){
+    $('#address-editor, #address-placeholder').toggleClass('hide');
+    $toggle_address_button.toggleClass('btn-success');
+    var button_text = $toggle_address_button.text() === 'Edit' ? 'Cancel' : 'Edit';
+    $toggle_address_button.text(button_text);
+    center_editor_map();
+}
+
+function search_address(){
+    var address = $search_address.val();
+
+    if (address) {
+        $search_help.hide();
+        $no_geocode.hide();
+
+        $.ajax({
+            'url': 'http://open.mapquestapi.com/geocoding/v1/address',
+            'data': { 'location': address },
+            'dataType': 'jsonp',
+            'contentType': 'application/json',
+            'success': function(data) {
+                var locales = data['results'][0]['locations'];
+
+                locales = _.filter(locales, function(locale) {
+                    return locale['adminArea1'] == 'US';
+                });
+
+                if (locales.length === 0) {
+                    $did_you_mean.append('<li>No results</li>');
+
+                    $no_geocode.show();
+                } else if (locales.length == 1) {
+                    var locale = locales[0];
+
+                    map.setView([locale['latLng']['lat'], locale['latLng']['lng']], LOCATOR_DEFAULT_ZOOM);
+                    $possible_street.val(locale['street']);
+                    $possible_city.val(locale['adminArea5']);
+                    $possible_state.val(locale['adminArea3']);
+                    $possible_zip_code.val(locale['postalCode']);
+                    $possible_latitude.val(locale['latLng']['lat']);
+                    $possible_longitude.val(locale['latLng']['lng']);
+
+                    // $results_address.html('Showing results near ' + formatMapQuestAddress(locale));
+                } else {
+                    $did_you_mean.empty();
+
+                    _.each(locales, function(locale) {
+                        var context = $.extend(APP_CONFIG, locale);
+                        context['address'] = formatMapQuestAddress(locale);
+
+                        var html = JST.did_you_mean_item(context);
+
+                        $did_you_mean.append(html);
+                    });
+
+                    $search_help.show();
+                }
+            }
+        });
+    }
+}
+
 $(function() {
+    $locator_map = $('#locator-map');
+    $modal_map = $('#modal-locator-map');
+    $toggle_address_button = $('#toggle-address-button');
     $address_editor = $('#address-editor');
     $address_placeholder = $('#address-placeholder');
     $search_address = $('#search-address');
@@ -99,9 +194,8 @@ $(function() {
     }
 
     // Toggle the address edit interface 
-    $('#edit-address-button, #cancel-address').on('click', function(){
-        $('#address-editor, #address-placeholder').toggleClass('hide');
-        center_editor_map();
+    $toggle_address_button.on('click', function(){
+        toggle_address_button();
     });
 
     /*
@@ -149,6 +243,7 @@ $(function() {
     map_layer = L.mapbox.tileLayer(BASE_LAYER).addTo(map);
     grid_layer = L.mapbox.gridLayer(BASE_LAYER).addTo(map);
     map.addControl(L.mapbox.gridControl(grid_layer));
+    center_editor_map();
 
     $('#address-editor').on('shown', function() {
         centerEditorMap();
@@ -177,57 +272,16 @@ $(function() {
     }
 
     $search_address_button.click(function() {
-        var address = $search_address.val();
+        search_address();
+    });
 
-        if (address) {
-            $search_help.hide();
-            $no_geocode.hide();
-
-            $.ajax({
-                'url': 'http://open.mapquestapi.com/geocoding/v1/address',
-                'data': { 'location': address },
-                'dataType': 'jsonp',
-                'contentType': 'application/json',
-                'success': function(data) {
-                    var locales = data['results'][0]['locations'];
-
-                    locales = _.filter(locales, function(locale) {
-                        return locale['adminArea1'] == 'US';
-                    });
-
-                    if (locales.length === 0) {
-                        $did_you_mean.append('<li>No results</li>');
-
-                        $no_geocode.show();
-                    } else if (locales.length == 1) {
-                        var locale = locales[0];
-
-                        map.setView([locale['latLng']['lat'], locale['latLng']['lng']], LOCATOR_DEFAULT_ZOOM);
-                        $possible_street.val(locale['street']);
-                        $possible_city.val(locale['adminArea5']);
-                        $possible_state.val(locale['adminArea3']);
-                        $possible_zip_code.val(locale['postalCode']);
-                        $possible_latitude.val(locale['latLng']['lat']);
-                        $possible_longitude.val(locale['latLng']['lng']);
-
-                        // $results_address.html('Showing results near ' + formatMapQuestAddress(locale));
-                    } else {
-                        $did_you_mean.empty();
-
-                        _.each(locales, function(locale) {
-                            var context = $.extend(APP_CONFIG, locale);
-                            context['address'] = formatMapQuestAddress(locale);
-
-                            var html = JST.did_you_mean_item(context);
-
-                            $did_you_mean.append(html);
-                        });
-
-                        $search_help.show();
-                    }
-                }
-            });
-        }
+    $('#search-form').bind("keyup", function(e) {
+      var code = e.keyCode || e.which;
+      if (code  == 13) {
+        search_address();
+        e.preventDefault();
+        return false;
+      }
     });
 
     $did_you_mean.on('click', 'li', function() {
@@ -273,6 +327,10 @@ $(function() {
         });
     });
 
+    $('#search-form').submit(function() {
+      return false;
+    });
+
     $accept_address.click(function() {
         var placeholder_text = '';
 
@@ -303,18 +361,20 @@ $(function() {
         if ($latitude.val() != $possible_latitude.val()) {
             $latitude.attr('data-changed', 'true');
             $latitude.val($possible_latitude.val());
+            $locator_map.data('latitude', $latitude.val());
         }
 
         if ($longitude.val() != $possible_longitude.val()) {
             $longitude.attr('data-changed', 'true');
             $longitude.val($possible_longitude.val());
+            $locator_map.data('longitude', $longitude.val());
         }
 
         placeholder_text = $address.val() + '<br>' + $city.val() + ', ' + $state.val();
 
-        resize_locator_map($longitude.val(), $latitude.val());
+        resize_locator_map();
         $('#address-placeholder p').html(placeholder_text);
-        $('#address-editor, #address-placeholder').toggleClass('hide');
+        toggle_address_button();
     });
 
     map.on('moveend', function() {
@@ -342,35 +402,5 @@ $(function() {
             $playground_meta_items.slideToggle('fast');
         });
 
-    }
-
-    function resize_locator_map(longitude, latitude) {
-        CONTENT_WIDTH = $('#main-content').width();
-        PAGE_WIDTH = $('body').outerWidth();
-
-        var $map = $('#locator-map');
-        var $modal_map = $('#modal-locator-map');
-        var lat = latitude||$map.data('latitude');
-        var lon = longitude||$map.data('longitude');
-        var map_path;
-        var new_height;
-        var new_width = CONTENT_WIDTH;
-
-        if (PAGE_WIDTH > 480) {
-            new_width = Math.floor(new_width / 2) - 22;
-        }
-        new_height = Math.floor(CONTENT_WIDTH / 3);
-
-        if (RETINA) {
-            new_width = new_width * 2;
-            if (new_width > 640) {
-                new_width = 640;
-            }
-            new_height = Math.floor(new_width / 3);
-        }
-
-        map_path = 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/pin-m-star+ff6633(' + lon + ',' + lat + ')/' + lon + ',' + lat + ',' + LOCATOR_DEFAULT_ZOOM + '/' + new_width + 'x' + new_height + '.png';
-        $map.attr('src', map_path);
-        $modal_map.attr('src', map_path);
     }
 });
