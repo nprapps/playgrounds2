@@ -251,7 +251,7 @@ $(function() {
     center_editor_map();
 
     $('#address-editor').on('shown', function() {
-        centerEditorMap();
+        center_editor_map();
     });
 
     if ($latitude.val() !== '' && $longitude.val() !== '') {
