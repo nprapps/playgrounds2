@@ -40,12 +40,11 @@
 </div>
 
 <h1>{{ playground.display_name }}</h1>
-<h5 class="progress-bar">
-    <span class="progress-label">{{ playground.percent_complete.percent }}% complete</span>
-    <span
-        class="percent-complete {{ playground.percent_complete.class }}"
-        style="width: {{ playground.percent_complete.percent }}%;">&nbsp;</span>
-</h5>
+
+<div class="help-prompt help-prompt-features">
+    <p class="prompt"><i class="icon icon-warning-sign"></i>{{ COPY.content.playground_help_key_features }}</p>
+    <a href="#edit-playground" role="button" class="btn btn-blue btn-block btn-edit" data-toggle="modal"><i class="icon-pencil"></i> {{ COPY.content.playground_help_button }}</a>
+</div>
 
 <!-- Map / Address -->
 <div class="address">
@@ -70,23 +69,17 @@
     </div>
 </div>
 
+{% if playground.features %}
 <!-- Categories / key features -->
 <div class="playground-features">
     <h4>Key Features</h4>
 
-    {% if playground.features %}
     <ul>{% for feature in playground.features %}
         <li>{{ feature.cleaned.name }} <i class="icon icon-question-sign" data-toggle="tooltip" title="{{ feature.cleaned.description }}">About</i></li>{% endfor %}
     </ul>
 
-    {% else %}
-    <div class="help-prompt help-prompt-features">
-        <p class="prompt">{{ COPY.content.playground_help_key_features }}</p>
-        <a href="#edit-playground" role="button" class="btn btn-blue btn-block btn-edit" data-toggle="modal"><i class="icon-pencil"></i> {{ COPY.content.playground_help_button }}</a>
-    </div>
-    {% endif %}
-
 </div>
+{% endif %}
 
 <!-- Description -->
 <div class="about">

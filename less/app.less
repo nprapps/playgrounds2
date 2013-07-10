@@ -21,8 +21,8 @@ h1 { font: normal 32px/1.125 Georgia, serif; margin: 0 0 22px 0; }
 h2 { font-weight: normal; line-height: 1.2; color: #333; margin-bottom: 22px; font-size: 22px; }
 h3, h4, h5, h6 { font-weight: normal; line-height: 1.2; color: #999; margin-bottom: 22px; }
 p { margin-bottom: 1.3em; }
-a, a:link, a:visited { color: #4774cc; text-decoration: none; }
-a:hover, a:active { color: #bccae5; text-decoration: none; }
+//a, a:link, a:visited { color: #4774cc; text-decoration: none; }
+//a:hover, a:active { color: #bccae5; text-decoration: none; }
 .btn.btn-blue, a.btn.btn-blue {
     background: none;
     background-color: #7598c9;
@@ -164,13 +164,20 @@ section#the-goods { margin-top: 44px; }
 
     p {
         margin: 0;
-        text-align: center;
+        //text-align: center;
 
         &.prompt {
             font-size: 13px;
-            font-weight: bold;
             color: #555;
             margin-bottom: 6px;
+
+            .icon {
+                color: @btnDangerBackground;
+                font-size: 200%;
+                float: left;
+                margin-top: 5px;
+                margin-right: 11px;
+            }
         }
     }
 
@@ -555,9 +562,14 @@ section#the-goods { margin-top: 44px; }
         &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
     }
     .update-form-modal {
+        h5 {
+            margin-bottom: @baseLineHeight/2;
+        }
+
         .address-label {
             .btn {
                 float: right;
+                margin-top: -5px;
             }
         }
 
@@ -715,14 +727,15 @@ section#the-goods { margin-top: 44px; }
             right: 0;
             background: @white;
             overflow: scroll;
+            z-index: 100;
 
-            h4,
+            .edit-address-hed,
             #search-form {
                 display: block;
                 padding: 0 20px;
             }
 
-            h4 {
+            .edit-address-hed {
                 padding: 20px 20px 0;
             }
 
