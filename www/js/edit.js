@@ -55,7 +55,7 @@ function get_parameter_by_name(name) {
     name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
         results = regex.exec(location.search);
-    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
 function center_editor_map(){
@@ -244,6 +244,7 @@ $(function() {
         minZoom: 11,
         scrollWheelZoom: false
     });
+
     map_layer = L.mapbox.tileLayer(BASE_LAYER).addTo(map);
     grid_layer = L.mapbox.gridLayer(BASE_LAYER).addTo(map);
     map.addControl(L.mapbox.gridControl(grid_layer));
@@ -275,40 +276,6 @@ $(function() {
         map.setView([38.9, -77], 12);
     }
 
-    $search_address_button.click(function() {
-        search_address();
-    });
-
-    $('#search-form').bind("keyup", function(e) {
-      var code = e.keyCode || e.which;
-      if (code  == 13) {
-        search_address();
-        e.preventDefault();
-        return false;
-      }
-    });
-
-    $did_you_mean.on('click', 'li', function() {
-        var $this = $(this);
-        var street = $this.data('street');
-        var city = $this.data('city');
-        var state = $this.data('state');
-        var zip = $this.data('zip');
-        var latitude = $this.data('latitude');
-        var longitude = $this.data('longitude');
-
-        map.setView([latitude, longitude], LOCATOR_DEFAULT_ZOOM);
-
-        $possible_street.val(street);
-        $possible_city.val(city);
-        $possible_state.val(state);
-        $possible_zip_code.val(zip);
-        $possible_latitude.val(latitude);
-        $possible_longitude.val(longitude);
-
-        $search_help.hide();
-    });
-
     var geocodeCallback = function(locale) {
         $latitude.val(locale['latLng']['lat']);
         $longitude.val(locale['latLng']['lng']);
@@ -336,13 +303,8 @@ $(function() {
         });
     });
 
-    $('#search-form').submit(function() {
-      return false;
-    });
-
     $accept_address.click(function() {
-
-        if ( REVERSE_GEOCODE == false ) {
+        if ( REVERSE_GEOCODE === false ) {
             var address_string = '';
             address_string += $possible_street.val() + ' ';
             address_string += $possible_city.val() + ', ';
@@ -429,6 +391,7 @@ $(function() {
         $('.path-geocode').removeClass('hidden');
         $('#accept-address').removeClass('hidden');
     });
+
     $reverse_geocode_button.on('click', function(){
         REVERSE_GEOCODE = true;
         $('.address-form').addClass('hidden');
@@ -436,4 +399,5 @@ $(function() {
         $('#accept-address').removeClass('hidden');
         center_editor_map();
     });
+
 });
