@@ -119,7 +119,8 @@ def update_playground():
             pass
 
         try:
-            payload['playground']['reverse_geocoded'] = True
+            if payload['playground']['reverse_geocoded'] == "on":
+                payload['playground']['reverse_geocoded'] = True
         except KeyError:
             pass
 
@@ -201,6 +202,12 @@ def insert_playground():
         if payload['playground']['zip_code'] == "None":
             payload['playground']['zip_code'] = None
 
+        try:
+            if payload['playground']['reverse_geocoded'] == "on":
+                payload['playground']['reverse_geocoded'] = True
+        except KeyError:
+            pass
+
         # Set up a list for features.
         payload['playground']['features'] = []
 
@@ -212,11 +219,6 @@ def insert_playground():
         # If there weren't any features in this POST, remove the features list from payload.
         if len(payload['playground']['features']) == 0:
             del(payload['playground']['features'])
-
-        try:
-            payload['playground']['reverse_geocoded'] = True
-        except KeyError:
-            pass
 
         # Write to the changes.json file.
         # write_data(payload)
