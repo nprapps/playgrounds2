@@ -311,8 +311,6 @@ $(function() {
             address_string += $possible_state.val() + ' ';
             address_string += $possible_zip_code.val();
 
-            console.log(address_string);
-
             geocode(address_string, geocodeCallback);
         }
 
