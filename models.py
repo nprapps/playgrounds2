@@ -72,7 +72,7 @@ class Playground(Model):
 
     active = BooleanField(default=True)
 
-    address_approximate = BooleanField(verbose_name='Address Approximate', default=False)
+    reverse_geocoded = BooleanField(verbose_name='Reverse Geocoded', default=False)
 
     class Meta:
         database = database
@@ -258,7 +258,7 @@ class Playground(Model):
             if field == 'facility':
                 field_dict['name'] = 'At (is this in a park or school?)'
 
-            if field == 'address_approximate':
+            if field == 'reverse_geocoded':
                 field_dict['display'] = 'style="display:none"'
                 field_dict['widget'] = '<input type="checkbox" name="%s"></input>' % (field)
 
@@ -277,14 +277,14 @@ class Playground(Model):
                 "Owner",
                 "Remarks",
                 "Id",
-                "Address Approximate",
+                "Reverse Geocoded",
                 "Slug",
                 "Latitude",
                 "Longitude"
             ]
 
             fields = sorted(fields, key=lambda x: order.index(x['name']))
-            
+
         return fields
 
     def update_form(self):
@@ -374,7 +374,7 @@ class Playground(Model):
         See below for the implementation of the SQL distance algorithm.
         """
         if not self.latitude or not self.longitude:
-            return [] 
+            return []
 
         return list(Playground.raw('SELECT *, distance(?, ?, latitude, longitude) as distance FROM playground WHERE distance IS NOT NULL AND id <> ? ORDER BY distance ASC LIMIT ?', self.latitude, self.longitude, self.id, n))
 

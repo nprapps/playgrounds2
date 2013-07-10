@@ -119,7 +119,7 @@ def update_playground():
             pass
 
         try:
-            payload['playground']['address_approximate'] = True
+            payload['playground']['reverse_geocoded'] = True
         except KeyError:
             pass
 
@@ -195,6 +195,9 @@ def insert_playground():
         except KeyError:
             pass
 
+        if payload['playground']['zip_code'] == "None":
+            payload['playground']['zip_code'] = None
+
         # Set up a list for features.
         payload['playground']['features'] = []
 
@@ -208,9 +211,10 @@ def insert_playground():
             del(payload['playground']['features'])
 
         # Write to the changes.json file.
-        write_data(payload)
+        # write_data(payload)
 
-        return redirect('%s/playground/create.html?action=create_thanks' % (app_config.S3_BASE_URL))
+        return json.dumps(payload)
+        # return redirect('%s/playground/create.html?action=create_thanks' % (app_config.S3_BASE_URL))
 
 @app.route('/%s/request-delete-playground/' % app_config.PROJECT_SLUG, methods=['POST'])
 def delete_playground():
