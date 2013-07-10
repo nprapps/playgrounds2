@@ -113,35 +113,35 @@ ADMIN_EMAILS = [
 FEATURES = {
     'smooth-surface-throughout': {
         'name': 'Smooth surface throughout',
-        'description': 'TKTK'
+        'description': 'A surface that smooth enough for a wheelchair, and is resilient enough to cushion a fall.'
     },
     'ramps-to-play-components': {
         'name': 'Ramps to play components',
-        'description': 'TKTK'
+        'description': ' A path for a wheelchair to travel, not just to the playground, but within it as well.'
     },
     'transfer-stations-to-play-components': {
         'name': 'Transfer stations to play components',
-        'description': 'TKTK'
+        'description': ' Low platforms where those using wheelchairs can lift themselves out of them, onto playground equipment.'
     },
     'accessible-swing': {
         'name': 'Accessible swing',
-        'description': 'TKTK'
+        'description': 'Swings with features such as high backs and harnesses to assist special-needs children.'
     },
     'sound-play-components': {
         'name': 'Sound play components',
-        'description': 'TKTK'
+        'description': 'Outdoor devices that make sound or music, such as drums and marimbas.'
     },
     'sight-impaired-play-components': {
         'name': 'Sight-impaired play components',
-        'description': 'TKTK'
+        'description': ' Playground features that include Braille panels, interesting textures or fragrances.'
     },
     'safety-fence': {
         'name': 'Safety fence',
-        'description': 'TKTK'
+        'description': 'A fence enclosing the playground.'
     },
     'single-entrance': {
         'name': 'Single entrance',
-        'description': 'TKTK'
+        'description': 'Only one way in or out of the play area, to help parents and caregivers keep track of children.'
     }
 }
 
