@@ -24,53 +24,29 @@
 
 {% block content %}
 <div class="create-form">
-    <form id="playground-form" class="row-fluid" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/insert-playground/">
-        <h2>{{ COPY.content.create_title }}</h2>
-        <p class="muted">{{ COPY.content.create_description }}</p>
-        <p class="muted bulk-email">{{ COPY.content.create_description_email }}</p>
+    <h2>{{ COPY.content.create_title }}</h2>
+    <p class="muted">{{ COPY.content.create_description }}</p>
+    <p class="muted bulk-email">{{ COPY.content.create_description_email }}</p>
 
-        <a id="path-geocode" class="btn btn-large btn-block">I know the street address.</a>
-        <a id="path-reverse-geocode" class="btn btn-large btn-block">I don't know the address.</a>
+    <a id="path-geocode" class="btn btn-large btn-block">I know the street address.</a>
+    <a id="path-reverse-geocode" class="btn btn-large btn-block">I don't know the address.</a>
 
-        <div id="address-editor">
-            <div class="path-reverse-geocode hidden address-form">
-                <p>Drag the map to update location.</p>
+    <div id="address-editor">
+        <div class="path-reverse-geocode hidden address-form">
+            <p>Drag the map to update location.</p>
 
-                <div id="edit-map">
-                    <div id="edit-marker" class="icon-screenshot"></div>
-                </div>
-
-                <input type="hidden" name="latitude"/>
-                <input type="hidden" name="longitude"/>
-                <button type="button" id="geolocate" class="btn btn-large">
-                    <i class="icon-screenshot"></i>
-                </button>
-
+            <div id="edit-map">
+                <div id="edit-marker" class="icon-screenshot"></div>
             </div>
-            <div class="path-geocode hidden address-form basic-info">
-                <div class="control-group">
-                    <label class="control-label">Street</label>
-                    <div class="controls">
-                        <input class="input-block-level input" type="text" name="address"/></div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">City</label>
-                    <div class="controls">
-                        <input class="input-block-level input" type="text" name="city"/></div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">State</label>
-                    <div class="controls">
-                        <input class="input-block-level input" type="text" name="state"/></div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">Zip Code</label>
-                    <div class="controls">
-                        <input class="input-block-level input" type="text" name="zip_code"/></div>
-                </div>
-            </div>
+
+            <button type="button" id="geolocate" class="btn btn-large">
+                <i class="icon-screenshot"></i>
+            </button>
+
         </div>
+    </div>
 
+    <form id="playground-form" class="row-fluid" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/insert-playground/">
         <div class="basic-info span6">
         {% for field in fields %}
             <div class="control-group"{% if field.display %} {{ field.display|safe }}{% endif %}>

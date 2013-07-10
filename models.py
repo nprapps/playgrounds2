@@ -266,12 +266,12 @@ class Playground(Model):
                 fields.append(field_dict)
 
             order = [
-                "Name",
-                "At (is this in a park or school?)",
                 "Address",
                 "City",
                 "State",
                 "Zip Code",
+                "Name",
+                "At (is this in a park or school?)",
                 "URL",
                 "Agency",
                 "Owner",
