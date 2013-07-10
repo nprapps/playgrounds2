@@ -118,12 +118,6 @@ $(function() {
     $('#playground-update').on('click', function(){
         if ( REVERSE_GEOCODE === false ) {
 
-            $.each($('#playground-form .input'), function(index, item) {
-                if ($(item).attr('data-changed') != 'true') {
-                    $(item).removeAttr('name');
-                }
-            });
-
             var address_string = '';
             address_string += $address.val() + ' ';
             address_string += $city.val() + ', ';
@@ -131,18 +125,14 @@ $(function() {
             address_string += $zip_code.val();
 
             geocode(address_string, geocodeCallback);
-        } else {
 
-            $.each($('#playground-form .input'), function(index, item) {
-                if ($(item).attr('data-changed') != 'true') {
-                    $(item).removeAttr('name');
-                }
-            });
+        } else {
 
             prepAddress();
             $reverse_geocoded.attr('checked', 'checked');
             $reverse_geocoded.attr('data-changed', 'true');
-            $('#playground-form').submit();
+
+            submitForm();
         }
         return false;
     });
@@ -168,7 +158,7 @@ $(function() {
         $longitude.attr('value', locale['latLng']['lng']);
 
         prepAddress();
-        $('#playground-form').submit();
+        submitForm();
     };
 
     var reverseGeocodeCallback = function(locale) {
@@ -217,7 +207,15 @@ $(function() {
         });
     }
 
-    function prepAddress() {
+    var submitForm = function() {
+        if ( $('input[name="name"]').val() === '' || $address.val() === '' ){
+            alert('You are missing form fields.');
+        } else {
+            $('#playground-form').submit();
+        }
+    };
+
+    var prepAddress = function() {
         $address.attr('data-changed', 'true');
         $city.attr('data-changed', 'true');
         $geo_state.attr('data-changed', 'true');
@@ -234,7 +232,7 @@ $(function() {
         $longitude.attr('data-changed', 'true');
         $locator_map.data('longitude', $longitude.val());
         resize_locator_map();
-    }
+    };
 
     $geocode_button.on('click', function(){
         REVERSE_GEOCODE = false;
