@@ -12,7 +12,7 @@ var $latitude = null;
 var $longitude = null;
 var $playground_meta_hdr = null;
 var $playground_meta_items = null;
-
+var $reverse_geocoded = null;
 var $edit_alert = null;
 
 var BASE_LAYER = APP_CONFIG.MAPBOX_BASE_LAYER;
@@ -89,6 +89,7 @@ $(function() {
     $zip_code = $('input[name="zip_code"]');
     $latitude = $('input[name="latitude"]');
     $longitude = $('input[name="longitude"]');
+    $reverse_geocoded = $('input[name="reverse_geocoded"]');
 
     $playground_meta_hdr = $('#main-content').find('.about').find('h5.meta');
     $playground_meta_items = $('#main-content').find('.about').find('ul.meta');
@@ -115,14 +116,14 @@ $(function() {
     });
 
     $('#playground-update').on('click', function(){
-        // Loop over the inputs inside the form.
-        $.each($('#playground-form .input'), function(index, item) {
-            if ($(item).attr('data-changed') != 'true') {
-                $(item).removeAttr('name');
-            }
-        });
-
         if ( REVERSE_GEOCODE === false ) {
+
+            $.each($('#playground-form .input'), function(index, item) {
+                if ($(item).attr('data-changed') != 'true') {
+                    $(item).removeAttr('name');
+                }
+            });
+
             var address_string = '';
             address_string += $address.val() + ' ';
             address_string += $city.val() + ', ';
@@ -131,7 +132,16 @@ $(function() {
 
             geocode(address_string, geocodeCallback);
         } else {
+
+            $.each($('#playground-form .input'), function(index, item) {
+                if ($(item).attr('data-changed') != 'true') {
+                    $(item).removeAttr('name');
+                }
+            });
+
             prepAddress();
+            $reverse_geocoded.attr('checked', 'checked');
+            $reverse_geocoded.attr('data-changed', 'true');
             $('#playground-form').submit();
         }
         return false;

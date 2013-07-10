@@ -213,6 +213,11 @@ def insert_playground():
         if len(payload['playground']['features']) == 0:
             del(payload['playground']['features'])
 
+        try:
+            payload['playground']['reverse_geocoded'] = True
+        except KeyError:
+            pass
+
         # Write to the changes.json file.
         # write_data(payload)
 
