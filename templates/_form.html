@@ -27,6 +27,9 @@
 
         <form id="search-form">
             <input type="text" class="input input-block-level" id="search-address" />
+            <div id="no-geocode">
+                <h4>Sorry, we couldn't locate that address.</h4>
+            </div>
             <div id="search-help">
                 <h4>Did you mean...?</h4>
                 <ul id='did-you-mean-edit'></ul>
@@ -44,15 +47,9 @@
                 <i class="icon-screenshot"></i>
             </button>
         </form>
-
         <a id="accept-address" class="btn btn-large btn-block btn-success">
             Done
         </a>
-
-        <div id="no-geocode">
-            <h4>Sorry, we couldn't locate that address.</h4>
-        </div>
-
     </div>
     <form id="playground-form" class="row-fluid" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/update-playground/">
             <div class="basic-info span6">
@@ -79,4 +76,48 @@
 <div class="modal-footer">
     <button type="button" class="btn btn-large" data-dismiss="modal" aria-hidden="true">Cancel</button>
     <button id="playground-update" class="btn btn-large btn-success">Save</button>
+</div>
+
+<div id="address-editor" class="hide">
+
+    <h4 class="edit-address-hed">Edit location</h4>
+
+    <div class="edit-address-map">
+        <div id="edit-map">
+            <div id="edit-marker" class="icon-screenshot"></div>
+            <a id="geolocate" class="btn btn-large">
+                <i class="icon-location-arrow"></i>
+            </a>
+        </div>
+    </div>
+    <form id="search-form">
+        <p>Drag the map to update location, or search for an address below.</p>
+        <input type="text" class="input input-block-level" id="search-address" />
+        <div id="no-geocode">
+            <h4>Sorry, we couldn't locate that address.</h4>
+        </div>
+        <div id="search-help">
+            <h4>Did you mean...?</h4>
+            <ul id='did-you-mean-edit'></ul>
+        </div>
+        <input type="hidden" id="possible-street"/>
+        <input type="hidden" id="possible-city"/>
+        <input type="hidden" id="possible-state"/>
+        <input type="hidden" id="possible-zip"/>
+        <input type="hidden" id="possible-latitude"/>
+        <input type="hidden" id="possible-longitude"/>
+        <button type="button"id="search-address-button" class="btn btn-large">
+            Search
+        </button>
+        
+    </form>
+
+    <div class="edit-address-footer">
+        <a id="accept-address" class="btn btn-large btn-block btn-success">
+            Done
+        </a>
+    </div>
+
+
+
 </div>

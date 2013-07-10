@@ -93,7 +93,7 @@ function resize_locator_map() {
 }
 
 function toggle_address_button(){
-    $('#address-editor, #address-placeholder').toggleClass('hide');
+    $('#address-editor').toggleClass('hide');
     $toggle_address_button.toggleClass('btn-success');
     var button_text = $toggle_address_button.text() === 'Edit' ? 'Cancel' : 'Edit';
     $toggle_address_button.text(button_text);
@@ -197,9 +197,10 @@ $(function() {
     }
 
     // Toggle the address edit interface
-    $toggle_address_button.on('click', function(){
+    $('#toggle-address-button, #modal-locator-map').on('click', function(){
         toggle_address_button();
     });
+
 
     /*
     * We only want to submit changed formfields to the server for processing.
