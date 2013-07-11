@@ -163,7 +163,6 @@ $(function() {
     };
 
     var reverseGeocodeCallback = function(locale) {
-
         $address.val(locale['street']);
         $city.val(locale['adminArea5']);
         $geo_state.val(locale['adminArea3']);
@@ -174,11 +173,9 @@ $(function() {
 
     $geolocate_button.click(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
-            $search_help.hide();
-            $no_geocode.hide();
-
+            // $search_help.hide();
+            // $no_geocode.hide();
             map.setView([position.coords.latitude, position.coords.longitude], LOCATOR_DEFAULT_ZOOM);
-
             reverseGeocode(position.coords.latitude, position.coords.longitude, reverseGeocodeCallback);
         });
     });
