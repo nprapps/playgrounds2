@@ -245,14 +245,14 @@ class Playground(Model):
                 field_dict['display'] = 'style="display:none"'
                 field_dict['widget'] = '<input type="text" name="%s" value="%s" data-changed="true"></input>' % (field, field_value)
 
-            elif field == 'public_remarks':
-                field_dict['widget'] = '<textarea class="input-block-level input" name="%s" rows="10">%s</textarea>' % (field, field_value)
+            # elif field == 'public_remarks':
+            #     field_dict['widget'] = '<textarea class="input-block-level input" name="%s" rows="10">%s</textarea>' % (field, field_value)
 
             elif field == 'reverse_geocoded':
                 field_dict['display'] = 'style="display:none"'
                 field_dict['widget'] = '<input type="checkbox" name="%s"></input>' % (field)
 
-            elif field in ['latitude', 'longitude', 'address', 'city', 'state', 'zip_code']:
+            elif field in ['latitude', 'longitude', 'address', 'public_remarks', 'city', 'state', 'zip_code']:
                 field_dict['display'] = 'style="display:none"'
                 field_dict['widget'] = '<input type="text" name="%s" value="%s"></input>' % (field, field_value)
 

@@ -208,13 +208,30 @@ $(function() {
         toggle_address_button();
     });
 
+
+    // Prevent scrolling on elements below the current modal.
+
+    function prevent_body_scroll(e) {
+        if (!$('.scrollable').has($(e.target)).length) e.preventDefault();
+    }
+
+
     $('.modal').on('shown', function(){
-        $('html, body').css('overflow','hidden');
+        $('body').on('touchmove', prevent_body_scroll(event));
     });
 
     $('.modal').on('hidden', function(){
-        $('html, body').css('overflow','auto');
+        $('body').off('touchmove', prevent_body_scroll(event));
     });
+
+    $('#address-pane').on('shown', function(){
+        $('body, #map-pane').on('touchmove', prevent_body_scroll(event));
+    });
+
+    $('#address-pane').on('hidden', function(){
+        $('body, #map-pane').off('touchmove', prevent_body_scroll(event));
+    });
+    
 
 
     /*

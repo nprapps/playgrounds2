@@ -562,6 +562,11 @@ section#the-goods { margin-top: 44px; }
         &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
     }
     .update-form-modal {
+
+        .modal-body {
+            padding-bottom: 100px;
+        }
+
         h5 {
             margin-bottom: @baseLineHeight/2;
         }
@@ -786,11 +791,12 @@ section#the-goods { margin-top: 44px; }
 
             .address-pane {
                 position: absolute;
-                top: 79px;
+                top: 80px;
                 bottom: 44px;
                 width: 100%;
                 padding-top: @baseLineHeight;
                 //padding-bottom: 64px;
+                -webkit-overflow-scrolling: touch;
                 overflow: scroll;
             }
         }
