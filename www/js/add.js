@@ -163,7 +163,6 @@ $(function() {
     };
 
     var reverseGeocodeCallback = function(locale) {
-        unitedStatesCheck(locale);
 
         $address.val(locale['street']);
         $city.val(locale['adminArea5']);

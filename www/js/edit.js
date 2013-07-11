@@ -323,8 +323,6 @@ $(function() {
         $possible_latitude.val(locale['latLng']['lat']);
         $possible_longitude.val(locale['latLng']['lng']);
 
-        unitedStatesCheck(locale);
-
         $search_address.val(formatMapQuestAddress(locale));
     };
 
