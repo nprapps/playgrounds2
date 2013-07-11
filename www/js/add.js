@@ -157,11 +157,14 @@ $(function() {
         $latitude.attr('value', locale['latLng']['lat']);
         $longitude.attr('value', locale['latLng']['lng']);
 
+        unitedStatesCheck(locale);
         prepAddress();
         submitForm();
     };
 
     var reverseGeocodeCallback = function(locale) {
+        unitedStatesCheck(locale);
+
         $address.val(locale['street']);
         $city.val(locale['adminArea5']);
         $geo_state.val(locale['adminArea3']);

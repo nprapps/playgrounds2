@@ -311,6 +311,8 @@ $(function() {
     var geocodeCallback = function(locale) {
         $latitude.val(locale['latLng']['lat']);
         $longitude.val(locale['latLng']['lng']);
+
+        unitedStatesCheck(locale);
     };
 
     var reverseGeocodeCallback = function(locale) {
@@ -320,6 +322,8 @@ $(function() {
         $possible_zip_code.val(locale['postalCode']);
         $possible_latitude.val(locale['latLng']['lat']);
         $possible_longitude.val(locale['latLng']['lng']);
+
+        unitedStatesCheck(locale);
 
         $search_address.val(formatMapQuestAddress(locale));
     };

@@ -71,3 +71,10 @@ function reverseGeocode(latitude, longitude, callback) {
         }
     });
 }
+
+function unitedStatesCheck(locale) {
+    var country = locale[6]; 
+    if (country !== 'US') {
+        alert("Please provide an address located within the United States.");
+    }
+};
