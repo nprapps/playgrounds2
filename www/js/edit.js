@@ -208,6 +208,14 @@ $(function() {
         toggle_address_button();
     });
 
+    $('.modal').on('shown', function(){
+        $('html, body').css('overflow','hidden');
+    });
+
+    $('.modal').on('hidden', function(){
+        $('html, body').css('overflow','auto');
+    });
+
 
     /*
     * We only want to submit changed formfields to the server for processing.

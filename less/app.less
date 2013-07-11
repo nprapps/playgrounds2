@@ -604,7 +604,9 @@ section#the-goods { margin-top: 44px; }
 
         #edit-map {
             width: 100%;
-            height: 300px;
+            position: absolute;
+            top: 79px;
+            bottom: 44px;
             //margin-top: 10px;
             //margin-bottom: 10px;
         }
@@ -616,7 +618,7 @@ section#the-goods { margin-top: 44px; }
             right: 0;
             line-height: 34px;
             color: @white;
-            background: @primaryControl;
+            background: @secondaryControl;
             text-shadow: none;
         }
 
@@ -740,14 +742,20 @@ section#the-goods { margin-top: 44px; }
             }
 
             .edit-address-hed {
-                padding: 20px 20px 0;
+                padding: 0 20px;
+                margin: 0;
+                line-height: 44px;
             }
 
             .edit-address-footer {
-                position: fixed;
+                position: absolute;
                 bottom: 0;
                 width: 100%;
                 height: 44px;
+
+                .btn {
+                    padding: 12px 0;
+                }
             }
 
             .nav-tabs {
@@ -759,13 +767,10 @@ section#the-goods { margin-top: 44px; }
                 li {
                     display: table-cell;
                     width: 50%;
-                    background: @lightGray;
+                    background: @secondaryControl;
 
                     &.active {
                         background: @primaryControl;
-                        a {
-                            color: @white;
-                        }
                     }
 
                     a {
@@ -774,13 +779,19 @@ section#the-goods { margin-top: 44px; }
                         background: transparent;
                         .border-radius(0);
                         text-align: center;
+                        color: @white;
                     }
                 }
             }
 
             .address-pane {
+                position: absolute;
+                top: 79px;
+                bottom: 44px;
+                width: 100%;
                 padding-top: @baseLineHeight;
-                padding-bottom: 64px;
+                //padding-bottom: 64px;
+                overflow: scroll;
             }
         }
 
