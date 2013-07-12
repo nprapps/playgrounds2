@@ -23,26 +23,27 @@
 {% endblock %}
 
 {% block content %}
-<div class="create-form address-editor">
+<div class="create-form">
     <h2>{{ COPY.content.create_title }}</h2>
     <p class="muted">{{ COPY.content.create_description }}</p>
     <p class="muted bulk-email">{{ COPY.content.create_description_email }}</p>
 
-    <ul class="nav nav-tabs" id="myTab">
-        <li><a id="path-geocode" class="btn btn-large">I know the street address.</a></li>
-        <li><a id="path-reverse-geocode" class="btn btn-large">I don't know the address.</a></li>
-    </ul>
+    <a id="path-geocode" class="btn btn-large btn-block">I know the street address.</a>
+    <a id="path-reverse-geocode" class="btn btn-large btn-block">I don't know the address.</a>
 
-    <div class="path-reverse-geocode hidden address-form">
-        <p>Drag the map to update location.</p>
+    <div id="address-editor">
+        <div class="path-reverse-geocode hidden address-form">
+            <p>Drag the map to update location.</p>
 
-        <div id="edit-map">
-            <div id="edit-marker" class="icon-screenshot"></div>
+            <div id="edit-map">
+                <div id="edit-marker" class="icon-screenshot"></div>
+            </div>
+
+            <button type="button" id="geolocate" class="btn btn-large">
+                <i class="icon-screenshot"></i>
+            </button>
+
         </div>
-
-        <button type="button" id="geolocate" class="btn btn-large">
-            <i class="icon-screenshot"></i>
-        </button>
     </div>
 
     <form id="playground-form" class="row-fluid" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/insert-playground/">
