@@ -730,7 +730,7 @@ section#the-goods { margin-top: 44px; }
             }
         }
 
-        #address-editor {
+        .address-editor {
             position: absolute;
             top: 0;
             left: 0;
@@ -963,6 +963,43 @@ section#the-goods { margin-top: 44px; }
                         line-height: 30px;
                     }
                 }
+            }
+
+            .nav-tabs {
+                display: table;
+                width: 100%;
+                border: none;
+                margin-bottom: 0;
+
+                li {
+                    display: table-cell;
+                    width: 50%;
+                    background: @secondaryControl;
+
+                    &.active {
+                        background: @primaryControl;
+                    }
+
+                    a {
+                        display: block;
+                        border: none;
+                        background: transparent;
+                        .border-radius(0);
+                        text-align: center;
+                        color: @white;
+                    }
+                }
+            }
+
+            .address-pane {
+                position: absolute;
+                top: 80px;
+                bottom: 44px;
+                width: 100%;
+                padding-top: @baseLineHeight;
+                //padding-bottom: 64px;
+                -webkit-overflow-scrolling: touch;
+                overflow: scroll;
             }
         }
 

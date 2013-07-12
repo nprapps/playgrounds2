@@ -175,7 +175,9 @@ $(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
             // $search_help.hide();
             // $no_geocode.hide();
+
             map.setView([position.coords.latitude, position.coords.longitude], LOCATOR_DEFAULT_ZOOM);
+
             reverseGeocode(position.coords.latitude, position.coords.longitude, reverseGeocodeCallback);
         });
     });
@@ -235,9 +237,11 @@ $(function() {
 
     $geocode_button.on('click', function(){
         REVERSE_GEOCODE = false;
+
         $('.address-form').addClass('hidden');
         $('.path-geocode').removeClass('hidden');
         $('#accept-address').removeClass('hidden');
+
         $city.parent('div').parent('div').toggle();
         $geo_state.parent('div').parent('div').toggle();
         $zip_code.parent('div').parent('div').toggle();
@@ -246,9 +250,11 @@ $(function() {
 
     $reverse_geocode_button.on('click', function(){
         REVERSE_GEOCODE = true;
+
         $('.address-form').addClass('hidden');
         $('.path-reverse-geocode').removeClass('hidden');
         $('#accept-address').removeClass('hidden');
+
         center_editor_map();
         $city.parent('div').parent('div').toggle();
         $geo_state.parent('div').parent('div').toggle();

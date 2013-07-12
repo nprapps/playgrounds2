@@ -4,7 +4,7 @@ var $no_geocode = null;
 var $geolocate_button = null;
 var $modal_map = null;
 
-var $address = null
+var $address = null;
 var $edit_map = null;
 var $locator_map = null;
 var $modal_map = null;
@@ -100,7 +100,7 @@ function resize_locator_map() {
 }
 
 function toggle_address_button(){
-    $('#address-editor').toggleClass('hide');
+    $('.address-editor').toggleClass('hide');
     $toggle_address_button.toggleClass('btn-success');
     var button_text = $toggle_address_button.text() === 'Edit' ? 'Cancel' : 'Edit';
     $toggle_address_button.text(button_text);
@@ -165,7 +165,7 @@ $(function() {
     $locator_map = $('#locator-map');
     $modal_map = $('#modal-locator-map');
     $toggle_address_button = $('#toggle-address-button');
-    $address_editor = $('#address-editor');
+    $address_editor = $('.address-editor');
     $address_placeholder = $('#address-placeholder');
     $search_address = $('#search-address');
     $search_address_button = $('#search-address-button');
@@ -282,7 +282,7 @@ $(function() {
     map.addControl(L.mapbox.gridControl(grid_layer));
     center_editor_map();
 
-    $('#address-editor').on('shown', function() {
+    $address_editor.on('shown', function() {
         center_editor_map();
     });
 

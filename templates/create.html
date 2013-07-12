@@ -23,65 +23,53 @@
 {% endblock %}
 
 {% block content %}
-<div class="create-form">
+<div class="address-editor create-form">
     <h2>{{ COPY.content.create_title }}</h2>
     <p class="muted">{{ COPY.content.create_description }}</p>
     <p class="muted bulk-email">{{ COPY.content.create_description_email }}</p>
 
-    <a id="path-geocode" class="btn btn-large btn-block">I know the street address.</a>
-    <a id="path-reverse-geocode" class="btn btn-large btn-block">I don't know the address.</a>
+    <ul class="nav nav-tabs" id="myTab">
+      <li class="active"><a href="#map-pane" data-toggle="tab">Don't know address?</a></li>
+      <li><a href="#address-pane" data-toggle="tab"></a>Know the Address</li>
+    </ul>
 
-    <div id="address-editor" class="hide scrollable">
-        <h2 class="edit-address-hed">Edit location</h2>
-
-        <ul class="nav nav-tabs" id="myTab">
-          <li class="active"><a href="#map-pane" data-toggle="tab">Adjust position</a></li>
-          <li><a href="#address-pane" data-toggle="tab">Edit address</a></li>
-        </ul>
-
-        <div class="tab-content">
-            <div id="map-pane" class="map-pane tab-pane active">
-                <div class="edit-address-map">
-                    <div id="edit-map">
-                        <div id="edit-marker" class="icon-screenshot"></div>
-                        <a id="geolocate" class="btn btn-large">
-                            <i class="icon-location-arrow"></i>
-                        </a>
-                    </div>
-                    <p>Drag the map to update location</p>
+    <div class="tab-content">
+        <div id="map-pane" class="map-pane tab-pane active path-reverse-geocode">
+            <div class="edit-address-map">
+                <div id="edit-map">
+                    <div id="edit-marker" class="icon-screenshot"></div>
+                    <a id="geolocate" class="btn btn-large">
+                        <i class="icon-location-arrow"></i>
+                    </a>
                 </div>
-            </div>
-            <div id="address-pane" class="address-pane tab-pane scrollable">
-                <form id="playground-form" class="row-fluid" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/insert-playground/">
-                    <div class="basic-info span6">
-                    {% for field in fields %}
-                        <div class="control-group"{% if field.display %} {{ field.display|safe }}{% endif %}>
-                            <label class="control-label">{{ field.name }}</label>
-                            <div class="controls">
-                                {{ field.widget|safe }}
-                            </div>
-                        </div>
-                    {% endfor %}
-                    </div>
-                    <div class="features span6">
-                    <h4>Features</h4>
-                    {% for feature in features %}
-                        <div class="feature">
-                            {{ feature|safe }}
-                        </div>
-                    {% endfor %}
-                    </div>
-                </form>
+                <p>Drag the map to update location</p>
             </div>
         </div>
-        
-        <div class="edit-address-footer">
-            <a id="accept-address" class="btn btn-large btn-block btn-success">
-                Done
-            </a>
+        <div id="address-pane" class="address-pane tab-pane scrollable">
+
         </div>
     </div>
 
+    <form id="playground-form" class="row-fluid" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/insert-playground/">
+        <div class="basic-info span6">
+        {% for field in fields %}
+            <div class="control-group"{% if field.display %} {{ field.display|safe }}{% endif %}>
+                <label class="control-label">{{ field.name }}</label>
+                <div class="controls">
+                    {{ field.widget|safe }}
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+        <div class="features span6">
+            <h4>Features</h4>
+            {% for feature in features %}
+                <div class="feature">
+                    {{ feature|safe }}
+                </div>
+            {% endfor %}
+        </div>
+    </form>
     <button type="button" class="btn btn-large">Back</button>
     <button id="playground-update" class="btn btn-large btn-success">Save</button>
 </div>
