@@ -31,44 +31,61 @@
     <a id="path-geocode" class="btn btn-large btn-block">I know the street address.</a>
     <a id="path-reverse-geocode" class="btn btn-large btn-block">I don't know the address.</a>
 
-    <div id="address-editor">
-        <div class="path-reverse-geocode hidden address-form">
-            <p>Drag the map to update location.</p>
+    <div id="address-editor" class="hide scrollable">
+        <h2 class="edit-address-hed">Edit location</h2>
 
-            <div id="edit-map">
-                <div id="edit-marker" class="icon-screenshot"></div>
+        <ul class="nav nav-tabs" id="myTab">
+          <li class="active"><a href="#map-pane" data-toggle="tab">Adjust position</a></li>
+          <li><a href="#address-pane" data-toggle="tab">Edit address</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="map-pane" class="map-pane tab-pane active">
+                <div class="edit-address-map">
+                    <div id="edit-map">
+                        <div id="edit-marker" class="icon-screenshot"></div>
+                        <a id="geolocate" class="btn btn-large">
+                            <i class="icon-location-arrow"></i>
+                        </a>
+                    </div>
+                    <p>Drag the map to update location</p>
+                </div>
             </div>
-
-            <button type="button" id="geolocate" class="btn btn-large">
-                <i class="icon-screenshot"></i>
-            </button>
-
+            <div id="address-pane" class="address-pane tab-pane scrollable">
+                <form id="playground-form" class="row-fluid" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/insert-playground/">
+                    <div class="basic-info span6">
+                    {% for field in fields %}
+                        <div class="control-group"{% if field.display %} {{ field.display|safe }}{% endif %}>
+                            <label class="control-label">{{ field.name }}</label>
+                            <div class="controls">
+                                {{ field.widget|safe }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                    <div class="features span6">
+                    <h4>Features</h4>
+                    {% for feature in features %}
+                        <div class="feature">
+                            {{ feature|safe }}
+                        </div>
+                    {% endfor %}
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="edit-address-footer">
+            <a id="accept-address" class="btn btn-large btn-block btn-success">
+                Done
+            </a>
         </div>
     </div>
 
-    <form id="playground-form" class="row-fluid" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/insert-playground/">
-        <div class="basic-info span6">
-        {% for field in fields %}
-            <div class="control-group"{% if field.display %} {{ field.display|safe }}{% endif %}>
-                <label class="control-label">{{ field.name }}</label>
-                <div class="controls">
-                    {{ field.widget|safe }}
-                </div>
-            </div>
-        {% endfor %}
-        </div>
-        <div class="features span6">
-        <h4>Features</h4>
-        {% for feature in features %}
-            <div class="feature">
-                {{ feature|safe }}
-            </div>
-        {% endfor %}
-        </div>
-    </form>
     <button type="button" class="btn btn-large">Back</button>
     <button id="playground-update" class="btn btn-large btn-success">Save</button>
 </div>
+
 {% endblock %}
 
 {% block extra_foot_js %}
