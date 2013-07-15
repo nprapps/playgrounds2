@@ -1,19 +1,17 @@
 $(function() {
     var playground = {
-        "constants": {
-            "ACTION": get_parameter_by_name('action'),
-            "BASE_LAYER": APP_CONFIG.MAPBOX_BASE_LAYER,
-            "CONTENT_WIDTH": 0,
-            "GEOLOCATE": Modernizr.geolocation,
-            "LOCATOR_DEFAULT_ZOOM": 15,
-            "PAGE_WIDTH": 0,
-            "RESULTS_MAP_WIDTH": 500,
-            "RESULTS_MAP_HEIGHT": 500,
-            "RESULTS_MAX_ZOOM": 16,
-            "RESULTS_MIN_ZOOM": 8,
-            "RESULTS_DEFAULT_ZOOM": 14,
-            "RETINA": window.devicePixelRatio > 1
-        },
+        "ACTION": get_parameter_by_name('action'),
+        "BASE_LAYER": APP_CONFIG.MAPBOX_BASE_LAYER,
+        "CONTENT_WIDTH": 0,
+        "GEOLOCATE": Modernizr.geolocation,
+        "LOCATOR_DEFAULT_ZOOM": 15,
+        "PAGE_WIDTH": 0,
+        "RESULTS_MAP_WIDTH": 500,
+        "RESULTS_MAP_HEIGHT": 500,
+        "RESULTS_MAX_ZOOM": 16,
+        "RESULTS_MIN_ZOOM": 8,
+        "RESULTS_DEFAULT_ZOOM": 14,
+        "RETINA": window.devicePixelRatio > 1,
         "fields": {
             // Many other fields are set dynamically.
             "locator_map": $('#locator-map'),
@@ -23,29 +21,29 @@ $(function() {
         },
         "callbacks": {
             "geocode": function(locale) {
-                playground.fields.latitude.attr('value', locale['latLng']['lat']);
-                playground.fields.longitude.attr('value', locale['latLng']['lng']);
+                this.fields.latitude.attr('value', locale['latLng']['lat']);
+                this.fields.longitude.attr('value', locale['latLng']['lng']);
                 require_us_address(locale);
-                playground.form.geocode_fields();
+                this.form.geocode_fields();
                 $('#form').submit();
             },
             "reverse_geocode": function(locale) {
-                playground.fields.address.val(locale['street']);
-                playground.fields.city.val(locale['adminArea5']);
-                playground.fields.state.val(locale['adminArea3']);
-                playground.fields.zip_code.val(locale['postalCode']);
-                playground.fields.latitude.val(locale['latLng']['lat']);
-                playground.fields.longitude.val(locale['latLng']['lng']);
+                this.fields.address.val(locale['street']);
+                this.fields.city.val(locale['adminArea5']);
+                this.fields.state.val(locale['adminArea3']);
+                this.fields.zip_code.val(locale['postalCode']);
+                this.fields.latitude.val(locale['latLng']['lat']);
+                this.fields.longitude.val(locale['latLng']['lng']);
             }
         },
         "form": {
             "submit": function() {
-                if ( playground.fields.reverse_geocode.attr('checked') !== 'checked' ) {
-                    playground.geocode(playground.form.prepare_geocode_string(), playground.callbacks.geocode);
+                if ( this.fields.reverse_geocode.attr('checked') !== 'checked' ) {
+                    this.geocode(this.form.prepare_geocode_string(), this.callbacks.geocode);
                 } else {
-                    playground.form.geocode_fields();
-                    playground.fields.reverse_geocoded.attr('checked', 'checked');
-                    playground.fields.reverse_geocoded.attr('data-changed', 'true');
+                    this.form.geocode_fields();
+                    this.fields.reverse_geocoded.attr('checked', 'checked');
+                    this.fields.reverse_geocoded.attr('data-changed', 'true');
                     $('#form').submit();
                 }
                 return false;
@@ -59,7 +57,7 @@ $(function() {
                     }
                 });
                 if (flagged_fields.length > 0){
-                    playground.form.flag_fields(flagged_fields);
+                    this.form.flag_fields(flagged_fields);
                     return false;
                 } else {
                     return true;
@@ -70,27 +68,27 @@ $(function() {
                 $(required_field).addClass('flagged');
             },
             "prepare_geocode_string": function() {
-                var geocode_string = playground.address.val();
-                geocode_string += ' ' + playground.city.val();
-                geocode_string += ', ' + playground.state.val();
-                return geocode_string + ' ' + playground.zip_code.val();
+                var geocode_string = this.address.val();
+                geocode_string += ' ' + this.city.val();
+                geocode_string += ', ' + this.state.val();
+                return geocode_string + ' ' + this.zip_code.val();
             },
             "geocode_fields": function() {
                 // Set the base location fields to "changed" so that they will POST.
-                playground.fields.address.attr('data-changed', 'true');
-                playground.fields.city.attr('data-changed', 'true');
-                playground.fields.state.attr('data-changed', 'true');
-                playground.fields.zip_code.attr('data-changed', 'true');
-                playground.fields.latitude.attr('data-changed', 'true');
-                playground.fields.longitude.attr('data-changed', 'true');
+                this.fields.address.attr('data-changed', 'true');
+                this.fields.city.attr('data-changed', 'true');
+                this.fields.state.attr('data-changed', 'true');
+                this.fields.zip_code.attr('data-changed', 'true');
+                this.fields.latitude.attr('data-changed', 'true');
+                this.fields.longitude.attr('data-changed', 'true');
 
                 // Try to set the state to a proper state name.
-                playground.fields.state.val(STATE_NAME_TO_CODE[playground.fields.state.val()]);
+                this.fields.state.val(STATE_NAME_TO_CODE[this.fields.state.val()]);
 
                 // Reset the locator map.
-                playground.fields.locator_map.data('latitude', playground.fields.latitude.val());
-                playground.fields.locator_map.data('longitude', playground.fields.longitude.val());
-                playground.map.resize_locator();
+                this.fields.locator_map.data('latitude', this.fields.latitude.val());
+                this.fields.locator_map.data('longitude', this.fields.longitude.val());
+                this.map.resize_locator();
             }
         },
         "map": {
@@ -103,20 +101,20 @@ $(function() {
                     scrollWheelZoom: false
                 });
 
-                map_layer = L.mapbox.tileLayer(playground.constants.BASE_LAYER).addTo(map);
-                grid_layer = L.mapbox.gridLayer(playground.constants.BASE_LAYER).addTo(map);
+                map_layer = L.mapbox.tileLayer(this.BASE_LAYER).addTo(map);
+                grid_layer = L.mapbox.gridLayer(this.BASE_LAYER).addTo(map);
                 map.addControl(L.mapbox.gridControl(grid_layer));
 
-                if (playground.fields.latitude.val() !== '' && playground.fields.longitude.val() !== '') {
+                if (this.fields.latitude.val() !== '' && this.fields.longitude.val() !== '') {
                     map.setView([
-                            playground.fields.latitude.val(),
-                            playground.fields.longitude.val()],
-                        playground.constants.LOCATOR_DEFAULT_ZOOM);
+                            this.fields.latitude.val(),
+                            this.fields.longitude.val()],
+                        this.LOCATOR_DEFAULT_ZOOM);
                 } else {
                     map.setView([38.9, -77], 12);
                 }
                 console.log(map);
-                playground.map.center_editor();
+                this.map.center_editor();
             },
             "center_editor": function() {
                 map.invalidateSize(false);
@@ -125,20 +123,20 @@ $(function() {
                 $('#edit-marker').css({'left': marker_left, 'top': marker_top});
             },
             "resize_locator": function() {
-                playground.constants.CONTENT_WIDTH = $('#main-content').width();
-                playground.constants.PAGE_WIDTH = $('body').outerWidth();
-                var lat = playground.fields.locator_map.data('latitude');
-                var lon = playground.fields.locator_map.data('longitude'); // Because iOS refuses to obey toString()
+                this.CONTENT_WIDTH = $('#main-content').width();
+                this.PAGE_WIDTH = $('body').outerWidth();
+                var lat = this.fields.locator_map.data('latitude');
+                var lon = this.fields.locator_map.data('longitude'); // Because iOS refuses to obey toString()
                 var map_path;
                 var new_height;
-                var new_width = playground.constants.CONTENT_WIDTH;
+                var new_width = this.CONTENT_WIDTH;
 
-                if (playground.constants.PAGE_WIDTH > 480) {
+                if (this.PAGE_WIDTH > 480) {
                     new_width = Math.floor(new_width / 2) - 22;
                 }
-                new_height = Math.floor(playground.constants.CONTENT_WIDTH / 3);
+                new_height = Math.floor(this.CONTENT_WIDTH / 3);
 
-                if (playground.constants.RETINA) {
+                if (this.RETINA) {
                     new_width = new_width * 2;
                     if (new_width > 640) {
                         new_width = 640;
@@ -146,23 +144,23 @@ $(function() {
                     new_height = Math.floor(new_width / 3);
                 }
 
-                map_path = 'http://api.tiles.mapbox.com/v3/' + playground.constants.BASE_LAYER + '/pin-m-star+ff6633(' + lon + ',' + lat + ')/' + lon + ',' + lat + ',' + playground.constants.LOCATOR_DEFAULT_ZOOM + '/' + new_width + 'x' + new_height + '.png';
-                playground.fields.locator_map.attr('src', map_path);
-                playground.fields.modal_map.attr('src', map_path);
+                map_path = 'http://api.tiles.mapbox.com/v3/' + this.BASE_LAYER + '/pin-m-star+ff6633(' + lon + ',' + lat + ')/' + lon + ',' + lat + ',' + this.LOCATOR_DEFAULT_ZOOM + '/' + new_width + 'x' + new_height + '.png';
+                this.fields.locator_map.attr('src', map_path);
+                this.fields.modal_map.attr('src', map_path);
             }
         },
         "locate_me": function() {
             navigator.geolocation.getCurrentPosition(function(position) {
-                map.setView([position.coords.latitude, position.coords.longitude], playground.constants.LOCATOR_DEFAULT_ZOOM);
-                playground.reverse_geocode(position.coords.latitude, position.coords.longitude, playground.callbacks.reverse_geocode);
+                map.setView([position.coords.latitude, position.coords.longitude], this.LOCATOR_DEFAULT_ZOOM);
+                this.reverse_geocode(position.coords.latitude, position.coords.longitude, this.callbacks.reverse_geocode);
             });
         },
         "activate_path": function(path) {
             $('#form .path').hide();
             $('.' + path).show();
-            playground.map.center_editor();
+            this.map.center_editor();
             if ( $(this).attr('data-reverse-geocode') === 'checked' ) {
-                playground.fields.reverse_geocode.attr('checked', 'checked');
+                this.fields.reverse_geocode.attr('checked', 'checked');
             }
         },
         "geocode": function(address_string, callback) {
@@ -212,32 +210,32 @@ $(function() {
 
             // Loop and add a playgrounds.field attribute for each of these fields.
             $.each(field_list, function(index, field_name){
-                playground.fields[field_name] = $('input[name="' + field_name + '"]');
+                this.fields[field_name] = $('input[name="' + field_name + '"]');
             });
 
             // Set up the screen width constants.
-            playground.constants.CONTENT_WIDTH = $('#main-content').width();
-            playground.constants.PAGE_WIDTH = $('body').outerWidth();
-            playground.constants.RESULTS_MAP_WIDTH = playground.constants.CONTENT_WIDTH;
-            playground.constants.RESULTS_MAP_HEIGHT = playground.constants.CONTENT_WIDTH;
-            if (playground.constants.RETINA) {
-                playground.constants.BASE_LAYER = APP_CONFIG.MAPBOX_BASE_LAYER_RETINA;
-                playground.constants.LOCATOR_DEFAULT_ZOOM += 1;
-                playground.constants.RESULTS_DEFAULT_ZOOM += 1;
+            this.CONTENT_WIDTH = $('#main-content').width();
+            this.PAGE_WIDTH = $('body').outerWidth();
+            this.RESULTS_MAP_WIDTH = this.CONTENT_WIDTH;
+            this.RESULTS_MAP_HEIGHT = this.CONTENT_WIDTH;
+            if (this.RETINA) {
+                this.BASE_LAYER = APP_CONFIG.MAPBOX_BASE_LAYER_RETINA;
+                this.LOCATOR_DEFAULT_ZOOM += 1;
+                this.RESULTS_DEFAULT_ZOOM += 1;
             }
 
             // Set up the map.
-            playground.map.init();
+            this.map.init();
 
             // Watch the map.
             // Perform a reverse geocode when the map is finished moving.
             map.on('moveend', function() {
                 var latlng = map.getCenter();
-                playground.reverse_geocode(latlng.lat, latlng.lng, playground.callbacks.reverse_geocode);
+                this.reverse_geocode(latlng.lat, latlng.lng, this.callbacks.reverse_geocode);
             });
 
             // Activate the default geocode path. In this case, the map?
-            playground.activate_path('path-1');
+            this.activate_path('path-1');
 
             // Sets up the click functions for each of the buttons.
             // Requires a data-action attribute on the button element.
@@ -259,10 +257,10 @@ $(function() {
             });
 
             // Check to see if we've got a message to show.
-            if (playground.constants.ACTION !== null){
+            if (this.ACTION !== null){
 
                 // We'll name the message div after the URL param.
-                $('#' + playground.constants.ACTION).toggleClass('hide');
+                $('#' + this.ACTION).toggleClass('hide');
             }
 
             // Set up the features tooltip.
@@ -270,20 +268,20 @@ $(function() {
 
             // Do this thing with the map.
             if ( $('#locator-map') ) {
-                playground.map.resize_locator();
-                $(window).resize(_.debounce(playground.map.resize_locator_map, 100));
+                this.map.resize_locator();
+                $(window).resize(_.debounce(this.map.resize_locator_map, 100));
             }
 
             // All of this meta_hdr and meta_items stuff.
-            playground.fields.meta_hdr.html(playground.fields.meta_hdr.html() + ' &rsaquo;');
-            playground.fields.meta_items.hide();
-            playground.fields.meta_hdr.on('click', function() {
-                playground.fields.meta_items.slideToggle('fast');
+            this.fields.meta_hdr.html(this.fields.meta_hdr.html() + ' &rsaquo;');
+            this.fields.meta_items.hide();
+            this.fields.meta_hdr.on('click', function() {
+                this.fields.meta_items.slideToggle('fast');
             });
 
         }
     };
 
     // Initialize the playground object.
-    playground.init();
+    this.init();
 });
