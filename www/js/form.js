@@ -34,7 +34,6 @@ $(function() {
                 playground.fields.zip_code.val(locale['postalCode']);
                 playground.fields.latitude.val(locale['latLng']['lat']);
                 playground.fields.longitude.val(locale['latLng']['lng']);
-                console.log(playground.fields.address.attr('value'));
             }
         },
         'form': {
@@ -106,7 +105,7 @@ $(function() {
                 grid_layer = L.mapbox.gridLayer(playground.BASE_LAYER).addTo(map);
                 map.addControl(L.mapbox.gridControl(grid_layer));
 
-                if (playground.fields.latitude.val() !== undefined && playground.fields.longitude.val() !== undefined) {
+                if (playground.fields.latitude.val() !== '' && playground.fields.longitude.val() !== '') {
                     map.setView([
                             playground.fields.latitude.val(),
                             playground.fields.longitude.val()],
@@ -211,10 +210,8 @@ $(function() {
 
             // Loop and add a playgrounds.field attribute for each of these fields.
             $.each(field_list, function(index, field_name){
-                playground.fields[field_name] = $("input[name='' + field_name + '']");
+                playground.fields[field_name] = $('input[name="' + field_name + '"]');
             });
-
-            console.log(playground.fields)
 
             // Set up the screen width constants.
             playground.CONTENT_WIDTH = $('#main-content').width();
