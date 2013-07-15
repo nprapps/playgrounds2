@@ -106,7 +106,7 @@ $(function() {
                 map_layer = L.mapbox.tileLayer(BASE_LAYER).addTo(map);
                 grid_layer = L.mapbox.gridLayer(BASE_LAYER).addTo(map);
                 map.addControl(L.mapbox.gridControl(grid_layer));
-                center_editor_map();
+                playground.map.center_editor();
 
                 if (playground.fields.latitude.val() !== '' && playground.fields.longitude.val() !== '') {
                     map.setView([
