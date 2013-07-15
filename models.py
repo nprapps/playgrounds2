@@ -254,7 +254,7 @@ class Playground(Model):
 
             elif field in ['latitude', 'longitude', 'address', 'public_remarks', 'city', 'state', 'zip_code']:
                 field_dict['display'] = 'style="display:none"'
-                field_dict['widget'] = '<input type="text" name="%s" value="%s"></input>' % (field, field_value)
+                field_dict['widget'] = '<input class="input-block-level input" type="text" name="%s" value="%s"></input>' % (field, field_value)
 
             else:
                 field_dict['widget'] = '<input class="input-block-level input" type="text" name="%s" value="%s"></input>' % (field, field_value)

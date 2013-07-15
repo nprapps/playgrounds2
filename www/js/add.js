@@ -172,11 +172,7 @@ $(function() {
 
     $geolocate_button.click(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
-            $search_help.hide();
-            $no_geocode.hide();
-
             map.setView([position.coords.latitude, position.coords.longitude], LOCATOR_DEFAULT_ZOOM);
-
             reverseGeocode(position.coords.latitude, position.coords.longitude, reverseGeocodeCallback);
         });
     });
