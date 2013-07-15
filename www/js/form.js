@@ -1,33 +1,33 @@
 $(function() {
     var playground = {
-        "ACTION": get_parameter_by_name('action'),
-        "BASE_LAYER": APP_CONFIG.MAPBOX_BASE_LAYER,
-        "CONTENT_WIDTH": 0,
-        "GEOLOCATE": Modernizr.geolocation,
-        "LOCATOR_DEFAULT_ZOOM": 15,
-        "PAGE_WIDTH": 0,
-        "RESULTS_MAP_WIDTH": 500,
-        "RESULTS_MAP_HEIGHT": 500,
-        "RESULTS_MAX_ZOOM": 16,
-        "RESULTS_MIN_ZOOM": 8,
-        "RESULTS_DEFAULT_ZOOM": 14,
-        "RETINA": window.devicePixelRatio > 1,
-        "fields": {
+        'ACTION': get_parameter_by_name('action'),
+        'BASE_LAYER': APP_CONFIG.MAPBOX_BASE_LAYER,
+        'CONTENT_WIDTH': 0,
+        'GEOLOCATE': Modernizr.geolocation,
+        'LOCATOR_DEFAULT_ZOOM': 15,
+        'PAGE_WIDTH': 0,
+        'RESULTS_MAP_WIDTH': 500,
+        'RESULTS_MAP_HEIGHT': 500,
+        'RESULTS_MAX_ZOOM': 16,
+        'RESULTS_MIN_ZOOM': 8,
+        'RESULTS_DEFAULT_ZOOM': 14,
+        'RETINA': window.devicePixelRatio > 1,
+        'fields': {
             // Many other fields are set dynamically.
-            "locator_map": $('#locator-map'),
-            "modal_map": $('#modal-locator-map'),
-            "meta_items": $('#main-content').find('.about').find('ul.meta'),
-            "meta_hdr": $('#main-content').find('.about').find('h5.meta')
+            'locator_map': $('#locator-map'),
+            'modal_map': $('#modal-locator-map'),
+            'meta_items': $('#main-content').find('.about').find('ul.meta'),
+            'meta_hdr': $('#main-content').find('.about').find('h5.meta')
         },
-        "callbacks": {
-            "geocode": function(locale) {
+        'callbacks': {
+            'geocode': function(locale) {
                 this.fields.latitude.attr('value', locale['latLng']['lat']);
                 this.fields.longitude.attr('value', locale['latLng']['lng']);
                 require_us_address(locale);
                 this.form.geocode_fields();
                 $('#form').submit();
             },
-            "reverse_geocode": function(locale) {
+            'reverse_geocode': function(locale) {
                 this.fields.address.val(locale['street']);
                 this.fields.city.val(locale['adminArea5']);
                 this.fields.state.val(locale['adminArea3']);
@@ -36,8 +36,8 @@ $(function() {
                 this.fields.longitude.val(locale['latLng']['lng']);
             }
         },
-        "form": {
-            "submit": function() {
+        'form': {
+            'submit': function() {
                 if ( this.fields.reverse_geocode.attr('checked') !== 'checked' ) {
                     this.geocode(this.form.prepare_geocode_string(), this.callbacks.geocode);
                 } else {
@@ -48,8 +48,8 @@ $(function() {
                 }
                 return false;
             },
-            "validate": function() {
-                var required_fields = $('#form input[data-required="true"]');
+            'validate': function() {
+                var required_fields = $('#form input[data-required='true']');
                 var flagged_fields = [];
                 $.each(required_fields, function(index, required_field){
                     if (required_field.val === '') {
@@ -64,17 +64,17 @@ $(function() {
                 }
 
             },
-            "flag_fields": function(flagged_fields) {
+            'flag_fields': function(flagged_fields) {
                 $(required_field).addClass('flagged');
             },
-            "prepare_geocode_string": function() {
+            'prepare_geocode_string': function() {
                 var geocode_string = this.address.val();
                 geocode_string += ' ' + this.city.val();
                 geocode_string += ', ' + this.state.val();
                 return geocode_string + ' ' + this.zip_code.val();
             },
-            "geocode_fields": function() {
-                // Set the base location fields to "changed" so that they will POST.
+            'geocode_fields': function() {
+                // Set the base location fields to 'changed' so that they will POST.
                 this.fields.address.attr('data-changed', 'true');
                 this.fields.city.attr('data-changed', 'true');
                 this.fields.state.attr('data-changed', 'true');
@@ -91,8 +91,8 @@ $(function() {
                 this.map.resize_locator();
             }
         },
-        "map": {
-            "init": function() {
+        'map': {
+            'init': function() {
                 /*
                 * Initializes the map.
                 */
@@ -116,13 +116,13 @@ $(function() {
                 console.log(map);
                 this.map.center_editor();
             },
-            "center_editor": function() {
+            'center_editor': function() {
                 map.invalidateSize(false);
                 var marker_left = $('#edit-map').width()/2 - 8;
                 var marker_top = $('#edit-map').height()/2 - 8;
                 $('#edit-marker').css({'left': marker_left, 'top': marker_top});
             },
-            "resize_locator": function() {
+            'resize_locator': function() {
                 this.CONTENT_WIDTH = $('#main-content').width();
                 this.PAGE_WIDTH = $('body').outerWidth();
                 var lat = this.fields.locator_map.data('latitude');
@@ -149,13 +149,13 @@ $(function() {
                 this.fields.modal_map.attr('src', map_path);
             }
         },
-        "locate_me": function() {
+        'locate_me': function() {
             navigator.geolocation.getCurrentPosition(function(position) {
                 map.setView([position.coords.latitude, position.coords.longitude], this.LOCATOR_DEFAULT_ZOOM);
                 this.reverse_geocode(position.coords.latitude, position.coords.longitude, this.callbacks.reverse_geocode);
             });
         },
-        "activate_path": function(path) {
+        'activate_path': function(path) {
             $('#form .path').hide();
             $('.' + path).show();
             this.map.center_editor();
@@ -163,7 +163,7 @@ $(function() {
                 this.fields.reverse_geocode.attr('checked', 'checked');
             }
         },
-        "geocode": function(address_string, callback) {
+        'geocode': function(address_string, callback) {
             $.ajax({
                 'url': 'http://open.mapquestapi.com/geocoding/v1/?inFormat=kvp&location=' + address_string,
                 'dataType': 'jsonp',
@@ -176,7 +176,7 @@ $(function() {
                 }
             });
         },
-        "reverse_geocode": function(latitude, longitude, callback) {
+        'reverse_geocode': function(latitude, longitude, callback) {
             $.ajax({
                 'url': 'http://open.mapquestapi.com/geocoding/v1/reverse',
                 'data': { 'location': latitude + ',' + longitude },
@@ -196,21 +196,21 @@ $(function() {
                 }
             });
         },
-        "init": function() {
+        'init': function() {
             // Set all of the playground field names.
             // List of fields we'd like to set up.
             var field_list = [
-                "address",
-                "city",
-                "state",
-                "zip_code",
-                "latitude",
-                "longitude",
-                "reverse_geocoded"];
+                'address',
+                'city',
+                'state',
+                'zip_code',
+                'latitude',
+                'longitude',
+                'reverse_geocoded'];
 
             // Loop and add a playgrounds.field attribute for each of these fields.
             $.each(field_list, function(index, field_name){
-                this.fields[field_name] = $('input[name="' + field_name + '"]');
+                this.fields[field_name] = $("input[name='' + field_name + '']");
             });
 
             // Set up the screen width constants.
