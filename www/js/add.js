@@ -12,7 +12,7 @@ var $latitude = null;
 var $longitude = null;
 var $playground_meta_hdr = null;
 var $playground_meta_items = null;
-var $reverse_geocoded = null;
+
 var $edit_alert = null;
 
 var BASE_LAYER = APP_CONFIG.MAPBOX_BASE_LAYER;
@@ -89,7 +89,6 @@ $(function() {
     $zip_code = $('input[name="zip_code"]');
     $latitude = $('input[name="latitude"]');
     $longitude = $('input[name="longitude"]');
-    $reverse_geocoded = $('input[name="reverse_geocoded"]');
 
     $playground_meta_hdr = $('#main-content').find('.about').find('h5.meta');
     $playground_meta_items = $('#main-content').find('.about').find('ul.meta');
@@ -116,8 +115,14 @@ $(function() {
     });
 
     $('#playground-update').on('click', function(){
-        if ( REVERSE_GEOCODE === false ) {
+        // Loop over the inputs inside the form.
+        $.each($('#playground-form .input'), function(index, item) {
+            if ($(item).attr('data-changed') != 'true') {
+                $(item).removeAttr('name');
+            }
+        });
 
+        if ( REVERSE_GEOCODE === false ) {
             var address_string = '';
             address_string += $address.val() + ' ';
             address_string += $city.val() + ', ';
@@ -125,14 +130,9 @@ $(function() {
             address_string += $zip_code.val();
 
             geocode(address_string, geocodeCallback);
-
         } else {
-
             prepAddress();
-            $reverse_geocoded.attr('checked', 'checked');
-            $reverse_geocoded.attr('data-changed', 'true');
-
-            submitForm();
+            $('#playground-form').submit();
         }
         return false;
     });
@@ -157,9 +157,8 @@ $(function() {
         $latitude.attr('value', locale['latLng']['lat']);
         $longitude.attr('value', locale['latLng']['lng']);
 
-        unitedStatesCheck(locale);
         prepAddress();
-        submitForm();
+        $('#playground-form').submit();
     };
 
     var reverseGeocodeCallback = function(locale) {
@@ -173,8 +172,8 @@ $(function() {
 
     $geolocate_button.click(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
-            // $search_help.hide();
-            // $no_geocode.hide();
+            $search_help.hide();
+            $no_geocode.hide();
 
             map.setView([position.coords.latitude, position.coords.longitude], LOCATOR_DEFAULT_ZOOM);
 
@@ -208,15 +207,7 @@ $(function() {
         });
     }
 
-    var submitForm = function() {
-        if ( $('input[name="name"]').val() === '' || $address.val() === '' ){
-            alert('You are missing form fields.');
-        } else {
-            $('#playground-form').submit();
-        }
-    };
-
-    var prepAddress = function() {
+    function prepAddress() {
         $address.attr('data-changed', 'true');
         $city.attr('data-changed', 'true');
         $geo_state.attr('data-changed', 'true');
@@ -233,15 +224,13 @@ $(function() {
         $longitude.attr('data-changed', 'true');
         $locator_map.data('longitude', $longitude.val());
         resize_locator_map();
-    };
+    }
 
     $geocode_button.on('click', function(){
         REVERSE_GEOCODE = false;
-
         $('.address-form').addClass('hidden');
         $('.path-geocode').removeClass('hidden');
         $('#accept-address').removeClass('hidden');
-
         $city.parent('div').parent('div').toggle();
         $geo_state.parent('div').parent('div').toggle();
         $zip_code.parent('div').parent('div').toggle();
@@ -250,11 +239,9 @@ $(function() {
 
     $reverse_geocode_button.on('click', function(){
         REVERSE_GEOCODE = true;
-
         $('.address-form').addClass('hidden');
         $('.path-reverse-geocode').removeClass('hidden');
         $('#accept-address').removeClass('hidden');
-
         center_editor_map();
         $city.parent('div').parent('div').toggle();
         $geo_state.parent('div').parent('div').toggle();

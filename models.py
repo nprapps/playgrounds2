@@ -243,7 +243,7 @@ class Playground(Model):
             # Everything else should be an if/elif/else instead of if/if/else.
             if field == 'id':
                 field_dict['display'] = 'style="display:none"'
-                field_dict['widget'] = '<input type="text" name="%s" value="%s" data-changed="true"></input>' % (field, field_value)
+                field_dict['widget'] = '<input class="input-block-level input" type="text" name="%s" value="%s" data-changed="true"></input>' % (field, field_value)
 
             # elif field == 'public_remarks':
             #     field_dict['widget'] = '<textarea class="input-block-level input" name="%s" rows="10">%s</textarea>' % (field, field_value)

@@ -832,12 +832,15 @@ section#the-goods { margin-top: 44px; }
     }
 
     .create-form {
-        #search-help {
-            display: none;
-        }
 
-        #no-geocode {
-            display: none;
+        .create-paths a {
+            background: @primaryControl;
+            display: block;
+            border: none;
+            text-shadow: none;
+            .border-radius(0);
+            text-align: center;
+            color: @white;
         }
 
         #search-form {
@@ -873,6 +876,17 @@ section#the-goods { margin-top: 44px; }
             font-size: 24px;
             text-align: center;
             color: #ff6633;
+        }
+
+        #geolocate {
+            position: absolute;
+            z-index: 10000;
+            bottom: 0;
+            right: 0;
+            line-height: 34px;
+            color: @white;
+            background: @secondaryControl;
+            text-shadow: none;
         }
 
         ol {
@@ -967,42 +981,6 @@ section#the-goods { margin-top: 44px; }
                 }
             }
 
-            .nav-tabs {
-                display: table;
-                width: 100%;
-                border: none;
-                margin-bottom: 0;
-
-                li {
-                    display: table-cell;
-                    width: 50%;
-                    background: @secondaryControl;
-
-                    &.active {
-                        background: @primaryControl;
-                    }
-
-                    a {
-                        display: block;
-                        border: none;
-                        background: transparent;
-                        .border-radius(0);
-                        text-align: center;
-                        color: @white;
-                    }
-                }
-            }
-
-            .address-pane {
-                position: absolute;
-                top: 80px;
-                bottom: 44px;
-                width: 100%;
-                padding-top: @baseLineHeight;
-                //padding-bottom: 64px;
-                -webkit-overflow-scrolling: touch;
-                overflow: scroll;
-            }
         }
 
         @media @screen-tiny {
