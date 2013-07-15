@@ -22,14 +22,14 @@ $(function() {
             "meta_hdr": $('#main-content').find('.about').find('h5.meta')
         },
         "callbacks": {
-            "geocode": function() {
+            "geocode": function(locale) {
                 playground.fields.latitude.attr('value', locale['latLng']['lat']);
                 playground.fields.longitude.attr('value', locale['latLng']['lng']);
                 require_us_address(locale);
                 playground.form.geocode_fields();
                 $('#form').submit();
             },
-            "reverse_geocode": function() {
+            "reverse_geocode": function(locale) {
                 playground.fields.address.val(locale['street']);
                 playground.fields.city.val(locale['adminArea5']);
                 playground.fields.state.val(locale['adminArea3']);
@@ -90,7 +90,7 @@ $(function() {
                 // Reset the locator map.
                 playground.fields.locator_map.data('latitude', playground.fields.latitude.val());
                 playground.fields.locator_map.data('longitude', playground.fields.longitude.val());
-                resize_locator_map();
+                playground.map.resize_locator();
             }
         },
         "map": {
@@ -103,10 +103,9 @@ $(function() {
                     scrollWheelZoom: false
                 });
 
-                map_layer = L.mapbox.tileLayer(BASE_LAYER).addTo(map);
-                grid_layer = L.mapbox.gridLayer(BASE_LAYER).addTo(map);
+                map_layer = L.mapbox.tileLayer(playground.constants.BASE_LAYER).addTo(map);
+                grid_layer = L.mapbox.gridLayer(playground.constants.BASE_LAYER).addTo(map);
                 map.addControl(L.mapbox.gridControl(grid_layer));
-                playground.map.center_editor();
 
                 if (playground.fields.latitude.val() !== '' && playground.fields.longitude.val() !== '') {
                     map.setView([
@@ -116,6 +115,8 @@ $(function() {
                 } else {
                     map.setView([38.9, -77], 12);
                 }
+                console.log(map);
+                playground.map.center_editor();
             },
             "center_editor": function() {
                 map.invalidateSize(false);
@@ -145,9 +146,9 @@ $(function() {
                     new_height = Math.floor(new_width / 3);
                 }
 
-                map_path = 'http://api.tiles.mapbox.com/v3/' + playground.constants.BASE_LAYER + '/pin-m-star+ff6633(' + lon + ',' + lat + ')/' + lon + ',' + lat + ',' + LOCATOR_DEFAULT_ZOOM + '/' + new_width + 'x' + new_height + '.png';
+                map_path = 'http://api.tiles.mapbox.com/v3/' + playground.constants.BASE_LAYER + '/pin-m-star+ff6633(' + lon + ',' + lat + ')/' + lon + ',' + lat + ',' + playground.constants.LOCATOR_DEFAULT_ZOOM + '/' + new_width + 'x' + new_height + '.png';
                 playground.fields.locator_map.attr('src', map_path);
-                playgrounds.fields.modal_map.attr('src', map_path);
+                playground.fields.modal_map.attr('src', map_path);
             }
         },
         "locate_me": function() {
@@ -159,6 +160,7 @@ $(function() {
         "activate_path": function(path) {
             $('#form .path').hide();
             $('.' + path).show();
+            playground.map.center_editor();
             if ( $(this).attr('data-reverse-geocode') === 'checked' ) {
                 playground.fields.reverse_geocode.attr('checked', 'checked');
             }
@@ -224,12 +226,22 @@ $(function() {
                 playground.constants.RESULTS_DEFAULT_ZOOM += 1;
             }
 
+            // Set up the map.
+            playground.map.init();
+
+            // Watch the map.
+            // Perform a reverse geocode when the map is finished moving.
+            map.on('moveend', function() {
+                var latlng = map.getCenter();
+                playground.reverse_geocode(latlng.lat, latlng.lng, playground.callbacks.reverse_geocode);
+            });
+
             // Activate the default geocode path. In this case, the map?
-            playground.activate_path('path-2');
+            playground.activate_path('path-1');
 
             // Sets up the click functions for each of the buttons.
             // Requires a data-action attribute on the button element.
-            $('button').each(function(index, action){
+            $('#form a.btn').each(function(index, action){
                 $(this).on('click', function(){
                     playground[$(this).attr('data-action')]($(this).attr('data-path'));
                     return false;
@@ -253,22 +265,12 @@ $(function() {
                 $('#' + playground.constants.ACTION).toggleClass('hide');
             }
 
-            // Set up the map.
-            playground.map.init();
-
-            // Watch the map.
-            // Perform a reverse geocode when the map is finished moving.
-            map.on('moveend', function() {
-                var latlng = map.getCenter();
-                playground.reverse_geocode(latlng.lat, latlng.lng, playground.callbacks.reverse_geocode);
-            });
-
             // Set up the features tooltip.
             $('.playground-features i').tooltip( { trigger: 'click' } );
 
             // Do this thing with the map.
             if ( $('#locator-map') ) {
-                playground.map.resize_locator_map();
+                playground.map.resize_locator();
                 $(window).resize(_.debounce(playground.map.resize_locator_map, 100));
             }
 

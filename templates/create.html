@@ -28,34 +28,124 @@
     <p class="muted">{{ COPY.content.create_description }}</p>
     <p class="muted bulk-email">{{ COPY.content.create_description_email }}</p>
 
-    <div class="create-paths">
-        <a id="path-geocode" class="btn btn-large btn-block">I know the street address.</a>
-        <a id="path-reverse-geocode" class="btn btn-large btn-block">I don't know the address.</a>
-    </div>
+    <form id="form" class="row-fluid" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/insert-playground/">
 
-    <div id="address-editor">
-        <div class="path-reverse-geocode hidden address-form">
-            <p>Drag the map to update location.</p>
-
-            <div id="edit-map">
-                <div id="edit-marker" class="icon-screenshot"></div>
-                <button type="button" id="geolocate" class="btn btn-large">
-                    <i class="icon-location-arrow"></i>
-                </button>
-            </div>
+        <div class="create-paths">
+            <a class="btn btn-large btn-block" data-path="path-2" data-action="activate_path">I know the street address.</a>
+            <a class="btn btn-large btn-block" data-path="path-1" data-action="activate_path">I don't know the address.</a>
         </div>
-    </div>
 
-    <form id="playground-form" class="row-fluid" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/insert-playground/">
-        <div class="basic-info span6">
-        {% for field in fields %}
-            <div class="control-group"{% if field.display %} {{ field.display|safe }}{% endif %}>
-                <label class="control-label">{{ field.name }}</label>
-                <div class="controls">
-                    {{ field.widget|safe }}
+        <div id="address-editor">
+            <div class="path-reverse-geocode path-1 path address-form">
+                <p>Drag the map to update location.</p>
+
+                <div id="edit-map">
+                    <div id="edit-marker" class="icon-screenshot"></div>
+                    <button type="button" id="geolocate" class="btn btn-large">
+                        <i class="icon-location-arrow"></i>
+                    </button>
                 </div>
             </div>
-        {% endfor %}
+        </div>
+
+        <div class="basic-info span6">
+            <div class="control-group path-2 path">
+                <label class="control-label">Address</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="address" value=""></input>
+                </div>
+            </div>
+            <div class="control-group path-2 path">
+                <label class="control-label">City</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="city" value=""></input>
+                </div>
+            </div>
+
+            <div class="control-group path-2 path">
+                <label class="control-label">State</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="state" value=""></input>
+                </div>
+            </div>
+
+            <div class="control-group path-2 path">
+                <label class="control-label">Zip Code</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="zip_code" value=""></input>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Name</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="name" value=""></input>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">At (is this in a park or school?)</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="facility" value=""></input>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">URL</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="url" value=""></input>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Agency</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="agency" value=""></input>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Owner</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="owner" value=""></input>
+                </div>
+            </div>
+
+            <div class="control-group" style="display:none">
+                <label class="control-label">Remarks</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="public_remarks" value=""></input>
+                </div>
+            </div>
+
+            <div class="control-group" style="display:none">
+                <label class="control-label">Id</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="id" value="" data-changed="true"></input>
+                </div>
+            </div>
+
+            <div class="control-group" style="display:none">
+                <label class="control-label">Reverse Geocoded</label>
+                <div class="controls">
+                    <input type="checkbox" name="reverse_geocoded"></input>
+                </div>
+            </div>
+
+            <div class="control-group" style="display:none">
+                <label class="control-label">Latitude</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="latitude" value=""></input>
+                </div>
+            </div>
+
+            <div class="control-group" style="display:none">
+                <label class="control-label">Longitude</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="longitude" value=""></input>
+                </div>
+            </div>
+
         </div>
         <div class="features span6">
         <h4>Features</h4>
@@ -76,7 +166,7 @@
     {{ JS.push('js/lib/moment.js') }}
     {{ JS.push('js/lib/bootstrap.js') }}
     {{ JS.push('js/templates.js') }}
-    {{ JS.push('js/add.js') }}
+    {{ JS.push('js/form.js') }}
     {{ JS.push('js/lookup_tables.js') }}
     {{ JS.push('js/utils.js') }}
     {{ JS.render('js/app-add-footer.min.js') }}
