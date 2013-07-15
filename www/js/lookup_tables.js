@@ -29,7 +29,7 @@ STATE_CODE_TO_NAME = {
     'NE': 'Nebraska',
     'NV': 'Nevada',
     'NH': 'New Hampshire',
-    'NJ': 'New Jersey', 
+    'NJ': 'New Jersey',
     'NM': 'New Mexico',
     'NY': 'New York',
     'NC': 'North Carolina',
@@ -50,7 +50,7 @@ STATE_CODE_TO_NAME = {
     'WV': 'West Virginia',
     'WI': 'Wisconsin',
     'WY': 'Wyoming'
-}
+};
 
 STATE_NAME_TO_CODE = {
     'Alabama': 'AL',
@@ -83,7 +83,7 @@ STATE_NAME_TO_CODE = {
     'Nebraska': 'NE',
     'Nevada': 'NV',
     'New Hampshire': 'NH',
-    'New Jersey': 'NJ', 
+    'New Jersey': 'NJ',
     'New Mexico': 'NM',
     'New York': 'NY',
     'North Carolina': 'NC',
@@ -104,4 +104,4 @@ STATE_NAME_TO_CODE = {
     'West Virginia': 'WV',
     'Wisconsin': 'WI',
     'Wyoming': 'WY'
-}
+};
