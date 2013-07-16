@@ -124,8 +124,10 @@ $(function() {
             'resize_locator': function() {
                 playground.CONTENT_WIDTH = $('#main-content').width();
                 playground.PAGE_WIDTH = $('body').outerWidth();
-                var lat = playground.fields.locator_map.data('latitude');
-                var lon = playground.fields.locator_map.data('longitude'); // Because iOS refuses to obey toString()
+                // var lat = playground.fields.locator_map.data('latitude');
+                // var lon = playground.fields.locator_map.data('longitude'); // Because iOS refuses to obey toString()
+                var lat = playground.fields.latitude.val();
+                var lon = playground.fields.longitude.val();
                 var map_path;
                 var new_height;
                 var new_width = playground.CONTENT_WIDTH;
@@ -194,6 +196,12 @@ $(function() {
                     callback(locale);
                 }
             });
+        },
+        'accept_address': function() {
+            placeholder_text = playground.fields.address.val() + '<br>' + playground.fields.city.val() + ', ' + playground.fields.state.val();
+            $('#address-placeholder p').html(placeholder_text);
+            playground.map.resize_locator();
+            playground.toggle_address_button();
         },
         'toggle_address_button': function(){
             $('.address-editor').toggleClass('hide');
