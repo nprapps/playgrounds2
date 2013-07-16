@@ -37,17 +37,6 @@ $(function() {
             }
         },
         'form': {
-            'submit': function() {
-                if ( playground.fields.reverse_geocode.attr('checked') !== 'checked' ) {
-                    playground.geocode(playground.form.prepare_geocode_string(), playground.callbacks.geocode);
-                } else {
-                    playground.form.geocode_fields();
-                    playground.fields.reverse_geocoded.attr('checked', 'checked');
-                    playground.fields.reverse_geocoded.attr('data-changed', 'true');
-                    $('#form').submit();
-                }
-                return false;
-            },
             'validate': function() {
                 var required_fields = $("#form input[data-required='true']");
                 var flagged_fields = [];
@@ -208,6 +197,17 @@ $(function() {
             $('.address-editor').toggleClass('hide');
             $('#toggle-address-button').toggleClass('btn-success').text($('#toggle-address-button').text() === 'Edit' ? 'Cancel' : 'Edit');
             playground.map.center_editor();
+        },
+        'submit': function() {
+            if ( playground.fields.reverse_geocode.attr('checked') !== 'checked' ) {
+                playground.geocode(playground.form.prepare_geocode_string(), playground.callbacks.geocode);
+            } else {
+                playground.form.geocode_fields();
+                playground.fields.reverse_geocoded.attr('checked', 'checked');
+                playground.fields.reverse_geocoded.attr('data-changed', 'true');
+                $('#form').submit();
+            }
+            return false;
         },
         'setup': function() {
             // Set all of the playground field names.
