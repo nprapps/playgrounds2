@@ -98,6 +98,7 @@ $(function() {
                 */
                 map = L.map('edit-map', {
                     minZoom: 11,
+                    maxZoom: 17,
                     scrollWheelZoom: false
                 });
 

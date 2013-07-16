@@ -32,7 +32,7 @@
                 <div class="control-group">
                     <label class="control-label">Name</label>
                     <div class="controls">
-                        <input class="input-block-level input" type="text" name="name" value=""></input>
+                        <input class="input-block-level input" type="text" name="name" value="{{ playground.name }}"></input>
                     </div>
                 </div>
 
@@ -118,7 +118,7 @@
         <div id="map-pane" class="map-pane tab-pane active">
             <div class="edit-address-map">
                 <div id="edit-map">
-                    <div id="edit-marker" class="icon-screenshot"></div>
+                    <div id="edit-marker"></div>
                     <a id="geolocate" data-action="locate_me" class="btn btn-large">
                         <i class="icon-location-arrow"></i>
                     </a>
