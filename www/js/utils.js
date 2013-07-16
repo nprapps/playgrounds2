@@ -12,6 +12,13 @@ function radToDeg(radian) {
     return radian / Math.PI * 180;
 }
 
+function get_parameter_by_name(name) {
+    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
 function formatMapQuestAddress(locale) {
     var quality = locale['geocodeQuality'];
     var street = locale['street'];
@@ -35,46 +42,9 @@ function formatMapQuestAddress(locale) {
     }
 }
 
-
-function geocode(address_string, callback) {
-    $.ajax({
-        'url': 'http://open.mapquestapi.com/geocoding/v1/?inFormat=kvp&location=' + address_string,
-        'dataType': 'jsonp',
-        'contentType': 'application/json',
-        'success': function(data) {
-            var locales = data['results'][0]['locations'];
-            var locale = locales[0];
-            var zip_list = [];
-
-            callback(locale);
-        }
-    });
-}
-
-function reverseGeocode(latitude, longitude, callback) {
-    $.ajax({
-        'url': 'http://open.mapquestapi.com/geocoding/v1/reverse',
-        'data': { 'location': latitude + ',' + longitude },
-        'dataType': 'jsonp',
-        'contentType': 'application/json',
-        'success': function(data) {
-            var locales = data['results'][0]['locations'];
-            var locale = locales[0];
-            var zip_list = [];
-
-            if (locale['adminArea4'] == 'District of Columbia')  {
-                locale['adminArea5'] = 'Washington';
-                locale['adminArea3'] = 'District of Columbia';
-            }
-
-            callback(locale);
-        }
-    });
-}
-
-function unitedStatesCheck(locale) {
-    var country = locale[6]; 
+function require_us_address(locale) {
+    var country = locale[6];
     if (country !== 'US') {
         alert("Please provide an address located within the United States.");
     }
-};
+}

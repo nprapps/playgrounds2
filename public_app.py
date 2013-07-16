@@ -53,6 +53,7 @@ def write_data(payload, path='data/changes.json'):
 
     f.close()
 
+
 @app.route('/%s/' % app_config.PROJECT_SLUG)
 def _dynamic_page():
     """
@@ -142,6 +143,7 @@ def update_playground():
         # return json.dumps(payload)
         return redirect('%s/playground/%s.html?action=editing_thanks' % (app_config.S3_BASE_URL, playground.slug))
 
+
 @app.route('/%s/insert-playground/' % app_config.PROJECT_SLUG, methods=['POST'])
 def insert_playground():
     """
@@ -199,7 +201,10 @@ def insert_playground():
         except KeyError:
             pass
 
-        if payload['playground']['zip_code'] == "None":
+        try:
+            if payload['playground']['zip_code'] == "None":
+                payload['playground']['zip_code'] = None
+        except KeyError:
             payload['playground']['zip_code'] = None
 
         try:
@@ -221,10 +226,11 @@ def insert_playground():
             del(payload['playground']['features'])
 
         # Write to the changes.json file.
-        # write_data(payload)
+        write_data(payload)
 
-        return json.dumps(payload)
-        # return redirect('%s/playground/create.html?action=create_thanks' % (app_config.S3_BASE_URL))
+        # return json.dumps(payload)
+        return redirect('%s?action=create_thanks' % (app_config.S3_BASE_URL))
+
 
 @app.route('/%s/request-delete-playground/' % app_config.PROJECT_SLUG, methods=['POST'])
 def delete_playground():
@@ -270,6 +276,7 @@ def delete_playground():
     # Otherwise, bork. A 400 error should do nicely.
     else:
         abort(400)
+
 
 @app.route('/%s/delete-playground/<playground_slug>/' % app_config.PROJECT_SLUG, methods=['GET'])
 def delete_playground_confirm(playground_slug=None):
