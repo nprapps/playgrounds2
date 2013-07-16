@@ -34,6 +34,8 @@ $(function() {
                 playground.fields.zip_code.val(locale['postalCode']);
                 playground.fields.latitude.val(locale['latLng']['lat']);
                 playground.fields.longitude.val(locale['latLng']['lng']);
+                require_us_address(locale);
+                playground.form.geocode_fields();
             }
         },
         'form': {
