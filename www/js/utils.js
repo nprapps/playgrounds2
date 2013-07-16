@@ -45,6 +45,10 @@ function formatMapQuestAddress(locale) {
 function require_us_address(locale) {
     var country = locale[6];
     if (country !== 'US') {
-        alert("Please provide an address located within the United States.");
+        console.log("Please provide an address located within the United States.");
     }
+}
+
+function prevent_body_scroll(e) {
+    if (!$('.scrollable').has($(e.target)).length) e.preventDefault();
 }

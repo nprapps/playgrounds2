@@ -195,6 +195,11 @@ $(function() {
                 }
             });
         },
+        'toggle_address_button': function(){
+            $('.address-editor').toggleClass('hide');
+            $('#toggle-address-button').toggleClass('btn-success').text($('#toggle-address-button').text() === 'Edit' ? 'Cancel' : 'Edit');
+            playground.map.center_editor();
+        },
         'setup': function() {
             // Set all of the playground field names.
             // List of fields we'd like to set up.
@@ -278,6 +283,21 @@ $(function() {
             playground.fields.meta_hdr.on('click', function() {
                 playground.fields.meta_items.slideToggle('fast');
             });
+
+            // Lock down the double-modal.
+            $('.modal').on('shown', function(){
+                $('body').on('touchmove', prevent_body_scroll(event));
+            });
+            $('.modal').on('hidden', function(){
+                $('body').off('touchmove', prevent_body_scroll(event));
+            });
+            $('#address-pane').on('shown', function(){
+                $('body, #map-pane').on('touchmove', prevent_body_scroll(event));
+            });
+            $('#address-pane').on('hidden', function(){
+                $('body, #map-pane').off('touchmove', prevent_body_scroll(event));
+            });
+
         }
     };
     // Initialize the playground object.

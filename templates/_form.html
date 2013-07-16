@@ -1,8 +1,12 @@
+<form id="form" class="row-fluid" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/update-playground/">
 <div class="modal-body scrollable">
+
     <h2>Edit Playground</h2>
     <p class="muted">Changes will be submitted for review and posted within 24 hours.</p>
 
-    <h5 class="address-label">Address <a id="toggle-address-button" class="btn btn-success">Edit</a></h5>
+    <h5 class="address-label">Address
+        <a id="toggle-address-button" data-action="toggle_address_button" class="btn btn-success">Edit</a>
+    </h5>
     <div id="address-placeholder">
         {% if playground.latitude and playground.longitude %}
         <img id="modal-locator-map" data-longitude="{{ playground.longitude }}" data-latitude="{{ playground.latitude }}" />
@@ -16,8 +20,7 @@
             </p>
         </div>
     </div>
-    <form id="playground-form" class="row-fluid" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/update-playground/">
-            <div class="features span6">
+        <div class="features span6">
             <h5>Features</h5>
             {% for feature in features %}
                 <div class="feature">
@@ -26,17 +29,77 @@
             {% endfor %}
             </div>
             <div class="basic-info span6">
-            {% for field in fields %}
-                <div class="control-group"{% if field.display %} {{ field.display|safe }}{% endif %}>
-                    <label class="control-label">{{ field.name }}</label>
+                <div class="control-group">
+                    <label class="control-label">Name</label>
                     <div class="controls">
-                        {{ field.widget|safe }}
+                        <input class="input-block-level input" type="text" name="name" value=""></input>
                     </div>
                 </div>
-            {% endfor %}
-            </div>
-    </form>
 
+                <div class="control-group">
+                    <label class="control-label">At (is this in a park or school?)</label>
+                    <div class="controls">
+                        <input class="input-block-level input" type="text" name="facility" value="{{ playground.facility }}"></input>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">URL</label>
+                    <div class="controls">
+                        <input class="input-block-level input" type="text" name="url" value="{{ playground.facility }}"></input>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Agency</label>
+                    <div class="controls">
+                        <input class="input-block-level input" type="text" name="agency" value="{{ playground.agency }}"></input>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Owner</label>
+                    <div class="controls">
+                        <input class="input-block-level input" type="text" name="owner" value="{{ playground.owner }}"></input>
+                    </div>
+                </div>
+
+                <div class="control-group" style="display:none">
+                    <label class="control-label">Remarks</label>
+                    <div class="controls">
+                        <input class="input-block-level input" type="text" name="public_remarks" value="{{ playground.public_remarks }}"></input>
+                    </div>
+                </div>
+
+                <div class="control-group" style="display:none">
+                    <label class="control-label">Id</label>
+                    <div class="controls">
+                        <input class="input-block-level input" type="text" name="id" value="{{ playground.id }}" data-changed="true"></input>
+                    </div>
+                </div>
+
+                <div class="control-group" style="display:none">
+                    <label class="control-label">Reverse Geocoded</label>
+                    <div class="controls">
+                        <input type="checkbox" name="reverse_geocoded"{% if playground.reverse_geocoded == True %} checked=checked{% endif %}></input>
+                    </div>
+                </div>
+
+                <div class="control-group" style="display:none">
+                    <label class="control-label">Latitude</label>
+                    <div class="controls">
+                        <input class="input-block-level input" type="text" name="latitude" value="{{ playground.latitude }}"></input>
+                    </div>
+                </div>
+
+                <div class="control-group" style="display:none">
+                    <label class="control-label">Longitude</label>
+                    <div class="controls">
+                        <input class="input-block-level input" type="text" name="longitude" value="{{ playground.longitude }}"></input>
+                    </div>
+                </div>
+
+            </div>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-large" data-dismiss="modal" aria-hidden="true">Cancel</button>
@@ -56,44 +119,45 @@
             <div class="edit-address-map">
                 <div id="edit-map">
                     <div id="edit-marker" class="icon-screenshot"></div>
-                    <a id="geolocate" class="btn btn-large">
+                    <a id="geolocate" data-action="locate_me" class="btn btn-large">
                         <i class="icon-location-arrow"></i>
                     </a>
                 </div>
                 <p>Drag the map to update location</p>
             </div>
         </div>
-        <div id="address-pane" class="address-pane tab-pane scrollable">
-            <form id="search-form">
-                <!-- <input type="text" class="input input-block-level" id="search-address" />
-                <div id="no-geocode">
-                    <h4>Sorry, we couldn't locate that address.</h4>
+        <div id="address-pane" class="address-pane tab-pane">
+            <div class="control-group">
+                <label class="control-label">Address</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="address" value="{{ playground.address }}"></input>
                 </div>
-                <div id="search-help">
-                    <h4>Did you mean...?</h4>
-                    <ul id='did-you-mean-edit'></ul>
-                </div> -->
-                <label>Street</label>
-                <input type="text" id="possible-street"/>
-                <label>City</label>
-                <input type="text" id="possible-city"/>
-                <label>State</label>
-                <input type="text" id="possible-state"/>
-                <label>ZIP</label>
-                <input type="text" id="possible-zip"/>
-                <input type="hidden" id="possible-latitude"/>
-                <input type="hidden" id="possible-longitude"/>
-                <!-- <button type="button"id="search-address-button" class="btn btn-large">
-                    Search
-                </button> -->
-            </form>
+            </div>
+            <div class="control-group">
+                <label class="control-label">City</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="city" value="{{ playground.city }}"></input>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">State</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="state" value="{{ playground.state }}"></input>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Zip Code</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="zip_code" value="{{ playground.zip_code }}"></input>
+                </div>
+            </div>
         </div>
     </div>
-    
-    
+
     <div class="edit-address-footer">
-        <a id="accept-address" class="btn btn-large btn-block btn-success">
-            Done
-        </a>
+        <a id="accept-address" data-action="toggle_address_button" class="btn btn-large btn-block btn-success">Done</a>
     </div>
 </div>
+</form>
