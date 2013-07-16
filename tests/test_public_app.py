@@ -13,6 +13,7 @@ from models import Playground
 import public_app
 import tests.utils as utils
 
+
 class ApiTestCase(unittest.TestCase):
     """
     Test the index page.
@@ -96,7 +97,7 @@ class ApiTestCase(unittest.TestCase):
 
         self.assertEqual(response.status_code, 302)
         redirect_url = '%s/playground/%s.html?action=deleting_thanks' % (app_config.S3_BASE_URL, "strong-reach-playground-bowdon-ga")
-        self.assertEqual(response.headers['location'],redirect_url)
+        self.assertEqual(response.headers['location'], redirect_url)
 
     def test_delete_playground_confirm(self):
         utils.load_test_playgrounds()

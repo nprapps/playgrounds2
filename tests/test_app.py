@@ -10,6 +10,7 @@ import app_config
 from models import Playground
 import tests.utils as utils
 
+
 class ViewsTestCase(unittest.TestCase):
     """
     Test the index page.
@@ -43,9 +44,10 @@ class ViewsTestCase(unittest.TestCase):
         assert playground.display_name in response.data
 
     def test_playground_create_exists(self):
-        response = self.client.get(url_for('_playground_create'))
+        response = self.client.get(url_for('playground_create'))
 
-        assert 'playground' in response.data 
+        assert 'playground' in response.data
+
 
 class AppConfigTestCase(unittest.TestCase):
     """
@@ -66,7 +68,7 @@ class AppConfigTestCase(unittest.TestCase):
 
         data = self.parse_data(response)
 
-        assert data['DEBUG'] == True
+        assert data['DEBUG'] is True
 
     def test_app_config_production(self):
         app_config.configure_targets('production')
@@ -75,7 +77,7 @@ class AppConfigTestCase(unittest.TestCase):
 
         data = self.parse_data(response)
 
-        assert data['DEBUG'] == False
+        assert data['DEBUG'] is False
 
         app_config.configure_targets('staging')
 
