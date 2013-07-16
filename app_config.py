@@ -86,6 +86,7 @@ NPR_DFP = {
 SERVICES
 """
 GOOGLE_ANALYTICS_ID = 'UA-5828686-4'
+DISQUS_SHORTNAME = 'npr-playgrounds2'
 
 """
 Application specific
