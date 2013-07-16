@@ -203,6 +203,8 @@ def configure_targets(deployment_target):
     global S3_BASE_URL
     global SERVER_BASE_URL
 
+    global DISQUS_SHORTNAME
+
     global DEPLOYMENT_TARGET
 
     if deployment_target == 'production':
@@ -214,6 +216,8 @@ def configure_targets(deployment_target):
         S3_BASE_URL = 'http://%s/%s' % (S3_BUCKETS[0], PROJECT_SLUG)
         SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
 
+        DISQUS_SHORTNAME = 'npr-playgrounds2'
+
     elif deployment_target == 'staging':
         S3_BUCKETS = STAGING_S3_BUCKETS
         SERVERS = STAGING_SERVERS
@@ -223,6 +227,8 @@ def configure_targets(deployment_target):
         S3_BASE_URL = 'http://%s/%s' % (S3_BUCKETS[0], PROJECT_SLUG)
         SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
 
+        DISQUS_SHORTNAME = 'npr-playgrounds2-staging'
+
     else:
         S3_BUCKETS = None
         SERVERS = None
@@ -231,6 +237,8 @@ def configure_targets(deployment_target):
         CLOUD_SEARCH_PROXY_BASE_URL = 'http://127.0.0.1:8000'
         S3_BASE_URL = 'http://127.0.0.1:8000'
         SERVER_BASE_URL = 'http://127.0.0.1:8001/%s' % PROJECT_SLUG
+
+        DISQUS_SHORTNAME = 'npr-playgrounds2-staging'
 
     DEPLOYMENT_TARGET = deployment_target
 
