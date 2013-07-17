@@ -19,6 +19,11 @@
                 <h2>{{ COPY.content.lorem_ipsum }}</h2>
             </div>
         </div>
+    </div>
+</header>
+
+<section id="playground-search">
+    <div class="container">
         <div class="row">
             <div class="span12">
 
@@ -36,86 +41,95 @@
                 </div>
 
                 <h3 id="search-title">{{ COPY.content.search_title }}</h3>
+                <p class="example">for example,
+                    <a id="newyork">New York City</a> or
+                    <a id="huntley">Deicke Park, Huntley, IL</a> or
+                    <a id="zip">79410</a>
+                </p>
 
                 <form id="search">
                     <button type="button" id="geolocate" class="btn btn-blue btn-block"><i class="icon-screenshot"></i> Find Playgrounds Nearby</button>
 
                     <h6 class="divider">OR</h6>
 
-                    <div class="text-search">
-                        <p><label for="address">Address:</label> <input type="text" name="address" /></p>
+                    <div id="address-search">
+                        <p class="address-search-input"><label for="address">Address:</label> <input type="text" name="address" /></p>
 
-                        <p class="example">For example,
-                            <a id="newyork">New York City</a> or
-                            <a id="huntley">Deicke Park, Huntley, IL</a> or
-                            <a id="zip">79410</a>
-                        </p>
+                        <input type="hidden" name="latitude" />
+                        <input type="hidden" name="longitude" />
+                        <button type="submit" id="search-btn" class="btn btn-blue btn-block">Search</button>
                     </div>
-                    <input type="hidden" name="latitude" />
-                    <input type="hidden" name="longitude" />
-                    <button type="submit" id="search-btn" class="btn btn-blue btn-block"><i class="icon-search"></i> Search</button>
                 </form>
 
             </div>
         </div>
     </div>
-</header>
+</section>
 {% endblock %}
 
 
 {% block content %}
-<div id="search-help">
-    <h4>Did you mean...?</h4>
-    <ul></ul>
-    <h6 class="divider">OR</h6>
-</div>
 
-<div id="no-geocode">
-    <h4>Sorry, we couldn't locate that address.</h4>
-</div>
+<div id="playground-results-wrap">
+    <div id="search-help">
+        <h4>Did you mean...?</h4>
+        <ul></ul>
+        <h6 class="divider">OR</h6>
+    </div>
 
-<div id="results-loading">Loading...</div>
+    <div id="no-geocode">
+        <h4>Sorry, we couldn't locate that address.</h4>
+    </div>
 
-<div id="search-results-wrapper">
-    <h4 id="results-address"></h4>
-    <div id="search-results-map-wrapper">
-        <img id="search-results-map" src="" />
-        <img id="search-results-map-loading" src="img/loading.gif" />
+    <div id="results-loading">Loading...</div>
 
-        <div class="zoom-buttons">
-            <button type="button" id="zoom-in" class="btn-zoom">+</button>
-            <button type="button" id="zoom-out" class="btn-zoom">-</button>
+    <div id="search-results-wrapper">
+        <h4 id="results-address"></h4>
+        <div id="search-results-map-wrapper">
+            <img id="search-results-map" src="" />
+            <img id="search-results-map-loading" src="img/loading.gif" />
+
+            <div class="zoom-buttons">
+                <button type="button" id="zoom-in" class="btn-zoom">+</button>
+                <button type="button" id="zoom-out" class="btn-zoom">-</button>
+            </div>
+        </div>
+
+        <ul id="search-results" class="playground-list">
+        </ul>
+
+        <div class="help-prompt">
+            <p class="prompt">{{ COPY.content.search_help_title }}</p>
+            <p><a href="create.html" class="btn btn-blue btn-block"><i class="icon-plus-sign"></i> {{ COPY.content.search_help_button }}</a></p>
         </div>
     </div>
 
-    <ul id="search-results" class="playground-list">
-    </ul>
-
-    <div class="help-prompt">
-        <p class="prompt">{{ COPY.content.search_help_title }}</p>
-        <p><a href="create.html" class="btn btn-blue btn-block"><i class="icon-plus-sign"></i> {{ COPY.content.search_help_button }}</a></p>
-    </div>
+    <button type="button" id="search-again" class="btn btn-blue btn-block"><i class="icon-search"></i> Try Another Search</button>
 </div>
 
-<button type="button" id="search-again" class="btn btn-blue btn-block"><i class="icon-search"></i> Try Another Search</button>
+
+<div id="playground-feature-primer">
+    <h3 id="feature-title">{{ COPY.content.feature_title }}</h3>
+    <p id="feature-description">{{ COPY.content.feature_description }}</p>
+
+    <dl id="feature-list">
+        {% for row in COPY.feature_list %}
+        <dt>
+            {{ row.term }}
+        </dt>
+        <dd>
+            <img src="{{ row.photo }}" alt="{{ row.term }}" />
+            {{ row.definition }}
+        </dd>
+        {% endfor %}
+    </dl>
+</div>
 
 
-<h3 id="help-title">{{ COPY.content.help_title }}</h3>
-<p id="help-description">{{ COPY.content.help_description }}</p>
-
-
-<h3 id="feature-title">{{ COPY.content.feature_title }}</h3>
-<p id="feature-description">{{ COPY.content.feature_description }}</p>
-
-<dl id="feature-list">
-    {% for row in COPY.feature_list %}
-    <dt>
-        <img src="{{ row.photo }}" alt="{{ row.term }}" />
-        {{ row.term }}
-    </dt>
-    <dd>{{ row.definition }}</dd>
-    {% endfor %}
-</dl>
+<div id="playground-help">
+    <h3 id="help-title">{{ COPY.content.help_title }}</h3>
+    <p id="help-description">{{ COPY.content.help_description }}</p>
+</div>
 
 {% endblock %}
 
