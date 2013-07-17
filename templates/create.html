@@ -1,4 +1,4 @@
-{% extends "_base.html" %}
+{% extends '_base.html' %}
 
 {% block body_class %}playground{% endblock body_class %}
 
@@ -15,7 +15,7 @@
     <div class="container">
         <div class="row">
             <div class="span12">
-                <h1><a href="../../">{{ PROJECT_NAME }}</a></h1>
+                <h1><a href="../">{{ PROJECT_NAME }}</a></h1>
             </div>
         </div>
     </div>
@@ -23,57 +23,31 @@
 {% endblock %}
 
 {% block content %}
-<form id="form" class="row-fluid playground-form" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/insert-playground/">
-    <div class="create-form">
-        <h2>{{ COPY.content.create_title }}</h2>
-        <p class="muted">{{ COPY.content.create_description }}</p>
-        <p class="muted bulk-email">{{ COPY.content.create_description_email }}</p>
-            <div class="create-paths">
-                <a class="btn btn-large btn-block" data-path="path-2" data-action="activate_path">I know the street address.</a>
-                <a class="btn btn-large btn-block" data-path="path-1" data-action="activate_path">I don't know the address.</a>
-            </div>
 
-            <div id="address-editor">
-                <div class="path-reverse-geocode path-1 path address-form">
-                    <p>Drag the map to update location.</p>
+<form id="form" class="row-fluid playground-form" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/update-playground/">
+<div class="">
 
-                    <div id="edit-map">
-                        <div id="edit-marker"></div>
-                        <button type="button" id="geolocate" class="btn btn-large" data-action="locate_me">
-                            <i class="icon-location-arrow"></i>
-                        </button>
-                    </div>
+    <h2>Add Playground</h2>
+    <p class="muted">Changes will be submitted for review and posted within 24 hours.</p>
+
+    <h5 class="address-label">Address
+        <a id="toggle-address-button" data-action="toggle_address_button" class="btn btn-success">Edit</a>
+    </h5>
+    <div id="address-placeholder">
+        <img id="modal-locator-map" data-longitude="" data-latitude="" />
+        <div class="address-meta">
+            <p></p>
+        </div>
+    </div>
+        <div class="features span6">
+            <h5>Features</h5>
+            {% for feature in features %}
+                <div class="feature">
+                    {{ feature|safe }}
                 </div>
+            {% endfor %}
             </div>
-
             <div class="basic-info span6">
-                <div class="control-group path-2 path">
-                    <label class="control-label">Address</label>
-                    <div class="controls">
-                        <input class="input-block-level input" type="text" name="address" value=""></input>
-                    </div>
-                </div>
-                <div class="control-group path-2 path">
-                    <label class="control-label">City</label>
-                    <div class="controls">
-                        <input class="input-block-level input" type="text" name="city" value=""></input>
-                    </div>
-                </div>
-
-                <div class="control-group path-2 path">
-                    <label class="control-label">State</label>
-                    <div class="controls">
-                        <input class="input-block-level input" type="text" name="state" value=""></input>
-                    </div>
-                </div>
-
-                <div class="control-group path-2 path">
-                    <label class="control-label">Zip Code</label>
-                    <div class="controls">
-                        <input class="input-block-level input" type="text" name="zip_code" value=""></input>
-                    </div>
-                </div>
-
                 <div class="control-group">
                     <label class="control-label">Name</label>
                     <div class="controls">
@@ -143,22 +117,74 @@
                         <input class="input-block-level input" type="text" name="longitude" value=""></input>
                     </div>
                 </div>
+
             </div>
-            <div class="features span6">
-            <h4>Features</h4>
-            {% for feature in features %}
-                <div class="feature">
-                    {{ feature|safe }}
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-large" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <button id="playground-update" class="btn btn-large btn-success">Save</button>
+</div>
+
+<div class="hide address-editor">
+    <h2 class="edit-address-hed">Add location</h2>
+
+    <ul class="nav nav-tabs" id="myTab">
+      <li class="active"><a href="#map-pane" data-toggle="tab">Adjust position</a></li>
+      <li><a href="#address-pane" data-toggle="tab">Edit address</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="map-pane" class="map-pane tab-pane active">
+            <div class="edit-address-map">
+                <div id="edit-map">
+                    <div id="edit-marker"></div>
+                    <a id="geolocate" data-action="locate_me" class="btn btn-large">
+                        <i class="icon-location-arrow"></i>
+                    </a>
                 </div>
-            {% endfor %}
+                <p>Drag the map to update location</p>
+            </div>
+        </div>
+        <div id="address-pane" class="address-pane tab-pane">
+            <div class="control-group">
+                <label class="control-label">Address</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="address" value=""></input>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">City</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="city" value=""></input>
+                </div>
             </div>
 
-        <div class="span12">
-            <button type="button" class="btn btn-large">Back</button>
-            <button id="playground-update" class="btn btn-large btn-success" data-action="submit">Save</button>
+            <div class="control-group">
+                <label class="control-label">State</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="state" value=""></input>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Zip Code</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="zip_code" value=""></input>
+                </div>
+            </div>
         </div>
     </div>
+
+    <div class="edit-address-footer">
+        <a id="accept-address" data-action="accept_address" class="btn btn-large btn-block btn-success">Done</a>
+    </div>
+</div>
 </form>
+{% endblock %}
+
+{% block wide_content %}{% endblock %}
+
+{% block scripts%}
 {% endblock %}
 
 {% block extra_foot_js %}
@@ -169,5 +195,6 @@
     {{ JS.push('js/form.js') }}
     {{ JS.push('js/lookup_tables.js') }}
     {{ JS.push('js/utils.js') }}
-    {{ JS.render('js/app-add-footer.min.js') }}
+    {{ JS.render('js/app-edit-footer.min.js') }}
 {% endblock extra_foot_js %}
+
