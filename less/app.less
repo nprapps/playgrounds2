@@ -301,10 +301,13 @@ section#the-goods { margin-top: 44px; }
         line-height: 32px;
         font-size: 32px;
         border-radius:18px;
+        margin-top: -10px;
+        margin-left: -10px;
         text-align: center;
         background-color: #ff3300;
         opacity: 0.5;
         border: 2px solid #ffaa66;
+        box-sizing: border-box;
     }
 
     ol {
@@ -464,10 +467,16 @@ section#the-goods { margin-top: 44px; }
             top: 80px;
             bottom: 44px;
             width: 100%;
-            padding-top: @baseLineHeight;
+            padding: @baseLineHeight 20px;
+            box-sizing: border-box;
             //padding-bottom: 64px;
             -webkit-overflow-scrolling: touch;
             overflow: scroll;
+
+            input[type="text"] {
+                height: 44px;
+                line-height: 44px;
+            }
         }
     }
 }
