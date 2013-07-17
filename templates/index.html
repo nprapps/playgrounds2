@@ -19,47 +19,51 @@
                 <h2>{{ COPY.content.lorem_ipsum }}</h2>
             </div>
         </div>
+        <div class="row">
+            <div class="span12">
+
+                <div id="create_thanks" class="alert alert-success alert-block hide">
+                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                    <h4>Thanks!</h4>
+                    <p>Your changes have been submitted for review.</p>
+                    <p>Would you mind reviewing another playground?</p>
+                    <ul>
+                        <li><a href="#">Park One</a></li>
+                        <li><a href="#">Park Two</a></li>
+                        <li><a href="#">Park Three</a></li>
+                        <li><a href="#">Not Now, Thanks</a></li>
+                    </ul>
+                </div>
+
+                <h3 id="search-title">{{ COPY.content.search_title }}</h3>
+
+                <form id="search">
+                    <button type="button" id="geolocate" class="btn btn-blue btn-block"><i class="icon-screenshot"></i> Find Playgrounds Nearby</button>
+
+                    <h6 class="divider">OR</h6>
+
+                    <div class="text-search">
+                        <p><label for="address">Address:</label> <input type="text" name="address" /></p>
+
+                        <p class="example">For example,
+                            <a id="newyork">New York City</a> or
+                            <a id="huntley">Deicke Park, Huntley, IL</a> or
+                            <a id="zip">79410</a>
+                        </p>
+                    </div>
+                    <input type="hidden" name="latitude" />
+                    <input type="hidden" name="longitude" />
+                    <button type="submit" id="search-btn" class="btn btn-blue btn-block"><i class="icon-search"></i> Search</button>
+                </form>
+
+            </div>
+        </div>
     </div>
 </header>
 {% endblock %}
 
 
 {% block content %}
-<div id="create_thanks" class="alert alert-success alert-block hide">
-    <a href="#" class="close" data-dismiss="alert">&times;</a>
-    <h4>Thanks!</h4>
-    <p>Your changes have been submitted for review.</p>
-    <p>Would you mind reviewing another playground?</p>
-    <ul>
-        <li><a href="#">Park One</a></li>
-        <li><a href="#">Park Two</a></li>
-        <li><a href="#">Park Three</a></li>
-        <li><a href="#">Not Now, Thanks</a></li>
-    </ul>
-</div>
-
-<h3 id="search-title">{{ COPY.content.search_title }}</h3>
-
-<form id="search">
-    <button type="button" id="geolocate" class="btn btn-blue btn-block"><i class="icon-screenshot"></i> Find Playgrounds Nearby</button>
-
-    <h6 class="divider">OR</h6>
-
-    <div class="text-search">
-        <p><label for="address">Address:</label> <input type="text" name="address" /></p>
-        <p><label for="query">Keyword:</label> <input type="text" name="query" /></p>
-
-        <p class="example">For example,
-            <a id="newyork">New York City</a> or
-            <a id="huntley">Deicke Park, Huntley, IL</a> or
-            <a id="zip">79410</a>
-        </p>
-    </div>
-    <input type="hidden" name="latitude" />
-    <input type="hidden" name="longitude" />
-    <button type="submit" id="search-btn" class="btn btn-blue btn-block"><i class="icon-search"></i> Search</button>
-</form>
-
 <div id="search-help">
     <h4>Did you mean...?</h4>
     <ul></ul>
@@ -98,6 +102,20 @@
 
 <h3 id="help-title">{{ COPY.content.help_title }}</h3>
 <p id="help-description">{{ COPY.content.help_description }}</p>
+
+
+<h3 id="feature-title">{{ COPY.content.feature_title }}</h3>
+<p id="feature-description">{{ COPY.content.feature_description }}</p>
+
+<dl id="feature-list">
+    {% for row in COPY.feature_list %}
+    <dt>
+        <img src="{{ row.photo }}" alt="{{ row.term }}" />
+        {{ row.term }}
+    </dt>
+    <dd>{{ row.definition }}</dd>
+    {% endfor %}
+</dl>
 
 {% endblock %}
 
