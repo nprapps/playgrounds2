@@ -31,10 +31,10 @@
     <p class="muted">Changes will be submitted for review and posted within 24 hours.</p>
 
     <h5 class="address-label">Address
-        <a id="toggle-address-button" data-action="toggle_address_button" class="btn btn-success">Edit</a>
+        <a id="toggle-address-button" data-action="toggle_address_button" class="btn btn-success">Edit this address</a>
     </h5>
     <div id="address-placeholder">
-        <img id="modal-locator-map" data-longitude="" data-latitude="" />
+        <img id="modal-locator-map" class="hidden" data-longitude="" data-latitude="" />
         <div class="address-meta">
             <p></p>
         </div>
@@ -125,12 +125,12 @@
     <button id="playground-update" class="btn btn-large btn-success">Save</button>
 </div>
 
-<div class="hide address-editor">
-    <h2 class="edit-address-hed">Add location</h2>
+<div class="address-editor">
+    <h2 class="edit-address-hed">Add a playground</h2>
 
     <ul class="nav nav-tabs" id="myTab">
-      <li class="active"><a href="#map-pane" data-toggle="tab">Adjust position</a></li>
-      <li><a href="#address-pane" data-toggle="tab">Edit address</a></li>
+      <li class="active"><a href="#map-pane" data-toggle="tab">I don't know the exact address</a></li>
+      <li><a href="#address-pane" data-toggle="tab">I know the exact address</a></li>
     </ul>
 
     <div class="tab-content">

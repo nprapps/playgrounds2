@@ -146,6 +146,7 @@ $(function() {
             navigator.geolocation.getCurrentPosition(function(position) {
                 map.setView([position.coords.latitude, position.coords.longitude], playground.LOCATOR_DEFAULT_ZOOM);
                 playground.reverse_geocode(position.coords.latitude, position.coords.longitude, playground.callbacks.reverse_geocode);
+                $('#modal-locator-map').removeClass('hidden');
             });
         },
         'activate_path': function(path) {
@@ -311,6 +312,7 @@ $(function() {
 
             if(playground.fields.latitude.val() === '' || playground.fields.longitude.val() === ''){
                 playground.locate_me();
+                prevent_body_scroll(event);
             }
         }
     };
