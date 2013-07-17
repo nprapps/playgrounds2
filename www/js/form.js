@@ -309,6 +309,9 @@ $(function() {
                 $('body, #map-pane').off('touchmove', prevent_body_scroll(event));
             });
 
+            if(playground.fields.latitude.val() === '' || playground.fields.longitude.val() === ''){
+                playground.locate_me();
+            }
         }
     };
     // Initialize the playground object.
