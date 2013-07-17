@@ -231,6 +231,247 @@ section#the-goods { margin-top: 44px; }
     }
 }
 
+// Shared styles for creating or editing a playground
+.playground-form {
+    h5 {
+        margin-bottom: @baseLineHeight/2;
+    }
+
+    .address-label {
+        .btn {
+            float: right;
+            margin-top: -5px;
+        }
+    }
+
+    #modal-locator-map {
+        margin-bottom: @baseLineHeight/2;
+    }
+
+    #search-help {
+        display: none;
+    }
+
+    #no-geocode {
+        display: none;
+    }
+
+    #search-form {
+        input[type="text"],
+        textarea {
+            line-height: 44px;
+            height: 44px;
+        }
+
+        label {
+            color: #999;
+        }
+
+        textarea {
+            min-height: 200px;
+            line-height: 1.3;
+        }
+    }
+
+    #edit-map {
+        width: 100%;
+        position: absolute;
+        top: 79px;
+        bottom: 44px;
+        //margin-top: 10px;
+        //margin-bottom: 10px;
+    }
+
+    #geolocate {
+        position: absolute;
+        z-index: 10000;
+        bottom: 0;
+        right: 0;
+        line-height: 34px;
+        color: @white;
+        background: @secondaryControl;
+        text-shadow: none;
+    }
+
+    #edit-marker {
+        position: absolute;
+        z-index: 9999;
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+        font-size: 32px;
+        border-radius:18px;
+        text-align: center;
+        background-color: #ff3300;
+        opacity: 0.5;
+        border: 2px solid #ffaa66;
+    }
+
+    ol {
+        list-style: none;
+        margin: 0;
+    }
+
+    .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 10;
+        color: #fff;
+        background: #666;
+        width: 44px;
+        height: 44px;
+        line-height: 44px;
+        text-align: center;
+        font-weight: normal;
+        font-size: 24px;
+        vertical-align: middle;
+    }
+
+    .checkbox {
+        line-height: 1;
+    }
+
+    .basic-info {
+        input[type="text"],
+        textarea {
+            line-height: 44px;
+            height: 44px;
+        }
+
+        label {
+            color: #999;
+        }
+
+        textarea {
+            min-height: 200px;
+            line-height: 1.3;
+        }
+    }
+
+    .features {
+        .feature {
+            position: relative;
+            padding-bottom: 10px;
+            min-height: 44px;
+
+            input[type="checkbox"] {
+                opacity: 0;
+                position: absolute;
+                left: -2px;
+                top: -2px;
+                width: 35px;
+                height: 35px;
+                z-index: 10;
+            }
+
+
+            .checkbox {
+                padding-left: 40px;
+                cursor: default;
+                &:before {
+                    content: ' ';
+                    display: block;
+                    position: absolute;
+                    left:0;
+                    top: 0;
+                    z-index: 1;
+                    border: 2px solid lighten(@deepBlue, 20%);
+                    width: 30px;
+                    height: 30px;
+
+                    .lt-ie9 & {
+                        display: none;
+                    }
+                }
+            }
+
+            input[type="checkbox"]:checked ~ .checkbox {
+                &:before {
+                    background: lighten(@deepBlue, 5%);
+                    box-shadow: inset 0 0 0 1px #fff;
+                    .icon-FontAwesome();
+                    content: @ok;
+                    color: #fff;
+                    font-size: 30px;
+                    line-height: 30px;
+                }
+            }
+        }
+    }
+
+    .address-editor {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: @white;
+        overflow: scroll;
+        z-index: 100;
+
+        .edit-address-hed,
+        #search-form {
+            display: block;
+            padding: 0 20px;
+        }
+
+        .edit-address-hed {
+            padding: 0 20px;
+            margin: 0;
+            line-height: 44px;
+        }
+
+        .edit-address-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 44px;
+
+            .btn {
+                padding: 12px 0;
+            }
+        }
+
+        .nav-tabs {
+            display: table;
+            width: 100%;
+            border: none;
+            margin-bottom: 0;
+
+            li {
+                display: table-cell;
+                width: 50%;
+                background: @secondaryControl;
+
+                &.active {
+                    background: @primaryControl;
+                }
+
+                a {
+                    display: block;
+                    border: none;
+                    background: transparent;
+                    .border-radius(0);
+                    text-align: center;
+                    color: @white;
+                }
+            }
+        }
+
+        .address-pane {
+            position: absolute;
+            top: 80px;
+            bottom: 44px;
+            width: 100%;
+            padding-top: @baseLineHeight;
+            //padding-bottom: 64px;
+            -webkit-overflow-scrolling: touch;
+            overflow: scroll;
+        }
+    }
+}
+
 
 .index #main-content {
     h3 {
@@ -567,244 +808,6 @@ section#the-goods { margin-top: 44px; }
             padding-bottom: 100px;
         }
 
-        h5 {
-            margin-bottom: @baseLineHeight/2;
-        }
-
-        .address-label {
-            .btn {
-                float: right;
-                margin-top: -5px;
-            }
-        }
-
-        #modal-locator-map {
-            margin-bottom: @baseLineHeight/2;
-        }
-
-        #search-help {
-            display: none;
-        }
-
-        #no-geocode {
-            display: none;
-        }
-
-        #search-form {
-            input[type="text"],
-            textarea {
-                line-height: 44px;
-                height: 44px;
-            }
-
-            label {
-                color: #999;
-            }
-
-            textarea {
-                min-height: 200px;
-                line-height: 1.3;
-            }
-        }
-
-        #edit-map {
-            width: 100%;
-            position: absolute;
-            top: 79px;
-            bottom: 44px;
-            //margin-top: 10px;
-            //margin-bottom: 10px;
-        }
-
-        #geolocate {
-            position: absolute;
-            z-index: 10000;
-            bottom: 0;
-            right: 0;
-            line-height: 34px;
-            color: @white;
-            background: @secondaryControl;
-            text-shadow: none;
-        }
-
-        #edit-marker {
-            position: absolute;
-            z-index: 9999;
-            width: 32px;
-            height: 32px;
-            line-height: 32px;
-            font-size: 32px;
-            border-radius:18px;
-            text-align: center;
-            background-color: #ff3300;
-            opacity: 0.5;
-            border: 2px solid #ffaa66;
-        }
-
-        ol {
-            list-style: none;
-            margin: 0;
-        }
-
-        .close {
-            position: absolute;
-            top: 0;
-            right: 0;
-            z-index: 10;
-            color: #fff;
-            background: #666;
-            width: 44px;
-            height: 44px;
-            line-height: 44px;
-            text-align: center;
-            font-weight: normal;
-            font-size: 24px;
-            vertical-align: middle;
-        }
-
-        .checkbox {
-            line-height: 1;
-        }
-
-        .basic-info {
-            input[type="text"],
-            textarea {
-                line-height: 44px;
-                height: 44px;
-            }
-
-            label {
-                color: #999;
-            }
-
-            textarea {
-                min-height: 200px;
-                line-height: 1.3;
-            }
-        }
-
-        .features {
-            .feature {
-                position: relative;
-                padding-bottom: 10px;
-                min-height: 44px;
-
-                input[type="checkbox"] {
-                    opacity: 0;
-                    position: absolute;
-                    left: -2px;
-                    top: -2px;
-                    width: 35px;
-                    height: 35px;
-                    z-index: 10;
-                }
-
-
-                .checkbox {
-                    padding-left: 40px;
-                    cursor: default;
-                    &:before {
-                        content: ' ';
-                        display: block;
-                        position: absolute;
-                        left:0;
-                        top: 0;
-                        z-index: 1;
-                        border: 2px solid lighten(@deepBlue, 20%);
-                        width: 30px;
-                        height: 30px;
-
-                        .lt-ie9 & {
-                            display: none;
-                        }
-                    }
-                }
-
-                input[type="checkbox"]:checked ~ .checkbox {
-                    &:before {
-                        background: lighten(@deepBlue, 5%);
-                        box-shadow: inset 0 0 0 1px #fff;
-                        .icon-FontAwesome();
-                        content: @ok;
-                        color: #fff;
-                        font-size: 30px;
-                        line-height: 30px;
-                    }
-                }
-            }
-        }
-
-        .address-editor {
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background: @white;
-            overflow: scroll;
-            z-index: 100;
-
-            .edit-address-hed,
-            #search-form {
-                display: block;
-                padding: 0 20px;
-            }
-
-            .edit-address-hed {
-                padding: 0 20px;
-                margin: 0;
-                line-height: 44px;
-            }
-
-            .edit-address-footer {
-                position: absolute;
-                bottom: 0;
-                width: 100%;
-                height: 44px;
-
-                .btn {
-                    padding: 12px 0;
-                }
-            }
-
-            .nav-tabs {
-                display: table;
-                width: 100%;
-                border: none;
-                margin-bottom: 0;
-
-                li {
-                    display: table-cell;
-                    width: 50%;
-                    background: @secondaryControl;
-
-                    &.active {
-                        background: @primaryControl;
-                    }
-
-                    a {
-                        display: block;
-                        border: none;
-                        background: transparent;
-                        .border-radius(0);
-                        text-align: center;
-                        color: @white;
-                    }
-                }
-            }
-
-            .address-pane {
-                position: absolute;
-                top: 80px;
-                bottom: 44px;
-                width: 100%;
-                padding-top: @baseLineHeight;
-                //padding-bottom: 64px;
-                -webkit-overflow-scrolling: touch;
-                overflow: scroll;
-            }
-        }
-
         @media @screen-tiny {
             top: 0;
             bottom: 0;
@@ -832,6 +835,7 @@ section#the-goods { margin-top: 44px; }
                 padding: 10px 20px;
             }
         }
+
     }
 
     .create-form {
