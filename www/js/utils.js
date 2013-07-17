@@ -43,7 +43,7 @@ function formatMapQuestAddress(locale) {
 }
 
 function require_us_address(locale) {
-    var country = locale[6];
+    var country = locale['adminArea1'];
     if (country !== 'US') {
         console.log("Please provide an address located within the United States.");
     }
