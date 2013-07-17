@@ -73,8 +73,8 @@ $(function() {
                 playground.fields.latitude.attr('data-changed', 'true');
                 playground.fields.longitude.attr('data-changed', 'true');
 
-                // Try to set the state to a proper state name.
-                console.log(playground.fields.state.val());
+                playground.fields.state.val(STATE_NAME_TO_CODE[playground.fields.state.val()]);
+                $('[name=state]').val(playground.fields.state.val());
 
                 // Reset the locator map.
                 playground.fields.locator_map.data('latitude', playground.fields.latitude.val());
