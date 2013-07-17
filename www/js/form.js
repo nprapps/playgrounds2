@@ -74,7 +74,7 @@ $(function() {
                 playground.fields.longitude.attr('data-changed', 'true');
 
                 // Try to set the state to a proper state name.
-                playground.fields.state.val(STATE_NAME_TO_CODE[playground.fields.state.val()]);
+                console.log(playground.fields.state.val());
 
                 // Reset the locator map.
                 playground.fields.locator_map.data('latitude', playground.fields.latitude.val());
@@ -218,7 +218,6 @@ $(function() {
             var field_list = [
                 'address',
                 'city',
-                'state',
                 'zip_code',
                 'latitude',
                 'longitude',
@@ -229,6 +228,9 @@ $(function() {
             $.each(field_list, function(index, field_name){
                 playground.fields[field_name] = $('input[name="' + field_name + '"]');
             });
+
+            // Except for states because they're selectable
+            playground.fields.state = $('select option:selected')
 
             // Set up the screen width constants.
             playground.CONTENT_WIDTH = $('#main-content').width();
