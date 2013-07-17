@@ -45,8 +45,8 @@ function get_parameter_by_name(name) {
 
 function center_editor_map(){
     map.invalidateSize(false);
-    var marker_left = $('#edit-map').width()/2 - 8;
-    var marker_top = $('#edit-map').height()/2 - 8;
+    var marker_left = $('#edit-map').width()/2;
+    var marker_top = $('#edit-map').height()/2;
     $('#edit-marker').css({'left': marker_left, 'top': marker_top});
 }
 
