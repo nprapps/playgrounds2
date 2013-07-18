@@ -30,6 +30,7 @@ var $search_results = null;
 var $search_results_map_wrapper = null;
 var $search_results_map = null;
 var $search_results_map_loading = null;
+var $search_wrapper = null;
 var $zoom_in = null;
 var $zoom_out = null;
 var $search_help = null;
@@ -207,11 +208,13 @@ function show_search() {
     $search_results_wrapper.hide();
     $search_again.hide();
     $search_title.show();
+    $search_wrapper.hide();
 }
 
 function hide_search() {
 //    $search_form.hide();
     $search_again.show();
+    $search_wrapper.show();
 }
 
 $(function() {
@@ -229,6 +232,7 @@ $(function() {
     $search_results_map_wrapper = $('#search-results-map-wrapper');
     $search_results_map = $('#search-results-map');
     $search_results_map_loading = $('#search-results-map-loading');
+    $search_wrapper = $('#playground-results-wrap');
     $zoom_in = $('#zoom-in');
     $zoom_out = $('#zoom-out');
     $search_help = $('#search-help');
