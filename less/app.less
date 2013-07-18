@@ -539,14 +539,15 @@ section#the-goods { margin-top: 44px; }
             .address-search-input {
                 float: left;
                 margin-right: 11px;
-                line-height: 44px;
-                margin-top: 6px;
+                height: 32px;
             }
-            
             #search-btn {
                 font-size: 14px;
                 width: auto;
                 float: left;
+                
+                i { margin-right: 0; }
+                span { display: none; }
             }
             &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
         }
@@ -1018,6 +1019,20 @@ footer {
         .secondary li { font-size: 10px; text-transform: none; }
         .secondary a { color: #bccae5; }
     }
+    .index #playground-search { 
+        margin-left: -20px; margin-right: -20px; 
+        padding-left: 20px; padding-right: 20px;
+
+        h3 { 
+            display: block;
+            margin-bottom: 6px;
+        }
+        p.example {
+            display: block;
+            margin-left: 0;
+            margin-bottom: 11px;
+        }
+    }
 }
 @media @screen-tiny {
     section.the-goods { margin-top: 33px; }
@@ -1030,6 +1045,23 @@ footer {
     header {
         padding: 33px 20px;
         h1 { font-size: 36px; }
+    }
+    .index #playground-search {
+        #address-search {
+            width: auto;
+            float: right;
+
+            #search-btn { float: right; }
+        }
+        #geolocate {
+            width: 100%;
+            display: block;
+            margin-bottom: 11px;
+        }
+        h6.divider {
+            width: auto;
+            margin-right: 11px;
+        }
     }
     .playground {
         nav .social-links {
@@ -1047,11 +1079,11 @@ footer {
                 font-size: 16px;
             }
         }
+        #main-content .social li {
+            span { display: none; }
+            b { display: inline; }
+        }
     }
 
     footer { border-top: 1px solid #CCC; margin-top: 24px; }
-    .playground #main-content .social li {
-        span { display: none; }
-        b { display: inline; }
-    }
 }
