@@ -93,15 +93,14 @@ nav {
 
 // Header
 header {
-    background-color: #ebebeb;
+    background-color: #ccc;
     padding: 50px 30px 30px 30px;
     margin: 0;
-    // border-bottom: 2px solid #fff;
 
     h1 {
         font-size: 48px;
         font-family: Helvetica, Arial, sans-serif;
-        color: #555;
+        color: #444;
         margin-bottom: 11px;
     }
     h2 {
@@ -111,14 +110,19 @@ header {
     }
 }
 .playground header {
+    background-color: #ebebeb;
     padding-top: 22px;
     padding-bottom: 22px;
 
     h1 {
         font-size: 20px;
         margin-bottom: 0;
+        color: #555;
 
         a { color: #555; }
+    }
+    h2 {
+        color: #666;
     }
 }
 
@@ -410,7 +414,6 @@ section#the-goods { margin-top: 44px; }
         bottom: 0;
         right: 0;
         background: @white;
-        overflow: scroll;
         z-index: 100;
 
         .edit-address-hed,
@@ -663,32 +666,31 @@ section#the-goods { margin-top: 44px; }
             margin-bottom: 33px;
         }
         #feature-list {
+            .row-fluid {
+                margin-bottom: 22px;
+            }
             img {
                 display: block;
-                margin-bottom: 11px;
                 width: 100%;
                 height: auto;
             }
-            dt {
+            h4 {
                 font-size: 18px;
+                line-height: 1.3;
                 font-weight: normal;
                 color: #787878;
                 margin: 0 0 11px 0;
-                width: 30%;
-                float: left;
-                clear: both;
             }
-            dd {
+            p {
                 font-size: 14px;
-                margin: 0 0 33px 0;
-                width: 65%;
-                float: right;
+                line-height: 1.5;
             }
             &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
         }
     }
     #playground-results-wrap {
         margin-bottom: 44px;
+        display: none;
     }
 }
 
@@ -885,6 +887,19 @@ section#the-goods { margin-top: 44px; }
 
         .modal-body {
             padding-bottom: 100px;
+
+            .playground-form {
+                .address-editor {
+                    overflow: scroll;
+                }
+            }
+        }
+
+        .alert {
+            background: @lightGray;
+            border: none;
+            color: @textColor;
+            font-size: 16px;
         }
 
         @media @screen-tiny {
@@ -932,12 +947,23 @@ section#the-goods { margin-top: 44px; }
 
 
 .create-playground {
-    .address-editor {
-        position: fixed;
 
-        #edit-map,
-        #address-pane {
-            top: 100px;
+    section#the-goods {
+        margin-top: 0;
+    }
+    
+    .playground-form {
+        .address-editor {
+            position: fixed;
+
+            #edit-map,
+            #address-pane {
+                top: 100px;
+            }
+        }
+
+        .create-footer {
+            text-align: right;
         }
     }
 }

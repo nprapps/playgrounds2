@@ -1,6 +1,6 @@
 {% extends '_base.html' %}
 
-{% block body_class %}playground{% endblock body_class %}
+{% block body_class %}playground create-playground{% endblock body_class %}
 
 {% block extra_css %}
     {{ CSS.push('css/mapbox.css') }}
@@ -120,8 +120,7 @@
 
             </div>
 </div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-large" data-dismiss="modal" aria-hidden="true">Cancel</button>
+<div class="create-footer">
     <button id="playground-update" class="btn btn-large btn-success">Save</button>
 </div>
 

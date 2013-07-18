@@ -110,17 +110,19 @@
     <h3 id="feature-title">{{ COPY.content.feature_title }}</h3>
     <p id="feature-description">{{ COPY.content.feature_description }}</p>
 
-    <dl id="feature-list">
+    <div id="feature-list">
         {% for row in COPY.feature_list %}
-        <dt>
-            {{ row.term }}
-        </dt>
-        <dd>
-            <img src="{{ row.photo }}" alt="{{ row.term }}" />
-            {{ row.definition }}
-        </dd>
+        <div class="row-fluid">
+            <div class="span8">
+                <img src="{{ row.photo }}" alt="{{ row.term }}" />
+            </div>
+            <div class="span4">
+                <h4>{{ row.term }}</h4>
+                <p>{{ row.definition }}</p>
+            </div>
+        </div>
         {% endfor %}
-    </dl>
+    </div>
 </div>
 
 
