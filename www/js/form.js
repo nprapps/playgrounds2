@@ -74,7 +74,7 @@ $(function() {
                 playground.fields.longitude.attr('data-changed', 'true');
 
                 playground.fields.state.val(STATE_NAME_TO_CODE[playground.fields.state.val()]);
-                $('[name=state]').val(playground.fields.state.val());
+                $('#form input[name=state]').val(playground.fields.state.val());
 
                 // Reset the locator map.
                 playground.fields.locator_map.data('latitude', playground.fields.latitude.val());
@@ -229,8 +229,8 @@ $(function() {
                 playground.fields[field_name] = $('input[name="' + field_name + '"]');
             });
 
-            // Except for states because they're selectable
-            playground.fields.state = $('select option:selected')
+            // Except for states because they're selectable.
+            playground.fields.state = $('select option:selected');
 
             // Set up the screen width constants.
             playground.CONTENT_WIDTH = $('#main-content').width();
