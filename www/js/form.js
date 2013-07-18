@@ -25,7 +25,6 @@ $(function() {
                 playground.fields.longitude.attr('value', locale['latLng']['lng']);
                 require_us_address(locale);
                 playground.form.geocode_fields();
-                $('#form').submit();
             },
             'reverse_geocode': function(locale) {
                 playground.fields.address.val(locale['street']);
@@ -64,11 +63,19 @@ $(function() {
             'flag_fields': function(flagged_fields) {
                 $(required_field).addClass('flagged');
             },
-            'prepare_geocode_string': function() {
-                var geocode_string = playground.address.val();
-                geocode_string += ' ' + playground.city.val();
-                geocode_string += ', ' + playground.state.val();
-                return geocode_string + ' ' + playground.zip_code.val();
+            'prepare_geocode_object': function() {
+                geocode_string = '{location:{';
+                geocode_string += 'street:"' + playground.fields.address.val() +'",';
+                if (playground.fields.city.val() !== '' && playground.fields.state.val() !== 'DC') {
+                    geocode_string += 'adminArea5:"' + playground.fields.city.val() +'",';
+                }
+                if (playground.fields.state.val() !== '' && playground.fields.state.val() !== 'DC') {
+                    geocode_string += 'adminArea3:"' + STATE_CODE_TO_NAME[playground.fields.state.val()] +'",';
+                }
+                if (playground.fields.zip_code.val() !== '') {
+                    geocode_string += 'postalCode:"' + playground.fields.zip_code.val() +'"';
+                }
+                return geocode_string + '}}';
             },
             'geocode_fields': function() {
                 // Set the base location fields to 'changed' so that they will POST.
@@ -82,6 +89,8 @@ $(function() {
                 // Reset the locator map.
                 playground.fields.locator_map.data('latitude', playground.fields.latitude.val());
                 playground.fields.locator_map.data('longitude', playground.fields.longitude.val());
+
+                // Set the map state.
                 playground.map.resize_locator();
             }
         },
@@ -117,10 +126,11 @@ $(function() {
                 $('#edit-marker').css({'left': marker_left, 'top': marker_top});
             },
             'resize_locator': function() {
+                // Set the width.
                 playground.CONTENT_WIDTH = $('#main-content').width();
                 playground.PAGE_WIDTH = $('body').outerWidth();
-                // var lat = playground.fields.locator_map.data('latitude');
-                // var lon = playground.fields.locator_map.data('longitude'); // Because iOS refuses to obey toString()
+
+                // Set the map coords.
                 var lat = playground.fields.latitude.val();
                 var lon = playground.fields.longitude.val();
                 var map_path;
@@ -140,9 +150,20 @@ $(function() {
                     new_height = Math.floor(new_width / 3);
                 }
 
-                map_path = 'http://api.tiles.mapbox.com/v3/' + playground.BASE_LAYER + '/pin-m-star+ff6633(' + lon + ',' + lat + ')/' + lon + ',' + lat + ',' + playground.LOCATOR_DEFAULT_ZOOM + '/' + new_width + 'x' + new_height + '.png';
+                // Set up the map image.
+                map_path = 'http://api.tiles.mapbox.com/v3/';
+                map_path += playground.BASE_LAYER + '/pin-m-star+ff6633(' + lon + ',' + lat + ')/';
+                map_path += lon + ',' + lat + ',' + playground.LOCATOR_DEFAULT_ZOOM + '/';
+                map_path += new_width + 'x' + new_height + '.png';
+
                 playground.fields.locator_map.attr('src', map_path);
                 playground.fields.modal_map.attr('src', map_path);
+
+                // Set the placeholder text.
+                placeholder_text = playground.fields.address.val();
+                placeholder_text += '<br>' + playground.fields.city.val();
+                placeholder_text += ', ' + playground.fields.state.val();
+                $('#address-placeholder p').html(placeholder_text);
             }
         },
         'locate_me': function() {
@@ -152,17 +173,9 @@ $(function() {
                 $('#modal-locator-map').removeClass('hidden');
             });
         },
-        'activate_path': function(path) {
-            $('#form .path').hide();
-            $('.' + path).show();
-            playground.map.center_editor();
-            if ( $(this).attr('data-reverse-geocode') === 'checked' ) {
-                playground.fields.reverse_geocode.attr('checked', 'checked');
-            }
-        },
-        'geocode': function(address_string, callback) {
+        'geocode': function(geocode_object, callback) {
             $.ajax({
-                'url': 'http://open.mapquestapi.com/geocoding/v1/?inFormat=kvp&location=' + address_string,
+                'url': 'http://open.mapquestapi.com/geocoding/v1/?inFormat=json&json='+ geocode_object,
                 'dataType': 'jsonp',
                 'contentType': 'application/json',
                 'success': function(data) {
@@ -194,19 +207,16 @@ $(function() {
             });
         },
         'accept_address': function() {
-            placeholder_text = playground.fields.address.val() + '<br>' + playground.fields.city.val() + ', ' + playground.fields.state.val();
-            $('#address-placeholder p').html(placeholder_text);
-            playground.map.resize_locator();
+            playground.geocode(playground.form.prepare_geocode_object(), playground.callbacks.geocode);
             playground.toggle_address_button();
         },
         'toggle_address_button': function(){
             $('.address-editor').toggleClass('hide');
             $('#toggle-address-button').toggleClass('btn-success').text($('#toggle-address-button').text() === 'Edit' ? 'Cancel' : 'Edit');
-            playground.map.center_editor();
         },
         'submit': function() {
             if ( playground.fields.reverse_geocode.attr('checked') !== 'checked' ) {
-                playground.geocode(playground.form.prepare_geocode_string(), playground.callbacks.geocode);
+                playground.geocode(playground.form.prepare_geocode_object(), playground.callbacks.geocode);
             } else {
                 playground.form.geocode_fields();
                 playground.fields.reverse_geocoded.attr('checked', 'checked');
@@ -263,9 +273,6 @@ $(function() {
                 var latlng = map.getCenter();
                 playground.reverse_geocode(latlng.lat, latlng.lng, playground.callbacks.reverse_geocode);
             });
-
-            // Activate the default geocode path. In this case, the map?
-            playground.activate_path('path-1');
 
             // Sets up the click functions for each of the buttons.
             // Requires a data-action attribute on the button element.

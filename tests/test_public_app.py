@@ -128,7 +128,7 @@ class ApiTestCase(unittest.TestCase):
 
         self.assertEqual(response.status_code, 302)
 
-        redirect_url = '%s/playground/create.html' % (app_config.S3_BASE_URL)
+        redirect_url = app_config.S3_BASE_URL
         self.assertEqual(response.headers['Location'].split('?')[0], redirect_url)
 
         with open('data/changes.json') as f:
