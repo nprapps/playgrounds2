@@ -314,7 +314,6 @@ $(function() {
 
             if(playground.fields.latitude.val() === '' || playground.fields.longitude.val() === ''){
                 playground.locate_me();
-                prevent_body_scroll(event);
             }
         }
     };
