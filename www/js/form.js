@@ -30,7 +30,13 @@ $(function() {
             'reverse_geocode': function(locale) {
                 playground.fields.address.val(locale['street']);
                 playground.fields.city.val(locale['adminArea5']);
-                playground.fields.state.val(locale['adminArea3']);
+
+                // States are special. Handle them specially.
+                var short_state = STATE_NAME_TO_CODE[locale['adminArea3']];
+                playground.fields.state.val(short_state);
+                $('#form select[name="state"] option[value="'+ short_state +'""]').attr('selected', 'selected');
+
+                // playground.fields.state.attr('selected', 'selected');
                 playground.fields.zip_code.val(locale['postalCode']);
                 playground.fields.latitude.val(locale['latLng']['lat']);
                 playground.fields.longitude.val(locale['latLng']['lng']);
@@ -72,9 +78,6 @@ $(function() {
                 playground.fields.zip_code.attr('data-changed', 'true');
                 playground.fields.latitude.attr('data-changed', 'true');
                 playground.fields.longitude.attr('data-changed', 'true');
-
-                playground.fields.state.val(STATE_NAME_TO_CODE[playground.fields.state.val()]);
-                $('[name=state]').val(playground.fields.state.val());
 
                 // Reset the locator map.
                 playground.fields.locator_map.data('latitude', playground.fields.latitude.val());
@@ -229,8 +232,16 @@ $(function() {
                 playground.fields[field_name] = $('input[name="' + field_name + '"]');
             });
 
-            // Except for states because they're selectable
-            playground.fields.state = $('select option:selected')
+            // Except for states because they're selectable.
+            playground.fields.state = $('#form select[name="state"]');
+            playground.fields.state_selected = $('#form select[name="state"] option:selected');
+
+            // Watch the state selector.
+            // Update the state_selected and state value.
+            playground.fields.state.on('change', function(){
+                playground.fields.state_selected = $('#form select[name="state"] option:selected');
+                playground.fields.state.val(playground.fields.state_selected.val());
+            });
 
             // Set up the screen width constants.
             playground.CONTENT_WIDTH = $('#main-content').width();
@@ -314,7 +325,6 @@ $(function() {
 
             if(playground.fields.latitude.val() === '' || playground.fields.longitude.val() === ''){
                 playground.locate_me();
-                prevent_body_scroll(event);
             }
         }
     };
