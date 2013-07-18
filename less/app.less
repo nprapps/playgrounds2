@@ -538,13 +538,14 @@ section#the-goods { margin-top: 44px; }
             
             .address-search-input {
                 float: left;
-                margin-right: 11px;
                 height: 32px;
+                width: 80%;
             }
             #search-btn {
                 font-size: 14px;
-                width: auto;
-                float: left;
+                width: 15%;
+                float: right;
+                padding: 0;
                 
                 i { margin-right: 0; }
                 span { display: none; }
@@ -1032,6 +1033,10 @@ footer {
             margin-left: 0;
             margin-bottom: 11px;
         }
+        #address-search {
+            .address-search-input { width: 65%; }
+            #search-btn { width: 25%; }
+        }
     }
 }
 @media @screen-tiny {
@@ -1048,10 +1053,11 @@ footer {
     }
     .index #playground-search {
         #address-search {
-            width: auto;
+            width: 90%;
             float: right;
 
-            #search-btn { float: right; }
+            .address-search-input { width: 70%; }
+            #search-btn { width: 20%; }
         }
         #geolocate {
             width: 100%;
@@ -1059,8 +1065,8 @@ footer {
             margin-bottom: 11px;
         }
         h6.divider {
-            width: auto;
-            margin-right: 11px;
+            width: 10%;
+            text-align: left;
         }
     }
     .playground {
