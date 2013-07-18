@@ -52,3 +52,7 @@ function require_us_address(locale) {
 function prevent_body_scroll(e) {
     if (!$('.scrollable').has($(e.target)).length) e.preventDefault();
 }
+
+function pop_alert(message) {
+    alert(message);
+}

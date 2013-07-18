@@ -21,10 +21,17 @@ $(function() {
         },
         'callbacks': {
             'geocode': function(locale) {
-                playground.fields.latitude.attr('value', locale['latLng']['lat']);
-                playground.fields.longitude.attr('value', locale['latLng']['lng']);
-                require_us_address(locale);
-                playground.form.geocode_fields();
+                if (locale){
+                    playground.fields.latitude.attr('value', locale['latLng']['lat']);
+                    playground.fields.longitude.attr('value', locale['latLng']['lng']);
+
+                    require_us_address(locale);
+                    playground.form.geocode_fields();
+                    playground.toggle_address_button();
+
+                } else {
+                    pop_alert('We can\'t find a place with that name.\nWant to try again?');
+                }
             },
             'reverse_geocode': function(locale) {
                 playground.fields.address.val(locale['street']);
@@ -180,7 +187,10 @@ $(function() {
                 'contentType': 'application/json',
                 'success': function(data) {
                     var locales = data['results'][0]['locations'];
-                    var locale = locales[0];
+                    var locale;
+                    if (locales.length !== 0) {
+                        locale = locales[0];
+                    }
                     var zip_list = [];
                     callback(locale);
                 }
@@ -208,7 +218,6 @@ $(function() {
         },
         'accept_address': function() {
             playground.geocode(playground.form.prepare_geocode_object(), playground.callbacks.geocode);
-            playground.toggle_address_button();
         },
         'toggle_address_button': function(){
             $('.address-editor').toggleClass('hide');
