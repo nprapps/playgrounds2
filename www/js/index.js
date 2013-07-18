@@ -203,14 +203,14 @@ function reset_zoom() {
 }
 
 function show_search() {
-    $search_form.show();
+//    $search_form.show();
     $search_results_wrapper.hide();
     $search_again.hide();
     $search_title.show();
 }
 
 function hide_search() {
-    $search_form.hide();
+//    $search_form.hide();
     $search_again.show();
 }
 
@@ -302,14 +302,14 @@ $(function() {
             $results_address.hide();
             $search_results_wrapper.show();
 
-            $results_address.text('Showing results near you.');
+            $results_address.text('Showing Results Near You');
 
             $search_latitude.val(position.coords.latitude);
             $search_longitude.val(position.coords.longitude);
             $results_loading.show();
             search();
         });
-        $results_address.html('Showing results nearby');
+        $results_address.html('Showing Results Nearby');
     });
 
     $('#newyork').click(function() {
@@ -360,7 +360,7 @@ $(function() {
 
         $search_latitude.val(latitude);
         $search_longitude.val(longitude);
-        $results_address.html('Showing results near ' + address);
+        $results_address.html('Showing Results Near ' + address);
 
         $search_help.hide();
         $search_help_us.show();
@@ -413,7 +413,7 @@ $(function() {
                             $search_latitude.val(locale['latLng']['lat']);
                             $search_longitude.val(locale['latLng']['lng']);
 
-                            $results_address.html('Showing results near ' + formatMapQuestAddress(locale));
+                            $results_address.html('Showing Results Near ' + formatMapQuestAddress(locale));
 
                             $results_loading.show();
                             search();
