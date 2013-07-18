@@ -410,7 +410,6 @@ section#the-goods { margin-top: 44px; }
         bottom: 0;
         right: 0;
         background: @white;
-        overflow: scroll;
         z-index: 100;
 
         .edit-address-hed,
@@ -885,6 +884,19 @@ section#the-goods { margin-top: 44px; }
 
         .modal-body {
             padding-bottom: 100px;
+
+            .playground-form {
+                .address-editor {
+                    overflow: scroll;
+                }
+            }
+        }
+
+        .alert {
+            background: @lightGray;
+            border: none;
+            color: @textColor;
+            font-size: 16px;
         }
 
         @media @screen-tiny {
@@ -932,12 +944,23 @@ section#the-goods { margin-top: 44px; }
 
 
 .create-playground {
-    .address-editor {
-        position: fixed;
 
-        #edit-map,
-        #address-pane {
-            top: 100px;
+    section#the-goods {
+        margin-top: 0;
+    }
+    
+    .playground-form {
+        .address-editor {
+            position: fixed;
+
+            #edit-map,
+            #address-pane {
+                top: 100px;
+            }
+        }
+
+        .create-footer {
+            text-align: right;
         }
     }
 }
