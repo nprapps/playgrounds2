@@ -67,9 +67,7 @@ $(function() {
 
     $geolocate_button.click(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
-            $search_latitude.val(position.coords.latitude);
-            $search_longitude.val(position.coords.longitude);
-            $search_form.submit();
+            window.location.href = 'search.html#latitude=' + position.coords.latitude + '&longitude=' + position.coords.longitude; 
         });
     });
 
@@ -86,6 +84,12 @@ $(function() {
     $('#zip').click(function() {
         $search_address.val('79410');
         $search_form.submit();
+    });
+
+    $search_form.submit(function() {
+        window.location.href = 'search.html#address=' + encodeURIComponent($search_address.val()); 
+
+        return false;
     });
 
     if (GEOLOCATE) {

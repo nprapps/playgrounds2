@@ -228,6 +228,7 @@ $(function() {
         },
         'toggle_address_button': function(){
             $('.address-editor').toggleClass('hide');
+            playground.map.center_editor();
             $('#toggle-address-button').toggleClass('btn-success').text($('#toggle-address-button').text() === 'Edit' ? 'Cancel' : 'Edit');
         },
         'submit': function() {

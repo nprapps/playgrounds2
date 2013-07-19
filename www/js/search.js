@@ -41,9 +41,6 @@ var $results_loading = null;
 var $playground_meta_hdr = null;
 var $playground_meta_items = null;
 
-var is_index = false;
-var is_playground = false;
-
 var zoom = RESULTS_DEFAULT_ZOOM;
 var crs = null;
 
@@ -187,6 +184,27 @@ function search() {
                 $results_address.show();
             }
 
+            hash.add({
+                'latitude': $search_latitude.val(),
+                'longitude': $search_longitude.val(),
+                'zoom': zoom
+            });
+
+            if ($search_address.val()) {
+                hash.clear();
+                hash.add({
+                    'address': $search_address.val(),
+                    'zoom': zoom
+                });
+            } else {
+                hash.clear();
+                hash.add({
+                    'latitude': $search_latitude.val(),
+                    'longitude': $search_longitude.val(),
+                    'zoom': zoom
+                });
+            }
+
             $search_results.show();
         },
         cache: true,
@@ -219,6 +237,7 @@ function hide_search() {
 
 function geolocate_callback(position) {
     hide_search();
+    $search_address.val('');
     $search_help.hide();
     $search_results.empty();
     $search_results_map_wrapper.hide();
@@ -264,12 +283,7 @@ $(function() {
     RESULTS_MAP_WIDTH = CONTENT_WIDTH;
     RESULTS_MAP_HEIGHT = CONTENT_WIDTH;
 
-    is_index = $('body').hasClass('index');
-    is_playground = $('body').hasClass('playground');
-
-    if (is_index) {
-        crs = L.CRS.EPSG3857;
-    }
+    crs = L.CRS.EPSG3857;
 
     // Fetches the key from the URL. This could easily be undefined or null.
     var action = get_parameter_by_name('action');
@@ -304,7 +318,7 @@ $(function() {
     $geolocate_button.click(function() {
         reset_zoom();
         navigator.geolocation.getCurrentPosition(geolocate_callback);
-        $results_address.html('Showing Results Nearby');
+        $results_address.html('Showing Results Near You');
     });
 
     // Search examples are fun.
@@ -343,6 +357,7 @@ $(function() {
         var latitude = $this.data('latitude');
         var longitude = $this.data('longitude');
 
+        $search_address.val(display_name);
         $search_latitude.val(latitude);
         $search_longitude.val(longitude);
         $results_address.html('Showing Results Near ' + display_name);
@@ -437,15 +452,18 @@ $(function() {
         $search_divider.show();
     }
 
-    var address = get_parameter_by_name('address');
-    var latitude = get_parameter_by_name('latitude');
-    var longitude = get_parameter_by_name('longitude');
+    $search_address.val(hash.get('address') || '');
+    var latitude = hash.get('latitude');
+    var longitude = hash.get('longitude');
+    zoom = parseInt(hash.get('zoom')) || zoom;
 
     if (latitude && longitude) {
+        $search_latitude.val(latitude);
+        $search_longitude.val(longitude);
+
         var position = { 'coords': { 'latitude': latitude, 'longitude': longitude } };
         geolocate_callback(position);
-    } else if (address) {
-        $search_address.val(address);
+    } else if ($search_address.val()) {
         $search_form.submit();
     }
 });
