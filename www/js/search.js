@@ -43,6 +43,7 @@ var $playground_meta_items = null;
 
 var zoom = RESULTS_DEFAULT_ZOOM;
 var crs = null;
+var ignore_hash_change = false;
 
 function degToCloudSearch(degree) {
     /*
@@ -183,27 +184,27 @@ function search() {
                 $search_results_map_wrapper.show();
                 $results_address.show();
             }
-
-            hash.add({
-                'latitude': $search_latitude.val(),
-                'longitude': $search_longitude.val(),
-                'zoom': zoom
-            });
+                
+            console.log('before');
+            ignore_hash_change = true;
+            //$(window).off('hashchange', hashchange_callback);
 
             if ($search_address.val()) {
-                hash.clear();
-                hash.add({
+                hash.set({
                     'address': $search_address.val(),
                     'zoom': zoom
                 });
             } else {
-                hash.clear();
-                hash.add({
+                hash.set({
                     'latitude': $search_latitude.val(),
                     'longitude': $search_longitude.val(),
                     'zoom': zoom
                 });
             }
+                
+            //$(window).on('hashchange', hashchange_callback);
+            ignore_hash_change = false;
+            console.log('after');
 
             $search_results.show();
         },
@@ -250,6 +251,34 @@ function geolocate_callback(position) {
     $search_longitude.val(position.coords.longitude);
     $results_loading.show();
     search();
+}
+
+function hashchange_callback() {
+    console.log('hash change');
+    if (ignore_hash_change) {
+        return false;
+    }
+
+    console.log(1);
+
+    $search_address.val(hash.get('address') || '');
+    var latitude = hash.get('latitude');
+    var longitude = hash.get('longitude');
+    zoom = parseInt(hash.get('zoom')) || zoom;
+
+    console.log(2);
+
+    if (latitude && longitude) {
+        $search_latitude.val(latitude);
+        $search_longitude.val(longitude);
+
+        var position = { 'coords': { 'latitude': latitude, 'longitude': longitude } };
+        geolocate_callback(position);
+    } else if ($search_address.val()) {
+        $search_form.submit();
+    }
+
+    console.log(3);
 }
 
 $(function() {
@@ -460,18 +489,9 @@ $(function() {
         $search_divider.show();
     }
 
-    $search_address.val(hash.get('address') || '');
-    var latitude = hash.get('latitude');
-    var longitude = hash.get('longitude');
-    zoom = parseInt(hash.get('zoom')) || zoom;
+    hashchange_callback();
 
-    if (latitude && longitude) {
-        $search_latitude.val(latitude);
-        $search_longitude.val(longitude);
-
-        var position = { 'coords': { 'latitude': latitude, 'longitude': longitude } };
-        geolocate_callback(position);
-    } else if ($search_address.val()) {
-        $search_form.submit();
-    }
+    $(window).on('hashchange', function() {
+        hashchange_callback();
+    });
 });
