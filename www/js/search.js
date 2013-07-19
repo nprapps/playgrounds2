@@ -442,9 +442,9 @@ $(function() {
         $search_divider.show();
     }
 
-    var address = get_parameter_by_name('address');
-    var latitude = get_parameter_by_name('latitude');
-    var longitude = get_parameter_by_name('longitude');
+    var address = hash.get('address');
+    var latitude = hash.get('latitude');
+    var longitude = hash.get('longitude');
 
     if (latitude && longitude) {
         var position = { 'coords': { 'latitude': latitude, 'longitude': longitude } };
