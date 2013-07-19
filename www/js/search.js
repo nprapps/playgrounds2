@@ -109,6 +109,7 @@ function buildCloudSearchParams() {
 
     params['bq'] = '(and ' + query_bits.join(' ') + ')';
     params['return-fields'] = return_fields.join(',');
+    params['size'] = 26;
 
     return params;
 }
@@ -436,6 +437,11 @@ $(function() {
         return false;
     });
 
+    if (GEOLOCATE) {
+        $geolocate_button.show();
+        $search_divider.show();
+    }
+
     var address = get_parameter_by_name('address');
     var latitude = get_parameter_by_name('latitude');
     var longitude = get_parameter_by_name('longitude');
@@ -446,10 +452,5 @@ $(function() {
     } else if (address) {
         $search_address.val(address);
         $search_form.submit();
-    }
-
-    if (GEOLOCATE) {
-        $geolocate_button.show();
-        $search_divider.show();
     }
 });
