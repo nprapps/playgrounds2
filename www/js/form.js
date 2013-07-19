@@ -24,13 +24,11 @@ $(function() {
                 if (locale){
                     playground.fields.latitude.attr('value', locale['latLng']['lat']);
                     playground.fields.longitude.attr('value', locale['latLng']['lng']);
-
                     require_us_address(locale);
                     playground.form.geocode_fields();
                     playground.toggle_address_button();
-
                 } else {
-                    pop_alert('We can\'t find a place with that name.\nWant to try again?');
+                    make_alert('We can\'t find a place with that name.\nWant to try again?', 'warning');
                 }
             },
             'reverse_geocode': function(locale) {
@@ -46,6 +44,7 @@ $(function() {
                 playground.fields.zip_code.val(locale['postalCode']);
                 playground.fields.latitude.val(locale['latLng']['lat']);
                 playground.fields.longitude.val(locale['latLng']['lng']);
+
                 require_us_address(locale);
                 playground.form.geocode_fields();
             }
@@ -65,7 +64,6 @@ $(function() {
                 } else {
                     return true;
                 }
-
             },
             'flag_fields': function(flagged_fields) {
                 $(required_field).addClass('flagged');
@@ -79,8 +77,11 @@ $(function() {
                 if (playground.fields.state.val() !== '' && playground.fields.state.val() !== 'DC') {
                     geocode_string += 'adminArea3:"' + STATE_CODE_TO_NAME[playground.fields.state.val()] +'",';
                 }
+                if (playground.fields.state.val() == 'DC') {
+                    geocode_string += 'adminArea4:"District of Columbia",';
+                }
                 if (playground.fields.zip_code.val() !== '') {
-                    geocode_string += 'postalCode:"' + playground.fields.zip_code.val() +'"';
+                    geocode_string += 'postalCode:"' + playground.fields.zip_code.val() +'",';
                 }
                 return geocode_string + '}}';
             },

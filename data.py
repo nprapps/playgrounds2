@@ -195,6 +195,13 @@ def load_playgrounds(path='data/playgrounds.csv'):
                 source=row['Source']
             )
 
+            for slug in app_config.FEATURES.keys():
+                if row[slug] == 'TRUE':
+                    PlaygroundFeature.create(
+                        slug=slug,
+                        playground=playground
+                    )
+
             Revision.create(
                 timestamp=datetime.datetime.now(pytz.utc),
                 action='insert',
