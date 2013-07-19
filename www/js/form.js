@@ -175,11 +175,17 @@ $(function() {
             }
         },
         'locate_me': function() {
-            navigator.geolocation.getCurrentPosition(function(position) {
+            function success(position){
                 map.setView([position.coords.latitude, position.coords.longitude], playground.LOCATOR_DEFAULT_ZOOM);
                 playground.reverse_geocode(position.coords.latitude, position.coords.longitude, playground.callbacks.reverse_geocode);
                 $('#modal-locator-map').removeClass('hidden');
-            });
+            }
+
+            function error(){
+                $('#myTab a:last').tab('show');
+            }
+
+            navigator.geolocation.getCurrentPosition(success, error);
         },
         'geocode': function(geocode_object, callback) {
             $.ajax({
@@ -222,6 +228,7 @@ $(function() {
         },
         'toggle_address_button': function(){
             $('.address-editor').toggleClass('hide');
+            playground.map.center_editor();
             $('#toggle-address-button').toggleClass('btn-success').text($('#toggle-address-button').text() === 'Edit' ? 'Cancel' : 'Edit');
         },
         'submit': function() {
