@@ -363,6 +363,16 @@ section#the-goods { margin-top: 44px; }
         vertical-align: middle;
     }
 
+    .alert {
+        position: static;
+        #the-goods & {
+            margin-left: 0;
+            margin-right: 0;
+            margin-bottom: @baseLineHeight;
+            width: auto;
+        }
+    }
+
     .checkbox {
         line-height: 1;
     }
@@ -523,6 +533,16 @@ section#the-goods { margin-top: 44px; }
 }
 
 .index {
+    h3 {
+        font-size: 28px;
+        color: #787878;
+        margin: 0 0 22px 0;
+    }
+    p {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
     #playground-help {
         margin-bottom: 44px;
     }
@@ -837,10 +857,8 @@ section#the-goods { margin-top: 44px; }
     border-bottom: 2px solid #ebebeb;
     padding: 33px 0;
 
-    h3 {
-        font-size: 20px;
-        color: #787878;
-        margin: 0 0 22px 0;
+    h1 {
+        margin: 0 0 11px 0;
         display: inline-block;
     }
     h6.divider {
@@ -856,7 +874,7 @@ section#the-goods { margin-top: 44px; }
 
         &.example {
             font-size: 13px;
-            margin-left: 33px;
+            margin-left: 11px;
             color: #777;
             display: inline-block;
         }
@@ -899,11 +917,17 @@ section#the-goods { margin-top: 44px; }
         &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
     }
 }
-.index #main-content,
-.search #main-content {
-    h3 {
-        font-size: 28px;
+.index #playground-search {
+    h1 {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 20px;
         color: #787878;
+    }
+}
+.search #main-content {
+    h4 {
+//        font-size: 22px;
+//        color: #787878;
         margin: 0 0 22px 0;
     }
     h6.divider {
@@ -1082,28 +1106,28 @@ footer {
                 font-size: 36px;
             }
         }
-        #playground-search {
-            margin-left: -20px; margin-right: -20px;
-            padding-left: 20px; padding-right: 20px;
-
-            h3 {
-                display: block;
-                margin-bottom: 6px;
-            }
-            p.example {
-                display: block;
-                margin-left: 0;
-                margin-bottom: 11px;
-            }
-            #address-search {
-                .address-search-input { width: 65%; }
-                #search-btn { width: 25%; }
-            }
-        }        
         #playground-feature-primer #feature-list img {
             margin-bottom: 22px;
         }
     }
+    #playground-search {
+        margin-left: -20px; margin-right: -20px;
+        padding-left: 20px; padding-right: 20px;
+
+        h1 {
+            display: block;
+            margin-bottom: 6px;
+        }
+        p.example {
+            display: block;
+            margin-left: 0;
+            margin-bottom: 11px;
+        }
+        #address-search {
+            .address-search-input { width: 65%; }
+            #search-btn { width: 25%; }
+        }
+    }        
 }
 @media @screen-tiny {
     section.the-goods { margin-top: 33px; }
@@ -1124,24 +1148,6 @@ footer {
             
             h1 { font-size: 32px; }
         }
-        #playground-search {
-            #address-search {
-                width: 90%;
-                float: right;
-
-                .address-search-input { width: 70%; }
-                #search-btn { width: 20%; }
-            }
-            #geolocate {
-                width: 100%;
-                display: block;
-                margin-bottom: 11px;
-            }
-            h6.divider {
-                width: 10%;
-                text-align: left;
-            }
-        }
     }
     .playground,
     .search {
@@ -1159,6 +1165,24 @@ footer {
             h1 {
                 font-size: 16px;
             }
+        }
+    }
+    #playground-search {
+        #address-search {
+            width: 90%;
+            float: right;
+
+            .address-search-input { width: 70%; }
+            #search-btn { width: 20%; }
+        }
+        #geolocate {
+            width: 100%;
+            display: block;
+            margin-bottom: 11px;
+        }
+        h6.divider {
+            width: 10%;
+            text-align: left;
         }
     }
     .playground {
