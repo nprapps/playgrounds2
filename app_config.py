@@ -92,8 +92,7 @@ DISQUS_SHORTNAME = 'npr-playgrounds2'
 Application specific
 """
 DATA_GOOGLE_DOC_KEY = '0AlXMOHKxzQVRdGxsTklpUnBHV3NSRHFZaDVFWnQ5VVE'
-GEOCODED_DATA_GOOGLE_DOC_KEY = '0Antez86oOXPndEpJWGxnYVY0aDFKSTh2bDFhLUFKbHc'
-DATA_URL = 'https://docs.google.com/spreadsheet/pub?key=%s&single=true&gid=0&output=csv' % GEOCODED_DATA_GOOGLE_DOC_KEY
+DATA_URL = 'https://docs.google.com/spreadsheet/pub?key=%s&single=true&gid=0&output=csv' % DATA_GOOGLE_DOC_KEY
 
 MAPBOX_BASE_LAYER = 'npr.map-s5q5dags'
 MAPBOX_BASE_LAYER_RETINA = 'npr.map-u1zkdj0e'
