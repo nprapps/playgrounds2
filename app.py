@@ -102,6 +102,15 @@ def index():
 
     return render_template('index.html', **context)
 
+@app.route('/search.html')
+def search():
+    """
+    Search results page.
+    """
+    context = make_context()
+
+    return render_template('search.html', **context)
+
 @app.route('/create.html')
 def playground_create():
     context = make_context()

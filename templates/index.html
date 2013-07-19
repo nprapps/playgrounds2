@@ -22,89 +22,12 @@
     </div>
 </header>
 
-<section id="playground-search">
-    <div class="container">
-        <div class="row">
-            <div class="span12">
+{% include '_search_form.html' %}
 
-                <div id="create_thanks" class="alert alert-success alert-block hide">
-                    <a href="#" class="close" data-dismiss="alert">&times;</a>
-                    <h4>Thanks!</h4>
-                    <p>Your changes have been submitted for review.</p>
-                    <p>Would you mind reviewing another playground?</p>
-                    <ul>
-                        <li><a href="#">Park One</a></li>
-                        <li><a href="#">Park Two</a></li>
-                        <li><a href="#">Park Three</a></li>
-                        <li><a href="#">Not Now, Thanks</a></li>
-                    </ul>
-                </div>
-
-                <h3 id="search-title">{{ COPY.content.search_title }}</h3>
-                <p class="example">for example,
-                    <a id="newyork">New York City</a> or
-                    <a id="huntley">Deicke Park, Huntley, IL</a> or
-                    <a id="zip">79410</a>
-                </p>
-
-                <form id="search">
-                    <button type="button" id="geolocate" class="btn btn-blue btn-block"><i class="icon-screenshot"></i> Find Playgrounds Nearby</button>
-
-                    <h6 class="divider">OR</h6>
-
-                    <div id="address-search">
-                        <input type="text" name="address" placeholder="Address, City/State or ZIP" class="address-search-input" />
-
-                        <input type="hidden" name="latitude" />
-                        <input type="hidden" name="longitude" />
-                        <button type="submit" id="search-btn" class="btn btn-blue btn-block"><i class="icon-search"></i><span>Search</span></button>
-                    </div>
-                </form>
-
-            </div>
-        </div>
-    </div>
-</section>
 {% endblock %}
 
 
 {% block content %}
-
-<div id="playground-results-wrap">
-    <div id="search-help">
-        <h4>Did you mean...?</h4>
-        <ul></ul>
-        <h6 class="divider">OR</h6>
-    </div>
-
-    <div id="no-geocode">
-        <h4>Sorry, we couldn't locate that address.</h4>
-    </div>
-
-    <div id="results-loading">Loading...</div>
-
-    <div id="search-results-wrapper">
-        <h3 id="results-address"></h3>
-        <div id="search-results-map-wrapper">
-            <img id="search-results-map" src="" />
-            <img id="search-results-map-loading" src="img/loading.gif" />
-
-            <div class="zoom-buttons">
-                <button type="button" id="zoom-in" class="btn-zoom">+</button>
-                <button type="button" id="zoom-out" class="btn-zoom">-</button>
-            </div>
-        </div>
-
-        <ul id="search-results" class="playground-list">
-        </ul>
-
-        <div class="help-prompt">
-            <p class="prompt">{{ COPY.content.search_help_title }}</p>
-            <p><a href="create.html" class="btn btn-blue btn-block"><i class="icon-plus-sign"></i> {{ COPY.content.search_help_button }}</a></p>
-        </div>
-    </div>
-</div>
-
 
 <div id="playground-feature-primer">
     <h3 id="feature-title">{{ COPY.content.feature_title }}</h3>
