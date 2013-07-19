@@ -110,7 +110,7 @@ header {
     }
 }
 .index header {
-    background: #ccc url('@{img-root}/playground-1200.jpg') no-repeat 50% 80%;
+    background: #ccc url('@{img-root}/playground-1200.jpg') no-repeat 50% 60%;
     background-size: cover;
     padding: 0 30px 0 30px;
     height: 400px;
@@ -1036,6 +1036,7 @@ footer {
     }
     .index header {
         background-image: url('@{img-root}/playground-980.jpg');
+        h1 { font-size: 42px; }
     }
 }
 @media @screen-small {
@@ -1051,6 +1052,25 @@ footer {
     .index {
         header {
             background-image: url('@{img-root}/playground-768.jpg');
+            padding: 0;
+            position: relative;
+            height: 350px;
+            
+            .row { 
+                height: auto;
+                position: absolute;
+                bottom: 0;
+            }
+            .project-info-wrapper {
+                position: static;
+                top: auto; bottom: 0; left: auto;
+            }
+            .project-info {
+                padding-top: 22px;
+            }
+            h1 { 
+                font-size: 36px;
+            }
         }
         #playground-search {
             margin-left: -20px; margin-right: -20px;
@@ -1085,11 +1105,14 @@ footer {
     }
     header {
         padding: 33px 20px;
-        h1 { font-size: 36px; }
+        h1 { font-size: 32px; }
     }
     .index {
         header {
             background-image: url('@{img-root}/playground-480.jpg');
+            height: 300px;
+            
+            h1 { font-size: 32px; }
         }
         #playground-search {
             #address-search {
