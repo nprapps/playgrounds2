@@ -1034,6 +1034,9 @@ footer {
         .primary { float: none; }
         .secondary ul, .secondary p { margin-left: 0; float: left; }
     }
+    .index header {
+        background-image: url('@{img-root}/playground-980.jpg');
+    }
 }
 @media @screen-small {
     nav, header, footer, .alert { margin-left: -20px; margin-right: -20px; }
@@ -1046,6 +1049,9 @@ footer {
         .secondary a { color: #bccae5; }
     }
     .index {
+        header {
+            background-image: url('@{img-root}/playground-768.jpg');
+        }
         #playground-search {
             margin-left: -20px; margin-right: -20px;
             padding-left: 20px; padding-right: 20px;
@@ -1081,22 +1087,27 @@ footer {
         padding: 33px 20px;
         h1 { font-size: 36px; }
     }
-    .index #playground-search {
-        #address-search {
-            width: 90%;
-            float: right;
+    .index {
+        header {
+            background-image: url('@{img-root}/playground-480.jpg');
+        }
+        #playground-search {
+            #address-search {
+                width: 90%;
+                float: right;
 
-            .address-search-input { width: 70%; }
-            #search-btn { width: 20%; }
-        }
-        #geolocate {
-            width: 100%;
-            display: block;
-            margin-bottom: 11px;
-        }
-        h6.divider {
-            width: 10%;
-            text-align: left;
+                .address-search-input { width: 70%; }
+                #search-btn { width: 20%; }
+            }
+            #geolocate {
+                width: 100%;
+                display: block;
+                margin-bottom: 11px;
+            }
+            h6.divider {
+                width: 10%;
+                text-align: left;
+            }
         }
     }
     .playground {
