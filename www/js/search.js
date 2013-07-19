@@ -321,16 +321,9 @@ $(function() {
         $results_address.html('Showing Results Near You');
     });
 
-    $('#newyork').click(function() {
-        $search_address.val('New York City, New York');
-        $search_form.submit();
-    });
-    $('#huntley').click(function() {
-        $search_address.val('Deicke Park, Huntley, Illinois');
-        $search_form.submit();
-    });
-    $('#zip').click(function() {
-        $search_address.val('79410');
+    // Search examples are fun.
+    $('a.search-example').on('click', function(){
+        $search_address.val($(this).text());
         $search_form.submit();
     });
 
@@ -417,7 +410,6 @@ $(function() {
                             $no_geocode.show();
                         } else if (data.length == 1) {
                             // If there's one result, render it.
-
                             var locale = data[0];
 
                             $search_latitude.val(locale['lat']);
