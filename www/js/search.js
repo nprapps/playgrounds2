@@ -307,16 +307,9 @@ $(function() {
         $results_address.html('Showing Results Nearby');
     });
 
-    $('#newyork').click(function() {
-        $search_address.val('New York City, New York');
-        $search_form.submit();
-    });
-    $('#huntley').click(function() {
-        $search_address.val('Deicke Park, Huntley, Illinois');
-        $search_form.submit();
-    });
-    $('#zip').click(function() {
-        $search_address.val('79410');
+    // Search examples are fun.
+    $('a.search-example').on('click', function(){
+        $search_address.val($(this).text());
         $search_form.submit();
     });
 
