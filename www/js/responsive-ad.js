@@ -45,7 +45,8 @@ if ('ontouchstart' in document.documentElement) {
 	}
     // No box ad when we have adhesion, so #header gets 12 columns
     if (winWidth <= 1024){
-        $('#header').removeClass('span8').addClass('span12');
+//        $('#header').removeClass('span8').addClass('span12');
+        $('#main-content').removeClass('span8').addClass('span12');
     }
 }
 if (NPR.PageInfo.getUrlParameter('device') == 'tablet') {
