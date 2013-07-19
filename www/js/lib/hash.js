@@ -31,6 +31,13 @@ var hash = (function() {
                 return params;
             }
         },
+        set: function(newParams) {
+            var params = {};
+            for (var p in newParams) {
+                params[p] = newParams[p];
+            }
+            toHash(params);
+        },
         add: function(newParams) {
             var params = fromHash();
             for (var p in newParams) {
