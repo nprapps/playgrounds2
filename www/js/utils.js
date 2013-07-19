@@ -45,14 +45,32 @@ function formatMapQuestAddress(locale) {
 function require_us_address(locale) {
     var country = locale['adminArea1'];
     if (country !== 'US') {
-        console.log("Please provide an address located within the United States.");
+        make_alert('Please choose an address within the United States.', 'warning');
     }
 }
 
 function prevent_body_scroll(e) {
-    if (!$('.scrollable').has($(e.target)).length) e.preventDefault();
+    if (!$('.scrollable').has($(e.target)).length) {
+        e.preventDefault();
+    }
 }
 
-function pop_alert(message) {
-    alert(message);
+function make_alert(text, klass){
+    // Generate a template.
+    var alert_template = _.template('<div class="alert <%= klass %>"><%= text %></div>');
+
+    // Blank the div and add our rendered template.
+    $('div.alerts').html('').append(
+        alert_template({
+            'text': text,
+            'klass': klass
+        })
+    );
+
+    // Make it disappear reasonably quickly after 2 seconds.
+    var t = setTimeout(function(){
+        $('div.alerts .alert').fadeOut(500, function(){
+            $('div.alerts').html('');
+        });
+    }, 2000);
 }

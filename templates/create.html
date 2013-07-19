@@ -51,7 +51,7 @@
                 <div class="control-group">
                     <label class="control-label">Name</label>
                     <div class="controls">
-                        <input class="input-block-level input" type="text" name="name" value=""></input>
+                        <input class="input-block-level input" type="text" name="name" value="" data-required='true'></input>
                     </div>
                 </div>
 
@@ -125,13 +125,13 @@
 </div>
 
 <div class="address-editor">
+    <div class="alerts"></div>
     <h2 class="edit-address-hed">Add a playground</h2>
 
     <ul class="nav nav-tabs" id="myTab">
       <li class="active"><a href="#map-pane" data-toggle="tab">I don't know the exact address</a></li>
       <li><a href="#address-pane" data-toggle="tab">I know the exact address</a></li>
     </ul>
-
     <div class="tab-content">
         <div id="map-pane" class="map-pane tab-pane active">
             <div class="edit-address-map">
@@ -146,13 +146,13 @@
         </div>
         <div id="address-pane" class="address-pane tab-pane">
             <div class="control-group">
-                <label class="control-label">Address</label>
+                <label class="control-label" data-required="true">Address</label>
                 <div class="controls">
                     <input class="input-block-level input" type="text" name="address" value=""></input>
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">City</label>
+                <label class="control-label" data-required="true">City</label>
                 <div class="controls">
                     <input class="input-block-level input" type="text" name="city" value=""></input>
                 </div>
@@ -161,7 +161,7 @@
             <div class="control-group">
                 <label class="control-label">State</label>
                 <div class="controls">
-                    <select class="span12" type="text" name="state" value="">
+                    <select class="span12" type="text" name="state" value="" data-required="true">
                         <option value="AL">AL</option>
                         <option value="AK">AK</option>
                         <option value="AZ">AZ</option>
@@ -220,7 +220,7 @@
             <div class="control-group">
                 <label class="control-label">Zip Code</label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="zip_code" value=""></input>
+                    <input class="input-block-level input" type="text" name="zip_code" value="" data-required="true"></input>
                 </div>
             </div>
         </div>
