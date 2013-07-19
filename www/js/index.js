@@ -4,6 +4,7 @@ var GEOLOCATE = Modernizr.geolocation;
 var $search_form = null;
 var $search_latitude = null;
 var $search_longitude = null;
+var $search_address = null;
 var $geolocate_button = null;
 var $search_divider = null;
 var $playground_meta_hdr = null;
@@ -11,6 +12,7 @@ var $playground_meta_items = null;
 
 $(function() {
     $search_form = $('#search');
+    $search_address = $('#search input[name="address"]');
     $search_latitude = $('#search input[name="latitude"]');
     $search_longitude = $('#search input[name="longitude"]');
     $geolocate_button = $('#geolocate');
@@ -72,17 +74,16 @@ $(function() {
     });
 
     $('#newyork').click(function() {
-        $search_query.val('');
         $search_address.val('New York City, New York');
         $search_form.submit();
     });
+
     $('#huntley').click(function() {
-        $search_query.val('');
         $search_address.val('Deicke Park, Huntley, Illinois');
         $search_form.submit();
     });
+
     $('#zip').click(function() {
-        $search_query.val('');
         $search_address.val('79410');
         $search_form.submit();
     });
