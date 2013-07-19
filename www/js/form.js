@@ -175,11 +175,17 @@ $(function() {
             }
         },
         'locate_me': function() {
-            navigator.geolocation.getCurrentPosition(function(position) {
+            function success(position){
                 map.setView([position.coords.latitude, position.coords.longitude], playground.LOCATOR_DEFAULT_ZOOM);
                 playground.reverse_geocode(position.coords.latitude, position.coords.longitude, playground.callbacks.reverse_geocode);
                 $('#modal-locator-map').removeClass('hidden');
-            });
+            }
+
+            function error(){
+                $('#myTab a:last').tab('show');
+            }
+
+            navigator.geolocation.getCurrentPosition(success, error);
         },
         'geocode': function(geocode_object, callback) {
             $.ajax({

@@ -293,10 +293,6 @@ section#the-goods { margin-top: 44px; }
             height: 44px;
         }
 
-        label {
-            color: #999;
-        }
-
         textarea {
             min-height: 200px;
             line-height: 1.3;
@@ -372,10 +368,6 @@ section#the-goods { margin-top: 44px; }
             height: 44px;
         }
 
-        label {
-            color: #999;
-        }
-
         textarea {
             min-height: 200px;
             line-height: 1.3;
@@ -400,7 +392,7 @@ section#the-goods { margin-top: 44px; }
 
 
             .checkbox {
-                padding-left: 40px;
+                padding-left: 45px;
                 cursor: default;
                 &:before {
                     content: ' ';
@@ -430,6 +422,20 @@ section#the-goods { margin-top: 44px; }
                     line-height: 30px;
                 }
             }
+
+            .help-block {
+                padding-left: 45px;
+                font-size: 14px;
+                color: @grayLight;
+            }
+        }
+
+        .alert {
+            background: @lightGray;
+            border: none;
+            padding: 8px 14px;
+            color: @textColor;
+            font-size: 16px;
         }
     }
 
@@ -920,13 +926,6 @@ section#the-goods { margin-top: 44px; }
                     overflow: scroll;
                 }
             }
-        }
-
-        .alert {
-            background: @lightGray;
-            border: none;
-            color: @textColor;
-            font-size: 16px;
         }
 
         @media @screen-tiny {
