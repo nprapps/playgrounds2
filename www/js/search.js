@@ -408,7 +408,7 @@ $(function() {
                             $search_latitude.val(locale['lat']);
                             $search_longitude.val(locale['lon']);
 
-                            $results_address.html('Showing Results Near ' + locale['display_name']);
+                            $results_address.html('Showing Results Near ' + locale['display_name'].replace(', United States of America', ''));
 
                             $results_loading.show();
                             search();
