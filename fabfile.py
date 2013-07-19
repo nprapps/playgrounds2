@@ -456,6 +456,12 @@ def load_data():
     models.create_tables()
     data.load_playgrounds()
 
+def runserver(port='8000'):
+    """
+    Use local runserver.
+    """
+    local('gunicorn -b 127.0.0.1:%s app:app' % port)
+
 def local_bootstrap():
     """
     Get and load all data required to make the app run.
