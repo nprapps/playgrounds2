@@ -395,7 +395,6 @@ $(function() {
                             $no_geocode.show();
                         } else if (data.length == 1) {
                             // If there's one result, render it.
-
                             var locale = data[0];
 
                             $search_latitude.val(locale['lat']);
