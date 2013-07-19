@@ -346,13 +346,13 @@ $(function() {
 
     $did_you_mean.on('click', 'li', function() {
         var $this = $(this);
-        var address = $this.data('address');
+        var display_name = $this.data('display-name');
         var latitude = $this.data('latitude');
         var longitude = $this.data('longitude');
 
         $search_latitude.val(latitude);
         $search_longitude.val(longitude);
-        $results_address.html('Showing Results Near ' + address);
+        $results_address.html('Showing Results Near ' + display_name);
 
         $search_help.hide();
         $search_help_us.show();
@@ -382,40 +382,43 @@ $(function() {
                 $results_loading.show();
 
                 $.ajax({
-                    'url': 'http://open.mapquestapi.com/geocoding/v1/address',
-                    'data': { 'location': address },
+                    'url': 'http://open.mapquestapi.com/nominatim/v1/search.php?format=json&json_callback=playgroundCallback&q=' + address,
+                    'type': 'GET',
                     'dataType': 'jsonp',
+                    'cache': true,
+                    'jsonp': false,
+                    'jsonpCallback': 'playgroundCallback',
                     'contentType': 'application/json',
                     'success': function(data) {
-                        var locales = data['results'][0]['locations'];
-
-                        locales = _.filter(locales, function(locale) {
-                            return locale['adminArea1'] == 'US';
+                        // US addresses only, plzkthxbai.
+                        data = _.filter(data, function(locale) {
+                            return locale['display_name'].indexOf("United States of America") > 0;
                         });
-
                         $results_loading.hide();
 
-                        if (locales.length === 0) {
+                        if (data.length === 0) {
+                            // If there are no results, show a nice message.
                             $did_you_mean.append('<li>No results</li>');
-
                             $no_geocode.show();
-                        } else if (locales.length == 1) {
-                            var locale = locales[0];
+                        } else if (data.length == 1) {
+                            // If there's one result, render it.
 
-                            $search_latitude.val(locale['latLng']['lat']);
-                            $search_longitude.val(locale['latLng']['lng']);
+                            var locale = data[0];
 
-                            $results_address.html('Showing Results Near ' + formatMapQuestAddress(locale));
+                            $search_latitude.val(locale['lat']);
+                            $search_longitude.val(locale['lon']);
+
+                            $results_address.html('Showing Results Near ' + locale['display_name'].replace(', United States of America', ''));
 
                             $results_loading.show();
                             search();
                         } else {
+                            // If there are many results,
+                            // show the did-you-mean path.
                             $did_you_mean.empty();
 
-                            _.each(locales, function(locale) {
+                            _.each(data, function(locale) {
                                 var context = $.extend(APP_CONFIG, locale);
-                                context['address'] = formatMapQuestAddress(locale);
-
                                 var html = JST.did_you_mean_item(context);
 
                                 $did_you_mean.append(html);
