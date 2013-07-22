@@ -17,7 +17,13 @@
             <div class="span5 project-info-wrapper">
                 <div class="project-info">
                     <h1>{{ PROJECT_NAME }}</h1>
-                    <h2>{{ COPY.content.lorem_ipsum }}</h2>
+                    <h2>{{ COPY.content.app_description }}</h2>
+                    
+                    <p class="sublinks">
+                        <a href="{{ COPY.content.data_link }}">{{ COPY.content.data_link_text }}</a> |
+                        <a href="{{ COPY.content.data_about_link }}">{{ COPY.content.data_about_link_text }}</a> |
+                        <a href="{{ COPY.content.series_link }}">{{ COPY.content.series_link_text }}</a>
+                    </p>
                 </div>
             </div>
         </div>
