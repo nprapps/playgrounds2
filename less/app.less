@@ -117,6 +117,23 @@ header {
     padding: 0 30px 0 30px;
     height: 400px;
 
+    .mobile-prompt {
+        padding: 6px 11px 6px 33px;
+        margin: 33px -11px 0 -11px;
+        background: rgba(255,255,255,.5) url('@{img-root}/ico-smartphone.png') no-repeat 11px center;
+
+        p {
+            font-size: 12px;
+            color: #444;
+            margin: 0;
+            
+            b { 
+                background-color: rgba(117,152,201,.3);
+                padding: 2px 5px;
+                margin: 0 2px;
+            }
+        }
+    }
     .project-info-wrapper {
         background-color: rgba(255,255,255,.8);
         position: absolute;
@@ -134,16 +151,21 @@ header {
     .sublinks {
         font-size: 12px;
         margin-top: 22px;
+        margin-bottom: 0;
         color: #999;
         
         a {
             font-weight: bold;
-            margin: 0 6px;
+            margin: 0 4px;
             white-space: nowrap;
             
             &:first-child { margin-left: 0; }
         }
     }
+}
+.NPRtablet .index header .mobile-prompt,
+.NPRphone .index header .mobile-prompt {
+    display: none;
 }
 .playground header,
 .search header {
@@ -1160,7 +1182,7 @@ footer {
     .index {
         header {
             background-image: url('@{img-root}/playground-480.jpg');
-            height: 300px;
+            height: 350px;
             
             h1 { font-size: 32px; }
         }
