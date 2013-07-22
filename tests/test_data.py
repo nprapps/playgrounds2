@@ -41,6 +41,10 @@ class PlaygroundsTestCase(unittest.TestCase):
 
         self.assertEqual(len(non_duplicate), playgrounds.count())
 
+        features = PlaygroundFeature.select()
+
+        self.assertEqual(features.count(), 2)
+
 
 class DeletesTestCase(unittest.TestCase):
     def setUp(self):
@@ -138,10 +142,13 @@ class UpdatesTestCase(unittest.TestCase):
         self.assertEqual(revision.playground.id, playground.id)
 
         log = revision.get_log()
-        self.assertEqual(len(log), 1)
+        self.assertEqual(len(log), 2)
         self.assertEqual(log[0]['field'], 'name')
         self.assertEqual(log[0]['from'], 'Strong Reach Playground')
         self.assertEqual(log[0]['to'], 'NEW NAME')
+        self.assertEqual(log[1]['field'], 'smooth-surface-throughout')
+        self.assertEqual(log[1]['from'], 1)
+        self.assertEqual(log[1]['to'], 0)
 
         headers = revision.get_headers()
         self.assertEqual(headers['content_length'], '18')

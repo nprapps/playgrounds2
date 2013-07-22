@@ -230,8 +230,8 @@ function geolocate_callback(position) {
 }
 
 function hashchange_callback() {
-    console.log('hash change');
-    $search_address.val($.bbq.getState('address') || '');
+    var address = $.bbq.getState('address') || '';
+    $search_address.val(address);
     var latitude = $.bbq.getState('latitude');
     var longitude = $.bbq.getState('longitude');
     zoom = parseInt($.bbq.getState('zoom')) || zoom;
@@ -257,6 +257,8 @@ function hashchange_callback() {
         $results_loading.show();
 
         search();
+    } else if (address) {
+        $search_form.submit();
     }
 }
 
@@ -331,7 +333,6 @@ $(function() {
         return false;
     });
 
-    // Search examples are fun.
     $('a.search-example').on('click', function(){
         $search_address.val($(this).text());
         $search_form.submit();
@@ -369,9 +370,7 @@ $(function() {
 
     $did_you_mean.on('click', 'li', function() {
         var $this = $(this);
-        console.log($this);
         var display_name = $this.data('display-name');
-        console.log(display_name);
         var latitude = $this.data('latitude');
         var longitude = $this.data('longitude');
 
