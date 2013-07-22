@@ -67,7 +67,7 @@ $(function() {
 
     $geolocate_button.click(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
-            window.location.href = 'search.html#latitude=' + position.coords.latitude + '&longitude=' + position.coords.longitude; 
+            window.location.href = 'search.html#latitude=' + position.coords.latitude + '&longitude=' + position.coords.longitude + '&nearby=true'; 
         });
     });
 

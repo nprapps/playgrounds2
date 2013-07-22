@@ -177,6 +177,7 @@ function search() {
                     $search_results_map.css('opacity', '1.0');
                     $search_results_map.off('load');
                 });
+
                 $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + search_map_width + 'x' + search_map_height + '.png');
                 $search_results_map_wrapper.show();
                 $search_results_wrapper.show();
@@ -195,13 +196,27 @@ function navigate(nearby) {
     /*
      * Update the url hash, triggering the page to change.
      */
+    // Maintain nearby value if unspecified
+    if (_.isUndefined(nearby)) {
+        nearby = $.bbq.getState('nearby') == 'true';
+    }
+
     $.bbq.pushState({
         'address': $search_address.val(),
         'latitude': $search_latitude.val(),
         'longitude': $search_longitude.val(),
         'zoom': zoom,
-        'nearby': nearby || false
+        'nearby': nearby 
     })
+}
+
+function reset_zoom() {
+    /*
+     * Reset zoom level to default.
+     */
+    zoom = RESULTS_DEFAULT_ZOOM;
+    $zoom_in.removeAttr('disabled');
+    $zoom_out.removeAttr('disabled');
 }
 
 function hashchange_callback() {
@@ -215,19 +230,16 @@ function hashchange_callback() {
     zoom = parseInt($.bbq.getState('zoom')) || zoom;
     var nearby = ($.bbq.getState('nearby') == 'true') || false;
 
-    // Reset to the default zoom level
-    zoom = RESULTS_DEFAULT_ZOOM;
-    $zoom_in.removeAttr('disabled');
-    $zoom_out.removeAttr('disabled');
-
     if (latitude && longitude) {
+        if (!($search_latitude.val() == latitude && $search_longitude.val() == longitude)) {
+            $search_help.hide();
+            $search_results.empty();
+            $search_results_map_wrapper.hide();
+            $results_address.hide();
+        }
+
         $search_latitude.val(latitude);
         $search_longitude.val(longitude);
-
-        $search_help.hide();
-        $search_results.empty();
-        $search_results_map_wrapper.hide();
-        $results_address.hide();
 
         if (!nearby) {
             $results_address.text('Showing Results Near ' + $search_address.val());
@@ -307,8 +319,11 @@ $(function() {
 
     $geolocate_button.click(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
+            $search_address.val('');
             $search_latitude.val(position.coords.latitude);
             $search_longitude.val(position.coords.longitude);
+
+            reset_zoom();
 
             navigate(true);
         }
@@ -373,6 +388,8 @@ $(function() {
             $results_address.hide();
             $no_geocode.hide();
             $search_results_wrapper.show();
+
+            reset_zoom();
 
             var address = $search_address.val();
 
