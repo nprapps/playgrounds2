@@ -62,9 +62,9 @@
 
         <!-- Directions -->
         {% if playground.address_approximate and playground.latitude and playground.longitude %}
-        <p><a href="https://maps.google.com/maps?saddr=&daddr={{ playground.latitude }},{{ playground.longitude }}&z=16" target="_blank" class="btn btn-blue">Get Driving Directions</a></p>
+        <p><a href="https://maps.google.com/maps?saddr=&daddr={{ playground.latitude }},{{ playground.longitude }}&z=16" target="_blank" class="btn btn-blue" data-ios-map="http://maps.apple.com/?daddr={{ playground.latitude }},{{ playground.longitude }}" data-ios-gmap="comgooglemaps://?daddr={{ playground.latitude }},{{ playground.longitude }}&views=traffic">Get Driving Directions</a></p>
         {% elif playground.address %}
-        <p><a href="https://maps.google.com/maps?saddr=&daddr={{ playground.address }}+{{ playground.city }}+{{ playground.state }}+{{ playground.zip }}&z=16" target="_blank" class="btn btn-blue"><i class="icon-road"></i> Get Driving Directions</a></p>
+        <p><a id="directions-link" href="https://maps.google.com/maps?saddr=&daddr={{ playground.address }}+{{ playground.city }}+{{ playground.state }}+{{ playground.zip }}&z=16" target="_blank" class="btn btn-blue" data-ios-map="http://maps.apple.com/?daddr={{ playground.latitude }},{{ playground.longitude }}" data-ios-gmap="comgooglemaps://?daddr={{ playground.latitude }},{{ playground.longitude }}&views=traffic"><i class="icon-road"></i> Get Driving Directions</a></p>
         {% endif %}
     </div>
 </div>
