@@ -74,3 +74,17 @@ function make_alert(text, klass){
         });
     }, 2000);
 }
+
+function set_driving_urls(){
+    var $directions_link = $('#directions-link');
+    if (navigator.userAgent.match(/iPhone|iPad|iPod/i)){
+        // handle iOS
+        $directions_link.attr('href', $directions_link.data('ios-gmap'));
+    }
+}
+
+$(function(){
+    if (navigator.userAgent.match(/iPhone|iPad|iPod/i)){
+        set_driving_urls();
+    }
+});
