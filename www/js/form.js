@@ -36,9 +36,14 @@ $(function() {
                 playground.fields.city.val(locale['adminArea5']);
 
                 // States are special. Handle them specially.
-                var short_state = STATE_NAME_TO_CODE[locale['adminArea3']];
-                playground.fields.state.val(short_state);
-                $('#form select[name="state"] option[value="'+ short_state +'""]').attr('selected', 'selected');
+                if (locale['adminArea3'] == 'District of Columbia') { 
+                    var short_state = STATE_NAME_TO_CODE[locale['adminArea3']];
+                    playground.fields.state.val(short_state);
+                    $('select[name="state"] option[value="'+ short_state +'""]').attr('selected', 'selected');
+                } else {
+                    playground.fields.state.val(locale['adminArea3']);
+                    $('select[name="state"] option[value="'+ locale['adminArea3'] +'""]').attr('selected', 'selected');
+                }
 
                 // playground.fields.state.attr('selected', 'selected');
                 playground.fields.zip_code.val(locale['postalCode']);
@@ -260,13 +265,13 @@ $(function() {
             });
 
             // Except for states because they're selectable.
-            playground.fields.state = $('#form select[name="state"]');
-            playground.fields.state_selected = $('#form select[name="state"] option:selected');
+            playground.fields.state = $('select[name="state"]');
+            playground.fields.state_selected = $('select[name="state"] option:selected');
 
             // Watch the state selector.
             // Update the state_selected and state value.
             playground.fields.state.on('change', function(){
-                playground.fields.state_selected = $('#form select[name="state"] option:selected');
+                playground.fields.state_selected = $('select[name="state"] option:selected');
                 playground.fields.state.val(playground.fields.state_selected.val());
             });
 
