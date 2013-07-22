@@ -16,10 +16,8 @@ if (RETINA) {
 
 var LETTERS = 'abcdefghijklmnopqrstuvwxyz';
 
-var $search_title = null;
 var $search_form = null;
 var $search_address = null;
-var $search_again = null;
 var $search_divider = null;
 var $search_latitude = null;
 var $search_longitude = null;
@@ -181,6 +179,7 @@ function search() {
                 });
                 $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + search_map_width + 'x' + search_map_height + '.png');
                 $search_results_map_wrapper.show();
+                $search_results_wrapper.show();
                 $results_address.show();
             }
                 
@@ -190,8 +189,6 @@ function search() {
         jsonp: false,
         jsonpCallback: 'myCallback'
     });
-
-    hide_search();
 }
 
 function navigate(nearby) {
@@ -208,18 +205,6 @@ function reset_zoom() {
     zoom = RESULTS_DEFAULT_ZOOM;
     $zoom_in.removeAttr('disabled');
     $zoom_out.removeAttr('disabled');
-}
-
-function show_search() {
-    $search_results_wrapper.hide();
-    $search_again.hide();
-    $search_title.show();
-    $search_wrapper.hide();
-}
-
-function hide_search() {
-    $search_again.show();
-    $search_wrapper.show();
 }
 
 function geolocate_callback(position) {
@@ -241,12 +226,10 @@ function hashchange_callback() {
         $search_latitude.val(latitude);
         $search_longitude.val(longitude);
 
-        hide_search();
         $search_help.hide();
         $search_results.empty();
         $search_results_map_wrapper.hide();
         $results_address.hide();
-        $search_results_wrapper.show();
 
         if (!nearby) {
             $results_address.text('Showing Results Near ' + $search_address.val());
@@ -263,7 +246,6 @@ function hashchange_callback() {
 }
 
 $(function() {
-    $search_title = $('#search-title');
     $search_form = $('#search');
     $search_address = $('#search input[name="address"]');
     $search_again = $('#search-again');
@@ -333,13 +315,6 @@ $(function() {
         return false;
     });
 
-    $('a.search-example').on('click', function(){
-        $search_address.val($(this).text());
-        $search_form.submit();
-
-        return false;
-    });
-
     $zoom_in.click(function() {
         zoom += 1;
 
@@ -388,16 +363,9 @@ $(function() {
         return false;
     });
 
-    $search_again.on('click', function() {
-        show_search();
-
-        return false;
-    });
-
     $search_form.submit(function() {
         if ($search_address.val() !== '') {
             reset_zoom();
-            hide_search();
             $search_help.hide();
             $search_results.empty();
             $search_results_map_wrapper.hide();

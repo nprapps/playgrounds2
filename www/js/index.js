@@ -71,13 +71,6 @@ $(function() {
         });
     });
 
-    $('a.search-example').on('click', function() {
-        $search_address.val($(this).text());
-        $search_form.submit();
-
-        return false;
-    });
-
     $search_form.submit(function() {
         window.location.href = 'search.html#address=' + encodeURIComponent($search_address.val()); 
 
