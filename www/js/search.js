@@ -185,6 +185,8 @@ function search() {
             }
                 
             $search_results.show();
+
+            $.smoothScroll({ scrollTarget: '#search-results-wrapper' });
         },
         cache: true,
         jsonp: false,
@@ -388,6 +390,7 @@ $(function() {
             $results_address.hide();
             $no_geocode.hide();
             $search_results_wrapper.show();
+            
 
             reset_zoom();
 
