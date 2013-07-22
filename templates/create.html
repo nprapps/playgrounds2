@@ -52,38 +52,13 @@
     </div>#}
     <div class="features span6">
         <h5>Features</h5>
+        
+        {% for feature in COPY.feature_list %}
         <div class="feature control-group">
-            <input type="checkbox" name="safety-fence"> <label class="checkbox">Safety fence</label>
-            <span class="help-block">{{ FEATURES['safety-fence'].description }}</span>
+            <input type="checkbox" name="{{ feature['key'] }}"> <label class="checkbox">{{ feature['term'] }}</label>
+            <span class="help-block">{{ feature['definition_short'] }}</span>
         </div>
-        <div class="feature control-group">
-            <input type="checkbox" name="ramps-to-play-components"> <label class="checkbox">Ramps to play components</label>
-            <span class="help-block">{{ FEATURES['ramps-to-play-components'].description }}</span>
-        </div>
-        <div class="feature control-group">
-            <input type="checkbox" name="transfer-stations-to-play-components"> <label class="checkbox">Transfer stations to play components</label>
-            <span class="help-block">{{ FEATURES['transfer-stations-to-play-components'].description }}</span>
-        </div>
-        <div class="feature control-group">
-            <input type="checkbox" name="single-entrance"> <label class="checkbox">Single entrance</label>
-            <span class="help-block">{{ FEATURES['single-entrance'].description }}</span>
-        </div>
-        <div class="feature control-group">
-            <input type="checkbox" name="smooth-surface-throughout"> <label class="checkbox">Smooth surface throughout</label>
-            <span class="help-block">{{ FEATURES['smooth-surface-throughout'].description }}</span>
-        </div>
-        <div class="feature control-group">
-            <input type="checkbox" name="sight-impaired-play-components"> <label class="checkbox">Sight-impaired play components</label>
-            <span class="help-block">{{ FEATURES['sight-impaired-play-components'].description }}</span>
-        </div>
-        <div class="feature control-group">
-            <input type="checkbox" name="sound-play-components"> <label class="checkbox">Sound play components</label>
-            <span class="help-block">{{ FEATURES['sound-play-components'].description }}</span>
-        </div>
-        <div class="feature control-group">
-            <input type="checkbox" name="accessible-swing"> <label class="checkbox">Accessible swing</label>
-            <span class="help-block">{{ FEATURES['accessible-swing'].description }}</span>
-        </div>
+        {% endfor %}
 
         <div class="alert">Don't see the feature you're looking for? <a href="#">Email us</a>.</div>
     </div>

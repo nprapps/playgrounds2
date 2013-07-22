@@ -15,6 +15,7 @@ from playhouse.sqlite_ext import SqliteExtDatabase
 import requests
 
 import app_config
+import copytext
 
 
 database = SqliteExtDatabase('playgrounds.db')
@@ -301,7 +302,12 @@ class Playground(Model):
         """
         fields = []
 
-        for slug, details in app_config.FEATURES.items():
+        features = copytext.COPY.feature_list
+
+        for feature in features:
+            slug = feature['key']
+            name = feature['term']
+
             if playground:
                 instances = PlaygroundFeature.select().where(
                     PlaygroundFeature.playground == playground.id,
@@ -315,7 +321,7 @@ class Playground(Model):
                 <input type="checkbox" name="%s" %s>
                 <label class="checkbox">%s
                 </label>
-            """ % (slug, checked, details['name']))
+            """ % (slug, checked, name))
 
         return fields
 
@@ -405,7 +411,7 @@ def display_field_name(field_name):
     try:
         return getattr(Playground, field_name).verbose_name
     except AttributeError:
-        return app_config.FEATURES[field_name]['name'];
+        return copytext.COPY.feature_list[field_name]['term']
 
 
 def get_active_playgrounds():
@@ -423,7 +429,6 @@ def get_active_playgrounds():
 class PlaygroundFeature(Model):
     """
     A feature at a single playground.
-    Feature names should be limited to app_config.FEATURES.keys()
     """
     slug = CharField()
     playground = ForeignKeyField(Playground, cascade=False)
@@ -432,8 +437,10 @@ class PlaygroundFeature(Model):
         database = database
 
     @property
-    def cleaned(self):
-        return app_config.FEATURES[self.slug]
+    def copy(self):
+        for feature in copytext.COPY.feature_list:
+            if feature['key'] == self.slug:
+                return feature
 
 
 class Revision(Model):

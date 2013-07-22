@@ -75,7 +75,7 @@
     <h4>Key Features</h4>
 
     <ul>{% for feature in playground.features %}
-        <li>{{ feature.cleaned.name }} <i class="icon icon-question-sign" data-toggle="tooltip" title="{{ feature.cleaned.description }}">About</i></li>{% endfor %}
+        <li>{{ feature.copy['term'] }} <i class="icon icon-question-sign" data-toggle="tooltip" title="{{ feature.copy['definition_short'] }}">About</i></li>{% endfor %}
     </ul>
 
 </div>

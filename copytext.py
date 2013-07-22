@@ -23,6 +23,8 @@ class Row(object):
 
     def __getattr__(self, name):
         if not self._row:
+            print self._sheet.name, self._index
+            print self._row.keys()
             return 'COPY.%s.%i (row does not exist)' % (self._sheet.name, self._index)
 
         if name not in self._row:
@@ -111,3 +113,4 @@ class Copy(object):
 
             self._copy[sheet.name] = Sheet(sheet.name, rows, columns)
 
+COPY = Copy()

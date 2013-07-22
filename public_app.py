@@ -9,6 +9,7 @@ from flask import Flask, redirect, abort
 import pytz
 
 import app_config
+import copytext
 from models import Playground
 
 app = Flask(app_config.PROJECT_NAME)
@@ -129,7 +130,9 @@ def update_playground():
         payload['playground']['features'] = []
 
         # Loop over all of the possible features to see if they're present in the POST.
-        for slug in app_config.FEATURES.keys():
+        for feature in copytext.COPY.feature_list:
+            slug = feature['key']
+
             if request.form.get(slug, None):
                 payload['playground']['features'].append(slug)
 
@@ -217,7 +220,9 @@ def insert_playground():
         payload['playground']['features'] = []
 
         # Loop over all of the possible features to see if they're present in the POST.
-        for slug in app_config.FEATURES.keys():
+        for feature in copytext.COPY.feature_list:
+            slug = feature['key']
+
             if request.form.get(slug, None):
                 payload['playground']['features'].append(slug)
 
