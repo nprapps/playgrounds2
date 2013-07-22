@@ -192,6 +192,9 @@ function search() {
 }
 
 function navigate(nearby) {
+    /*
+     * Update the url hash, triggering the page to change.
+     */
     $.bbq.pushState({
         'address': $search_address.val(),
         'latitude': $search_latitude.val(),
@@ -201,26 +204,21 @@ function navigate(nearby) {
     })
 }
 
-function reset_zoom() {
-    zoom = RESULTS_DEFAULT_ZOOM;
-    $zoom_in.removeAttr('disabled');
-    $zoom_out.removeAttr('disabled');
-}
-
-function geolocate_callback(position) {
-    $search_latitude.val(position.coords.latitude);
-    $search_longitude.val(position.coords.longitude);
-
-    navigate(true);
-}
-
 function hashchange_callback() {
+    /*
+     * React to changes in the url hash and update the search.
+     */
     var address = $.bbq.getState('address') || '';
     $search_address.val(address);
     var latitude = $.bbq.getState('latitude');
     var longitude = $.bbq.getState('longitude');
     zoom = parseInt($.bbq.getState('zoom')) || zoom;
     var nearby = ($.bbq.getState('nearby') == 'true') || false;
+
+    // Reset to the default zoom level
+    zoom = RESULTS_DEFAULT_ZOOM;
+    $zoom_in.removeAttr('disabled');
+    $zoom_out.removeAttr('disabled');
 
     if (latitude && longitude) {
         $search_latitude.val(latitude);
@@ -308,9 +306,13 @@ $(function() {
     }
 
     $geolocate_button.click(function() {
-        reset_zoom();
-        navigator.geolocation.getCurrentPosition(geolocate_callback);
-        $results_address.html('Showing Results Near You');
+        navigator.geolocation.getCurrentPosition(function(position) {
+            $search_latitude.val(position.coords.latitude);
+            $search_longitude.val(position.coords.longitude);
+
+            navigate(true);
+        }
+        );
 
         return false;
     });
@@ -365,7 +367,6 @@ $(function() {
 
     $search_form.submit(function() {
         if ($search_address.val() !== '') {
-            reset_zoom();
             $search_help.hide();
             $search_results.empty();
             $search_results_map_wrapper.hide();
