@@ -43,7 +43,6 @@ var $playground_meta_items = null;
 
 var zoom = RESULTS_DEFAULT_ZOOM;
 var crs = null;
-var ignore_hash_change = false;
 
 function degToCloudSearch(degree) {
     /*
@@ -185,27 +184,6 @@ function search() {
                 $results_address.show();
             }
                 
-            console.log('before');
-            ignore_hash_change = true;
-            //$(window).off('hashchange', hashchange_callback);
-
-            if ($search_address.val()) {
-                hash.set({
-                    'address': $search_address.val(),
-                    'zoom': zoom
-                });
-            } else {
-                hash.set({
-                    'latitude': $search_latitude.val(),
-                    'longitude': $search_longitude.val(),
-                    'zoom': zoom
-                });
-            }
-                
-            //$(window).on('hashchange', hashchange_callback);
-            ignore_hash_change = false;
-            console.log('after');
-
             $search_results.show();
         },
         cache: true,
@@ -216,6 +194,16 @@ function search() {
     hide_search();
 }
 
+function navigate(nearby) {
+    $.bbq.pushState({
+        'address': $search_address.val(),
+        'latitude': $search_latitude.val(),
+        'longitude': $search_longitude.val(),
+        'zoom': zoom,
+        'nearby': nearby || false
+    })
+}
+
 function reset_zoom() {
     zoom = RESULTS_DEFAULT_ZOOM;
     $zoom_in.removeAttr('disabled');
@@ -223,7 +211,6 @@ function reset_zoom() {
 }
 
 function show_search() {
-//    $search_form.show();
     $search_results_wrapper.hide();
     $search_again.hide();
     $search_title.show();
@@ -231,54 +218,46 @@ function show_search() {
 }
 
 function hide_search() {
-//    $search_form.hide();
     $search_again.show();
     $search_wrapper.show();
 }
 
 function geolocate_callback(position) {
-    hide_search();
-    $search_address.val('');
-    $search_help.hide();
-    $search_results.empty();
-    $search_results_map_wrapper.hide();
-    $results_address.hide();
-    $search_results_wrapper.show();
-
-    $results_address.text('Showing Results Near You');
-
     $search_latitude.val(position.coords.latitude);
     $search_longitude.val(position.coords.longitude);
-    $results_loading.show();
-    search();
+
+    navigate(true);
 }
 
 function hashchange_callback() {
     console.log('hash change');
-    if (ignore_hash_change) {
-        return false;
-    }
-
-    console.log(1);
-
-    $search_address.val(hash.get('address') || '');
-    var latitude = hash.get('latitude');
-    var longitude = hash.get('longitude');
-    zoom = parseInt(hash.get('zoom')) || zoom;
-
-    console.log(2);
+    $search_address.val($.bbq.getState('address') || '');
+    var latitude = $.bbq.getState('latitude');
+    var longitude = $.bbq.getState('longitude');
+    zoom = parseInt($.bbq.getState('zoom')) || zoom;
+    var nearby = ($.bbq.getState('nearby') == 'true') || false;
 
     if (latitude && longitude) {
         $search_latitude.val(latitude);
         $search_longitude.val(longitude);
 
-        var position = { 'coords': { 'latitude': latitude, 'longitude': longitude } };
-        geolocate_callback(position);
-    } else if ($search_address.val()) {
-        $search_form.submit();
-    }
+        hide_search();
+        $search_help.hide();
+        $search_results.empty();
+        $search_results_map_wrapper.hide();
+        $results_address.hide();
+        $search_results_wrapper.show();
 
-    console.log(3);
+        if (!nearby) {
+            $results_address.text('Showing Results Near ' + $search_address.val());
+        } else {
+            $results_address.text('Showing Results Near You');
+        }
+    
+        $results_loading.show();
+
+        search();
+    }
 }
 
 $(function() {
@@ -348,12 +327,16 @@ $(function() {
         reset_zoom();
         navigator.geolocation.getCurrentPosition(geolocate_callback);
         $results_address.html('Showing Results Near You');
+
+        return false;
     });
 
     // Search examples are fun.
     $('a.search-example').on('click', function(){
         $search_address.val($(this).text());
         $search_form.submit();
+
+        return false;
     });
 
     $zoom_in.click(function() {
@@ -365,7 +348,9 @@ $(function() {
 
         $zoom_out.removeAttr('disabled');
 
-        search();
+        navigate();
+
+        return false;
     });
 
     $zoom_out.click(function() {
@@ -377,12 +362,16 @@ $(function() {
 
         $zoom_in.removeAttr('disabled');
 
-        search();
+        navigate();
+
+        return false;
     });
 
     $did_you_mean.on('click', 'li', function() {
         var $this = $(this);
+        console.log($this);
         var display_name = $this.data('display-name');
+        console.log(display_name);
         var latitude = $this.data('latitude');
         var longitude = $this.data('longitude');
 
@@ -395,11 +384,15 @@ $(function() {
         $search_help_us.show();
 
         $results_loading.show();
-        search();
+        navigate();
+
+        return false;
     });
 
     $search_again.on('click', function() {
         show_search();
+
+        return false;
     });
 
     $search_form.submit(function() {
@@ -441,13 +434,15 @@ $(function() {
                             // If there's one result, render it.
                             var locale = data[0];
 
+                            var display_name = locale['display_name'].replace(', United States of America', '');
                             $search_latitude.val(locale['lat']);
                             $search_longitude.val(locale['lon']);
+                            $search_address.val(display_name);
 
-                            $results_address.html('Showing Results Near ' + locale['display_name'].replace(', United States of America', ''));
+                            $results_address.html('Showing Results Near ' + display_name);
 
                             $results_loading.show();
-                            search();
+                            navigate();
                         } else {
                             // If there are many results,
                             // show the did-you-mean path.
@@ -470,9 +465,10 @@ $(function() {
                 $search_latitude.val('');
                 $search_longitude.val('');
                 $results_loading.show();
-                search();
+                navigate();
             }
         }
+
         return false;
     });
 
@@ -481,9 +477,6 @@ $(function() {
         $search_divider.show();
     }
 
-    hashchange_callback();
-
-    $(window).on('hashchange', function() {
-        hashchange_callback();
-    });
+    $(window).bind('hashchange', hashchange_callback);
+    $(window).trigger('hashchange');
 });
