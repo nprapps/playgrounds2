@@ -33,10 +33,14 @@ def process_updates(path=None, local=None):
 
         # Render and deploy.
         data.render_playgrounds(changed_playgrounds)
+        data.render_sitemap()
 
         if not local or local is False:
             data.gzip('%s.playgrounds_html' % path, '%s.playgrounds_gzip' % path)
             data.deploy_to_s3('%s.playgrounds_gzip' % path)
+
+            data.gzip('www/sitemap.xml', 'gzip/sitemap.xml')
+            data.deploy_to_s3('gzip/sitemap.xml')
 
             # Update the search index.
             data.update_search_index(changed_playgrounds)
