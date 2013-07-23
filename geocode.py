@@ -6,14 +6,11 @@ import geopy
 from geopy import geocoders
 
 g = geocoders.GoogleV3()
-# bing = geocoders.Bing()
 
 error = 0
 none_error = 0
 coded_goog = 0
-# coded_bing = 0
 written = 0
-# uhoh = 0
 
 GQueryError = geopy.geocoders.googlev3.GQueryError
 
@@ -29,7 +26,7 @@ Bad Addresses
 * 6501 West 21st Street North Wichita, KS 67212
 ! 2801 Park Avenue Paducah, KY 42001
 ! 900 Lakeshore Drive Lake Charles, LA 70601
-! 34 JerdenÕs Lane Rockport, MA 1966
+! 34 Jerdens Lane Rockport, MA 1966
 * 18100 Washington Grove Lane Germantown, MD 20874
 * 75 School Street West Dennis, MA 2670
 * 700 Main Street Oconomowoc, WI 53066
@@ -68,7 +65,7 @@ with open('data/playgrounds.csv', 'r+b') as readfile:
     with open('data/playgrounds_geocoded.csv', 'w+b') as writefile:
         write_csv = csv.writer(writefile)
 
-        for playground in Playground.select().where(Playground.latitude >> None):
+        for playground in Playground.select():
             time.sleep(0.25)
 
             hard_address = '%s %s, %s %s' % (
@@ -85,14 +82,14 @@ with open('data/playgrounds.csv', 'r+b') as readfile:
                 playground.save()
                 coded_goog += 1
                 for row in read_csv:
-                    if str(row[0]) == str(playground.id):
-                        row[9] = playground.latitude
-                        row[10] = playground.longitude
-                        write_csv.writerow(row)
-                        written += 1
+                    if row[21] == 'TRUE':
                         continue
-            # else:
-                #     uhoh += 1
+
+                    row[9] = playground.latitude
+                    row[10] = playground.longitude
+                    write_csv.writerow(row)
+                    written += 1
+                    break
 
             except ValueError:
                 print '\t*' + hard_address
@@ -105,4 +102,3 @@ print "coded: " + str(coded_goog)
 print "multi results: " + str(error)
 print "no results: " + str(none_error)
 print "written: " + str(written)
-# print "unmatched: " + str(uhoh)
