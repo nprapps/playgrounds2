@@ -128,8 +128,7 @@ function search() {
     $search_results_map.css('opacity', '0.25');
 
     $.ajax({
-        url: APP_CONFIG.CLOUD_SEARCH_PROXY_BASE_URL + '/cloudsearch/2011-02-01/search',
-        data: buildCloudSearchParams(),
+        url: APP_CONFIG.CLOUD_SEARCH_PROXY_BASE_URL + '/cloudsearch/2011-02-01/search?' + $.param(buildCloudSearchParams()),
         dataType: 'jsonp',
         success: function(data) {
             $results_loading.hide();
@@ -188,9 +187,7 @@ function search() {
 
             $.smoothScroll({ scrollTarget: '#search-results-wrapper' });
         },
-        cache: true,
-        jsonp: false,
-        jsonpCallback: 'myCallback'
+        cache: true
     });
 }
 
