@@ -122,7 +122,7 @@ $(function() {
                 grid_layer = L.mapbox.gridLayer(playground.BASE_LAYER).addTo(map);
                 map.addControl(L.mapbox.gridControl(grid_layer));
 
-                if (playground.fields.latitude.val() !== '' && playground.fields.longitude.val() !== '') {
+                if (playground.fields.latitude.val() !== '' && playground.fields.latitude.val() !== 'None') {
                     map.setView([
                             playground.fields.latitude.val(),
                             playground.fields.longitude.val()],
@@ -330,6 +330,10 @@ $(function() {
             });
             */
 
+            if(playground.fields.latitude.val() === '' || playground.fields.latitude.val() === 'None'){
+                playground.locate_me();
+            }
+
             // Do this thing with the map.
             if ( $('#locator-map') ) {
                 playground.map.resize_locator();
@@ -357,9 +361,6 @@ $(function() {
                 $('body, #map-pane').off('touchmove', prevent_body_scroll(event));
             });
 
-            if(playground.fields.latitude.val() === '' || playground.fields.longitude.val() === ''){
-                playground.locate_me();
-            }
         }
     };
     // Initialize the playground object.
