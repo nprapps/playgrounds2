@@ -51,14 +51,6 @@ def gzip(src, dst):
     os.system('python gzip_www.py %s %s' % (src, dst))
     os.system('rm -rf %s/live-data' % dst)
 
-def copy_text_js():
-    copy = {}
-
-    for message in ['editing_thanks', 'creating_thanks', 'deleting_thanks']:
-        copy[message] = unicode(getattr(copytext.COPY.content, message))
-
-    with open('www/js/copy_text.js', 'w') as f:
-        f.write('window.COPYTEXT = %s' % json.dumps(copy))
 
 def app_config_js():
     from app import _app_config_js

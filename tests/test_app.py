@@ -61,7 +61,9 @@ class AppConfigTestCase(unittest.TestCase):
         """
         Trim leading variable declaration and load JSON data.
         """
-        return json.loads(response.data[20:])
+        data = response.data.split('\n')[0]
+        data = data.strip(';')[20:]
+        return json.loads(data)
 
     def test_app_config_staging(self):
         response = self.client.get('/js/app_config.js')
