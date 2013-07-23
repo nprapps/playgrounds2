@@ -94,11 +94,30 @@
 
     {% block header_content %}
     {% endblock header_content %}
-    <div class="alerts"></div>
     <section id="the-goods">
         <div class="container">
             <div class="row">
                 <div id="main-content" class="span8">
+
+                    <div class="alerts">
+                        <div id="editing_thanks" class="alert alert-block hide">
+                            <a href="#" class="close" data-dismiss="alert">&times;</a>
+                            <p>{{ COPY.content.editing_thanks }}</p>
+                        </div>
+                        <div id="create_thanks" class="alert alert-block hide">
+                            <a href="#" class="close" data-dismiss="alert">&times;</a>
+                            <p>{{ COPY.content.creating_thanks }}</p>
+                            <p>
+                                <a href="create.html">Add Another?</a> | 
+                                <a href="#" data-dismiss="alert">No Thanks</a>
+                            </p>
+                        </div>
+                        <div id="deleting_thanks" class="alert alert-block hide">
+                            <a href="#" class="close" data-dismiss="alert">&times;</a>
+                            <p>{{ COPY.content.deleting_thanks }}</p>
+                        </div>
+                    </div>
+
                     {% block content %}
                     <h1>{{ project_name }}</h1>
                     App content goes here.
