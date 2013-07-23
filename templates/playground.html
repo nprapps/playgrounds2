@@ -25,26 +25,20 @@
 {% endblock %}
 
 {% block content %}
-
 <div id="editing_thanks" class="alert alert-success alert-block hide">
     <a href="#" class="close" data-dismiss="alert">&times;</a>
     <h4>Thanks!</h4>
     <p>Your changes have been submitted for review.</p>
-    <p>Would you mind reviewing another playground?</p>
-    <ul>
-        <li><a href="#">Park One</a></li>
-        <li><a href="#">Park Two</a></li>
-        <li><a href="#">Park Three</a></li>
-        <li><a href="#">Not Now, Thanks</a></li>
-    </ul>
 </div>
 
 <h1>{{ playground.display_name }}</h1>
 
+{% if not features %}
 <div class="help-prompt help-prompt-features">
     <p class="prompt"><i class="icon icon-warning-sign"></i>{{ COPY.content.playground_help_key_features }}</p>
     <a href="#edit-playground" role="button" class="btn btn-blue btn-block btn-edit" data-toggle="modal"><i class="icon-pencil"></i> {{ COPY.content.playground_help_button }}</a>
 </div>
+{% endif %}
 
 <!-- Map / Address -->
 <div class="address">

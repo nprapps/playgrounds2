@@ -36,7 +36,7 @@ $(function() {
                 playground.fields.city.val(locale['adminArea5']);
 
                 // States are special. Handle them specially.
-                if (locale['adminArea3'] == 'District of Columbia') { 
+                if (locale['adminArea3'] == 'District of Columbia') {
                     var short_state = STATE_NAME_TO_CODE[locale['adminArea3']];
                     playground.fields.state.val(short_state);
                     $('select[name="state"] option[value="'+ short_state +'""]').attr('selected', 'selected');

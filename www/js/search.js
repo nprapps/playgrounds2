@@ -183,7 +183,7 @@ function search() {
                 $search_results_wrapper.show();
                 $results_address.show();
             }
-                
+
             $search_results.show();
 
             $.smoothScroll({ scrollTarget: '#search-results-wrapper' });
@@ -208,7 +208,7 @@ function navigate(nearby) {
         'latitude': $search_latitude.val(),
         'longitude': $search_longitude.val(),
         'zoom': zoom,
-        'nearby': nearby 
+        'nearby': nearby
     })
 }
 
@@ -248,7 +248,7 @@ function hashchange_callback() {
         } else {
             $results_address.text('Showing Results Near You');
         }
-    
+
         $results_loading.show();
 
         search();
@@ -390,7 +390,7 @@ $(function() {
             $results_address.hide();
             $no_geocode.hide();
             $search_results_wrapper.show();
-            
+
 
             reset_zoom();
 
@@ -463,6 +463,12 @@ $(function() {
     if (GEOLOCATE) {
         $geolocate_button.show();
         $search_divider.show();
+    }
+
+    // Check to see if we've got a message to show.
+    if (get_parameter_by_name('action') !== null){
+        // We'll name the message div after the URL param.
+        $('#' + get_parameter_by_name('action')).toggleClass('hide').show();
     }
 
     $(window).bind('hashchange', hashchange_callback);

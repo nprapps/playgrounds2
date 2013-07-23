@@ -234,7 +234,7 @@ def insert_playground():
         write_data(payload)
 
         # return json.dumps(payload)
-        return redirect('%s?action=create_thanks' % (app_config.S3_BASE_URL))
+        return redirect('%s/search.html?action=create_thanks' % (app_config.S3_BASE_URL))
 
 
 @app.route('/%s/request-delete-playground/' % app_config.PROJECT_SLUG, methods=['POST'])
