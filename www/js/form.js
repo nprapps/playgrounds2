@@ -323,10 +323,12 @@ $(function() {
             }
 
             // Set up the features tooltip.
+            /*
             var $playground_features = $('.playground-features');
             $playground_features.find('i').on('click', function() {
                 $(this).next('.feature-definition').slideToggle('fast');
             });
+            */
 
             // Do this thing with the map.
             if ( $('#locator-map') ) {

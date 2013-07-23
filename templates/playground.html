@@ -76,10 +76,9 @@
 
     <ul>{% for feature in playground.features %}
         <li>
-            {{ feature.copy['term'] }} 
-            <i class="icon-question-sign" title="about"></i>
+            <img src="{{ feature.copy['photo_thumb'] }}" alt="{{ feature.copy['term'] }}" />
             <div class="feature-definition">
-                <img src="{{ feature.copy['photo_thumb'] }}" alt="{{ feature.copy['term'] }}" />
+                <strong>{{ feature.copy['term'] }}</strong>
                 {{ feature.copy['definition_short'] }}
             </div>
         </li>
@@ -125,7 +124,6 @@
 
 
 <!-- disqus -->
-<!-- TODO: add disqus form -->
 <div class="comments">
     <h4>{{ COPY.content.playground_note_title }}</h4>
     <p class="description">{{ COPY.content.playground_note_description }}</p>

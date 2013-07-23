@@ -777,43 +777,32 @@ section#the-goods { margin-top: 44px; }
             &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
         }
         li {
-            background: url(http://media.npr.org/chrome/news/bullet_5x5.png) no-repeat 0 .6em;
-            padding-left: 16px;
-            margin-top: 6px;
-//            width: 45%;
-//            float: left;
-//            margin-right: 5%;
+            width: 45%;
+            float: left;
+            margin-right: 5%;
+            margin-bottom: 11px;
 
-            &:first-child {
-                margin-top: 0;
-            }
+            &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
         }
-        i {
-            color: #7598c9;
-            opacity: .5;
-            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none;
-            
-            &:hover {
-                opacity: 1;
-                cursor: pointer;
-            }
+        img {
+            float: left;
+            width: 75px;
+            height: auto;
         }
         .feature-definition {
             font-size: 12px;
             color: #666;
             line-height: 1.4;
-            padding: 5px 0;
-            padding-top: 5px;
-            max-width: 300px;
-            display: none;
-        
-            img {
-                float: left;
-                width: 75px;
-                height: auto;
-                margin-right: 10px;
+            margin-left: 85px;
+
+            strong {
+                color: #111;
+                display: block;
+                text-transform: capitalize;
+                margin-bottom: 3px;
+                font-size: 14px;
+                font-weight: normal;
             }
-            &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
         }
     }
     .social {
@@ -1250,11 +1239,17 @@ footer {
             text-align: left;
         }
     }
-    .playground {
-        #main-content .social li {
+    .playground #main-content { 
+        .playground-features li {
+            width: auto;
+            float: none;
+            margin-right: 0;
+        }
+        .social li {
             span { display: none; }
             b { display: inline; }
         }
+        
     }
 
     footer { border-top: 1px solid #CCC; margin-top: 24px; }
