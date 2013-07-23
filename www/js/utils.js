@@ -76,10 +76,20 @@ function make_alert(text, klass){
 }
 
 function set_driving_urls(){
+    var $directions_wrapper = $('.directions-wrapper');
     var $directions_link = $('#directions-link');
     if (navigator.userAgent.match(/iPhone|iPad|iPod/i)){
         // handle iOS
-        $directions_link.attr('href', $directions_link.data('ios-gmap'));
+
+        var directions_header = $('<h4>Get Driving Directions</h4>');
+        var google_maps_link = $('<a class="btn btn-blue"><i class="icon icon-google-plus"></i>Google Maps</a>');
+
+        $directions_link.attr('href', $directions_link.data('ios-map'));
+        $directions_link.html('<i class="icon icon-apple"></i> Apple Maps');
+        google_maps_link.attr('href', $directions_link.data('ios-gmap'));
+
+        $directions_link.parent().before(directions_header);
+        $directions_link.after(google_maps_link);
     }
 }
 
