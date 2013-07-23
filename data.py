@@ -2,7 +2,6 @@
 
 import datetime
 from glob import glob
-import gzip
 import json
 import os
 import time
@@ -56,7 +55,7 @@ def copy_text_js():
     copy = {}
 
     for message in ['editing_thanks', 'creating_thanks', 'deleting_thanks']:
-        copy[message] = unicode(getattr(copytext.Copy().content, message))
+        copy[message] = unicode(getattr(copytext.COPY.content, message))
 
     with open('www/js/copy_text.js', 'w') as f:
         f.write('window.COPYTEXT = %s' % json.dumps(copy))
@@ -165,6 +164,8 @@ def load_playgrounds(path='data/playgrounds.csv'):
     """
     Load playground data from the CSV into sqlite.
     """
+    features = copytext.COPY.feature_list
+    
     with open(path) as f:
         rows = CSVKitDictReader(f)
 
@@ -194,8 +195,10 @@ def load_playgrounds(path='data/playgrounds.csv'):
                 entry=row['Entry'],
                 source=row['Source']
             )
+            
+            for feature in features:
+                slug = feature['key']
 
-            for slug in app_config.FEATURES.keys():
                 if row[slug] == 'TRUE':
                     PlaygroundFeature.create(
                         slug=slug,
@@ -348,12 +351,12 @@ def process_update(record):
 
     # First case: If the list of old and new features is identical, don't do anything.
     if old_features != new_features:
-
         # So there's a difference between the old and new feature lists.
         # Since the Web can both add new features and remove old features,
         # we have to prepare for each path.
         # First, let's loop over the list of features that are available.
-        for slug in app_config.FEATURES.keys():
+        for feature in copytext.COPY.feature_list:
+            slug = feature['key']
 
             # If the slug is in the old feature set, let's check it against the new.
             if slug in old_features:
@@ -450,3 +453,14 @@ def process_delete(record):
     revisions = [{"field": "active", "from": True, "to": False}, {"field": "reason", "from": "", "to": record['playground']['text']}]
 
     return (playground, revisions)
+
+def render_sitemap():
+    with app.app.test_request_context(path='sitemap.xml'):
+        content = app.sitemap()
+
+        if isinstance(content, tuple):
+            content = content[0]
+
+    with open('www/sitemap.xml', 'w') as f:
+        f.write(content.encode('utf-8'))
+

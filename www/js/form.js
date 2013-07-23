@@ -36,7 +36,7 @@ $(function() {
                 playground.fields.city.val(locale['adminArea5']);
 
                 // States are special. Handle them specially.
-                if (locale['adminArea3'] == 'District of Columbia') { 
+                if (locale['adminArea3'] == 'District of Columbia') {
                     var short_state = STATE_NAME_TO_CODE[locale['adminArea3']];
                     playground.fields.state.val(short_state);
                     $('select[name="state"] option[value="'+ short_state +'""]').attr('selected', 'selected');
@@ -122,7 +122,7 @@ $(function() {
                 grid_layer = L.mapbox.gridLayer(playground.BASE_LAYER).addTo(map);
                 map.addControl(L.mapbox.gridControl(grid_layer));
 
-                if (playground.fields.latitude.val() !== '' && playground.fields.longitude.val() !== '') {
+                if (playground.fields.latitude.val() !== '' && playground.fields.latitude.val() !== 'None') {
                     map.setView([
                             playground.fields.latitude.val(),
                             playground.fields.longitude.val()],
@@ -323,7 +323,16 @@ $(function() {
             }
 
             // Set up the features tooltip.
-            $('.playground-features i').tooltip( { trigger: 'click' } );
+            /*
+            var $playground_features = $('.playground-features');
+            $playground_features.find('i').on('click', function() {
+                $(this).next('.feature-definition').slideToggle('fast');
+            });
+            */
+
+            if(playground.fields.latitude.val() === '' || playground.fields.latitude.val() === 'None'){
+                playground.locate_me();
+            }
 
             // Do this thing with the map.
             if ( $('#locator-map') ) {
@@ -352,9 +361,6 @@ $(function() {
                 $('body, #map-pane').off('touchmove', prevent_body_scroll(event));
             });
 
-            if(playground.fields.latitude.val() === '' || playground.fields.longitude.val() === ''){
-                playground.locate_me();
-            }
         }
     };
     // Initialize the playground object.
