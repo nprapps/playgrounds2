@@ -129,7 +129,7 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
 
         redirect_url = app_config.S3_BASE_URL
-        self.assertEqual(response.headers['Location'].split('?')[0], redirect_url)
+        self.assertEqual(response.headers['Location'].split('?')[0], redirect_url + '/search.html')
 
         with open('data/changes.json') as f:
             inserts = json.load(f)
