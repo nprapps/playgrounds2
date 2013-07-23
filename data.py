@@ -453,3 +453,14 @@ def process_delete(record):
     revisions = [{"field": "active", "from": True, "to": False}, {"field": "reason", "from": "", "to": record['playground']['text']}]
 
     return (playground, revisions)
+
+def render_sitemap():
+    with app.app.test_request_context(path='sitemap.xml'):
+        content = app.sitemap()
+
+        if isinstance(content, tuple):
+            content = content[0]
+
+    with open('www/sitemap.xml', 'w') as f:
+        f.write(content.encode('utf-8'))
+
