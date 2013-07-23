@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import copy
 from datetime import date
 import json
 from mimetypes import guess_type
@@ -158,11 +159,28 @@ def _playground(playground_slug):
 def _cloudsearch_proxy(path):
     from flask import request
 
-    url = 'http://%s/%s?%s' % (app_config.CLOUD_SEARCH_DOMAIN, path, urllib.urlencode(request.args))
+    args = {}
+
+    # Convert immutable MultiDict to dict
+    for k, v in request.args.items():
+        args[k] = v[0] if isinstance(v, list) else v
+
+    if 'callback' in request.args:
+        callback = request.args['callback']
+        del args['callback']
+    else:
+        callback = None
+
+    url = 'http://%s/%s?%s' % (app_config.CLOUD_SEARCH_DOMAIN, path, urllib.urlencode(args))
 
     response = requests.get(url)
 
-    return ('myCallback(' + response.text + ');', response.status_code, response.headers)
+    output = response.text
+
+    if callback:
+        output = '%s(%s);' % (callback, output)
+
+    return (output, response.status_code, response.headers)
 
 @app.route('/test/test.html')
 def test_dir():
