@@ -30,31 +30,16 @@
 <div id="main-content" class="row">
     <div class="span12">
         {% include '_alerts.html' %}
-    </div>
-    <div class="span6">
 
         <h3 id="results-address"></h3>
 
         <div id="search-help">
             <h3>Did you mean...?</h3>
             <ul></ul>
-            <h6 class="divider">OR</h6>
-        </div>
-
-        <div id="no-geocode">
-            <h3>Sorry, we couldn't locate that address.</h3>
-        </div>
-
-        <ul id="search-results" class="playground-list">
-        </ul>
-
-        <div class="help-prompt">
-            <p class="prompt">{{ COPY.content.search_help_title }}</p>
-            <p><a href="create.html" class="btn btn-blue btn-block"><i class="icon-plus-sign"></i> {{ COPY.content.search_help_button }}</a></p>
         </div>
 
     </div>
-    <div class="span6">
+    <div class="span6 right">
 
             <div id="search-results-wrapper">
                 <div id="search-results-map-wrapper">
@@ -69,7 +54,22 @@
             </div>
         </div>
 
+    </div>
+    <div class="span6 left">
+
+        <ul id="search-results" class="playground-list">
+        </ul>
+
         <div id="results-loading">Loading...</div>
+
+        <div id="no-geocode">
+            <h3>Sorry, we couldn't locate that address.</h3>
+        </div>
+
+        <div id="search-help-prompt" class="help-prompt">
+            <p class="prompt">{{ COPY.content.search_help_title }}</p>
+            <p><a href="create.html" class="btn btn-blue btn-block"><i class="icon-plus-sign"></i> {{ COPY.content.search_help_button }}</a></p>
+        </div>
 
     </div>
 </div>

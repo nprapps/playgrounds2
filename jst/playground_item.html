@@ -5,10 +5,11 @@
             <%= data.display_name[0] %>
         </a>
         <span class="distance">
-            <% if (data.distance && data.latitude.length > 0) { %>
-                <%= (data.distance[0] / 1000).toFixed(1) %> miles away |
-            <% } %>
             <% if (data.city[0]) { %><%= data.city[0] %>, <% } %><%= data.state[0] %>
+
+            <% if (data.distance && data.latitude.length > 0) { %>
+                 | <%= (data.distance[0] / 1000).toFixed(1) %> miles away
+            <% } %>
         </span>
     </div>
 </li>

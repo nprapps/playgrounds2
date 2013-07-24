@@ -219,13 +219,12 @@ function search() {
                 }
 
                 $search_results_map_wrapper.show();
-                $search_results_wrapper.show();
                 $results_address.show();
             }
 
             $search_results.show();
 
-            $.smoothScroll({ scrollTarget: '#search-results-wrapper' });
+            $.smoothScroll({ scrollTarget: '#results-address' });
         },
         cache: true
     });
@@ -302,7 +301,6 @@ $(function() {
     $search_latitude = $('#search input[name="latitude"]');
     $search_longitude = $('#search input[name="longitude"]');
     $geolocate_button = $('#geolocate');
-    $search_results_wrapper = $('#search-results-wrapper');
     $search_results = $('#search-results');
     $search_results_map_wrapper = $('#search-results-map-wrapper');
     $search_results_map_desktop = $('#search-results-map-desktop');
@@ -321,8 +319,10 @@ $(function() {
     $alerts = $('.alerts');
 
     CONTENT_WIDTH = $('#main-content').width();
-    RESULTS_MAP_WIDTH = CONTENT_WIDTH;
-    RESULTS_MAP_HEIGHT = CONTENT_WIDTH;
+    SEARCH_WIDTH = $('#main-content').find('.span6:eq(1)').width();
+    console.log(SEARCH_WIDTH);
+    RESULTS_MAP_WIDTH = SEARCH_WIDTH;
+    RESULTS_MAP_HEIGHT = SEARCH_WIDTH;
 
     crs = L.CRS.EPSG3857;
 
@@ -403,7 +403,6 @@ $(function() {
             $search_results_map_wrapper.hide();
             $results_address.hide();
             $no_geocode.hide();
-            $search_results_wrapper.show();
 
             reset_zoom();
 
