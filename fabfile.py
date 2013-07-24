@@ -314,6 +314,8 @@ def _gzip(src='www', dst='gzip'):
     Gzips everything in www and puts it all in gzip
     """
     data.gzip(src, dst)
+    os.system('rm -rf %s/live-data' % dst)
+    os.system('rm -rf %s/sitemap.xml' % dst)
 
 
 def render_confs():
