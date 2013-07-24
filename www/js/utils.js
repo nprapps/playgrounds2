@@ -78,19 +78,23 @@ function make_alert(text, klass){
 function set_driving_urls(){
     var $directions_wrapper = $('.directions-wrapper');
     var $directions_link = $('#directions-link');
-    if (navigator.userAgent.match(/iPhone|iPad|iPod/i)){
-        // handle iOS
+    var directions_header = $('<h4>Get Driving Directions</h4>');
+    var $google_maps_link = $('<a class="btn btn-blue"><i class="icon icon-google-plus"></i>Google Maps</a>');
 
-        var directions_header = $('<h4>Get Driving Directions</h4>');
-        var google_maps_link = $('<a class="btn btn-blue"><i class="icon icon-google-plus"></i>Google Maps</a>');
+    $directions_link.attr('href', $directions_link.data('ios-map'));
+    $directions_link.html('<i class="icon icon-apple"></i> Apple Maps');
+    $google_maps_link.attr('href', $directions_link.data('ios-gmap'));
 
-        $directions_link.attr('href', $directions_link.data('ios-map'));
-        $directions_link.html('<i class="icon icon-apple"></i> Apple Maps');
-        google_maps_link.attr('href', $directions_link.data('ios-gmap'));
+    $directions_link.parent().before(directions_header);
+    $directions_link.after($google_maps_link);
 
-        $directions_link.parent().before(directions_header);
-        $directions_link.after(google_maps_link);
-    }
+    $google_maps_link.on('click', function(){
+        setTimeout(function(){
+            if(confirm('Google Maps is not installed. Tap "okay" to go to the App Store.')){
+              document.location = 'https://itunes.apple.com/us/app/google-maps/id585027354?mt=8';
+            }
+        }, 300);
+    });
 }
 
 $(function(){
