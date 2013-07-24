@@ -47,9 +47,18 @@ def deploy_to_s3(src):
         os.system(s3cmd_gzip % (src, 's3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
 
 
+def deploy_file_to_s3(src, dst, gzipped=False):
+    if gzipped:
+        s3cmd_gzip = 's3cmd -P --add-header=Cache-Control:max-age=5 --add-header=Content-encoding:gzip --guess-mime-type --recursive --exclude "*" --include-from gzip_types.txt put %s %s'
+    else:
+        s3cmd = 's3cmd -P --add-header=Cache-Control:max-age=5 --guess-mime-type --recursive --exclude-from gzip_types.txt put %s %s'
+
+    for bucket in app_config.S3_BUCKETS:
+        os.system(s3cmd % (src, 's3://%s/%s/%s' % (bucket, app_config.PROJECT_SLUG, dst)))
+
+
 def gzip(src, dst):
     os.system('python gzip_www.py %s %s' % (src, dst))
-    os.system('rm -rf %s/live-data' % dst)
 
 
 def app_config_js():
