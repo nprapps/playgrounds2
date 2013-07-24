@@ -95,7 +95,6 @@ def render_playgrounds(playgrounds=None):
     slugs = [p.slug for p in playgrounds]
 
     app_config_js()
-    copy_text_js()
 
     compiled_includes = []
 
