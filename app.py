@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import copy
 from datetime import date
 import json
 from mimetypes import guess_type
@@ -13,7 +12,6 @@ from jinja2 import Template
 import requests
 
 import app_config
-import copytext
 from models import Playground, Revision, display_field_name
 from render_utils import flatten_app_config, make_context
 
@@ -218,14 +216,7 @@ def _app_config_js():
     config = flatten_app_config()
     js = 'window.APP_CONFIG = ' + json.dumps(config) + ';'
 
-    copy = { 'content': {} }
-
-    for key in ['editing_thanks', 'creating_thanks', 'deleting_thanks']:
-        copy['content'][key] = getattr(copytext.COPY.content, key)
-
-    copy = 'window.COPY = ' + json.dumps(copy) + ';'
-
-    return '\n'.join([js, copy]), 200, { 'Content-Type': 'application/javascript' }
+    return js, 200, { 'Content-Type': 'application/javascript' }
 
 # Server arbitrary static files on-demand
 @app.route('/<path:path>')

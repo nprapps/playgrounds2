@@ -27,7 +27,6 @@ var $search_results = null;
 var $search_results_map_wrapper = null;
 var $search_results_map = null;
 var $search_results_map_loading = null;
-var $search_wrapper = null;
 var $zoom_in = null;
 var $zoom_out = null;
 var $search_help = null;
@@ -267,7 +266,6 @@ $(function() {
     $search_results_map_wrapper = $('#search-results-map-wrapper');
     $search_results_map = $('#search-results-map');
     $search_results_map_loading = $('#search-results-map-loading');
-    $search_wrapper = $('#playground-results-wrap');
     $zoom_in = $('#zoom-in');
     $zoom_out = $('#zoom-out');
     $search_help = $('#search-help');
