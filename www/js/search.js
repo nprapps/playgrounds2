@@ -169,7 +169,7 @@ function search() {
                     }
                 });
             } else {
-                $search_results_ul.append('<li class="no-results">No results</li>');
+                $search_results_ul.append('<li class="no-results">No playgrounds found</li>');
             }
 
             if (latitude) {
@@ -224,6 +224,7 @@ function search() {
             }
 
             $search_results.show();
+            $search_help_us.show();
 
             $.smoothScroll({ scrollTarget: '#results-address' });
         },
