@@ -25,6 +25,7 @@ var $search_longitude = null;
 var $geolocate_button = null;
 var $search_results_wrapper = null;
 var $search_results = null;
+var $search_results_ul = null;
 var $search_results_map_wrapper = null;
 var $search_results_map = null;
 var $search_results_map_loading = null;
@@ -125,7 +126,7 @@ function search() {
     var latitude = parseFloat($search_latitude.val());
     var longitude = parseFloat($search_longitude.val());
 
-    $search_results.empty();
+    $search_results_ul.empty();
 
     if (IS_MOBILE) {
         $search_results_map_loading.show();
@@ -146,7 +147,7 @@ function search() {
                     context['letter'] = LETTERS[i];
 
                     var html = JST.playground_item(context);
-                    $search_results.append(html);
+                    $search_results_ul.append(html);
 
                     if (hit.data.latitude.length > 0) {
                         var lat = cloudSearchToDeg(hit.data.latitude[0]);
@@ -168,7 +169,7 @@ function search() {
                     }
                 });
             } else {
-                $search_results.append('<li class="no-results">No results</li>');
+                $search_results_ul.append('<li class="no-results">No results</li>');
             }
 
             if (latitude) {
@@ -269,7 +270,7 @@ function hashchange_callback() {
     if (latitude && longitude) {
         if (!($search_latitude.val() == latitude && $search_longitude.val() == longitude)) {
             $search_help.hide();
-            $search_results.empty();
+            $search_results_ul.empty();
             $search_results_map_wrapper.hide();
             $results_address.hide();
         }
@@ -300,6 +301,7 @@ $(function() {
     $search_longitude = $('#search input[name="longitude"]');
     $geolocate_button = $('#geolocate');
     $search_results = $('#search-results');
+    $search_results_ul = $search_results.find('ul');
     $search_results_map_wrapper = $('#search-results-map-wrapper');
     $search_results_map_desktop = $('#search-results-map-desktop');
     $search_results_map = $('#search-results-map');
@@ -318,7 +320,6 @@ $(function() {
 
     CONTENT_WIDTH = $('#main-content').width();
     SEARCH_WIDTH = $('#main-content').find('.span6:eq(1)').width();
-    console.log(SEARCH_WIDTH);
     RESULTS_MAP_WIDTH = SEARCH_WIDTH;
     RESULTS_MAP_HEIGHT = SEARCH_WIDTH;
 
@@ -397,7 +398,7 @@ $(function() {
     $search_form.submit(function() {
         if ($search_address.val() !== '') {
             $search_help.hide();
-            $search_results.empty();
+            $search_results_ul.empty();
             $search_results_map_wrapper.hide();
             $results_address.hide();
             $no_geocode.hide();

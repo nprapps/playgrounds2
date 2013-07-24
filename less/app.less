@@ -262,46 +262,58 @@ section#the-goods { margin-top: 44px; }
 
 .playground-list {
     list-style-type: none;
-    margin: 0;
+    margin: 0 0 44px 0;
     padding: 0;
+    display: table;
+    width: 100%;
 
-    a {
-        display: block;
-        margin-bottom: 2px;
-    }
     > li {
-        margin-bottom: 11px;
-        color: #555;
-        font-size: 15px;
+        display: table-row;
+        width: 100%;
+        font-size: 13px;
     }
-    .description {
-        display: block;
-        font-size: 12px;
+    .result-letter,
+    .result-meta,
+    .result-text {
+        padding-top: 11px;
         padding-bottom: 11px;
+        border-top: 1px solid #e2e2e2;
     }
-    .distance {
-        display: block;
-        font-size: 12px;
+    
+    .result-letter {
+        display: table-cell;
+        padding-right: 10px;
+        
+        strong {
+            display: inline-block;
+            background-color: #ff6706;
+            border-radius: 10px;
+            overflow: hidden;
+            color: #fff;
+            text-align: center;
+            font-weight: bold;
+            font-size: 12px;
+            width: 20px;
+        }
     }
-    .distance + .description {
-        margin-top: 3px;
+    .result-text {
+        padding-right: 20px;
+        display: table-cell;
     }
-    .map-letter {
-        float: left;
-        display: block;
-        background-color: #ff6706;
-        border-radius: 10px;
-        overflow: hidden;
-        width: 20px;
-        color: #fff;
-        text-align: center;
-        font-weight: bold;
-        font-size: 12px;
-    }
-    .map-result {
-        margin-left: 30px;
+    .result-meta {
+        display: table-cell;
+        color: #666;
+        text-align: right;
+        font-size: 90%;
+        
+        span {
+            display: inline-block;
+            white-space: nowrap;
+            padding-left: 22px;
+        }
     }
 }
+
 
 // Shared styles for creating or editing a playground
 .playground-form {
