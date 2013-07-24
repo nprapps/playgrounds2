@@ -180,9 +180,11 @@ function search() {
                     if (RETINA) {
                         search_map_width = search_map_width * 2;
                         search_map_height = search_map_height * 2;
+
                         if (search_map_width > 640) {
                             search_map_width = 640;
                         }
+
                         if (search_map_height > 640) {
                             search_map_height = 640;
                         }
@@ -478,9 +480,8 @@ $(function() {
 
     if (!IS_MOBILE) {
         $search_results_map_desktop.css({ height: '500px' });
-        $search_results_map.hide();
 
-        desktop_map = L.map('search-results-map-desktop', {
+        desktop_map = L.mapbox.map('search-results-map-desktop', null, {
             zoomControl: false
         });
 
