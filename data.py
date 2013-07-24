@@ -165,7 +165,7 @@ def load_playgrounds(path='data/playgrounds.csv'):
     Load playground data from the CSV into sqlite.
     """
     features = copytext.COPY.feature_list
-    
+
     with open(path) as f:
         rows = CSVKitDictReader(f)
 
@@ -195,7 +195,7 @@ def load_playgrounds(path='data/playgrounds.csv'):
                 entry=row['Entry'],
                 source=row['Source']
             )
-            
+
             for feature in features:
                 slug = feature['key']
 
@@ -434,11 +434,11 @@ def process_insert(record):
 
     for feature in features:
         PlaygroundFeature.create(
-            slug=slug,
+            slug=feature,
             playground=playground
         )
 
-        revisions.append({'field': slug, 'from': 0, 'to': 1})
+        revisions.append({'field': feature, 'from': 0, 'to': 1})
 
     return (playground, revisions)
 
