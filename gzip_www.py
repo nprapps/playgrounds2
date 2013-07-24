@@ -14,26 +14,48 @@ class FakeTime:
 # See: http://stackoverflow.com/questions/264224/setting-the-gzip-timestamp-from-python
 gzip.time = FakeTime()
 
+
+def compress(file_path):
+    f_in = open(file_path, 'rb')
+    contents = f_in.readlines()
+    f_in.close()
+    f_out = gzip.open(file_path, 'wb')
+    f_out.writelines(contents)
+    f_out.close()
+
+
 def main():
+    in_path = sys.argv[1]
+    out_path = sys.argv[2]
+
     with open('gzip_types.txt') as f:
         gzip_globs = [glob.strip() for glob in f]
 
-    shutil.rmtree(sys.argv[2], ignore_errors=True)
-    shutil.copytree(sys.argv[1], sys.argv[2])
+    if os.path.isdir(in_path):
+        shutil.rmtree(out_path, ignore_errors=True)
+        shutil.copytree(in_path, out_path)
 
-    for path, dirs, files in os.walk(sys.argv[2]):
-        for filename in files:
-            if not any([fnmatch(filename, glob) for glob in gzip_globs]):
-                continue
+        for path, dirs, files in os.walk(sys.argv[2]):
+            for filename in files:
+                if not any([fnmatch(filename, glob) for glob in gzip_globs]):
+                    continue
 
-            file_path = os.path.join(path, filename)
+                file_path = os.path.join(path, filename)
 
-            f_in = open(file_path, 'rb')
-            contents = f_in.readlines()
-            f_in.close()
-            f_out = gzip.open(file_path, 'wb')
-            f_out.writelines(contents)
-            f_out.close()
+                compress(file_path)
+    else:
+        if not any([fnmatch(in_path, glob) for glob in gzip_globs]):
+            return 
+
+        try:
+            os.remove(out_path)
+        except OSError:
+            pass
+
+        shutil.copy(in_path, out_path)
+
+        compress(out_path)
+
 
 if __name__ == '__main__':
     main()
