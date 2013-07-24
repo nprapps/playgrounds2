@@ -351,7 +351,7 @@ $(function() {
         $search_help_us.show();
 
         $results_loading.show();
-        navigate();
+        navigate(false);
 
         return false;
     });
@@ -364,7 +364,6 @@ $(function() {
             $results_address.hide();
             $no_geocode.hide();
             $search_results_wrapper.show();
-
 
             reset_zoom();
 
@@ -404,7 +403,7 @@ $(function() {
                             $results_address.html('Showing Results Near ' + display_name);
 
                             $results_loading.show();
-                            navigate();
+                            navigate(false);
                         } else {
                             // If there are many results,
                             // show the did-you-mean path.

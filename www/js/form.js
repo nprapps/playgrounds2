@@ -113,6 +113,9 @@ $(function() {
                 /*
                 * Initializes the map.
                 */
+
+                $('#edit-marker').hide();
+
                 map = L.map('edit-map', {
                     minZoom: 11,
                     maxZoom: 17,
@@ -128,8 +131,6 @@ $(function() {
                             playground.fields.latitude.val(),
                             playground.fields.longitude.val()],
                         playground.LOCATOR_DEFAULT_ZOOM);
-                } else {
-                    map.setView([38.9, -77], 12);
                 }
                 playground.map.center_editor();
             },
@@ -137,7 +138,8 @@ $(function() {
                 map.invalidateSize(false);
                 var marker_left = $('#edit-map').width()/2 - 8;
                 var marker_top = $('#edit-map').height()/2 - 8;
-                $('#edit-marker').css({'left': marker_left, 'top': marker_top});
+                $('#loading-spinner').hide();
+                $('#edit-marker').css({'left': marker_left, 'top': marker_top}).show();
             },
             'resize_locator': function() {
                 // Set the width.
