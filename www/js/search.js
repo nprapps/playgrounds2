@@ -365,7 +365,6 @@ $(function() {
             $no_geocode.hide();
             $search_results_wrapper.show();
 
-
             reset_zoom();
 
             var address = $search_address.val();

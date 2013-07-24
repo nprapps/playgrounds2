@@ -1,6 +1,9 @@
 var CONTENT_WIDTH;
 var GEOLOCATE = Modernizr.geolocation;
 
+// NB: Duplicated from search.js
+var RESULTS_DEFAULT_ZOOM = 14;
+
 var $search_form = null;
 var $search_latitude = null;
 var $search_longitude = null;
@@ -67,7 +70,7 @@ $(function() {
 
     $geolocate_button.click(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
-            window.location.href = 'search.html#latitude=' + position.coords.latitude + '&longitude=' + position.coords.longitude + '&nearby=true'; 
+            window.location.href = 'search.html#latitude=' + position.coords.latitude + '&longitude=' + position.coords.longitude + '&zoom=' + RESULTS_DEFAULT_ZOOM + '&nearby=true'; 
         });
     });
 
