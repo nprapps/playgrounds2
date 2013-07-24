@@ -480,7 +480,9 @@ $(function() {
         $search_results_map_desktop.css({ height: '500px' });
         $search_results_map.hide();
 
-        desktop_map = L.mapbox.map('search-results-map-desktop');
+        desktop_map = L.map('search-results-map-desktop', {
+            zoomControl: false
+        });
 
         var tiles = L.mapbox.tileLayer('npr.map-s5q5dags', {
             detectRetina: true,
