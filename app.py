@@ -12,7 +12,6 @@ from jinja2 import Template
 import requests
 
 import app_config
-import copytext
 from models import Playground, Revision, display_field_name
 from render_utils import flatten_app_config, make_context
 
@@ -45,6 +44,7 @@ def _prepare_email(revision_group):
         for revision in inserts:
             p = Playground.get(slug=revision.playground.slug)
             playground_dict = p.__dict__['_data']
+            playground_dict['display_name'] = p.display_name
             playground_dict['site_url'] = '%s/playground/%s.html' % (app_config.S3_BASE_URL, revision.playground.slug)
             playground_dict['revision_group'] = int(revision_group)
             playground_dict['headers'] = revision.get_headers()
@@ -57,6 +57,7 @@ def _prepare_email(revision_group):
         for revision in deletes:
             p = Playground.get(slug=revision.playground.slug)
             playground_dict = playground_dict = p.__dict__['_data']
+            playground_dict['display_name'] = p.display_name
             playground_dict['site_url'] = '%s/playground/%s.html' % (app_config.S3_BASE_URL, revision.playground.slug)
             playground_dict['delete_url'] = '%s/delete-playground/%s/' % (app_config.S3_BASE_URL, revision.playground.slug)
             playground_dict['revision_group'] = int(revision_group)
@@ -75,6 +76,7 @@ def _prepare_email(revision_group):
         for playground_slug in updated_playgrounds:
             p = Playground.get(slug=playground_slug)
             playground_dict = p.__dict__['_data']
+            playground_dict['display_name'] = p.display_name
             playground_dict['site_url'] = '%s/playground/%s.html' % (app_config.S3_BASE_URL, playground_slug)
             playground_dict['revisions'] = []
             for revision in updates:

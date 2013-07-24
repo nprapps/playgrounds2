@@ -156,8 +156,6 @@ def insert_playground():
 
     if request.method == 'POST':
 
-        print request.form
-
         playground_fields = Playground._meta.get_field_names()
 
         # Prep the payload.
