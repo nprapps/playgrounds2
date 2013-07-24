@@ -72,7 +72,7 @@ function make_alert(text, klass){
         $('div.alerts .alert').fadeOut(500, function(){
             $('div.alerts').html('');
         });
-    }, 2000);
+    }, 3000);
 }
 
 function set_driving_urls(){

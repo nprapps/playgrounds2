@@ -39,8 +39,13 @@ def process_updates(path=None, local=None):
             data.gzip('%s.playgrounds_html' % path, '%s.playgrounds_gzip' % path)
             data.deploy_to_s3('%s.playgrounds_gzip' % path)
 
+            try:
+                os.mkdir('gzip')
+            except OSError:
+                pass
+
             data.gzip('www/sitemap.xml', 'gzip/sitemap.xml')
-            data.deploy_to_s3('gzip/sitemap.xml')
+            data.deploy_file_to_s3('gzip/sitemap.xml', 'sitemap.xml', True)
 
             # Update the search index.
             data.update_search_index(changed_playgrounds)

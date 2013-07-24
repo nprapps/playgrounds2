@@ -24,7 +24,7 @@
 
 {% block content %}
 
-<form id="form" class="row-fluid playground-form" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/update-playground/">
+<form id="form" class="row-fluid playground-form" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/insert-playground/">
 <div class="">
 
     <h2>Add Playground</h2>
@@ -41,7 +41,7 @@
     </div>
     {#<div class="features span6">
         <h5>Features</h5>
-        
+
         {% for feature in features %}
         <div class="feature">
             {{ feature|safe }}
@@ -52,7 +52,7 @@
     </div>#}
     <div class="features span6">
         <h5>Features</h5>
-        
+
         {% for feature in COPY.feature_list %}
         <div class="feature control-group">
             <input type="checkbox" name="{{ feature['key'] }}"> <label class="checkbox">{{ feature['term'] }}</label>
@@ -151,7 +151,7 @@
         <div id="map-pane" class="map-pane tab-pane active">
             <div class="edit-address-map">
                 <div id="edit-map">
-                    <div id="edit-marker"></div>
+                    <div id="edit-marker" style="display:none;"></div>
                     <a id="geolocate" data-action="locate_me" class="btn btn-large">
                         <i class="icon-location-arrow"></i>
                     </a>
