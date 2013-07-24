@@ -7,6 +7,7 @@ var RESULTS_MAP_HEIGHT = 500;
 var RESULTS_MAX_ZOOM = 16;
 var RESULTS_MIN_ZOOM = 8;
 var RESULTS_DEFAULT_ZOOM = 14;
+var IS_MOBILE = Modernizr.touch;
 var RETINA = window.devicePixelRatio > 1;
 if (RETINA) {
     BASE_LAYER = APP_CONFIG.MAPBOX_BASE_LAYER_RETINA;
@@ -41,6 +42,8 @@ var $playground_meta_items = null;
 
 var zoom = RESULTS_DEFAULT_ZOOM;
 var crs = null;
+var desktop_map = null;
+var desktop_markers = null;
 
 function degToCloudSearch(degree) {
     /*
@@ -147,7 +150,19 @@ function search() {
                         var lat = cloudSearchToDeg(hit.data.latitude[0]);
                         var lng = cloudSearchToDeg(hit.data.longitude[0]);
 
-                        markers.push(buildMapboxPin('m', context['letter'], 'ff6633', lat, lng));
+                        if (IS_MOBILE) {
+                            markers.push(buildMapboxPin('m', context['letter'], 'ff6633', lat, lng));
+                        } else {
+                            markers.push(L.mapbox.marker.style({
+                                'type': 'Feature',
+                                'geometry': {},
+                                'properties': {
+                                    'marker-size': 'medium',
+                                    'marker-symbol': context['letter'],
+                                    'marker-color': '#ff6633'
+                                }
+                            }, [lat, lng]));
+                        }
                     }
                 });
             } else {
@@ -155,29 +170,50 @@ function search() {
             }
 
             if (latitude) {
-                var search_map_width = RESULTS_MAP_WIDTH;
-                var search_map_height = RESULTS_MAP_HEIGHT;
+                if (IS_MOBILE) {
+                    var search_map_width = RESULTS_MAP_WIDTH;
+                    var search_map_height = RESULTS_MAP_HEIGHT;
 
-                if (RETINA) {
-                    search_map_width = search_map_width * 2;
-                    search_map_height = search_map_height * 2;
-                    if (search_map_width > 640) {
-                        search_map_width = 640;
+                    if (RETINA) {
+                        search_map_width = search_map_width * 2;
+                        search_map_height = search_map_height * 2;
+                        if (search_map_width > 640) {
+                            search_map_width = 640;
+                        }
+                        if (search_map_height > 640) {
+                            search_map_height = 640;
+                        }
                     }
-                    if (search_map_height > 640) {
-                        search_map_height = 640;
-                    }
+
+                    markers.push(buildMapboxPin('l', 'circle', '006633', latitude, longitude));
+
+                    $search_results_map.on('load', function() {
+                        $search_results_map_loading.hide();
+                        $search_results_map.css('opacity', '1.0');
+                        $search_results_map.off('load');
+                    });
+
+                    $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + search_map_width + 'x' + search_map_height + '.png');
+                } else {
+                    desktop_map.setView([latitude, longitude], zoom);
+
+                    desktop_markers.clearLayers();
+
+                    markers.push(L.mapbox.marker.style({
+                        'type': 'Feature',
+                        'geometry': {},
+                        'properties': {
+                            'marker-size': 'large',
+                            'marker-symbol': 'circle',
+                            'marker-color': '#006633'
+                        }
+                    }, [latitude, longitude]));
+
+                    _.each(markers, function(marker) {
+                        desktop_markers.addLayer(marker);
+                    });
                 }
 
-                markers.push(buildMapboxPin('l', 'circle', '006633', latitude, longitude));
-
-                $search_results_map.on('load', function() {
-                    $search_results_map_loading.hide();
-                    $search_results_map.css('opacity', '1.0');
-                    $search_results_map.off('load');
-                });
-
-                $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + search_map_width + 'x' + search_map_height + '.png');
                 $search_results_map_wrapper.show();
                 $search_results_wrapper.show();
                 $results_address.show();
@@ -265,6 +301,7 @@ $(function() {
     $search_results_wrapper = $('#search-results-wrapper');
     $search_results = $('#search-results');
     $search_results_map_wrapper = $('#search-results-map-wrapper');
+    $search_results_map_desktop = $('#search-results-map-desktop');
     $search_results_map = $('#search-results-map');
     $search_results_map_loading = $('#search-results-map-loading');
     $search_wrapper = $('#playground-results-wrap');
@@ -436,6 +473,23 @@ $(function() {
     if (GEOLOCATE) {
         $geolocate_button.show();
         $search_divider.show();
+    }
+
+    if (!IS_MOBILE) {
+        $search_results_map_desktop.css({ height: '500px' });
+        $search_results_map.hide();
+
+        desktop_map = L.mapbox.map('search-results-map-desktop');
+
+        var tiles = L.mapbox.tileLayer('npr.map-s5q5dags', {
+            detectRetina: true,
+            retinaVersion: 'npr.map-u1zkdj0e'
+        });
+        
+        tiles.addTo(desktop_map);
+
+        desktop_markers = L.layerGroup();
+        desktop_markers.addTo(desktop_map);
     }
 
     // Check to see if we've got a message to show.
