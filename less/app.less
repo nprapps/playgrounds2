@@ -1010,16 +1010,8 @@ section#the-goods { margin-top: 44px; }
         line-height: 1.4;
     }
     #search-help {
-        margin: 0 0 -33px 0;
-        display: none;
+        margin: 0 0 44px 0;
 
-        h6.divider {
-            margin: 22px 0 0 0;
-            padding-top: 11px;
-            border-top: 1px solid #eee;
-            color: #999;
-            text-align: center;
-        }
         ul {
             list-style-type: none;
             margin: 0;
@@ -1034,13 +1026,9 @@ section#the-goods { margin-top: 44px; }
             }
         }
     }
-    #search-results,
-    #search-results-wrapper {
-        display: none;
-    }
     #search-results-map-wrapper {
+        margin-bottom: 44px;
         position: relative;
-        display: none;
 
         h3 {
             margin-bottom: 11px;
@@ -1085,10 +1073,12 @@ section#the-goods { margin-top: 44px; }
             top: 250px;
         }
     }
-    #no-geocode {
-        display: none;
-    }
-    #results-loading {
+    #no-geocode,
+    #results-loading,
+    #search-help,
+    #search-help-prompt,
+    #search-results,
+    #search-results-map-wrapper {
         display: none;
     }
 }
