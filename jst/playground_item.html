@@ -6,14 +6,14 @@
         <a href="<%= S3_BASE_URL %>/playground/<%= data.slug[0] %>.html">
             <%= data.display_name[0] %>
         </a>
-    </div>
-    <div class="result-meta">
         <span class="result-city">
             <% if (data.city[0]) { %><%= data.city[0] %>, <% } %><%= data.state[0] %>
         </span>
+    </div>
+    <div class="result-meta">
         <span class="result-distance">
             <% if (data.distance && data.latitude.length > 0) { %>
-                 <%= (data.distance[0] / 1000).toFixed(1) %> miles away
+                 <%= (data.distance[0] / 1000).toFixed(1) %> miles
             <% } %>
         </span>
     </div>
