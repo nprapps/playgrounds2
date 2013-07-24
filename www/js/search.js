@@ -28,7 +28,6 @@ var $search_results = null;
 var $search_results_map_wrapper = null;
 var $search_results_map = null;
 var $search_results_map_loading = null;
-var $search_wrapper = null;
 var $zoom_in = null;
 var $zoom_out = null;
 var $search_help = null;
@@ -127,8 +126,11 @@ function search() {
     var longitude = parseFloat($search_longitude.val());
 
     $search_results.empty();
-    $search_results_map_loading.show();
-    $search_results_map.css('opacity', '0.25');
+
+    if (IS_MOBILE) {
+        $search_results_map_loading.show();
+        $search_results_map.css('opacity', '0.25');
+    }
 
     $.ajax({
         url: APP_CONFIG.CLOUD_SEARCH_PROXY_BASE_URL + '/cloudsearch/2011-02-01/search?' + $.param(buildCloudSearchParams()),
@@ -304,7 +306,6 @@ $(function() {
     $search_results_map_desktop = $('#search-results-map-desktop');
     $search_results_map = $('#search-results-map');
     $search_results_map_loading = $('#search-results-map-loading');
-    $search_wrapper = $('#playground-results-wrap');
     $zoom_in = $('#zoom-in');
     $zoom_out = $('#zoom-out');
     $search_help = $('#search-help');

@@ -29,8 +29,9 @@
 {% block wide_content %}
 <div id="main-content" class="row">
     <div class="span12">
-
         {% include '_alerts.html' %}
+    </div>
+    <div class="span6">
 
         <h3 id="results-address"></h3>
 
@@ -44,29 +45,6 @@
             <h3>Sorry, we couldn't locate that address.</h3>
         </div>
 
-    </div>
-    <div class="span6">
-        <div id="playground-results-wrap">
-
-            <div id="search-results-wrapper">
-                <div id="search-results-map-wrapper">
-                    <div id="search-results-map-desktop"></div>
-                    <img id="search-results-map" src="" />
-                    <img id="search-results-map-loading" src="img/loading.gif" />
-
-                    <div class="zoom-buttons">
-                        <button type="button" id="zoom-in" class="btn-zoom">+</button>
-                        <button type="button" id="zoom-out" class="btn-zoom">-</button>
-                    </div>
-                </div>
-
-
-            </div>
-
-            <div id="results-loading">Loading...</div>
-        </div>
-    </div>
-    <div class="span6">
         <ul id="search-results" class="playground-list">
         </ul>
 
@@ -74,6 +52,25 @@
             <p class="prompt">{{ COPY.content.search_help_title }}</p>
             <p><a href="create.html" class="btn btn-blue btn-block"><i class="icon-plus-sign"></i> {{ COPY.content.search_help_button }}</a></p>
         </div>
+
+    </div>
+    <div class="span6">
+
+            <div id="search-results-wrapper">
+                <div id="search-results-map-wrapper">
+                    <div id="search-results-map-desktop"></div>
+                    <img id="search-results-map" src="" />
+                    <img id="search-results-map-loading" src="img/loading.gif" />
+
+                <div class="zoom-buttons">
+                    <button type="button" id="zoom-in" class="btn-zoom">+</button>
+                    <button type="button" id="zoom-out" class="btn-zoom">-</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="results-loading">Loading...</div>
+
     </div>
 </div>
 {% endblock %}

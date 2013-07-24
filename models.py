@@ -48,7 +48,7 @@ class Playground(Model):
     """
     slug = CharField()
 
-    name = CharField(verbose_name='Name')
+    name = CharField(verbose_name='Name', null=True)
     facility = CharField(verbose_name='Facility', null=True)
     facility_type = CharField(verbose_name='Facility type', null=True)
 
@@ -128,7 +128,6 @@ class Playground(Model):
         # Return the percent string and the css class.
         return {"percent": percent_string, "class": klass}
 
-
     @property
     def display_name(self):
         """
@@ -141,9 +140,9 @@ class Playground(Model):
             return self.name
 
         if self.facility:
-            return 'Playground at %s'  % self.facility
+            return 'Playground at %s' % self.facility
 
-        return 'Unnamed Playground'
+        return 'Playground'
 
     def save(self, *args, **kwargs):
         """
