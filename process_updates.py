@@ -40,7 +40,7 @@ def process_updates(path=None, local=None):
             data.deploy_to_s3('%s.playgrounds_gzip' % path)
 
             data.gzip('www/sitemap.xml', 'gzip/sitemap.xml')
-            data.deploy_file_to_s3('gzip/sitemap.xml')
+            data.deploy_file_to_s3('gzip/sitemap.xml', 'sitemap.xml', True)
 
             # Update the search index.
             data.update_search_index(changed_playgrounds)
