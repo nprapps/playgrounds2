@@ -26,30 +26,46 @@
 {% endblock %}
 
 
-{% block content %}
-<div id="playground-results-wrap">
-    <div id="search-help">
-        <h3>Did you mean...?</h3>
-        <ul></ul>
-        <h6 class="divider">OR</h6>
-    </div>
+{% block wide_content %}
+<div id="main-content" class="row">
+    <div class="span12">
 
-    <div id="no-geocode">
-        <h3>Sorry, we couldn't locate that address.</h3>
-    </div>
+        {% include '_alerts.html' %}
 
-    <div id="search-results-wrapper">
         <h3 id="results-address"></h3>
-        <div id="search-results-map-wrapper">
-            <img id="search-results-map" src="" />
-            <img id="search-results-map-loading" src="img/loading.gif" />
 
-            <div class="zoom-buttons">
-                <button type="button" id="zoom-in" class="btn-zoom">+</button>
-                <button type="button" id="zoom-out" class="btn-zoom">-</button>
-            </div>
+        <div id="search-help">
+            <h3>Did you mean...?</h3>
+            <ul></ul>
+            <h6 class="divider">OR</h6>
         </div>
 
+        <div id="no-geocode">
+            <h3>Sorry, we couldn't locate that address.</h3>
+        </div>
+
+    </div>
+    <div class="span6">
+        <div id="playground-results-wrap">
+
+            <div id="search-results-wrapper">
+                <div id="search-results-map-wrapper">
+                    <img id="search-results-map" src="" />
+                    <img id="search-results-map-loading" src="img/loading.gif" />
+
+                    <div class="zoom-buttons">
+                        <button type="button" id="zoom-in" class="btn-zoom">+</button>
+                        <button type="button" id="zoom-out" class="btn-zoom">-</button>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div id="results-loading">Loading...</div>
+        </div>
+    </div>
+    <div class="span6">
         <ul id="search-results" class="playground-list">
         </ul>
 
@@ -58,16 +74,9 @@
             <p><a href="create.html" class="btn btn-blue btn-block"><i class="icon-plus-sign"></i> {{ COPY.content.search_help_button }}</a></p>
         </div>
     </div>
-
-    <div id="results-loading">Loading...</div>
 </div>
-
-
 {% endblock %}
 
-
-{% block wide_content %}
-{% endblock %}
 
 {% block extra_foot_js %}
     {{ JS.push('js/lib/underscore.js') }}
