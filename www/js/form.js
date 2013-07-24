@@ -28,7 +28,8 @@ $(function() {
                     playground.form.geocode_fields();
                     playground.toggle_address_button();
                 } else {
-                    make_alert('We can\'t find a place with that name.\nWant to try again?', 'warning');
+                    alert_text = "<h3>I'm sorry! We couldn't find that place.</h3>Don't forget to add the street/avenue/boulevard.<br/>If you're still having trouble, try finding it on the map.";
+                    make_alert(alert_text, 'warning');
                 }
             },
             'reverse_geocode': function(locale) {
