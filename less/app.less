@@ -215,6 +215,7 @@ section#the-goods { margin-top: 44px; }
 .alert {
     margin: 0 0 33px 0;
     color: #A8803C;
+    border: none;
 
     #the-goods & {
         @media @screen-tiny {
@@ -858,9 +859,20 @@ section#the-goods { margin-top: 44px; }
             &.fade.in {
                 top: 0;
             }
+
+            .playground-form {
+                height: 100%;
+            }
+
             .modal-body {
                 box-sizing: border-box;
                 padding-bottom: 100px;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 64px;
+                max-height: none;
             }
 
             .modal-footer {
@@ -1027,7 +1039,6 @@ section#the-goods { margin-top: 44px; }
         display: none;
     }
     #search-results-map-wrapper {
-        margin: 22px 0;
         position: relative;
         display: none;
 
@@ -1218,6 +1229,7 @@ footer {
 
             h1 {
                 font-size: 16px;
+                white-space: nowrap; // Android wraps this for some reason.
             }
         }
     }

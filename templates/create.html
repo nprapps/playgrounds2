@@ -151,7 +151,7 @@
         <div id="map-pane" class="map-pane tab-pane active">
             <div class="edit-address-map">
                 <div id="edit-map">
-                    <div id="edit-marker"></div>
+                    <div id="edit-marker" style="display:none;"></div>
                     <a id="geolocate" data-action="locate_me" class="btn btn-large">
                         <i class="icon-location-arrow"></i>
                     </a>
@@ -247,8 +247,6 @@
 </div>
 </form>
 {% endblock %}
-
-{% block wide_content %}{% endblock %}
 
 {% block scripts%}
 {% endblock %}
