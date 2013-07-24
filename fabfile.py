@@ -124,12 +124,6 @@ def app_config_js():
     """
     data.app_config_js()
 
-def copy_text_js():
-    """
-    Render copy_text messages to a js file.
-    """
-    data.copy_text_js()
-
 def render_playgrounds():
     data.render_playgrounds()
 
@@ -148,7 +142,6 @@ def render():
     app_config.configure_targets(env.get('settings', None))
 
     app_config_js()
-    copy_text_js()
 
     compiled_includes = []
 

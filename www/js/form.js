@@ -317,18 +317,9 @@ $(function() {
 
             // Check to see if we've got a message to show.
             if (playground.ACTION !== null){
-
                 // We'll name the message div after the URL param.
                 $('#' + playground.ACTION).toggleClass('hide');
             }
-
-            // Set up the features tooltip.
-            /*
-            var $playground_features = $('.playground-features');
-            $playground_features.find('i').on('click', function() {
-                $(this).next('.feature-definition').slideToggle('fast');
-            });
-            */
 
             if(playground.fields.latitude.val() === '' || playground.fields.latitude.val() === 'None'){
                 playground.locate_me();

@@ -25,12 +25,6 @@
 {% endblock %}
 
 {% block content %}
-<div id="editing_thanks" class="alert alert-success alert-block hide">
-    <a href="#" class="close" data-dismiss="alert">&times;</a>
-    <h4>Thanks!</h4>
-    <p>Your changes have been submitted for review.</p>
-</div>
-
 <h1>{{ playground.display_name }}</h1>
 
 {% if not features %}
@@ -55,11 +49,14 @@
         </p>
 
         <!-- Directions -->
+        {#
         {% if playground.address_approximate and playground.latitude and playground.longitude %}
         <p><a href="https://maps.google.com/maps?saddr=&daddr={{ playground.latitude }},{{ playground.longitude }}&z=16" target="_blank" class="btn btn-blue" data-ios-map="http://maps.apple.com/?daddr={{ playground.latitude }},{{ playground.longitude }}" data-ios-gmap="comgooglemaps://?daddr={{ playground.latitude }},{{ playground.longitude }}&views=traffic">Get Driving Directions</a></p>
         {% elif playground.address %}
         <p><a id="directions-link" href="https://maps.google.com/maps?saddr=&daddr={{ playground.address }}+{{ playground.city }}+{{ playground.state }}+{{ playground.zip }}&z=16" target="_blank" class="btn btn-blue" data-ios-map="http://maps.apple.com/?daddr={{ playground.latitude }},{{ playground.longitude }}" data-ios-gmap="comgooglemaps://?daddr={{ playground.latitude }},{{ playground.longitude }}&views=traffic"><i class="icon-road"></i> Get Driving Directions</a></p>
         {% endif %}
+        #}
+        <p class="directions-wrapper"><a id="directions-link" href="https://maps.google.com/maps?saddr=&daddr={{ playground.latitude }},{{ playground.longitude }}&z=16" target="_blank" class="btn btn-blue" data-ios-map="http://maps.apple.com/?daddr={{ playground.latitude }},{{ playground.longitude }}" data-ios-gmap="comgooglemaps://?daddr={{ playground.latitude }},{{ playground.longitude }}&views=traffic">Get Driving Directions</a></p>
     </div>
 </div>
 
