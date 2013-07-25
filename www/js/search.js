@@ -180,17 +180,19 @@ function search() {
                             marker.on('mouseover', function() {
                                 $('.playground-list li').removeClass('highlight');
                                 $('#playground-' + this.letter).addClass('highlight');
-                            });
-
-                            marker.on('mouseout', function() {
-                                $('.playground-list li').removeClass('highlight');
-                                $('#playground-' + this.letter).removeClass('highlight');
+                                marker.on('mouseout', function() {
+                                    $('.playground-list li').removeClass('highlight');
+                                    $('#playground-' + this.letter).removeClass('highlight');
+                                });
                             });
 
                             marker.on('click', function() {
                                 $('.playground-list li').removeClass('highlight');
                                 $('#playground-' + this.letter).addClass('highlight');
                                 $.smoothScroll({ scrollTarget: '#playground-' + this.letter });
+                                marker.on('mouseout', function() {
+                                    $('#playground-' + this.letter).addClass('highlight');
+                                })
                             });
 
                             markers.push(marker);
