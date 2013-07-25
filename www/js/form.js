@@ -28,7 +28,6 @@ $(function() {
                     playground.form.geocode_fields();
                     playground.toggle_address_button();
                 } else {
-                    console.log('geocode struggs');
                     alert_text = "<strong>I'm sorry! We couldn't find that place.</strong><br>Don't forget to add the street/avenue/boulevard.<br/>If you're still having trouble, try finding it on the map.";
                     make_alert(alert_text, 'alert-error');
                 }
