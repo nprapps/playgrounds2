@@ -28,8 +28,9 @@ $(function() {
                     playground.form.geocode_fields();
                     playground.toggle_address_button();
                 } else {
-                    alert_text = "<h3>I'm sorry! We couldn't find that place.</h3>Don't forget to add the street/avenue/boulevard.<br/>If you're still having trouble, try finding it on the map.";
-                    make_alert(alert_text, 'warning');
+                    console.log('geocode struggs');
+                    alert_text = "<strong>I'm sorry! We couldn't find that place.</strong><br>Don't forget to add the street/avenue/boulevard.<br/>If you're still having trouble, try finding it on the map.";
+                    make_alert(alert_text, 'alert-error');
                 }
             },
             'reverse_geocode': function(locale) {
@@ -52,7 +53,6 @@ $(function() {
                 playground.fields.longitude.val(locale['latLng']['lng']);
 
                 require_us_address(locale);
-                playground.form.geocode_fields();
             }
         },
         'form': {
@@ -234,9 +234,12 @@ $(function() {
         'accept_address': function() {
             playground.geocode(playground.form.prepare_geocode_object(), playground.callbacks.geocode);
         },
-        'toggle_address_button': function(){
+        'toggle_address_button': function(cancel){
             $('.address-editor').toggleClass('hide');
-            playground.map.center_editor();
+            if (cancel !== true){
+                console.log('center editor');
+                playground.map.center_editor();
+            }
             $('#toggle-address-button').toggleClass('btn-success').text($('#toggle-address-button').text() === 'Edit' ? 'Cancel' : 'Edit');
         },
         'submit': function() {
@@ -316,6 +319,11 @@ $(function() {
 
                 // Remove a validation flag, if it exists.
                 $(this).removeClass('flagged');
+            });
+
+            // Allow address editor to be dismissed
+            $('#form .edit-address-hed .close').on('click', function(){
+                playground.toggle_address_button(true);
             });
 
             // Check to see if we've got a message to show.

@@ -60,18 +60,16 @@ function make_alert(text, klass){
     var alert_template = _.template('<div class="alert <%= klass %>"><%= text %></div>');
 
     // Blank the div and add our rendered template.
-    $('div.alerts').html('').append(
+    $('div.alerts').html(
         alert_template({
             'text': text,
             'klass': klass
         })
-    );
+    ).addClass('slide-down');
 
     // Make it disappear reasonably quickly after 2 seconds.
     var t = setTimeout(function(){
-        $('div.alerts .alert').fadeOut(500, function(){
-            $('div.alerts').html('');
-        });
+        $('div.alerts').removeClass('slide-down');
     }, 3000);
 }
 
