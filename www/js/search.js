@@ -394,7 +394,6 @@ $(function() {
         $results_address.html('Showing Results Near ' + display_name);
 
         $search_help.hide();
-        $search_help_us.show();
 
         $results_loading.show();
         navigate(false);
@@ -405,6 +404,7 @@ $(function() {
     $search_form.submit(function() {
         if ($search_address.val() !== '') {
             $search_help.hide();
+            $search_help_us.show();
             $search_results_ul.empty();
             $search_results_map_wrapper.hide();
             $results_address.hide();
