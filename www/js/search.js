@@ -451,6 +451,7 @@ $(function() {
                             $did_you_mean.empty();
 
                             _.each(data, function(locale) {
+                                locale['display_name'] = locale['display_name'].replace(', United States of America', '');
                                 var context = $.extend(APP_CONFIG, locale);
                                 var html = JST.did_you_mean_item(context);
 
@@ -490,7 +491,7 @@ $(function() {
             detectRetina: true,
             retinaVersion: 'npr.map-u1zkdj0e'
         });
-        
+
         tiles.addTo(desktop_map);
 
         desktop_markers = L.layerGroup();
