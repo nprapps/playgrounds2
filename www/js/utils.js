@@ -1,3 +1,16 @@
+function coordinatesApproxEqual(ll1, ll2, accuracy) {
+    /*
+     * Check if coordinates are the same within a tenth of a degree
+     *  in both dimensions. (or some other accuracy)
+     */
+    if (_.isUndefined(accuracy)) {
+        accuracy = 10;
+    }
+
+    return (Math.round(ll1.lat * accuracy) / accuracy == Math.round(ll2.lat * accuracy) / accuracy &&
+        Math.round(ll1.lng * accuracy) / accuracy == Math.round(ll2.lng * accuracy) / accuracy);
+}
+
 function degToRad(degree) {
     /*
      * Convert degrees to radians.

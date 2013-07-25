@@ -44,6 +44,8 @@ var zoom = RESULTS_DEFAULT_ZOOM;
 var crs = null;
 var desktop_map = null;
 var desktop_markers = null;
+var search_xhr = null;
+var geocode_xhr = null;
 
 function degToCloudSearch(degree) {
     /*
@@ -133,9 +135,16 @@ function search() {
         $search_results_map.css('opacity', '0.25');
     }
 
-    $.ajax({
+    if (search_xhr != null) {
+        search_xhr.abort();
+    }
+
+    search_xhr = $.ajax({
         url: APP_CONFIG.CLOUD_SEARCH_PROXY_BASE_URL + '/cloudsearch/2011-02-01/search?' + $.param(buildCloudSearchParams()),
         dataType: 'jsonp',
+        complete: function() {
+            search_xhr = null;
+        },
         success: function(data) {
             $results_loading.hide();
 
@@ -156,7 +165,7 @@ function search() {
                         if (IS_MOBILE) {
                             markers.push(buildMapboxPin('m', context['letter'], 'ff6633', lat, lng));
                         } else {
-                            markers.push(L.mapbox.marker.style({
+                            var marker = L.mapbox.marker.style({
                                 'type': 'Feature',
                                 'geometry': {},
                                 'properties': {
@@ -164,7 +173,17 @@ function search() {
                                     'marker-symbol': context['letter'],
                                     'marker-color': '#ff6633'
                                 }
-                            }, [lat, lng]));
+                            }, [lat, lng]);
+
+                            marker.letter = context['letter'];
+
+                            marker.on('click', function() {
+                                $('.playground-list li').removeClass('highlight'); 
+                                $('#playground-' + this.letter).addClass('highlight');
+                                $.smoothScroll({ scrollTarget: '#playground-' + this.letter });
+                            });
+
+                            markers.push(marker);
                         }
                     }
                 });
@@ -402,77 +421,87 @@ $(function() {
     });
 
     $search_form.submit(function() {
-        if ($search_address.val() !== '') {
-            $search_help.hide();
-            $search_help_us.show();
-            $search_results_ul.empty();
-            $search_results_map_wrapper.hide();
-            $results_address.hide();
-            $no_geocode.hide();
+        if ($search_address.val() == '') {
+            return false;
+        }
 
-            reset_zoom();
+        $search_help.hide();
+        $search_help_us.show();
+        $search_results_ul.empty();
+        $search_results_map_wrapper.hide();
+        $results_address.hide();
+        $no_geocode.hide();
 
-            var address = $search_address.val();
+        reset_zoom();
 
-            if (address) {
-                $results_loading.show();
+        var address = $search_address.val();
 
-                $.ajax({
-                    'url': 'http://open.mapquestapi.com/nominatim/v1/search.php?format=json&json_callback=playgroundCallback&q=' + address,
-                    'type': 'GET',
-                    'dataType': 'jsonp',
-                    'cache': true,
-                    'jsonp': false,
-                    'jsonpCallback': 'playgroundCallback',
-                    'contentType': 'application/json',
-                    'success': function(data) {
-                        // US addresses only, plzkthxbai.
-                        data = _.filter(data, function(locale) {
-                            return locale['display_name'].indexOf("United States of America") > 0;
-                        });
-                        $results_loading.hide();
+        if (address) {
+            $results_loading.show();
 
-                        if (data.length === 0) {
-                            // If there are no results, show a nice message.
-                            $did_you_mean.append('<li>No results</li>');
-                            $no_geocode.show();
-                        } else if (data.length == 1) {
-                            // If there's one result, render it.
-                            var locale = data[0];
-
-                            var display_name = locale['display_name'].replace(', United States of America', '');
-                            $search_latitude.val(locale['lat']);
-                            $search_longitude.val(locale['lon']);
-                            $search_address.val(display_name);
-
-                            $results_address.html('Showing Results Near ' + display_name);
-
-                            $results_loading.show();
-                            navigate(false);
-                        } else {
-                            // If there are many results,
-                            // show the did-you-mean path.
-                            $did_you_mean.empty();
-
-                            _.each(data, function(locale) {
-                                var context = $.extend(APP_CONFIG, locale);
-                                var html = JST.did_you_mean_item(context);
-
-                                $did_you_mean.append(html);
-
-                            });
-
-                            $search_help.show();
-                            $search_help_us.hide();
-                        }
-                    }
-                });
-            } else {
-                $search_latitude.val('');
-                $search_longitude.val('');
-                $results_loading.show();
-                navigate();
+            if (geocode_xhr) {
+                geocode_xhr.cancel();
             }
+
+            geocode_xhr = $.ajax({
+                'url': 'http://open.mapquestapi.com/nominatim/v1/search.php?format=json&json_callback=playgroundCallback&q=' + address,
+                'type': 'GET',
+                'dataType': 'jsonp',
+                'cache': true,
+                'jsonp': false,
+                'jsonpCallback': 'playgroundCallback',
+                'contentType': 'application/json',
+                'complete': function() {
+                    geocode_xhr = null;
+                },
+                'success': function(data) {
+                    // US addresses only, plzkthxbai.
+                    data = _.filter(data, function(locale) {
+                        return locale['display_name'].indexOf("United States of America") > 0;
+                    });
+                    $results_loading.hide();
+
+                    if (data.length === 0) {
+                        // If there are no results, show a nice message.
+                        $did_you_mean.append('<li>No results</li>');
+                        $no_geocode.show();
+                    } else if (data.length == 1) {
+                        // If there's one result, render it.
+                        var locale = data[0];
+
+                        var display_name = locale['display_name'].replace(', United States of America', '');
+                        $search_latitude.val(locale['lat']);
+                        $search_longitude.val(locale['lon']);
+                        $search_address.val(display_name);
+
+                        $results_address.html('Showing Results Near ' + display_name);
+
+                        $results_loading.show();
+                        navigate(false);
+                    } else {
+                        // If there are many results,
+                        // show the did-you-mean path.
+                        $did_you_mean.empty();
+
+                        _.each(data, function(locale) {
+                            locale['display_name'] = locale['display_name'].replace(', United States of America', '');
+                            var context = $.extend(APP_CONFIG, locale);
+                            var html = JST.did_you_mean_item(context);
+
+                            $did_you_mean.append(html);
+
+                        });
+
+                        $search_help.show();
+                        $search_help_us.hide();
+                    }
+                }
+            });
+        } else {
+            $search_latitude.val('');
+            $search_longitude.val('');
+            $results_loading.show();
+            navigate();
         }
 
         return false;
@@ -490,11 +519,23 @@ $(function() {
             zoomControl: false
         });
 
+        desktop_map.on('moveend', function() {
+            var latlng = desktop_map.getCenter();
+            var current = new L.LatLng($search_latitude.val(), $search_longitude.val());
+
+            if (!coordinatesApproxEqual(latlng, current, 100)) {
+                $search_latitude.val(latlng.lat);
+                $search_longitude.val(latlng.lng);
+                
+                navigate();
+            }
+        });
+
         var tiles = L.mapbox.tileLayer('npr.map-s5q5dags', {
             detectRetina: true,
             retinaVersion: 'npr.map-u1zkdj0e'
         });
-        
+
         tiles.addTo(desktop_map);
 
         desktop_markers = L.layerGroup();
