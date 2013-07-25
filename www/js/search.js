@@ -225,6 +225,10 @@ function search() {
 
             $search_results.show();
             $search_help_us.show();
+        
+            if (!IS_MOBILE) {
+                desktop_map.invalidateSize();
+            }
 
             $.smoothScroll({ scrollTarget: '#results-address' });
         },
