@@ -440,7 +440,7 @@ $(function() {
                     'contentType': 'application/json',
                     'complete': function() {
                         geocode_xhr = null;
-                    }
+                    },
                     'success': function(data) {
                         // US addresses only, plzkthxbai.
                         data = _.filter(data, function(locale) {
