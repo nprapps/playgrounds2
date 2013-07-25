@@ -411,85 +411,87 @@ $(function() {
     });
 
     $search_form.submit(function() {
-        if ($search_address.val() !== '') {
-            $search_help.hide();
-            $search_help_us.show();
-            $search_results_ul.empty();
-            $search_results_map_wrapper.hide();
-            $results_address.hide();
-            $no_geocode.hide();
+        if ($search_address.val() == '') {
+            return false;
+        }
 
-            reset_zoom();
+        $search_help.hide();
+        $search_help_us.show();
+        $search_results_ul.empty();
+        $search_results_map_wrapper.hide();
+        $results_address.hide();
+        $no_geocode.hide();
 
-            var address = $search_address.val();
+        reset_zoom();
 
-            if (address) {
-                $results_loading.show();
+        var address = $search_address.val();
 
-                if (geocode_xhr) {
-                    geocode_xhr.cancel();
-                }
+        if (address) {
+            $results_loading.show();
 
-                geocode_xhr = $.ajax({
-                    'url': 'http://open.mapquestapi.com/nominatim/v1/search.php?format=json&json_callback=playgroundCallback&q=' + address,
-                    'type': 'GET',
-                    'dataType': 'jsonp',
-                    'cache': true,
-                    'jsonp': false,
-                    'jsonpCallback': 'playgroundCallback',
-                    'contentType': 'application/json',
-                    'complete': function() {
-                        geocode_xhr = null;
-                    },
-                    'success': function(data) {
-                        // US addresses only, plzkthxbai.
-                        data = _.filter(data, function(locale) {
-                            return locale['display_name'].indexOf("United States of America") > 0;
-                        });
-                        $results_loading.hide();
-
-                        if (data.length === 0) {
-                            // If there are no results, show a nice message.
-                            $did_you_mean.append('<li>No results</li>');
-                            $no_geocode.show();
-                        } else if (data.length == 1) {
-                            // If there's one result, render it.
-                            var locale = data[0];
-
-                            var display_name = locale['display_name'].replace(', United States of America', '');
-                            $search_latitude.val(locale['lat']);
-                            $search_longitude.val(locale['lon']);
-                            $search_address.val(display_name);
-
-                            $results_address.html('Showing Results Near ' + display_name);
-
-                            $results_loading.show();
-                            navigate(false);
-                        } else {
-                            // If there are many results,
-                            // show the did-you-mean path.
-                            $did_you_mean.empty();
-
-                            _.each(data, function(locale) {
-                                locale['display_name'] = locale['display_name'].replace(', United States of America', '');
-                                var context = $.extend(APP_CONFIG, locale);
-                                var html = JST.did_you_mean_item(context);
-
-                                $did_you_mean.append(html);
-
-                            });
-
-                            $search_help.show();
-                            $search_help_us.hide();
-                        }
-                    }
-                });
-            } else {
-                $search_latitude.val('');
-                $search_longitude.val('');
-                $results_loading.show();
-                navigate();
+            if (geocode_xhr) {
+                geocode_xhr.cancel();
             }
+
+            geocode_xhr = $.ajax({
+                'url': 'http://open.mapquestapi.com/nominatim/v1/search.php?format=json&json_callback=playgroundCallback&q=' + address,
+                'type': 'GET',
+                'dataType': 'jsonp',
+                'cache': true,
+                'jsonp': false,
+                'jsonpCallback': 'playgroundCallback',
+                'contentType': 'application/json',
+                'complete': function() {
+                    geocode_xhr = null;
+                },
+                'success': function(data) {
+                    // US addresses only, plzkthxbai.
+                    data = _.filter(data, function(locale) {
+                        return locale['display_name'].indexOf("United States of America") > 0;
+                    });
+                    $results_loading.hide();
+
+                    if (data.length === 0) {
+                        // If there are no results, show a nice message.
+                        $did_you_mean.append('<li>No results</li>');
+                        $no_geocode.show();
+                    } else if (data.length == 1) {
+                        // If there's one result, render it.
+                        var locale = data[0];
+
+                        var display_name = locale['display_name'].replace(', United States of America', '');
+                        $search_latitude.val(locale['lat']);
+                        $search_longitude.val(locale['lon']);
+                        $search_address.val(display_name);
+
+                        $results_address.html('Showing Results Near ' + display_name);
+
+                        $results_loading.show();
+                        navigate(false);
+                    } else {
+                        // If there are many results,
+                        // show the did-you-mean path.
+                        $did_you_mean.empty();
+
+                        _.each(data, function(locale) {
+                            locale['display_name'] = locale['display_name'].replace(', United States of America', '');
+                            var context = $.extend(APP_CONFIG, locale);
+                            var html = JST.did_you_mean_item(context);
+
+                            $did_you_mean.append(html);
+
+                        });
+
+                        $search_help.show();
+                        $search_help_us.hide();
+                    }
+                }
+            });
+        } else {
+            $search_latitude.val('');
+            $search_longitude.val('');
+            $results_loading.show();
+            navigate();
         }
 
         return false;
@@ -509,11 +511,14 @@ $(function() {
 
         desktop_map.on('moveend', function() {
             var latlng = desktop_map.getCenter();
+            var current = new L.LatLng($search_latitude.val(), $search_longitude.val());
 
-            $search_latitude.val(latlng.lat);
-            $search_longitude.val(latlng.lng);
-            
-            navigate();
+            if (!coordinatesApproxEqual(latlng, current, 100)) {
+                $search_latitude.val(latlng.lat);
+                $search_longitude.val(latlng.lng);
+                
+                navigate();
+            }
         });
 
         var tiles = L.mapbox.tileLayer('npr.map-s5q5dags', {
