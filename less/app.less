@@ -341,6 +341,24 @@ section#the-goods { margin-top: 44px; }
 
 // Shared styles for creating or editing a playground
 .playground-form {
+
+    .alerts {
+        position: absolute;
+        z-index: 10000;
+        top: 0;
+        left: 0;        
+        .transition(all 0.5s ease-in-out);
+        .translate3d(0,-100%,0) ;
+
+        &.slide-down {
+            .translate3d(0,0,0);
+        }
+
+        .alert {
+            color: @errorText;
+        }
+    }
+
     h5 {
         margin-bottom: @baseLineHeight/2;
     }
