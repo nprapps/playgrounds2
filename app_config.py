@@ -54,7 +54,7 @@ SERVER_BASE_URL = 'http://127.0.0.1:8001/%s' % PROJECT_SLUG
 """
 COPY EDITING
 """
-COPY_GOOGLE_DOC_KEY = '0Antez86oOXPndGhEdGV6Qm9oMTQ0MFdVZTFnazRYaEE'
+COPY_GOOGLE_DOC_KEY = '0AlXMOHKxzQVRdHR4bkdreFVEQWdCUjZpZEw0cVRCM1E'
 COPY_URL = 'https://docs.google.com/spreadsheet/pub?key=%s&output=xls' % COPY_GOOGLE_DOC_KEY
 
 """
@@ -91,7 +91,7 @@ DISQUS_SHORTNAME = 'npr-playgrounds2'
 """
 Application specific
 """
-DATA_GOOGLE_DOC_KEY = '0Antez86oOXPndGhEdGV6Qm9oMTQ0MFdVZTFnazRYaEE'
+DATA_GOOGLE_DOC_KEY = '0AlXMOHKxzQVRdGxsTklpUnBHV3NSRHFZaDVFWnQ5VVE'
 DATA_URL = 'https://docs.google.com/spreadsheet/pub?key=%s&single=true&gid=0&output=csv' % DATA_GOOGLE_DOC_KEY
 
 MAPBOX_BASE_LAYER = 'npr.map-s5q5dags'
