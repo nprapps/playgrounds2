@@ -394,7 +394,6 @@ $(function() {
         $results_address.html('Showing Results Near ' + display_name);
 
         $search_help.hide();
-        $search_help_us.show();
 
         $results_loading.show();
         navigate(false);
@@ -405,6 +404,7 @@ $(function() {
     $search_form.submit(function() {
         if ($search_address.val() !== '') {
             $search_help.hide();
+            $search_help_us.show();
             $search_results_ul.empty();
             $search_results_map_wrapper.hide();
             $results_address.hide();
@@ -455,6 +455,7 @@ $(function() {
                             $did_you_mean.empty();
 
                             _.each(data, function(locale) {
+                                locale['display_name'] = locale['display_name'].replace(', United States of America', '');
                                 var context = $.extend(APP_CONFIG, locale);
                                 var html = JST.did_you_mean_item(context);
 
@@ -503,7 +504,7 @@ $(function() {
             detectRetina: true,
             retinaVersion: 'npr.map-u1zkdj0e'
         });
-        
+
         tiles.addTo(desktop_map);
 
         desktop_markers = L.layerGroup();
