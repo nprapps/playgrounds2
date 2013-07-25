@@ -165,7 +165,7 @@ function search() {
                         if (IS_MOBILE) {
                             markers.push(buildMapboxPin('m', context['letter'], 'ff6633', lat, lng));
                         } else {
-                            markers.push(L.mapbox.marker.style({
+                            var marker = L.mapbox.marker.style({
                                 'type': 'Feature',
                                 'geometry': {},
                                 'properties': {
@@ -173,7 +173,17 @@ function search() {
                                     'marker-symbol': context['letter'],
                                     'marker-color': '#ff6633'
                                 }
-                            }, [lat, lng]));
+                            }, [lat, lng]);
+
+                            marker.letter = context['letter'];
+
+                            marker.on('click', function() {
+                                $('.playground-list li').removeClass('highlight'); 
+                                $('#playground-' + this.letter).addClass('highlight');
+                                $.smoothScroll({ scrollTarget: '#playground-' + this.letter });
+                            });
+
+                            markers.push(marker);
                         }
                     }
                 });
