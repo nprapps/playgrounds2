@@ -202,7 +202,6 @@ $(function() {
                 'contentType': 'application/json',
                 'timeout': 5000,
                 'error': function(a, b, c) {
-                    console.log(b);
                     if (b == 'timeout'){
                         alert_text = "<h3>We're sorry!</h3>We're having a hard time finding this place.";
                         make_alert(alert_text, 'warning');
