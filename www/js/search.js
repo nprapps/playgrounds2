@@ -436,7 +436,6 @@ $(function() {
         }
 
         $search_help.hide();
-        $search_help_us.show();
         $search_results_ul.empty();
         $search_results_map_wrapper.hide();
         $results_address.hide();
@@ -474,6 +473,7 @@ $(function() {
                     if (data.length === 0) {
                         // If there are no results, show a nice message.
                         $did_you_mean.append('<li>No results</li>');
+                        $search_help_us.hide();
                         $no_geocode.show();
                     } else if (data.length == 1) {
                         // If there's one result, render it.
@@ -487,6 +487,7 @@ $(function() {
                         $results_address.html('Showing Results Near ' + display_name);
 
                         $results_loading.show();
+                        $search_help_us.show();
                         navigate(false);
                     } else {
                         // If there are many results,
@@ -526,7 +527,8 @@ $(function() {
         $search_results_map_desktop.css({ height: '500px' });
 
         desktop_map = L.mapbox.map('search-results-map-desktop', null, {
-            zoomControl: false
+            zoomControl: false,
+            scrollWheelZoom: false
         });
 
         desktop_map.on('moveend', function() {
@@ -543,7 +545,7 @@ $(function() {
 
         var tiles = L.mapbox.tileLayer('npr.map-s5q5dags', {
             detectRetina: true,
-            retinaVersion: 'npr.map-u1zkdj0e'
+            retinaVersion: 'npr.map-u1zkdj0e',
         });
 
         tiles.addTo(desktop_map);
