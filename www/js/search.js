@@ -431,44 +431,6 @@ $(function() {
     });
 
     $search_form.submit(function() {
-<<<<<<< HEAD
-        if ($search_address.val() !== '') {
-            $search_help.hide();
-            $search_help_us.show();
-            $search_results_ul.empty();
-            $search_results_map_wrapper.hide();
-            $results_address.hide();
-            $no_geocode.hide();
-
-            reset_zoom();
-
-            var address = $search_address.val();
-
-            if (address) {
-                $results_loading.show();
-
-                $.ajax({
-                    'url': 'http://open.mapquestapi.com/nominatim/v1/search.php?format=json&json_callback=playgroundCallback&q=' + address,
-                    'type': 'GET',
-                    'dataType': 'jsonp',
-                    'cache': true,
-                    'jsonp': false,
-                    'jsonpCallback': 'playgroundCallback',
-                    'contentType': 'application/json',
-                    'timeout': 5000,
-                    'error': function(a, b, c) {
-                        if (b == 'timeout'){
-                            $results_loading.hide();
-                            $no_geocode.show();
-                        }
-                    },
-                    'success': function(data) {
-                        // US addresses only, plzkthxbai.
-                        data = _.filter(data, function(locale) {
-                            return locale['display_name'].indexOf("United States of America") > 0;
-                        });
-                        $results_loading.hide();
-
         if ($search_address.val() === '') {
             return false;
         }
