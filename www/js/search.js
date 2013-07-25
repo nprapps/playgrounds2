@@ -490,6 +490,15 @@ $(function() {
             zoomControl: false
         });
 
+        desktop_map.on('moveend', function() {
+            var latlng = desktop_map.getCenter();
+
+            $search_latitude.val(latlng.lat);
+            $search_longitude.val(latlng.lng);
+            
+            navigate();
+        });
+
         var tiles = L.mapbox.tileLayer('npr.map-s5q5dags', {
             detectRetina: true,
             retinaVersion: 'npr.map-u1zkdj0e'
