@@ -44,6 +44,8 @@ var zoom = RESULTS_DEFAULT_ZOOM;
 var crs = null;
 var desktop_map = null;
 var desktop_markers = null;
+var search_xhr = null;
+var geocode_xhr = null;
 
 function degToCloudSearch(degree) {
     /*
@@ -133,9 +135,16 @@ function search() {
         $search_results_map.css('opacity', '0.25');
     }
 
-    $.ajax({
+    if (search_xhr != null) {
+        search_xhr.abort();
+    }
+
+    search_xhr = $.ajax({
         url: APP_CONFIG.CLOUD_SEARCH_PROXY_BASE_URL + '/cloudsearch/2011-02-01/search?' + $.param(buildCloudSearchParams()),
         dataType: 'jsonp',
+        complete: function() {
+            search_xhr = null;
+        },
         success: function(data) {
             $results_loading.hide();
 
@@ -417,7 +426,11 @@ $(function() {
             if (address) {
                 $results_loading.show();
 
-                $.ajax({
+                if (geocode_xhr) {
+                    geocode_xhr.cancel();
+                }
+
+                geocode_xhr = $.ajax({
                     'url': 'http://open.mapquestapi.com/nominatim/v1/search.php?format=json&json_callback=playgroundCallback&q=' + address,
                     'type': 'GET',
                     'dataType': 'jsonp',
@@ -425,6 +438,9 @@ $(function() {
                     'jsonp': false,
                     'jsonpCallback': 'playgroundCallback',
                     'contentType': 'application/json',
+                    'complete': function() {
+                        geocode_xhr = null;
+                    }
                     'success': function(data) {
                         // US addresses only, plzkthxbai.
                         data = _.filter(data, function(locale) {
