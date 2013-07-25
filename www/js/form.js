@@ -200,6 +200,14 @@ $(function() {
                 'url': 'http://open.mapquestapi.com/geocoding/v1/?inFormat=json&json='+ geocode_object,
                 'dataType': 'jsonp',
                 'contentType': 'application/json',
+                'timeout': 5000,
+                'error': function(a, b, c) {
+                    console.log(b);
+                    if (b == 'timeout'){
+                        alert_text = "<h3>We're sorry!</h3>We're having a hard time finding this place.";
+                        make_alert(alert_text, 'warning');
+                    }
+                },
                 'success': function(data) {
                     var locales = data['results'][0]['locations'];
                     var locale;
@@ -217,6 +225,13 @@ $(function() {
                 'data': { 'location': latitude + ',' + longitude },
                 'dataType': 'jsonp',
                 'contentType': 'application/json',
+                'timeout': 5000,
+                'error': function(a, b, c) {
+                    if (b == 'timeout'){
+                        alert_text = "<h3>We're sorry!</h3>We're having a hard time finding this place.";
+                        make_alert(alert_text, 'warning');
+                    }
+                },
                 'success': function(data) {
                     var locales = data['results'][0]['locations'];
                     var locale = locales[0];
