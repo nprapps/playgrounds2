@@ -14,7 +14,7 @@ import os
 NAMES
 """
 # Project name used for display
-PROJECT_NAME = 'Accessible Playgrounds'
+PROJECT_NAME = 'Play For All'
 
 # Project name used for paths on the filesystem and in urls
 # Use dashes, not underscores
@@ -91,7 +91,7 @@ DISQUS_SHORTNAME = 'npr-playgrounds2'
 """
 Application specific
 """
-DATA_GOOGLE_DOC_KEY = '0AlXMOHKxzQVRdGxsTklpUnBHV3NSRHFZaDVFWnQ5VVE'
+DATA_GOOGLE_DOC_KEY = '0Antez86oOXPndGhEdGV6Qm9oMTQ0MFdVZTFnazRYaEE'
 DATA_URL = 'https://docs.google.com/spreadsheet/pub?key=%s&single=true&gid=0&output=csv' % DATA_GOOGLE_DOC_KEY
 
 MAPBOX_BASE_LAYER = 'npr.map-s5q5dags'
