@@ -8,7 +8,6 @@ from geopy import geocoders
 g = geocoders.GoogleV3()
 
 error = 0
-none_error = 0
 coded = 0
 written = 0
 
@@ -32,13 +31,14 @@ with open('data/playgrounds.csv', 'r+b') as readfile:
             )
 
             for row in read_csv:
-                if row[21] == 'TRUE':
+                if row[6] == 'NY':
                     continue
                 try:
                     place, (lat, lng) = g.geocode(hard_address)
                 except:
                     row.append('TRUE')
                     write_csv.writerow(dict(zip(row0,row)))
+                    error += 1
                     continue
 
                 playground.latitude = lat
@@ -55,3 +55,4 @@ with open('data/playgrounds.csv', 'r+b') as readfile:
 
 print "coded: " + str(coded)
 print "written: " + str(written)
+print "errors: " + str(error)
