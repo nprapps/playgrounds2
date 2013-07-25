@@ -225,7 +225,7 @@ function search() {
 
             $search_results.show();
             $search_help_us.show();
-        
+
             if (!IS_MOBILE) {
                 desktop_map.invalidateSize();
             }
@@ -425,6 +425,13 @@ $(function() {
                     'jsonp': false,
                     'jsonpCallback': 'playgroundCallback',
                     'contentType': 'application/json',
+                    'timeout': 5000,
+                    'error': function(a, b, c) {
+                        if (b == 'timeout'){
+                            $results_loading.hide();
+                            $no_geocode.show();
+                        }
+                    },
                     'success': function(data) {
                         // US addresses only, plzkthxbai.
                         data = _.filter(data, function(locale) {
