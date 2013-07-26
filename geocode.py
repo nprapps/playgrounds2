@@ -20,7 +20,7 @@ with open('data/playgrounds.csv', 'r+b') as readfile:
         write_csv = csv.DictWriter(writefile, fieldnames=row0, delimiter=',')
         write_csv.writeheader()
 
-        for playground in Playground.select():
+        for playground in Playground.select().where(playground.latitude >> None):
             time.sleep(0.25)
 
             hard_address = '%s %s, %s %s' % (
@@ -29,6 +29,8 @@ with open('data/playgrounds.csv', 'r+b') as readfile:
                 playground.state, 
                 playground.zip_code
             )
+
+            print(hard_address)
 
             for row in read_csv:
                 if row[6] == 'NY':

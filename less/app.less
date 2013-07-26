@@ -258,7 +258,8 @@ section#the-goods { margin-top: 44px; }
 .playground #main-content .help-prompt p.prompt { font-size: 13px; }
 
 
-.playground-list {
+.playground-list,
+.playground #main-content & {
     list-style-type: none;
     margin: 0 0 22px 0;
     padding: 0;
@@ -277,13 +278,16 @@ section#the-goods { margin-top: 44px; }
             background: none;
             color: #121212;
         }
-
         &.highlight {
             background-color: #FBF1CD; 
 
             .result-text a {
                 font-weight: bold;
             }
+        }
+        .nearby & {
+            background: none;
+            border-bottom: 2px solid #eee;
         }
     }
     .result-letter,
@@ -341,6 +345,24 @@ section#the-goods { margin-top: 44px; }
 
 // Shared styles for creating or editing a playground
 .playground-form {
+
+    .alerts {
+        position: absolute;
+        z-index: 10000;
+        top: 0;
+        left: 0;        
+        .transition(all 0.5s ease-in-out);
+        .translate3d(0,-100%,0) ;
+
+        &.slide-down {
+            .translate3d(0,0,0);
+        }
+
+        .alert {
+            color: @errorText;
+        }
+    }
+
     h5 {
         margin-bottom: @baseLineHeight/2;
     }
@@ -971,13 +993,12 @@ section#the-goods { margin-top: 44px; }
 
     h1 {
         margin: 0 0 11px 0;
-        display: inline-block;
     }
     h6.divider {
         display: none;
         width: 10%;
         text-align: center;
-        float: left;
+        float: right;
         line-height: 44px;
         margin: 0;
     }
@@ -986,9 +1007,9 @@ section#the-goods { margin-top: 44px; }
 
         &.example {
             font-size: 13px;
-            margin-left: 11px;
+            line-height: 1.2;
             color: #777;
-            display: inline-block;
+            clear: both;
         }
     }
     label {
@@ -1002,7 +1023,7 @@ section#the-goods { margin-top: 44px; }
         display: none;
         font-size: 14px;
         width: 45%;
-        float: left;
+        float: right;
 
         i {
             font-size: 140%;
@@ -1215,15 +1236,6 @@ footer {
         margin-left: -20px; margin-right: -20px;
         padding-left: 20px; padding-right: 20px;
 
-        h1 {
-            display: block;
-            margin-bottom: 6px;
-        }
-        p.example {
-            display: block;
-            margin-left: 0;
-            margin-bottom: 11px;
-        }
         #address-search {
             .address-search-input { width: 65%; }
             #search-btn { width: 25%; }
@@ -1279,10 +1291,13 @@ footer {
         }
         #geolocate {
             width: 100%;
+            float: none;
             display: block;
             margin-bottom: 11px;
         }
         h6.divider {
+            clear: left;
+            float: left;
             width: 10%;
             text-align: left;
         }
