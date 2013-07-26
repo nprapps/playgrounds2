@@ -1,5 +1,7 @@
+var playground = {};
+
 $(function() {
-    var playground = {
+    playground = {
         'ACTION': get_parameter_by_name('action'),
         'BASE_LAYER': APP_CONFIG.MAPBOX_BASE_LAYER,
         'CONTENT_WIDTH': 0,
@@ -19,6 +21,11 @@ $(function() {
             'meta_items': $('#main-content').find('.about').find('ul.meta'),
             'meta_hdr': $('#main-content').find('.about').find('h5.meta')
         },
+        'inputs': {
+            'text_input': $('#form input[type="text"], #form select'),
+            'checkbox': $('#form input[type="checkbox"]')
+        },
+        'initial_field_values': {},
         'callbacks': {
             'geocode': function(locale) {
                 if (locale){
@@ -52,6 +59,7 @@ $(function() {
                 playground.fields.longitude.val(locale['latLng']['lng']);
 
                 require_us_address(locale);
+                playground.form.geocode_fields();
             }
         },
         'form': {
@@ -139,6 +147,14 @@ $(function() {
                 var marker_top = $('#edit-map').height()/2 - 8;
                 $('#loading-spinner').hide();
                 $('#edit-marker').css({'left': marker_left, 'top': marker_top}).show();
+            },
+            'reset_editor': function() {
+                if (playground.fields.latitude.val() !== '' && playground.fields.latitude.val() !== 'None') {
+                    map.setView([
+                            playground.fields.latitude.val(),
+                            playground.fields.longitude.val()],
+                        playground.LOCATOR_DEFAULT_ZOOM);
+                }
             },
             'resize_locator': function() {
                 // Set the width.
@@ -255,8 +271,39 @@ $(function() {
             }
             $('#toggle-address-button').toggleClass('btn-success').text($('#toggle-address-button').text() === 'Edit' ? 'Cancel' : 'Edit');
         },
+        'reset_form': function() {
+            $('#edit-playground').modal('hide'); 
+            $.each(this.inputs.text_input, function(){
+                $this = $(this);
+                $this.val($this.data('original')).attr('data-changed', 'false');
+            });
+            $.each(this.inputs.checkbox, function(){
+                $this = $(this);
+                $this.prop('checked', $this.data('original')).attr('data-changed', 'false');
+            });
+            this.map.resize_locator();
+            this.map.reset_editor();
+        },
+        'reset_location': function(){
+            this.toggle_address_button(true);
+            var field_list = [
+                'address',
+                'city',
+                'zip_code',
+                'latitude',
+                'longitude',
+                'reverse_geocoded',
+                'state'
+            ];
+            $.each(field_list, function(index, field_name){
+                var field = $('input[name="' + field_name + '"], select[name="' + field_name + '"]');
+                field.val(field.data('original')).attr('data-changed', 'false');
+            });
+            this.map.resize_locator();
+            this.map.reset_editor();
+        },
         'submit': function() {
-            if ( playground.fields.reverse_geocode.attr('checked') !== 'checked' ) {
+            if ( playground.fields.reverse_geocoded.attr('checked') !== 'checked' ) {
                 playground.geocode(playground.form.prepare_geocode_object(), playground.callbacks.geocode);
             } else {
                 playground.form.geocode_fields();
@@ -281,6 +328,17 @@ $(function() {
             // Loop and add a playgrounds.field attribute for each of these fields.
             $.each(field_list, function(index, field_name){
                 playground.fields[field_name] = $('input[name="' + field_name + '"]');
+            });
+
+            // Store original values as data attribute
+            $.each(playground.inputs.text_input, function(){
+                var $this = $(this);
+                $this.attr('data-original', $this.val());
+            });
+
+            $.each(playground.inputs.checkbox, function(){
+                var $this = $(this);
+                $this.attr('data-original', $this.is(':checked'));
             });
 
             // Except for states because they're selectable.
@@ -332,11 +390,6 @@ $(function() {
 
                 // Remove a validation flag, if it exists.
                 $(this).removeClass('flagged');
-            });
-
-            // Allow address editor to be dismissed
-            $('#form .edit-address-hed .close').on('click', function(){
-                playground.toggle_address_button(true);
             });
 
             // Check to see if we've got a message to show.
