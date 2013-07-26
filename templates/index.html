@@ -20,9 +20,9 @@
                     <h2>{{ COPY.content.app_description }}</h2>
                     
                     <p class="sublinks">
-                        <a href="{{ COPY.content.data_link }}">{{ COPY.content.data_link_text }}</a> |
-                        <a href="{{ COPY.content.data_about_link }}">{{ COPY.content.data_about_link_text }}</a> |
-                        <a href="{{ COPY.content.series_link }}">{{ COPY.content.series_link_text }}</a>
+                        <a href="{{ COPY.content.header_series_link }}">{{ COPY.content.header_series_link_text }}</a> |
+                        <a href="{{ COPY.content.header_help_link }}">{{ COPY.content.header_help_link_text }}</a> |
+                        <a href="{{ COPY.content.header_about_link }}">{{ COPY.content.header_about_link_text }}</a>
                     </p>
                     
                     <div class="mobile-prompt">
@@ -63,11 +63,21 @@
 <div id="playground-help">
     <h3 id="help-title">{{ COPY.content.help_title }}</h3>
     <p id="help-description">{{ COPY.content.help_description }}</p>
+    
+    <a href="{{ COPY.content.help_search_link }}" class="btn btn-blue">{{ COPY.content.help_search_link_text }}</a>
+</div>
+
+
+<div id="playground-data" class="help-prompt">
+    <h3 id="about-title">{{ COPY.content.data_title }}</h3>
+    <p id="about-description">{{ COPY.content.data_description }}</p>
+    
+    <a href="{{ COPY.content.data_link_csv }}" class="btn btn-blue">{{ COPY.content.data_link_csv_text }}</a>
+    <a href="{{ COPY.content.data_link_json }}" class="btn btn-blue">{{ COPY.content.data_link_json_text }}</a>
 </div>
 
 
 <div id="playground-meta">
-    <p class="about">{{ COPY.attribution.data_source }}</p>
     <p class="credits">{{ COPY.attribution.byline }}</p>
 </div>
 
