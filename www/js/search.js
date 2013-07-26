@@ -36,6 +36,7 @@ var $search_help_us = null;
 var $did_you_mean = null;
 var $results_address = null;
 var $no_geocode = null;
+var $map_loading = null;
 var $results_loading = null;
 var $playground_meta_hdr = null;
 var $playground_meta_items = null;
@@ -133,6 +134,8 @@ function search() {
     if (IS_MOBILE) {
         $search_results_map_loading.show();
         $search_results_map.css('opacity', '0.25');
+    } else {
+        desktop_map.removeLayer(desktop_markers);
     }
 
     if (search_xhr != null) {
@@ -146,6 +149,7 @@ function search() {
             search_xhr = null;
         },
         success: function(data) {
+            $map_loading.hide();
             $results_loading.hide();
 
             var markers = [];
@@ -248,6 +252,8 @@ function search() {
                     _.each(markers, function(marker) {
                         desktop_markers.addLayer(marker);
                     });
+                    
+                    desktop_map.addLayer(desktop_markers);
                 }
 
                 $search_results_map_wrapper.show();
@@ -351,6 +357,7 @@ $(function() {
     $search_help_us = $('#search-help-prompt');
     $results_address = $('#results-address');
     $no_geocode = $('#no-geocode');
+    $map_loading = $('#map-loading');
     $results_loading = $('#results-loading');
     $playground_meta_hdr = $('#main-content').find('.about').find('h5.meta');
     $playground_meta_items = $('#main-content').find('.about').find('ul.meta');
@@ -426,7 +433,7 @@ $(function() {
 
         $search_help.hide();
 
-        $results_loading.show();
+        $map_loading.show();
         navigate(false);
 
         return false;
@@ -448,7 +455,7 @@ $(function() {
         var address = $search_address.val();
 
         if (address) {
-            $results_loading.show();
+            $map_loading.show();
 
             if (geocode_xhr) {
                 geocode_xhr.cancel();
@@ -470,7 +477,7 @@ $(function() {
                     data = _.filter(data, function(locale) {
                         return locale['display_name'].indexOf("United States of America") > 0;
                     });
-                    $results_loading.hide();
+                    $map_loading.hide();
 
                     if (data.length === 0) {
                         // If there are no results, show a nice message.
@@ -488,7 +495,7 @@ $(function() {
 
                         $results_address.html('Showing Results Near ' + display_name);
 
-                        $results_loading.show();
+                        $map_loading.show();
                         $search_help_us.show();
                         navigate(false);
                     } else {
@@ -513,7 +520,7 @@ $(function() {
         } else {
             $search_latitude.val('');
             $search_longitude.val('');
-            $results_loading.show();
+            $map_loading.show();
             navigate();
         }
 
@@ -553,7 +560,6 @@ $(function() {
         tiles.addTo(desktop_map);
 
         desktop_markers = L.layerGroup();
-        desktop_markers.addTo(desktop_map);
     }
 
     // Check to see if we've got a message to show.

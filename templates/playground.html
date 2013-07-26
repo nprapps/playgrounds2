@@ -134,14 +134,22 @@
 <!-- nearby parks -->
 <div class="nearby">
     <h4>{{ COPY.content.playground_nearby_title }}</h4>
-    <ul class="playground-list">
+    <ul class="playground-list nearby">
         {% for nearby in playground.nearby(3) %}
         <li>
-            <a href="{{ S3_BASE_URL }}{{ url_for('_playground', playground_slug=nearby.slug) }}">{{ nearby.display_name }}</a>
-            <span class="distance">
-                {{ nearby.distance|round(1) }} miles away |
-                {% if nearby.city %}{{ nearby.city }}, {% endif %}{{ nearby.state }}
-            </span>
+            <div class="result-text">
+                <a href="{{ S3_BASE_URL }}{{ url_for('_playground', playground_slug=nearby.slug) }}">
+                    {{ nearby.display_name }}
+                </a>
+                <span class="result-city">
+                    {% if nearby.city %}{{ nearby.city }}, {% endif %}{{ nearby.state }}
+                </span>
+            </div>
+            <div class="result-meta">
+                <span class="result-distance">
+                    {{ nearby.distance|round(1) }} miles
+                </span>
+            </div>
         </li>
         {% endfor %}
     </ul>

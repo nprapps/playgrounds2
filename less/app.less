@@ -258,7 +258,8 @@ section#the-goods { margin-top: 44px; }
 .playground #main-content .help-prompt p.prompt { font-size: 13px; }
 
 
-.playground-list {
+.playground-list,
+.playground #main-content .playground-list {
     list-style-type: none;
     margin: 0 0 22px 0;
     padding: 0;
@@ -277,13 +278,19 @@ section#the-goods { margin-top: 44px; }
             background: none;
             color: #121212;
         }
-
         &.highlight {
             background-color: #FBF1CD; 
 
             .result-text a {
                 font-weight: bold;
             }
+        }
+    }
+    &.nearby > li {
+        background: none;
+        
+        div {
+            border-top: 1px solid #eee;
         }
     }
     .result-letter,
@@ -990,13 +997,12 @@ section#the-goods { margin-top: 44px; }
 
     h1 {
         margin: 0 0 11px 0;
-        display: inline-block;
     }
     h6.divider {
         display: none;
         width: 10%;
         text-align: center;
-        float: left;
+        float: right;
         line-height: 44px;
         margin: 0;
     }
@@ -1005,9 +1011,9 @@ section#the-goods { margin-top: 44px; }
 
         &.example {
             font-size: 13px;
-            margin-left: 11px;
+            line-height: 1.2;
             color: #777;
-            display: inline-block;
+            clear: both;
         }
     }
     label {
@@ -1021,7 +1027,7 @@ section#the-goods { margin-top: 44px; }
         display: none;
         font-size: 14px;
         width: 45%;
-        float: left;
+        float: right;
 
         i {
             font-size: 140%;
@@ -1066,7 +1072,7 @@ section#the-goods { margin-top: 44px; }
         font-size: 14px;
         line-height: 1.4;
     }
-    #results-loading {
+    #map-loading {
         padding: 11px;
         background-color: #f1f1f1;
         color: #666;
@@ -1138,7 +1144,16 @@ section#the-goods { margin-top: 44px; }
             top: 250px;
         }
     }
+    #results-loading {
+        padding: 11px;
+        background-color: #f1f1f1;
+        color: #666;
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 22px;
+    }
     #no-geocode,
+    #map-loading,
     #results-loading,
     #search-help,
     #search-help-prompt,
@@ -1234,15 +1249,6 @@ footer {
         margin-left: -20px; margin-right: -20px;
         padding-left: 20px; padding-right: 20px;
 
-        h1 {
-            display: block;
-            margin-bottom: 6px;
-        }
-        p.example {
-            display: block;
-            margin-left: 0;
-            margin-bottom: 11px;
-        }
         #address-search {
             .address-search-input { width: 65%; }
             #search-btn { width: 25%; }
@@ -1298,10 +1304,13 @@ footer {
         }
         #geolocate {
             width: 100%;
+            float: none;
             display: block;
             margin-bottom: 11px;
         }
         h6.divider {
+            clear: left;
+            float: left;
             width: 10%;
             text-align: left;
         }
