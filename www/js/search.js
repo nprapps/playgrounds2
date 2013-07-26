@@ -48,6 +48,7 @@ var desktop_markers = null;
 var $selected_playground = null;
 var search_xhr = null;
 var geocode_xhr = null;
+var user_zoomed = false;
 
 function degToCloudSearch(degree) {
     /*
@@ -214,7 +215,20 @@ function search() {
                     }
                 });
             } else {
-                $search_results_ul.append('<li class="no-results">No playgrounds found</li>');
+                if (!user_zoomed) {
+                    if (zoom == 14) {
+                        zoom = 11;
+                        search();
+                    } else if (zoom == 11) {
+                        zoom = 8;
+                        $zoom_out.attr('disabled', 'disabled');
+                        search();
+                    } else {
+                        $search_results_ul.append('<li class="no-results">No playgrounds found</li>');
+                    }
+                } else {
+                    $search_results_ul.append('<li class="no-results">No playgrounds found</li>');
+                }
             }
 
             if (latitude) {
@@ -308,6 +322,8 @@ function reset_zoom() {
     zoom = RESULTS_DEFAULT_ZOOM;
     $zoom_in.removeAttr('disabled');
     $zoom_out.removeAttr('disabled');
+
+    user_zoomed = false;
 }
 
 function hashchange_callback() {
@@ -411,6 +427,8 @@ $(function() {
 
         $zoom_out.removeAttr('disabled');
 
+        user_zoomed = true;
+
         navigate();
 
         return false;
@@ -424,6 +442,8 @@ $(function() {
         }
 
         $zoom_in.removeAttr('disabled');
+
+        user_zoomed = true;
 
         navigate();
 
@@ -507,6 +527,7 @@ $(function() {
 
                         $map_loading.show();
                         $search_help_us.show();
+
                         navigate(false);
                     } else {
                         // If there are many results,
