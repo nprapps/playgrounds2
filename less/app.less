@@ -444,21 +444,20 @@ section#the-goods { margin-top: 44px; }
         margin: 0;
     }
 
-    .btn.close {
+    .close {
         position: absolute;
         top: 0;
         right: 0;
         z-index: 10;
-        padding: 0;
+        color: #fff;
+        background: #666;
         width: 44px;
         height: 44px;
-        background: #666;
-        color: #fff;
-        vertical-align: middle;
+        line-height: 44px;
         text-align: center;
         font-weight: normal;
         font-size: 24px;
-        line-height: 44px;
+        vertical-align: middle;
     }
 
     .alert {
@@ -640,7 +639,9 @@ section#the-goods { margin-top: 44px; }
         font-size: 14px;
         line-height: 1.4;
     }
-
+    #playground-data {
+        margin-bottom: 44px;
+    }
     #playground-help {
         margin-bottom: 44px;
     }
@@ -680,16 +681,9 @@ section#the-goods { margin-top: 44px; }
         
         p {
             font-size: 12px;
-            
-            &.about {
-                color: #666;
-                margin-bottom: 22px;
-            }
-            &.credits {
-                font-style: italic;
-                color: #999;
-                margin: 0;
-            }
+            font-style: italic;
+            color: #999;
+            margin: 0;
         }
     }
 }
