@@ -45,6 +45,7 @@ var zoom = RESULTS_DEFAULT_ZOOM;
 var crs = null;
 var desktop_map = null;
 var desktop_markers = null;
+var $selected_playground = null;
 var search_xhr = null;
 var geocode_xhr = null;
 
@@ -130,6 +131,7 @@ function search() {
     var longitude = parseFloat($search_longitude.val());
 
     $search_results_ul.empty();
+    $selected_playground = null;
 
     if (IS_MOBILE) {
         $search_results_map_loading.show();
@@ -184,19 +186,27 @@ function search() {
                             marker.on('mouseover', function() {
                                 $('.playground-list li').removeClass('highlight');
                                 $('#playground-' + this.letter).addClass('highlight');
-                                marker.on('mouseout', function() {
-                                    $('.playground-list li').removeClass('highlight');
-                                    $('#playground-' + this.letter).removeClass('highlight');
-                                });
+                                
+                                if ($selected_playground) {
+                                    $selected_playground.addClass('highlight');
+                                }
+                            });
+
+                            marker.on('mouseout', function() {
+                                $('.playground-list li').removeClass('highlight');
+                                
+                                if ($selected_playground) {
+                                    $selected_playground.addClass('highlight');
+                                }
                             });
 
                             marker.on('click', function() {
+                                $selected_playground = $('#playground-' + this.letter);
+
                                 $('.playground-list li').removeClass('highlight');
-                                $('#playground-' + this.letter).addClass('highlight');
+                                $selected_playground.addClass('highlight');
+                                
                                 $.smoothScroll({ scrollTarget: '#playground-' + this.letter });
-                                marker.on('mouseout', function() {
-                                    $('#playground-' + this.letter).addClass('highlight');
-                                })
                             });
 
                             markers.push(marker);
