@@ -259,7 +259,7 @@ section#the-goods { margin-top: 44px; }
 
 
 .playground-list,
-.playground #main-content & {
+.playground #main-content .playground-list {
     list-style-type: none;
     margin: 0 0 22px 0;
     padding: 0;
@@ -285,10 +285,10 @@ section#the-goods { margin-top: 44px; }
                 font-weight: bold;
             }
         }
-        .nearby & {
-            background: none;
-            border-bottom: 2px solid #eee;
-        }
+    }
+    &.nearby > li {
+        background: none;
+        border-bottom: 2px solid #eee;
     }
     .result-letter,
     .result-meta,
