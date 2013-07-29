@@ -8,6 +8,18 @@
     {{ CSS.push('css/mapbox.css') }}
 {% endblock %}
 
+{% block social_head %}
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@nprapps">
+    <meta property="og:title" content="{{ FACEBOOK.TITLE }}: {{ playground.display_name }} : NPR" />
+    <meta property="og:url" content="{{ S3_BASE_URL }}{{ path }}" />
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="{% if playground.public_remarks %}{{ playground.public_remarks }}{% else %}{{ FACEBOOK.DESCRIPTION }}{% endif %}" />
+    <meta property="og:image" content="{{ FACEBOOK.IMAGE_URL }}" />
+    <meta property="og:site_name" content="NPR.org" />
+    <meta property="fb:app_id" content="{{ FACEBOOK.APP_ID }}" />
+{% endblock social_head %}
+
 {% block extra_head %}
     <script type='text/javascript' src="http://api.tiles.mapbox.com/mapbox.js/v1.1.0/mapbox.js"></script>
 {% endblock %}
@@ -125,8 +137,8 @@
 
 <!-- Share buttons -->
 <ul class="social">
-    <li class="facebook"><a rel="external" href="https://www.facebook.com/dialog/feed?app_id={{ FACEBOOK.APP_ID }}&amp;link={{ FACEBOOK.URL }}playground%2F{{ playground.id }}.html&amp;name={{ PROJECT_NAME }}%3A+{{ playground.name }}&amp;picture={{ FACEBOOK.IMAGE_URL }}&amp;redirect_uri={{ FACEBOOK.URL }}" alt="Share on Facebook" target="_blank" onclick="_gaq.push(['_trackEvent', 'Social', 'Click Facebook In Navbar', '{{ PROJECT_NAME }}']);"><span>Like This On Facebook</span><b>Share This</b></a></li>
-    <li class="twitter"><a rel="external" href="http://twitter.com/share?text={{ PROJECT_NAME }}%3A+{{ playground.name }}&amp;url={{ TWITTER.URL }}playground%2F{{ playground.id }}.html" alt="Share on Twitter" target="_blank" onclick="_gaq.push(['_trackEvent', 'Social', 'Click Twitter In Navbar', '{{ PROJECT_NAME }}']);"><span>Share This On Twitter</span><b>Tweet This</b></a></li>
+    <li class="facebook"><a rel="external" href="https://www.facebook.com/dialog/feed?app_id={{ FACEBOOK.APP_ID }}&amp;link={{ S3_BASE_URL }}{{ path }}&amp;name={{ PROJECT_NAME }}%3A+{{ playground.name }}&amp;picture={{ FACEBOOK.IMAGE_URL }}&amp;description={% if playground.public_remarks %}{{ playground.public_remarks|urlencode }}{% else %}{{ FACEBOOK.DESCRIPTION|urlencode }}{% endif %}&amp;redirect_uri={{ FACEBOOK.URL|urlencode }}" alt="Share on Facebook" target="_blank" onclick="_gaq.push(['_trackEvent', 'Social', 'Share Page On Facebook', '{{ PROJECT_NAME }}']);"><span>Like This On Facebook</span><b>Share This</b></a></li>
+    <li class="twitter"><a rel="external" href="http://twitter.com/share?text={{ PROJECT_NAME }}%3A+{{ playground.name }}&amp;url={{ S3_BASE_URL }}{{ path }}" alt="Share on Twitter" target="_blank" onclick="_gaq.push(['_trackEvent', 'Social', 'Share Page On Twitter', '{{ PROJECT_NAME }}']);"><span>Share This On Twitter</span><b>Tweet This</b></a></li>
 </ul>
 
 

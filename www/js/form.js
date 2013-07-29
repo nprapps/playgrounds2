@@ -408,6 +408,15 @@ $(function() {
                 });
             });
 
+
+            // Allow users to tab feature labels and descriptions to toggle checkbox
+            $('#form .feature label, #form .feature .help-block').each(function(){
+                $(this).on('click', function() {
+                    var input_checked = $(this).siblings('input').prop('checked');
+                    $(this).siblings('input').prop('checked', !input_checked);
+                });
+            });
+
             // Watch for changes to the playground form.
             $('#form .input').blur(function(){
 

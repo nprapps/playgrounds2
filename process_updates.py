@@ -24,8 +24,8 @@ def process_updates(path=None, local=None):
 
         os.system('rm -rf %s.playgrounds_html/' % path)
         os.system('rm -rf %s.playgrounds_gzip/' % path)
-        os.system('cp %splaygrounds.db data/%s-playgrounds.db' % (path, now))
-        os.system('cp %sdata/changes.json data/%s-changes.json' % (path, now))
+        os.system('cp %splaygrounds.db data/backups/%s-playgrounds.db' % (path, now))
+        os.system('cp %sdata/changes.json data/backups/%s-changes.json' % (path, now))
         os.system('mv %sdata/changes.json %schanges-in-progress.json' % (path, path))
 
         # Create our list of changed items and a revision group.

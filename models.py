@@ -47,7 +47,7 @@ class Playground(Model):
     The playground model for the sqlite database.
     """
     slug = CharField()
-    nprid = CharField()
+    nprid = CharField(null=True)
     name = CharField(verbose_name='Name', null=True)
     facility = CharField(verbose_name='Facility', null=True)
     facility_type = CharField(verbose_name='Facility type', null=True)

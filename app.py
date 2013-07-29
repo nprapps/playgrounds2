@@ -146,6 +146,7 @@ def _playground(playground_slug):
     """
     Playground detail page.
     """
+    from flask import request
     context = make_context()
 
     context['playground'] = Playground.get(slug=playground_slug)
@@ -153,6 +154,7 @@ def _playground(playground_slug):
     context['features'] = context['playground'].update_features_form()
     context['revisions'] = Revision.select().where(Revision.playground == context['playground'].id).where((Revision.action == 'insert') | (Revision.action == 'update')).order_by(Revision.timestamp.desc())
     context['display_field_name'] = display_field_name
+    context['path'] = request.path
 
     return render_template('playground.html', **context)
 
