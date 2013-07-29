@@ -29,6 +29,7 @@ var $search_results_ul = null;
 var $search_results_map_wrapper = null;
 var $search_results_map = null;
 var $search_results_map_loading = null;
+var $search_results_map_loading_text = null;
 var $zoom_in = null;
 var $zoom_out = null;
 var $search_help = null;
@@ -136,6 +137,7 @@ function search() {
 
     if (IS_MOBILE) {
         $search_results_map_loading.show();
+        $search_results_map_loading_text.show();
         $search_results_map.css('opacity', '0.25');
     } else {
         desktop_map.removeLayer(desktop_markers);
@@ -216,25 +218,27 @@ function search() {
                 });
             } else {
                 if (!user_zoomed) {
-                    if (zoom == 14) {
+                    if (zoom == 15) {
                         zoom = 11;
 
-                        if (!IS_MOBILE) {
-                            $map_loading.text('No playgrounds found, searching further away...').show();
-                        } else {
+                        if (IS_MOBILE) {
                             $search_results_map_loading.show();
+                            $search_results_map_loading_text.text('Searching further away...').show();
                             $search_results_map.css('opacity', '0.25');
+                        } else {
+                            $map_loading.text('Searching further away...').show();
                         }
 
                         search();
                     } else if (zoom == 11) {
                         zoom = 8;
                         
-                        if (!IS_MOBILE) {
-                            $map_loading.text('Searching far away...').show();
-                        } else {
+                        if (IS_MOBILE) {
                             $search_results_map_loading.show();
+                            $search_results_map_loading_text.text('Searching far away...').show();
                             $search_results_map.css('opacity', '0.25');
+                        } else {
+                            $map_loading.text('Searching far away...').show();
                         }
 
                         $zoom_out.attr('disabled', 'disabled');
@@ -269,6 +273,7 @@ function search() {
 
                     $search_results_map.on('load', function() {
                         $search_results_map_loading.hide();
+                        $search_results_map_loading_text.text('Searching...').hide();
                         $search_results_map.css('opacity', '1.0');
                         $search_results_map.off('load');
                     });
@@ -391,6 +396,7 @@ $(function() {
     $search_results_map_desktop = $('#search-results-map-desktop');
     $search_results_map = $('#search-results-map');
     $search_results_map_loading = $('#search-results-map-loading');
+    $search_results_map_loading_text = $('#search-results-map-loading-text');
     $zoom_in = $('#zoom-in');
     $zoom_out = $('#zoom-out');
     $search_help = $('#search-help');
