@@ -218,9 +218,25 @@ function search() {
                 if (!user_zoomed) {
                     if (zoom == 14) {
                         zoom = 11;
+
+                        if (!IS_MOBILE) {
+                            $map_loading.text('No playgrounds found, searching further away...').show();
+                        } else {
+                            $search_results_map_loading.show();
+                            $search_results_map.css('opacity', '0.25');
+                        }
+
                         search();
                     } else if (zoom == 11) {
                         zoom = 8;
+                        
+                        if (!IS_MOBILE) {
+                            $map_loading.text('Searching far away...').show();
+                        } else {
+                            $search_results_map_loading.show();
+                            $search_results_map.css('opacity', '0.25');
+                        }
+
                         $zoom_out.attr('disabled', 'disabled');
                         search();
                     } else {
@@ -341,7 +357,6 @@ function hashchange_callback() {
         if (!($search_latitude.val() == latitude && $search_longitude.val() == longitude)) {
             $search_help.hide();
             $search_results_ul.empty();
-            $search_results_map_wrapper.hide();
             $results_address.hide();
         }
 
@@ -464,6 +479,7 @@ $(function() {
         $search_help.hide();
 
         $map_loading.show();
+        $map_loading.find('.context').text('Searching for playgrounds...');
         navigate(false);
 
         return false;
@@ -526,7 +542,7 @@ $(function() {
 
                         $results_address.html('Showing Results Near ' + display_name);
 
-                        $map_loading.show();
+                        $map_loading.text('Searching for playgrounds...').show();
                         $search_help_us.show();
 
                         navigate(false);
@@ -552,7 +568,7 @@ $(function() {
         } else {
             $search_latitude.val('');
             $search_longitude.val('');
-            $map_loading.show();
+            $map_loading.text('Searching for playgrounds...').show();
             navigate();
         }
 
@@ -575,6 +591,7 @@ $(function() {
         desktop_map.on('moveend', function() {
             var latlng = desktop_map.getCenter();
             var current = new L.LatLng($search_latitude.val(), $search_longitude.val());
+            zoom = desktop_map.getZoom();
 
             if (!coordinatesApproxEqual(latlng, current, 100)) {
                 $search_latitude.val(latlng.lat);
