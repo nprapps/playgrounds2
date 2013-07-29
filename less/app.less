@@ -146,12 +146,11 @@ header {
     .project-info-wrapper {
         background-color: rgba(255,255,255,.8);
         position: absolute;
-        top: 44px;
         bottom: 0;
         left: 0;
     }
     .project-info {
-        padding: 44px 22px 22px 22px;
+        padding: 33px 22px 22px 22px;
     }
     .row {
         position: relative;
@@ -230,10 +229,10 @@ section#the-goods { margin-top: 44px; }
     margin: 44px 0 22px 0;
     padding: 11px;
     background-color: #f1f1f1;
-
+    
     p {
         margin: 0;
-        //text-align: center;
+        text-align: center;
 
         &.prompt {
             font-size: 13px;
@@ -255,7 +254,23 @@ section#the-goods { margin-top: 44px; }
         margin-top: 11px;
     }
 }
-.playground #main-content .help-prompt p.prompt { font-size: 13px; }
+.index #main-content #playground-data.help-prompt {
+    padding-top: 15px;
+    margin-left: -11px;
+    margin-right: -11px;
+
+    h3 {
+        font-size: 12px;
+        font-weight: bold;
+        margin-bottom: 6px;
+        color: #555;
+    }
+    p {
+        text-align: left;
+        margin-bottom: 11px;
+        font-size: 12px;
+    }
+}
 
 
 .playground-list,
@@ -444,21 +459,20 @@ section#the-goods { margin-top: 44px; }
         margin: 0;
     }
 
-    .btn.close {
+    .close {
         position: absolute;
         top: 0;
         right: 0;
         z-index: 10;
-        padding: 0;
+        color: #fff;
+        background: #666;
         width: 44px;
         height: 44px;
-        background: #666;
-        color: #fff;
-        vertical-align: middle;
+        line-height: 44px;
         text-align: center;
         font-weight: normal;
         font-size: 24px;
-        line-height: 44px;
+        vertical-align: middle;
     }
 
     .alert {
@@ -640,7 +654,9 @@ section#the-goods { margin-top: 44px; }
         font-size: 14px;
         line-height: 1.4;
     }
-
+    #playground-data {
+        margin-bottom: 44px;
+    }
     #playground-help {
         margin-bottom: 44px;
     }
@@ -680,16 +696,9 @@ section#the-goods { margin-top: 44px; }
         
         p {
             font-size: 12px;
-            
-            &.about {
-                color: #666;
-                margin-bottom: 22px;
-            }
-            &.credits {
-                font-style: italic;
-                color: #999;
-                margin: 0;
-            }
+            font-style: italic;
+            color: #999;
+            margin: 0;
         }
     }
 }

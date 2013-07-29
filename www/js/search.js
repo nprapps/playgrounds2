@@ -492,6 +492,7 @@ $(function() {
         }
 
         $search_help.hide();
+        $search_help_us.hide();
         $search_results_ul.empty();
         $search_results_map_wrapper.hide();
         $results_address.hide();

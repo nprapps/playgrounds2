@@ -18,6 +18,8 @@ $(function() {
             // Many other fields are set dynamically.
             'locator_map': $('#locator-map'),
             'modal_map': $('#modal-locator-map'),
+            'address_editor': $('.address-editor'),
+            'address_editor_toggle': $('#toggle-address-button'),
             'meta_items': $('#main-content').find('.about').find('ul.meta'),
             'meta_hdr': $('#main-content').find('.about').find('h5.meta')
         },
@@ -33,7 +35,11 @@ $(function() {
                     playground.fields.longitude.attr('value', locale['latLng']['lng']);
                     require_us_address(locale);
                     playground.form.geocode_fields();
-                    playground.toggle_address_button();
+                    playground.hide_address_editor();
+                    map.off('moveend');
+                    playground.map.reset_editor();
+                    map.on('moveend', playground.map.process_map_location);
+                    playground.address_change_accepted = true;
                 } else {
                     alert_text = "<strong>I'm sorry! We couldn't find that place.</strong><br>Don't forget to add the street/avenue/boulevard.<br/>If you're still having trouble, try finding it on the map.";
                     make_alert(alert_text, 'alert-error');
@@ -60,6 +66,7 @@ $(function() {
 
                 require_us_address(locale);
                 playground.form.geocode_fields();
+                playground.fields.reverse_geocoded.attr('checked', 'checked');
             }
         },
         'form': {
@@ -142,11 +149,13 @@ $(function() {
                 playground.map.center_editor();
             },
             'center_editor': function() {
+                map.off('moveend');
                 map.invalidateSize(false);
                 var marker_left = $('#edit-map').width()/2 - 8;
                 var marker_top = $('#edit-map').height()/2 - 8;
                 $('#loading-spinner').hide();
                 $('#edit-marker').css({'left': marker_left, 'top': marker_top}).show();
+                map.on('moveend', playground.map.process_map_location);
             },
             'reset_editor': function() {
                 if (playground.fields.latitude.val() !== '' && playground.fields.latitude.val() !== 'None') {
@@ -155,6 +164,10 @@ $(function() {
                             playground.fields.longitude.val()],
                         playground.LOCATOR_DEFAULT_ZOOM);
                 }
+            },
+            'process_map_location': function() {
+                var latlng = map.getCenter();
+                playground.reverse_geocode(latlng.lat, latlng.lng, playground.callbacks.reverse_geocode);
             },
             'resize_locator': function() {
                 // Set the width.
@@ -261,15 +274,28 @@ $(function() {
             });
         },
         'accept_address': function() {
-            playground.geocode(playground.form.prepare_geocode_object(), playground.callbacks.geocode);
-        },
-        'toggle_address_button': function(cancel){
-            $('.address-editor').toggleClass('hide');
-            if (cancel !== true){
-                console.log('center editor');
-                playground.map.center_editor();
+            if (playground.fields.reverse_geocoded.attr('checked') !== 'checked'){
+                playground.geocode(playground.form.prepare_geocode_object(), playground.callbacks.geocode);
+            } else {
+                this.hide_address_editor();
             }
-            $('#toggle-address-button').toggleClass('btn-success').text($('#toggle-address-button').text() === 'Edit' ? 'Cancel' : 'Edit');
+        },
+        'toggle_address_editor': function(){
+            if (this.fields.address_editor.hasClass('hide')){
+                this.show_address_editor();
+            } else {
+                this.hide_address_editor();
+            }
+        },
+        'show_address_editor': function(){
+            this.fields.address_editor.removeClass('hide');
+            this.fields.address_editor_toggle.text('Cancel');
+            this.map.center_editor();
+        },
+        'hide_address_editor': function(){
+            this.fields.address_editor.addClass('hide');
+            this.fields.address_editor_toggle.text('Edit');
+            $('#myTab a:first').tab('show');
         },
         'reset_form': function() {
             $('#edit-playground').modal('hide'); 
@@ -285,22 +311,25 @@ $(function() {
             this.map.reset_editor();
         },
         'reset_location': function(){
-            this.toggle_address_button(true);
-            var field_list = [
-                'address',
-                'city',
-                'zip_code',
-                'latitude',
-                'longitude',
-                'reverse_geocoded',
-                'state'
-            ];
-            $.each(field_list, function(index, field_name){
-                var field = $('input[name="' + field_name + '"], select[name="' + field_name + '"]');
-                field.val(field.data('original')).attr('data-changed', 'false');
-            });
-            this.map.resize_locator();
-            this.map.reset_editor();
+            this.hide_address_editor();
+            if(playground.address_change_accepted !== true){
+                var field_list = [
+                    'address',
+                    'city',
+                    'zip_code',
+                    'latitude',
+                    'longitude',
+                    'reverse_geocoded',
+                    'state'
+                ];
+
+                $.each(field_list, function(index, field_name){
+                    var field = $('input[name="' + field_name + '"], select[name="' + field_name + '"]');
+                    field.val(field.data('original')).attr('data-changed', 'false');
+                });
+                this.map.resize_locator();
+                this.map.reset_editor();
+            }
         },
         'submit': function() {
             if ( playground.fields.reverse_geocoded.attr('checked') !== 'checked' ) {
@@ -368,10 +397,7 @@ $(function() {
 
             // Watch the map.
             // Perform a reverse geocode when the map is finished moving.
-            map.on('moveend', function() {
-                var latlng = map.getCenter();
-                playground.reverse_geocode(latlng.lat, latlng.lng, playground.callbacks.reverse_geocode);
-            });
+            map.on('moveend', playground.map.process_map_location);
 
             // Sets up the click functions for each of the buttons.
             // Requires a data-action attribute on the button element.
@@ -391,6 +417,10 @@ $(function() {
                 // Remove a validation flag, if it exists.
                 $(this).removeClass('flagged');
             });
+
+            $('#address-pane input, #address-pane select').blur(function(){
+                playground.fields.reverse_geocoded.removeAttr('checked');
+            })
 
             // Check to see if we've got a message to show.
             if (playground.ACTION !== null){
@@ -414,21 +444,6 @@ $(function() {
             playground.fields.meta_hdr.on('click', function() {
                 playground.fields.meta_items.slideToggle('fast');
             });
-
-            // Lock down the double-modal.
-            $('.modal').on('shown', function(){
-                $('body').on('touchmove', prevent_body_scroll(event));
-            });
-            $('.modal').on('hidden', function(){
-                $('body').off('touchmove', prevent_body_scroll(event));
-            });
-            $('#address-pane').on('shown', function(){
-                $('body, #map-pane').on('touchmove', prevent_body_scroll(event));
-            });
-            $('#address-pane').on('hidden', function(){
-                $('body, #map-pane').off('touchmove', prevent_body_scroll(event));
-            });
-
         }
     };
     // Initialize the playground object.
