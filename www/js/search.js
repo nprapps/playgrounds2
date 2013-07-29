@@ -6,7 +6,7 @@ var RESULTS_MAP_WIDTH = 500;
 var RESULTS_MAP_HEIGHT = 500;
 var RESULTS_MAX_ZOOM = 16;
 var RESULTS_MIN_ZOOM = 8;
-var RESULTS_DEFAULT_ZOOM = 14;
+var RESULTS_DEFAULT_ZOOM = 15;
 var IS_MOBILE = Modernizr.touch;
 var RETINA = window.devicePixelRatio > 1;
 if (RETINA) {
@@ -32,9 +32,9 @@ var $search_results_map_loading = null;
 var $search_results_map_loading_text = null;
 var $zoom_in = null;
 var $zoom_out = null;
-var $search_help = null;
-var $search_help_us = null;
+var $did_you_mean_wrapper = null;
 var $did_you_mean = null;
+var $search_help_prompt = null;
 var $results_address = null;
 var $no_geocode = null;
 var $map_loading = null;
@@ -133,6 +133,7 @@ function search() {
     var longitude = parseFloat($search_longitude.val());
 
     $search_results_ul.empty();
+    $search_help_prompt.hide();
     $selected_playground = null;
 
     if (IS_MOBILE) {
@@ -306,7 +307,7 @@ function search() {
             }
 
             $search_results.show();
-            $search_help_us.show();
+            $search_help_prompt.show();
 
             if (!IS_MOBILE) {
                 desktop_map.invalidateSize();
@@ -360,7 +361,7 @@ function hashchange_callback() {
 
     if (latitude && longitude) {
         if (!($search_latitude.val() == latitude && $search_longitude.val() == longitude)) {
-            $search_help.hide();
+            $did_you_mean_wrapper.hide();
             $search_results_ul.empty();
             $results_address.hide();
         }
@@ -399,9 +400,9 @@ $(function() {
     $search_results_map_loading_text = $('#search-results-map-loading-text');
     $zoom_in = $('#zoom-in');
     $zoom_out = $('#zoom-out');
-    $search_help = $('#search-help');
+    $did_you_mean_wrapper = $('#search-help');
     $did_you_mean = $('#search-help ul');
-    $search_help_us = $('#search-help-prompt');
+    $search_help_prompt = $('#search-help-prompt');
     $results_address = $('#results-address');
     $no_geocode = $('#no-geocode');
     $map_loading = $('#map-loading');
@@ -482,10 +483,10 @@ $(function() {
         $search_longitude.val(longitude);
         $results_address.html('Showing Results Near ' + display_name);
 
-        $search_help.hide();
+        $did_you_mean_wrapper.hide();
 
         $map_loading.show();
-        $map_loading.find('.context').text('Searching for playgrounds...');
+        $map_loading.text('Searching...');
         navigate(false);
 
         return false;
@@ -496,8 +497,8 @@ $(function() {
             return false;
         }
 
-        $search_help.hide();
-        $search_help_us.hide();
+        $did_you_mean_wrapper.hide();
+        $search_help_prompt.hide();
         $search_results_ul.empty();
         $search_results_map_wrapper.hide();
         $results_address.hide();
@@ -530,12 +531,12 @@ $(function() {
                     data = _.filter(data, function(locale) {
                         return locale['display_name'].indexOf("United States of America") > 0;
                     });
+
                     $map_loading.hide();
 
                     if (data.length === 0) {
                         // If there are no results, show a nice message.
                         $did_you_mean.append('<li>No results</li>');
-                        $search_help_us.hide();
                         $no_geocode.show();
                     } else if (data.length == 1) {
                         // If there's one result, render it.
@@ -548,8 +549,7 @@ $(function() {
 
                         $results_address.html('Showing Results Near ' + display_name);
 
-                        $map_loading.text('Searching for playgrounds...').show();
-                        $search_help_us.show();
+                        $map_loading.text('Searching...').show();
 
                         navigate(false);
                     } else {
@@ -566,15 +566,14 @@ $(function() {
 
                         });
 
-                        $search_help.show();
-                        $search_help_us.hide();
+                        $did_you_mean_wrapper.show();
                     }
                 }
             });
         } else {
             $search_latitude.val('');
             $search_longitude.val('');
-            $map_loading.text('Searching for playgrounds...').show();
+            $map_loading.text('Searching...').show();
             navigate();
         }
 
