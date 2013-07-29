@@ -32,7 +32,7 @@ def update_search_index(playgrounds):
         return
 
     print 'Uploading to CloudSearch...'
-    response = requests.post('http://%s/2011-02-01/documents/batch' % app_config.CLOUD_SEARCH_DOC_DOMAIN, data=payload, headers={ 'Content-Type': 'application/json' })
+    response = requests.post('http://%s/2011-02-01/documents/batch' % app_config.CLOUD_SEARCH_DOC_DOMAIN, data=payload, headers={'Content-Type': 'application/json'})
 
     print response.status_code
     print response.text
