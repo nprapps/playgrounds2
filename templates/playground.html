@@ -137,7 +137,7 @@
 
 <!-- Share buttons -->
 <ul class="social">
-    <li class="facebook"><a rel="external" href="https://www.facebook.com/dialog/feed?app_id={{ FACEBOOK.APP_ID }}&amp;link={{ S3_BASE_URL }}{{ path }}&amp;name={{ PROJECT_NAME }}%3A+{{ playground.name }}&amp;picture={{ FACEBOOK.IMAGE_URL }}&amp;description={% if playground.public_remarks %}{{ playground.public_remarks|urlencode }}{% else %}{{ FACEBOOK.DESCRIPTION|urlencode }}{% endif %}" alt="Share on Facebook" target="_blank" onclick="_gaq.push(['_trackEvent', 'Social', 'Share Page On Facebook', '{{ PROJECT_NAME }}']);"><span>Like This On Facebook</span><b>Share This</b></a></li>
+    <li class="facebook"><a rel="external" href="https://www.facebook.com/dialog/feed?app_id={{ FACEBOOK.APP_ID }}&amp;link={{ S3_BASE_URL }}{{ path }}&amp;name={{ PROJECT_NAME }}%3A+{{ playground.name }}&amp;picture={{ FACEBOOK.IMAGE_URL }}&amp;description={% if playground.public_remarks %}{{ playground.public_remarks|urlencode }}{% else %}{{ FACEBOOK.DESCRIPTION|urlencode }}{% endif %}&amp;redirect_uri={{ FACEBOOK.URL|urlencode }}" alt="Share on Facebook" target="_blank" onclick="_gaq.push(['_trackEvent', 'Social', 'Share Page On Facebook', '{{ PROJECT_NAME }}']);"><span>Like This On Facebook</span><b>Share This</b></a></li>
     <li class="twitter"><a rel="external" href="http://twitter.com/share?text={{ PROJECT_NAME }}%3A+{{ playground.name }}&amp;url={{ S3_BASE_URL }}{{ path }}" alt="Share on Twitter" target="_blank" onclick="_gaq.push(['_trackEvent', 'Social', 'Share Page On Twitter', '{{ PROJECT_NAME }}']);"><span>Share This On Twitter</span><b>Tweet This</b></a></li>
 </ul>
 
