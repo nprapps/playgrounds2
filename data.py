@@ -71,10 +71,6 @@ def app_config_js():
         f.write(js)
 
 
-def update_copy():
-    os.system('curl -o data/copy.xls "%s"' % app_config.COPY_URL)
-
-
 def less():
     for path in glob('less/*.less'):
         filename = os.path.split(path)[-1]
@@ -94,7 +90,7 @@ def render_playgrounds(playgrounds=None):
     """
     from flask import g, url_for
 
-    update_copy()
+    os.system('curl -o data/copy.xls "%s"' % app_config.COPY_URL)
     less()
     jst()
 
