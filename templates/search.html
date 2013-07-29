@@ -38,10 +38,10 @@
             <ul></ul>
         </div>
 
-        <div id="map-loading">Loading...</div>
+        <div id="map-loading">Searching...</div>
 
         <div id="no-geocode">
-            <h3>Sorry, we couldn't locate that address.</h3>
+            <h3>{{ COPY.content.search_cant_geocode }}</h3>
         </div>
 
     </div>
@@ -52,6 +52,7 @@
                     <div id="search-results-map-desktop"></div>
                     <img id="search-results-map" src="" />
                     <img id="search-results-map-loading" src="img/loading.gif" />
+                    <div id="search-results-map-loading-text">Searching...</div>
 
                 <div class="zoom-buttons">
                     <button type="button" id="zoom-in" class="btn-zoom">+</button>

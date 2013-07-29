@@ -56,15 +56,17 @@
         });
     </script>
 
+    {% block social_head %}
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@nprapps">
-    <meta property="og:title" content="{{ FACEBOOK.TITLE }}" />
+    <meta property="og:title" content="{{ FACEBOOK.TITLE }} : NPR" />
     <meta property="og:url" content="{{ FACEBOOK.URL }}" />
     <meta property="og:type" content="article" />
     <meta property="og:description" content="{{ FACEBOOK.DESCRIPTION }}" />
     <meta property="og:image" content="{{ FACEBOOK.IMAGE_URL }}" />
     <meta property="og:site_name" content="NPR.org" />
     <meta property="fb:app_id" content="{{ FACEBOOK.APP_ID }}" />
+    {% endblock social_head %}
 
     {% block extra_head %}
     {% endblock extra_head %}
