@@ -408,6 +408,39 @@ def deploy(remote='origin'):
         if env['deploy_services']:
             deploy_confs()
 
+
+def write_snapshots():
+    require('settings', provided_by=[production, staging])
+
+    if (env.settings == 'production' and env.branch != 'stable'):
+        _confirm("You are trying to deploy the '%(branch)s' branch to production.\nYou should really only deploy a stable branch.\nDo you know what you're doing?" % env)
+
+    # Fake out deployment target
+    deployment_target = app_config.DEPLOYMENT_TARGET
+    app_config.configure_targets(env.get('settings', None))
+
+    os.system('rm -rf .backups_gzip')
+    os.system('rm -rf data/backups/.placeholder')
+
+    data.gzip('data/backups', '.backups_gzip')
+    _deploy_to_s3('.backups_gzip')
+
+    s3cmd = 's3cmd -P --add-header=Cache-Control:max-age=5 --guess-mime-type --recursive --exclude-from gzip_types.txt sync %s/ %s'
+    s3cmd_gzip = 's3cmd -P --add-header=Cache-Control:max-age=5 --add-header=Content-encoding:gzip --guess-mime-type --recursive --exclude "*" --include-from gzip_types.txt sync %s/ %s'
+
+    for bucket in app_config.S3_BUCKETS:
+        os.system(s3cmd % ('.backups_gzip', 's3://%s/%s/backups/' % (bucket, app_config.PROJECT_SLUG)))
+        os.system(s3cmd_gzip % ('.backups_gzip', 's3://%s/%s/backups/' % (bucket, app_config.PROJECT_SLUG)))
+
+    os.system('rm -rf .backups_gzip')
+    os.system('rm -rf data/backups')
+    os.system('mkdir -p data/backups')
+    os.system('touch data/backups/.placeholder')
+
+    # Un-fake-out deployment target
+    app_config.configure_targets(deployment_target)
+
+
 def deploy_playgrounds():
     require('settings', provided_by=[production, staging])
 

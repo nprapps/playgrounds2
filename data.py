@@ -372,6 +372,7 @@ def process_update(record):
 
     return playground, revisions
 
+
 def process_insert(record):
     """
     Process a single insert record from changes.json.
@@ -438,6 +439,7 @@ def process_insert(record):
 
     return (playground, revisions)
 
+
 def process_delete(record):
     """
     Create a revision from the delete requests.
@@ -449,6 +451,7 @@ def process_delete(record):
     revisions = [{"field": "active", "from": True, "to": False}, {"field": "reason", "from": "", "to": record['playground']['text']}]
 
     return (playground, revisions)
+
 
 def render_sitemap():
     with app.app.test_request_context(path='sitemap.xml'):
