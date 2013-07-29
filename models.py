@@ -359,6 +359,16 @@ class Playground(Model):
             sdf['fields']['latitude'] = abs(int((self.latitude + app_config.CLOUD_SEARCH_DEG_OFFSET) * app_config.CLOUD_SEARCH_DEG_SCALE))
             sdf['fields']['longitude'] = abs(int((self.longitude + app_config.CLOUD_SEARCH_DEG_OFFSET) * app_config.CLOUD_SEARCH_DEG_SCALE))
 
+        for feature in copytext.COPY.feature_list:
+            slug = feature['key']
+
+            if PlaygroundFeature.select().where(
+                PlaygroundFeature.playground == self.id,
+                PlaygroundFeature.slug == slug).count() > 0:
+                sdf['fields']['feature_%s' % slug.replace('-', '_')] = 1
+            else:
+                sdf['fields']['feature_%s' % slug.replace('-', '_')] = 0
+
         return sdf
 
     def delete_sdf(self):

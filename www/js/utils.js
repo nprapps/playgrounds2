@@ -94,17 +94,19 @@ function set_driving_urls(){
 
     $directions_link.attr('href', $directions_link.data('ios-map'));
     $directions_link.html('<i class="icon icon-apple"></i> Apple Maps');
-    $google_maps_link.attr('href', $directions_link.data('ios-gmap'));
 
     $directions_link.parent().before(directions_header);
     $directions_link.after($google_maps_link);
 
     $google_maps_link.on('click', function(){
+        var now = new Date().valueOf();
         setTimeout(function(){
+            if (new Date().valueOf() - now > 500) return;
             if(confirm('Google Maps is not installed. Tap "okay" to go to the App Store.')){
               document.location = 'https://itunes.apple.com/us/app/google-maps/id585027354?mt=8';
             }
-        }, 300);
+        }, 25);
+        document.location = $directions_link.data('ios-gmap');
     });
 }
 

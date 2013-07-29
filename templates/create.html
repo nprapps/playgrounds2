@@ -27,7 +27,7 @@
 <form id="form" class="row-fluid playground-form" method="post" enctype="multipart/form-data" action="{{ SERVER_BASE_URL }}/insert-playground/">
 <div class="">
 
-    <h2>Add Playground</h2>
+    <h2>{{ COPY.content.create_title }}</h2>
     <p class="muted">Changes will be submitted for review and posted within 24 hours.</p>
 
     <h5 class="address-label">Address
@@ -64,7 +64,7 @@
     </div>
     <div class="basic-info span6">
         <div class="control-group">
-            <label class="control-label">Name <span class="muted">(Optional)</span></label>
+            <label class="control-label">Playground Name <span class="muted">(Optional)</span></label>
             <div class="controls">
                 <input class="input-block-level input" type="text" name="name" value=""></input>
             </div>
@@ -140,7 +140,7 @@
 </div>
 
 <div class="address-editor">
-    <h2 class="edit-address-hed">Add a playground</h2>
+    <h2 class="edit-address-hed">{{ COPY.content.create_title }}</h2>
     <div class="alerts"></div>
     <ul class="nav nav-tabs" id="myTab">
       <li class="active"><a href="#map-pane" data-toggle="tab">I don't know the exact address</a></li>
