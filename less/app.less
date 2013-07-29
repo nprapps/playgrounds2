@@ -126,7 +126,8 @@ header {
         margin-bottom: 11px;
     }
     h2 {
-        font-size: 15px;
+        font-size: 17px;
+        line-height: 1.4;
         color: #666;
         margin: 0;
     }
@@ -139,7 +140,7 @@ header {
 
     .mobile-prompt {
         padding: 6px 11px 6px 33px;
-        margin: 33px -11px 0 -11px;
+        margin: 22px -11px 0 -11px;
         background: rgba(255,255,255,.5) url('@{img-root}/ico-smartphone.png') no-repeat 11px center;
 
         p {
@@ -152,6 +153,11 @@ header {
                 padding: 2px 5px;
                 margin: 0 2px;
             }
+        }
+
+        .NPRtablet &,
+        .NPRphone & {
+            display: none;
         }
     }
     .project-info-wrapper {
@@ -182,10 +188,7 @@ header {
         }
     }
 }
-.NPRtablet .index header .mobile-prompt,
-.NPRphone .index header .mobile-prompt {
-    display: none;
-}
+
 .playground header,
 .search header {
     background: none;
