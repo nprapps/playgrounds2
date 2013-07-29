@@ -357,7 +357,6 @@ function hashchange_callback() {
         if (!($search_latitude.val() == latitude && $search_longitude.val() == longitude)) {
             $search_help.hide();
             $search_results_ul.empty();
-            $search_results_map_wrapper.hide();
             $results_address.hide();
         }
 
