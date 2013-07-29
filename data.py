@@ -71,10 +71,6 @@ def app_config_js():
         f.write(js)
 
 
-def update_copy():
-    os.system('curl -o data/copy.xls "%s"' % app_config.COPY_URL)
-
-
 def less():
     for path in glob('less/*.less'):
         filename = os.path.split(path)[-1]
@@ -94,7 +90,7 @@ def render_playgrounds(playgrounds=None):
     """
     from flask import g, url_for
 
-    update_copy()
+    os.system('curl -o data/copy.xls "%s"' % app_config.COPY_URL)
     less()
     jst()
 
@@ -376,6 +372,7 @@ def process_update(record):
 
     return playground, revisions
 
+
 def process_insert(record):
     """
     Process a single insert record from changes.json.
@@ -442,6 +439,7 @@ def process_insert(record):
 
     return (playground, revisions)
 
+
 def process_delete(record):
     """
     Create a revision from the delete requests.
@@ -453,6 +451,7 @@ def process_delete(record):
     revisions = [{"field": "active", "from": True, "to": False}, {"field": "reason", "from": "", "to": record['playground']['text']}]
 
     return (playground, revisions)
+
 
 def render_sitemap():
     with app.app.test_request_context(path='sitemap.xml'):
