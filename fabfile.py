@@ -116,7 +116,7 @@ def update_copy():
     """
     Fetches the latest Google Doc and updates local JSON.
     """
-    data.update_copy()
+    os.system('curl -o data/copy.xls "%s"' % app_config.COPY_URL)
 
 def app_config_js():
     """
