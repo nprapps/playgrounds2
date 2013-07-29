@@ -592,6 +592,7 @@ $(function() {
         desktop_map.on('moveend', function() {
             var latlng = desktop_map.getCenter();
             var current = new L.LatLng($search_latitude.val(), $search_longitude.val());
+            zoom = desktop_map.getZoom();
 
             if (!coordinatesApproxEqual(latlng, current, 100)) {
                 $search_latitude.val(latlng.lat);
