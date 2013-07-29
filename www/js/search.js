@@ -77,6 +77,10 @@ function buildCloudSearchParams() {
     var params = {};
     var return_fields = ['name', 'display_name', 'city', 'state', 'latitude', 'longitude', 'public_remarks', 'slug'];
 
+    _.each(window.FEATURES, function(feature) {
+        return_fields.push('feature_' + feature.replace('-', '_'));
+    });
+
     var query_bits = ['deployment_target:\'' + deployment_target + '\''];
 
     /*if (query) {

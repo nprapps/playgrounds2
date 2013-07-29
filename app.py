@@ -12,6 +12,7 @@ from jinja2 import Template
 import requests
 
 import app_config
+import copytext
 from models import Playground, Revision, display_field_name
 from render_utils import flatten_app_config, make_context
 
@@ -217,8 +218,9 @@ def _app_config_js():
     """
     config = flatten_app_config()
     js = 'window.APP_CONFIG = ' + json.dumps(config) + ';'
+    features = 'window.FEATURES = ' + json.dumps([f['key'] for f in copytext.COPY.feature_list]) + ';'
 
-    return js, 200, { 'Content-Type': 'application/javascript' }
+    return '\n'.join([js, features]), 200, { 'Content-Type': 'application/javascript' }
 
 # Server arbitrary static files on-demand
 @app.route('/<path:path>')
