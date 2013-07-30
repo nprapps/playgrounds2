@@ -376,6 +376,40 @@ def deploy_confs():
                     sudo('service %s restart' % service_name)
 
 
+def write_data_json():
+    data.write_data_json()
+
+
+def write_data_csv():
+    data.write_data_csv()
+
+
+def deploy_data():
+    """
+    Deploy the latest data to S3.
+    """
+    write_data_csv()
+    write_data_json()
+
+    require('settings', provided_by=[production, staging])
+
+    if (env.settings == 'production' and env.branch != 'stable'):
+        _confirm("You are trying to deploy the '%(branch)s' branch to production.\nYou should really only deploy a stable branch.\nDo you know what you're doing?" % env)
+
+    # Fake out deployment target
+    deployment_target = app_config.DEPLOYMENT_TARGET
+    app_config.configure_targets(env.get('settings', None))
+
+    for filename in ['npr-accessible-playgrounds.csv', 'npr-accessible-playgrounds.json']:
+        s3cmd = 's3cmd -P --add-header=Cache-Control:max-age=5 --guess-mime-type --recursive sync %s %s'
+
+        for bucket in app_config.S3_BUCKETS:
+            os.system(s3cmd % ('www/%s' % filename, 's3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
+
+    # Un-fake-out deployment target
+    app_config.configure_targets(deployment_target)
+
+
 def deploy(remote='origin'):
     """
     Deploy the latest app to S3 and, if configured, to our servers.
@@ -423,7 +457,6 @@ def write_snapshots():
     os.system('rm -rf data/backups/.placeholder')
 
     data.gzip('data/backups', '.backups_gzip')
-    _deploy_to_s3('.backups_gzip')
 
     s3cmd = 's3cmd -P --add-header=Cache-Control:max-age=5 --guess-mime-type --recursive --exclude-from gzip_types.txt sync %s/ %s'
     s3cmd_gzip = 's3cmd -P --add-header=Cache-Control:max-age=5 --add-header=Content-encoding:gzip --guess-mime-type --recursive --exclude "*" --include-from gzip_types.txt sync %s/ %s'
