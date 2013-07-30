@@ -444,7 +444,9 @@ def display_field_name(field_name):
     try:
         return getattr(Playground, field_name).verbose_name
     except AttributeError:
-        return copytext.COPY.feature_list[field_name]['term']
+        feature = next(f for f in copytext.COPY.feature_list if f.key == field_name)
+
+        return feature['term']
 
 
 def get_active_playgrounds():
