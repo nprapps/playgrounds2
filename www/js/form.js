@@ -479,7 +479,7 @@ $(function() {
             })
 
             // All of this meta_hdr and meta_items stuff.
-            playground.fields.meta_hdr.html(playground.fields.meta_hdr.html() + ' &rsaquo;');
+            playground.fields.meta_hdr.html(playground.fields.meta_hdr.html() + ' +');
             playground.fields.meta_items.hide();
             playground.fields.meta_hdr.on('click', function() {
                 playground.fields.meta_items.slideToggle('fast');
