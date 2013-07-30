@@ -139,8 +139,9 @@ header {
     height: 400px;
 
     .mobile-prompt {
-        padding: 6px 11px 6px 33px;
-        margin: 22px -11px 0 -11px;
+        display: inline-block;
+        padding: 11px 11px 11px 33px;
+        margin: 22px 0 0 0;
         background: rgba(255,255,255,.5) url('@{img-root}/ico-smartphone.png') no-repeat 11px center;
 
         p {
@@ -167,7 +168,11 @@ header {
         left: 0;
     }
     .project-info {
-        padding: 33px 22px 22px 22px;
+        padding: 33px;
+        
+        @media @screen-tiny {
+            padding: 22px 20px;
+        }
     }
     .row {
         position: relative;
@@ -175,7 +180,7 @@ header {
     }
     .sublinks {
         font-size: 12px;
-        margin-top: 22px;
+        margin-top: 11px;
         margin-bottom: 0;
         color: #999;
         
