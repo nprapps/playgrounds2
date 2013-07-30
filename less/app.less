@@ -374,6 +374,7 @@ section#the-goods { margin-top: 44px; }
 
 // Shared styles for creating or editing a playground
 .playground-form {
+    margin-bottom: 0;
 
     .alerts {
         position: absolute;
@@ -587,6 +588,18 @@ section#the-goods { margin-top: 44px; }
         background: @white;
         z-index: 100;
 
+        @media @screen-tiny {
+            .translate(0,0);
+            .transition(all 0.5s ease-in-out);
+
+            &.hide {
+                display: block;
+                .translate(0,-100%);
+                .transition(all 0.5s ease-in-out);
+            }
+        }
+
+
         .edit-address-hed,
         #search-form {
             display: block;
@@ -597,6 +610,11 @@ section#the-goods { margin-top: 44px; }
             padding: 0 20px;
             margin: 0;
             line-height: 44px;
+            letter-spacing: -0.05em;
+
+            .close {
+                padding: 0;
+            }
         }
 
         .edit-address-footer {
@@ -923,7 +941,22 @@ section#the-goods { margin-top: 44px; }
         }
         &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
     }
+
     .update-form-modal {
+        @media @screen-tiny {
+            &.hide.in {
+                .translate(0,0);
+                .transition(all 0.5s ease-in-out);
+            }
+
+            &.hide {
+                display: block;
+                opacity: 1;
+                top: 0;
+                .translate(0,-100%);
+                .transition(all 0.5s ease-in-out);
+            }
+        }
 
         .modal-body {
             padding-bottom: 100px;

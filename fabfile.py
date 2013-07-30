@@ -124,8 +124,12 @@ def app_config_js():
     """
     data.app_config_js()
 
-def render_playgrounds():
+def local_render_playgrounds():
     data.render_playgrounds()
+
+def remote_render_playgrounds():
+    require('settings', provided_by=[production, staging])
+    run('source %(virtualenv_path)s/bin/activate && %(repo_path)s/render_playgrounds.py' % env)
 
 def render():
     """
