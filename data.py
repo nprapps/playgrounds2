@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from collections import defaultdict
+import csv
 import datetime
 from glob import glob
 import json
@@ -16,12 +18,73 @@ import pytz
 import app
 import app_config
 import copytext
-from models import Playground, PlaygroundFeature, Revision
+from models import Playground, PlaygroundFeature, Revision, get_active_playgrounds
+
+
+def write_data_csv(playgrounds=None):
+    """
+    Outputs a CSV-ified version of our playgrounds DB.
+    """
+    if not playgrounds:
+        playgrounds = get_active_playgrounds()
+
+    features = [
+        'smooth-surface-throughout',
+        'safety-fence',
+        'ramps-to-play-components',
+        'transfer-stations-to-play-components',
+        'sight-impaired-play-components',
+        'sound-play-components',
+        'accessible-swing'
+    ]
+
+    fields = get_active_playgrounds()[0].__dict__['_data'].keys()
+    fields.extend(features)
+
+    with open('www/npr-accessible-playgrounds.csv', 'wb') as csvfile:
+        csvwriter = csv.DictWriter(csvfile, fields)
+        csvwriter.writeheader()
+        for playground in get_active_playgrounds():
+            playground_dict = playground.to_dict()
+            playground_dict.pop('features')
+
+            for feature in features:
+                playground_dict[feature] = False
+
+            for f in playground.features:
+                playground_dict[f.slug] = True
+
+            csvwriter.writerow(playground_dict)
+
+
+def write_data_json(playgrounds=None):
+    """
+    Output a JSON-ified version of our playgrounds DB.
+    """
+    if not playgrounds:
+        playgrounds = get_active_playgrounds()
+
+    payload = {}
+    payload['meta'] = {}
+    payload['playgrounds'] = []
+
+    payload['meta']['count'] = playgrounds.count()
+    payload['meta']['states'] = defaultdict(int)
+    payload['meta']['features'] = defaultdict(int)
+
+    for playground in playgrounds:
+        payload['meta']['states'][playground.state] += 1
+        for feature in playground.features:
+            payload['meta']['features'][feature.slug] += 1
+        payload['playgrounds'].append(playground.to_dict())
+
+    with open('www/npr-accessible-playgrounds.json', 'wb') as jsonfile:
+        jsonfile.write(json.dumps(payload))
 
 
 def update_search_index(playgrounds):
     if not playgrounds:
-        playgrounds = Playground.select()
+        playgrounds = get_active_playgrounds()
 
     print 'Generating SDF batch...'
     sdf = [playground.sdf() for playground in playgrounds]

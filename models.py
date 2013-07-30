@@ -94,6 +94,25 @@ class Playground(Model):
 
         return None
 
+    def to_dict(self):
+        """
+        Dumps a playground and features as JSON.
+        """
+        playground = self.__dict__['_data']
+
+        for k, v in playground.items():
+            try:
+                playground[k] = v.encode('utf-8')
+            except AttributeError:
+                pass
+
+        playground['features'] = []
+        for feature in self.features:
+            feature = feature.__dict__['_data']
+            feature.pop('playground')
+            playground['features'].append(feature)
+        return playground
+
     @property
     def percent_complete(self):
         """

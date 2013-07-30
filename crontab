@@ -1,2 +1,3 @@
 0 4 * * * ubuntu bash /home/ubuntu/apps/playgrounds2/repository/cron.sh fab $DEPLOYMENT_TARGET write_snapshots >> /var/log/playgrounds2-crontab.log 2>&1
 0 4 * * * ubuntu bash /home/ubuntu/apps/playgrounds2/repository/cron.sh /home/ubuntu/apps/playgrounds2/repository/process_updates.py >> /var/log/playgrounds2-crontab.log 2>&1
+0 4 * * * ubuntu bash /home/ubuntu/apps/playgrounds2/repository/cron.sh fab $DEPLOYMENT_TARGET deploy_data >> /var/log/playgrounds2-crontab.log 2>&1
