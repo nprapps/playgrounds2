@@ -41,7 +41,7 @@ $(function() {
                     map.on('moveend', playground.map.process_map_location);
                     playground.address_change_accepted = true;
                 } else {
-                    alert_text = "<strong>I'm sorry! We couldn't find that place.</strong><br>Don't forget to add the street/avenue/boulevard.<br/>If you're still having trouble, try finding it on the map.";
+                    alert_text = "<strong>We're sorry! We couldn't find that place.</strong><br>Don't forget to add the street/avenue/boulevard.<br/>If you're still having trouble, try finding it on the map.";
                     make_alert(alert_text, 'alert-error');
                 }
             },
@@ -274,6 +274,19 @@ $(function() {
             });
         },
         'accept_address': function() {
+            var has_street_address = playground.fields.address.val() !== '';
+            var has_city = playground.fields.address.val() !== '';
+            var has_state = playground.fields.state.val() !== '';
+            var has_zip = playground.fields.address.val() !== '';
+            var use_city_state = has_street_address && has_city && has_state;
+            var use_zip = has_street_address && has_zip;
+            
+            if (!(use_city_state || use_zip)) {
+                alert_text = "<strong>We're sorry!</strong><br>We need more information to find this location. Please provide an address with a city and state or ZIP code.";
+                make_alert(alert_text, 'alert-error');
+                return;
+            }
+
             if (playground.fields.reverse_geocoded.attr('checked') !== 'checked'){
                 playground.geocode(playground.form.prepare_geocode_object(), playground.callbacks.geocode);
             } else {
