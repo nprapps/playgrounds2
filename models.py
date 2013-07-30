@@ -371,7 +371,7 @@ class Playground(Model):
                 'owner': self.owner or '',
                 'owner_type': self.owner_type or '',
                 'public_remarks': self.public_remarks or '',
-                'full_text': ' | '.join([self.name, self.city or '', self.state or '', self.agency or '', self.owner or '', self.public_remarks or '']),
+                'full_text': ' | '.join([self.name or '', self.city or '', self.state or '', self.agency or '', self.owner or '', self.public_remarks or '']),
                 'slug': self.slug,
                 'display_name': self.display_name
             }
@@ -444,7 +444,9 @@ def display_field_name(field_name):
     try:
         return getattr(Playground, field_name).verbose_name
     except AttributeError:
-        return copytext.COPY.feature_list[field_name]['term']
+        feature = next(f for f in copytext.COPY.feature_list if f.key == field_name)
+
+        return feature['term']
 
 
 def get_active_playgrounds():
