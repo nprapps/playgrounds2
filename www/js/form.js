@@ -304,8 +304,14 @@ $(function() {
             this.fields.address_editor.removeClass('hide');
             this.fields.address_editor_toggle.text('Cancel');
             this.map.center_editor();
+            if ($('body').hasClass('create-playground')){
+                $('.modal-backdrop').toggleClass('in');
+            }
         },
         'hide_address_editor': function(){
+            if ($('body').hasClass('create-playground')){
+                $('.modal-backdrop').toggleClass('in');
+            }
             this.fields.address_editor.addClass('hide');
             this.fields.address_editor_toggle.text('Edit');
             $('#myTab a:first').tab('show');
@@ -458,6 +464,11 @@ $(function() {
             if ( $('#locator-map') ) {
                 playground.map.resize_locator();
                 $(window).resize(_.debounce(playground.map.resize_locator_map, 100));
+            }
+
+            // Need to recenter the editor if the map dimension changes
+            if ( $('#edit-map') ) {
+                $(window).resize(_.debounce(playground.map.center_editor, 100));
             }
 
             // All of this meta_hdr and meta_items stuff.

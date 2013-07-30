@@ -20,87 +20,89 @@
             </p>
         </div>
     </div>
+    <div class="row-fluid">
         <div class="features span6">
             <h5>Features</h5>
-            {% for feature in features %}
-                <div class="feature">
-                    {{ feature|safe }}
-                </div>
-            {% endfor %}
-                <div class="alert">Don't see the feature you're looking for? <a href="#">Email us</a> or <a href="#">leave a tip</a>.</div>
+        {% for feature in features %}
+            <div class="feature">
+                {{ feature|safe }}
             </div>
-            <div class="basic-info span6">
-                <div class="control-group">
-                    <label class="control-label">Playground Name <span class="muted">(Optional)</span></label>
-                    <div class="controls">
-                        <input class="input-block-level input" type="text" name="name" value="{{ playground.name }}"></input>
-                    </div>
+        {% endfor %}
+            <div class="alert">Don't see the feature you're looking for? <a href="#">Email us</a> or <a href="#">leave a tip</a>.</div>
+        </div>
+        <div class="basic-info span6">
+            <div class="control-group">
+                <label class="control-label">Playground Name <span class="muted">(Optional)</span></label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="name" value="{{ playground.name }}"></input>
                 </div>
-
-                <div class="control-group">
-                    <label class="control-label">At (is this in a park or school?) <span class="muted">(Optional)</span></label>
-                    <div class="controls">
-                        <input class="input-block-level input" type="text" name="facility" value="{{ playground.facility }}"></input>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label class="control-label">URL <span class="muted">(Optional)</span></label>
-                    <div class="controls">
-                        <input class="input-block-level input" type="text" name="url" value="{{ playground.facility }}"></input>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label class="control-label">Agency <span class="muted">(Optional)</span></label>
-                    <div class="controls">
-                        <input class="input-block-level input" type="text" name="agency" value="{{ playground.agency }}"></input>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label class="control-label">Owner <span class="muted">(Optional)</span></label>
-                    <div class="controls">
-                        <input class="input-block-level input" type="text" name="owner" value="{{ playground.owner }}"></input>
-                    </div>
-                </div>
-
-                <div class="control-group" style="display:none">
-                    <label class="control-label">Remarks</label>
-                    <div class="controls">
-                        <input class="input-block-level input" type="text" name="public_remarks" value="{{ playground.public_remarks }}"></input>
-                    </div>
-                </div>
-
-                <div class="control-group" style="display:none">
-                    <label class="control-label">Id</label>
-                    <div class="controls">
-                        <input class="input-block-level input" type="text" name="id" value="{{ playground.id }}" data-changed="true"></input>
-                    </div>
-                </div>
-
-                <div class="control-group" style="display:none">
-                    <label class="control-label">Reverse Geocoded</label>
-                    <div class="controls">
-                        <input type="checkbox" name="reverse_geocoded"{% if playground.reverse_geocoded == True %} checked=checked{% endif %}></input>
-                    </div>
-                </div>
-
-                <div class="control-group" style="display:none">
-                    <label class="control-label">Latitude</label>
-                    <div class="controls">
-                        <input class="input-block-level input" type="text" name="latitude" value="{{ playground.latitude }}"></input>
-                    </div>
-                </div>
-
-                <div class="control-group" style="display:none">
-                    <label class="control-label">Longitude</label>
-                    <div class="controls">
-                        <input class="input-block-level input" type="text" name="longitude" value="{{ playground.longitude }}"></input>
-                    </div>
-                </div>
-
             </div>
+
+            <div class="control-group">
+                <label class="control-label">At (is this in a park or school?) <span class="muted">(Optional)</span></label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="facility" value="{{ playground.facility }}"></input>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">URL <span class="muted">(Optional)</span></label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="url" value="{{ playground.facility }}"></input>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Agency <span class="muted">(Optional)</span></label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="agency" value="{{ playground.agency }}"></input>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Owner <span class="muted">(Optional)</span></label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="owner" value="{{ playground.owner }}"></input>
+                </div>
+            </div>
+
+            <div class="control-group" style="display:none">
+                <label class="control-label">Remarks</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="public_remarks" value="{{ playground.public_remarks }}"></input>
+                </div>
+            </div>
+
+            <div class="control-group" style="display:none">
+                <label class="control-label">Id</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="id" value="{{ playground.id }}" data-changed="true"></input>
+                </div>
+            </div>
+
+            <div class="control-group" style="display:none">
+                <label class="control-label">Reverse Geocoded</label>
+                <div class="controls">
+                    <input type="checkbox" name="reverse_geocoded"{% if playground.reverse_geocoded == True %} checked=checked{% endif %}></input>
+                </div>
+            </div>
+
+            <div class="control-group" style="display:none">
+                <label class="control-label">Latitude</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="latitude" value="{{ playground.latitude }}"></input>
+                </div>
+            </div>
+
+            <div class="control-group" style="display:none">
+                <label class="control-label">Longitude</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="longitude" value="{{ playground.longitude }}"></input>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-large" data-action="reset_form" data-dismiss="modal" aria-hidden="true">Cancel</button>
