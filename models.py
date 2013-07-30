@@ -100,6 +100,9 @@ class Playground(Model):
         """
         playground = self.__dict__['_data']
 
+        for field in ['entry', 'source', 'active', 'remarks', 'reverse_geocoded']:
+            playground.pop(field)
+
         for k, v in playground.items():
             try:
                 playground[k] = v.encode('utf-8')
@@ -107,10 +110,12 @@ class Playground(Model):
                 pass
 
         playground['features'] = []
-        for feature in self.features:
-            feature = feature.__dict__['_data']
-            feature.pop('playground')
-            playground['features'].append(feature)
+        if self.features:
+            for feature in self.features:
+                f = {}
+                f['name'] = feature.slug.replace('-', ' ')
+                playground['features'].append(f)
+
         return playground
 
     @property

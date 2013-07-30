@@ -29,13 +29,13 @@ def write_data_csv(playgrounds=None):
         playgrounds = get_active_playgrounds()
 
     features = [
-        'smooth-surface-throughout',
-        'safety-fence',
-        'ramps-to-play-components',
-        'transfer-stations-to-play-components',
-        'sight-impaired-play-components',
-        'sound-play-components',
-        'accessible-swing'
+        'smooth surface throughout',
+        'safety fence',
+        'ramps to play components',
+        'transfer stations to play components',
+        'sight impaired play components',
+        'sound play components',
+        'accessible swing'
     ]
 
     fields = get_active_playgrounds()[0].__dict__['_data'].keys()
@@ -51,8 +51,9 @@ def write_data_csv(playgrounds=None):
             for feature in features:
                 playground_dict[feature] = False
 
-            for f in playground.features:
-                playground_dict[f.slug] = True
+            if playground.features:
+                for f in playground.features:
+                    playground_dict[f.slug.replace('-', ' ')] = True
 
             csvwriter.writerow(playground_dict)
 
@@ -74,8 +75,11 @@ def write_data_json(playgrounds=None):
 
     for playground in playgrounds:
         payload['meta']['states'][playground.state] += 1
-        for feature in playground.features:
-            payload['meta']['features'][feature.slug] += 1
+
+        if playground.features:
+            for feature in playground.features:
+                payload['meta']['features'][feature.slug.replace('-', ' ')] += 1
+
         payload['playgrounds'].append(playground.to_dict())
 
     with open('www/npr-accessible-playgrounds.json', 'wb') as jsonfile:
