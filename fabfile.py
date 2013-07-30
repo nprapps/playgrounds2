@@ -129,7 +129,7 @@ def local_render_playgrounds():
 
 def remote_render_playgrounds():
     require('settings', provided_by=[production, staging])
-    run('./render_playgrounds')
+    run('%(repo_path)s/render_playgrounds.py' % env)
 
 def render():
     """
