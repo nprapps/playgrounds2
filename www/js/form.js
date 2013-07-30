@@ -304,8 +304,14 @@ $(function() {
             this.fields.address_editor.removeClass('hide');
             this.fields.address_editor_toggle.text('Cancel');
             this.map.center_editor();
+            if ($('body').hasClass('create-playground')){
+                $('.modal-backdrop').toggleClass('in');
+            }
         },
         'hide_address_editor': function(){
+            if ($('body').hasClass('create-playground')){
+                $('.modal-backdrop').toggleClass('in');
+            }
             this.fields.address_editor.addClass('hide');
             this.fields.address_editor_toggle.text('Edit');
             $('#myTab a:first').tab('show');
