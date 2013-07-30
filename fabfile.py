@@ -129,7 +129,7 @@ def render_playgrounds():
 
 def remote_deploy_playgrounds():
     require('settings', provided_by=[production, staging])
-    run('cd %(repo_path)s && bash cron.sh fab deploy_playgrounds' % env)
+    run('cd %(repo_path)s && bash cron.sh fab $DEPLOYMENT_TARGET deploy_playgrounds' % env)
 
 def render():
     """
