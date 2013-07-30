@@ -124,12 +124,12 @@ def app_config_js():
     """
     data.app_config_js()
 
-def local_render_playgrounds():
+def render_playgrounds():
     data.render_playgrounds()
 
-def remote_render_playgrounds():
+def remote_deploy_playgrounds():
     require('settings', provided_by=[production, staging])
-    run('cd %(repo_path)s && bash cron.sh fab local_render_playgrounds' % env)
+    run('cd %(repo_path)s && bash cron.sh fab deploy_playgrounds' % env)
 
 def render():
     """
