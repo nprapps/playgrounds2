@@ -1,0 +1,97 @@
+.row-fluid {
+	position: relative;
+	[class*="span"] {
+		&[class*="col-push"],
+		&[class*="col-pull"] {
+			position: relative;
+			&.first { margin-left: 0; }
+		}
+	}
+
+	// Push and pull columns for source order changes
+	.col-push-1		{ left: (@fluidGridColumnWidth * 1) + (@fluidGridGutterWidth * 1); }
+	.col-push-2		{ left: (@fluidGridColumnWidth * 2) + (@fluidGridGutterWidth * 2); }
+	.col-push-3		{ left: (@fluidGridColumnWidth * 3) + (@fluidGridGutterWidth * 3); }
+	.col-push-4		{ left: (@fluidGridColumnWidth * 4) + (@fluidGridGutterWidth * 4); }
+	.col-push-5		{ left: (@fluidGridColumnWidth * 5) + (@fluidGridGutterWidth * 5); }
+	.col-push-6		{ left: (@fluidGridColumnWidth * 6) + (@fluidGridGutterWidth * 6); }
+	.col-push-7		{ left: (@fluidGridColumnWidth * 7) + (@fluidGridGutterWidth * 7); }
+	.col-push-8		{ left: (@fluidGridColumnWidth * 8) + (@fluidGridGutterWidth * 8); }
+	.col-push-9		{ left: (@fluidGridColumnWidth * 9) + (@fluidGridGutterWidth * 9); }
+	.col-push-10	{ left: (@fluidGridColumnWidth * 10) + (@fluidGridGutterWidth * 10); }
+	.col-push-11	{ left: (@fluidGridColumnWidth * 11) + (@fluidGridGutterWidth * 11); }
+
+	.col-pull-1		{ right: (@fluidGridColumnWidth * 1) + (@fluidGridGutterWidth * (1 - 1)); }
+	.col-pull-2		{ right: (@fluidGridColumnWidth * 2) + (@fluidGridGutterWidth * (2 - 1)); }
+	.col-pull-3		{ right: (@fluidGridColumnWidth * 3) + (@fluidGridGutterWidth * (3 - 1)); }
+	.col-pull-4		{ right: (@fluidGridColumnWidth * 4) + (@fluidGridGutterWidth * (4 - 1)); }
+	.col-pull-5		{ right: (@fluidGridColumnWidth * 5) + (@fluidGridGutterWidth * (5 - 1)); }
+	.col-pull-6		{ right: (@fluidGridColumnWidth * 6) + (@fluidGridGutterWidth * (6 - 1)); }
+	.col-pull-7		{ right: (@fluidGridColumnWidth * 7) + (@fluidGridGutterWidth * (7 - 1)); }
+	.col-pull-8		{ right: (@fluidGridColumnWidth * 8) + (@fluidGridGutterWidth * (8 - 1)); }
+	.col-pull-9		{ right: (@fluidGridColumnWidth * 9) + (@fluidGridGutterWidth * (9 - 1)); }
+	.col-pull-10	{ right: (@fluidGridColumnWidth * 10) + (@fluidGridGutterWidth * (10 - 1)); }
+	.col-pull-11	{ right: (@fluidGridColumnWidth * 11) + (@fluidGridGutterWidth * (11 - 1)); }
+
+	@media (min-width: 768px) and (max-width: 979px) {
+		.col-push-1		{ left: (@fluidGridColumnWidth768 * 1) + (@fluidGridGutterWidth768 * 1); }
+		.col-push-2		{ left: (@fluidGridColumnWidth768 * 2) + (@fluidGridGutterWidth768 * 2); }
+		.col-push-3		{ left: (@fluidGridColumnWidth768 * 3) + (@fluidGridGutterWidth768 * 3); }
+		.col-push-4		{ left: (@fluidGridColumnWidth768 * 4) + (@fluidGridGutterWidth768 * 4); }
+		.col-push-5		{ left: (@fluidGridColumnWidth768 * 5) + (@fluidGridGutterWidth768 * 5); }
+		.col-push-6		{ left: (@fluidGridColumnWidth768 * 6) + (@fluidGridGutterWidth768 * 6); }
+		.col-push-7		{ left: (@fluidGridColumnWidth768 * 7) + (@fluidGridGutterWidth768 * 7); }
+		.col-push-8		{ left: (@fluidGridColumnWidth768 * 8) + (@fluidGridGutterWidth768 * 8); }
+		.col-push-9		{ left: (@fluidGridColumnWidth768 * 9) + (@fluidGridGutterWidth768 * 9); }
+		.col-push-10	{ left: (@fluidGridColumnWidth768 * 10) + (@fluidGridGutterWidth768 * 10); }
+		.col-push-11	{ left: (@fluidGridColumnWidth768 * 11) + (@fluidGridGutterWidth768 * 11); }
+
+		.col-pull-1		{ right: (@fluidGridColumnWidth768 * 1) + (@fluidGridGutterWidth768 * (1 - 1)); }
+		.col-pull-2		{ right: (@fluidGridColumnWidth768 * 2) + (@fluidGridGutterWidth768 * (2 - 1)); }
+		.col-pull-3		{ right: (@fluidGridColumnWidth768 * 3) + (@fluidGridGutterWidth768 * (3 - 1)); }
+		.col-pull-4		{ right: (@fluidGridColumnWidth768 * 4) + (@fluidGridGutterWidth768 * (4 - 1)); }
+		.col-pull-5		{ right: (@fluidGridColumnWidth768 * 5) + (@fluidGridGutterWidth768 * (5 - 1)); }
+		.col-pull-6		{ right: (@fluidGridColumnWidth768 * 6) + (@fluidGridGutterWidth768 * (6 - 1)); }
+		.col-pull-7		{ right: (@fluidGridColumnWidth768 * 7) + (@fluidGridGutterWidth768 * (7 - 1)); }
+		.col-pull-8		{ right: (@fluidGridColumnWidth768 * 8) + (@fluidGridGutterWidth768 * (8 - 1)); }
+		.col-pull-9		{ right: (@fluidGridColumnWidth768 * 9) + (@fluidGridGutterWidth768 * (9 - 1)); }
+		.col-pull-10	{ right: (@fluidGridColumnWidth768 * 10) + (@fluidGridGutterWidth768 * (10 - 1)); }
+		.col-pull-11	{ right: (@fluidGridColumnWidth768 * 11) + (@fluidGridGutterWidth768 * (11 - 1)); }
+	}
+	@media (min-width: 1200px) {
+		.col-push-1		{ left: (@fluidGridColumnWidth1200 * 1) + (@fluidGridGutterWidth1200 * 1); }
+		.col-push-2		{ left: (@fluidGridColumnWidth1200 * 2) + (@fluidGridGutterWidth1200 * 2); }
+		.col-push-3		{ left: (@fluidGridColumnWidth1200 * 3) + (@fluidGridGutterWidth1200 * 3); }
+		.col-push-4		{ left: (@fluidGridColumnWidth1200 * 4) + (@fluidGridGutterWidth1200 * 4); }
+		.col-push-5		{ left: (@fluidGridColumnWidth1200 * 5) + (@fluidGridGutterWidth1200 * 5); }
+		.col-push-6		{ left: (@fluidGridColumnWidth1200 * 6) + (@fluidGridGutterWidth1200 * 6); }
+		.col-push-7		{ left: (@fluidGridColumnWidth1200 * 7) + (@fluidGridGutterWidth1200 * 7); }
+		.col-push-8		{ left: (@fluidGridColumnWidth1200 * 8) + (@fluidGridGutterWidth1200 * 8); }
+		.col-push-9		{ left: (@fluidGridColumnWidth1200 * 9) + (@fluidGridGutterWidth1200 * 9); }
+		.col-push-10	{ left: (@fluidGridColumnWidth1200 * 10) + (@fluidGridGutterWidth1200 * 10); }
+		.col-push-11	{ left: (@fluidGridColumnWidth1200 * 11) + (@fluidGridGutterWidth1200 * 11); }
+
+		.col-pull-1		{ right: (@fluidGridColumnWidth1200 * 1) + (@fluidGridGutterWidth1200 * (1 - 1)); }
+		.col-pull-2		{ right: (@fluidGridColumnWidth1200 * 2) + (@fluidGridGutterWidth1200 * (2 - 1)); }
+		.col-pull-3		{ right: (@fluidGridColumnWidth1200 * 3) + (@fluidGridGutterWidth1200 * (3 - 1)); }
+		.col-pull-4		{ right: (@fluidGridColumnWidth1200 * 4) + (@fluidGridGutterWidth1200 * (4 - 1)); }
+		.col-pull-5		{ right: (@fluidGridColumnWidth1200 * 5) + (@fluidGridGutterWidth1200 * (5 - 1)); }
+		.col-pull-6		{ right: (@fluidGridColumnWidth1200 * 6) + (@fluidGridGutterWidth1200 * (6 - 1)); }
+		.col-pull-7		{ right: (@fluidGridColumnWidth1200 * 7) + (@fluidGridGutterWidth1200 * (7 - 1)); }
+		.col-pull-8		{ right: (@fluidGridColumnWidth1200 * 8) + (@fluidGridGutterWidth1200 * (8 - 1)); }
+		.col-pull-9		{ right: (@fluidGridColumnWidth1200 * 9) + (@fluidGridGutterWidth1200 * (9 - 1)); }
+		.col-pull-10	{ right: (@fluidGridColumnWidth1200 * 10) + (@fluidGridGutterWidth1200 * (10 - 1)); }
+		.col-pull-11	{ right: (@fluidGridColumnWidth1200 * 11) + (@fluidGridGutterWidth1200 * (11 - 1)); }
+	}
+}
+@media (max-width: 767px) {
+	.row-fluid {
+		[class*="span"] {
+			&[class*="col-push"],
+			&[class*="col-pull"] {
+				right: auto;
+				left: auto;
+			}
+		}
+	}
+}

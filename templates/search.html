@@ -27,7 +27,7 @@
 
 
 {% block wide_content %}
-<div id="main-content" class="row">
+<div id="main-content" class="row-fluid">
     <div class="span12">
         {% include '_alerts.html' %}
 
@@ -45,42 +45,44 @@
         </div>
 
     </div>
-    <div class="span6">
+    <div class="row-fluid">
+        <div class="span6 col-push-6">
 
-            <div id="search-results-wrapper">
-                <div id="search-results-map-wrapper">
-                    <div id="search-results-map-desktop"></div>
-                    <img id="search-results-map" src="" />
-                    <img id="search-results-map-loading" src="img/loading.gif" />
-                    <div id="search-results-map-loading-text">Searching...</div>
+                <div id="search-results-wrapper">
+                    <div id="search-results-map-wrapper">
+                        <div id="search-results-map-desktop"></div>
+                        <img id="search-results-map" src="" />
+                        <img id="search-results-map-loading" src="img/loading.gif" />
+                        <div id="search-results-map-loading-text">Searching...</div>
 
-                <div class="zoom-buttons">
-                    <button type="button" id="zoom-in" class="btn-zoom">+</button>
-                    <button type="button" id="zoom-out" class="btn-zoom">-</button>
+                    <div class="zoom-buttons">
+                        <button type="button" id="zoom-in" class="btn-zoom">+</button>
+                        <button type="button" id="zoom-out" class="btn-zoom">-</button>
+                    </div>
                 </div>
             </div>
+
         </div>
+        <div class="span6 col-pull-6 first">
 
-    </div>
-    <div class="span6">
+            <div id="search-results-not-found" class="help-prompt">
+                <h4>{{ COPY.content.search_not_found }}</h4>
+                <p class="prompt">{{ COPY.content.search_not_found_text }}</p>
+                <p><a href="create.html" class="btn btn-blue btn-block"><i class="icon-plus-sign"></i> {{ COPY.content.search_help_button }}</a></p>
+            </div>
 
-        <div id="search-results-not-found" class="help-prompt">
-            <h4>{{ COPY.content.search_not_found }}</h4>
-            <p class="prompt">{{ COPY.content.search_not_found_text }}</p>
-            <p><a href="create.html" class="btn btn-blue btn-block"><i class="icon-plus-sign"></i> {{ COPY.content.search_help_button }}</a></p>
+            <div id="search-results">
+                <div id="results-loading">Searching...</div>
+                <ul class="playground-list">
+                </ul>
+            </div>
+
+            <div id="search-help-prompt" class="help-prompt">
+                <p class="prompt">{{ COPY.content.search_help_title }}</p>
+                <p><a href="create.html" class="btn btn-blue btn-block"><i class="icon-plus-sign"></i> {{ COPY.content.search_help_button }}</a></p>
+            </div>
+
         </div>
-
-        <div id="search-results">
-            <div id="results-loading">Searching...</div>
-            <ul class="playground-list">
-            </ul>
-        </div>
-
-        <div id="search-help-prompt" class="help-prompt">
-            <p class="prompt">{{ COPY.content.search_help_title }}</p>
-            <p><a href="create.html" class="btn btn-blue btn-block"><i class="icon-plus-sign"></i> {{ COPY.content.search_help_button }}</a></p>
-        </div>
-
     </div>
 </div>
 {% endblock %}
