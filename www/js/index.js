@@ -2,7 +2,7 @@ var CONTENT_WIDTH;
 var GEOLOCATE = Modernizr.geolocation;
 
 // NB: Duplicated from search.js
-var RESULTS_DEFAULT_ZOOM = 14;
+var RESULTS_DEFAULT_ZOOM = 15;
 
 var $search_form = null;
 var $search_latitude = null;
