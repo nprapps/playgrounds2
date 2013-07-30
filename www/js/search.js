@@ -228,10 +228,10 @@ function search() {
 
                         if (IS_MOBILE) {
                             $search_results_map_loading.show();
-                            $search_results_map_loading_text.text('Searching further away...').show();
+                            $search_results_map_loading_text.text('Searching farther away...').show();
                             $search_results_map.css('opacity', '0.25');
                         } else {
-                            $map_loading.text('Searching further away...').show();
+                            $map_loading.text('Searching farther away...').show();
                         }
 
                         search();
