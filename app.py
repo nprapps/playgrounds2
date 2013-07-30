@@ -218,7 +218,13 @@ def _app_config_js():
     """
     config = flatten_app_config()
     js = 'window.APP_CONFIG = ' + json.dumps(config) + ';'
-    features = 'window.FEATURES = ' + json.dumps([f['key'] for f in copytext.COPY.feature_list]) + ';'
+
+    features = {}
+
+    for feature in copytext.COPY.feature_list:
+        features[feature['key']] = feature._row 
+
+    features = 'window.FEATURES = ' + json.dumps(features) + ';'
 
     return '\n'.join([js, features]), 200, { 'Content-Type': 'application/javascript' }
 
