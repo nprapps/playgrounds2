@@ -415,7 +415,7 @@ class Playground(Model):
         if not self.latitude or not self.longitude:
             return []
 
-        return list(Playground.raw('SELECT *, distance(?, ?, latitude, longitude) as distance FROM playground WHERE distance IS NOT NULL AND id <> ? ORDER BY distance ASC LIMIT ?', self.latitude, self.longitude, self.id, n))
+        return list(Playground.raw('SELECT *, distance(?, ?, latitude, longitude) as distance FROM playground WHERE distance IS NOT NULL AND id <> ? AND active = 1 ORDER BY distance ASC LIMIT ?', self.latitude, self.longitude, self.id, n))
 
 @database.func()
 def distance(lat1, lng1, lat2, lng2):
