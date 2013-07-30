@@ -466,6 +466,11 @@ $(function() {
                 $(window).resize(_.debounce(playground.map.resize_locator_map, 100));
             }
 
+            // Need to recenter the editor if the map dimension changes
+            if ( $('#edit-map') ) {
+                $(window).resize(_.debounce(playground.map.center_editor, 100));
+            }
+
             // All of this meta_hdr and meta_items stuff.
             playground.fields.meta_hdr.html(playground.fields.meta_hdr.html() + ' &rsaquo;');
             playground.fields.meta_items.hide();
