@@ -471,6 +471,7 @@ $(function() {
                 $(window).resize(_.debounce(playground.map.center_editor, 100));
             }
 
+            // Recenter the editor map when you activate the map pane
             $('#editor-tabs a:first').on('click', function(e){
                 e.preventDefault();
                 $('this').tab('show');
