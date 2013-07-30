@@ -6,8 +6,26 @@
         <a href="<%= S3_BASE_URL %>/playground/<%= data.slug[0] %>.html">
             <%= data.display_name[0] %>
         </a>
-        <span class="result-city">
-            <% if (data.city[0]) { %><%= data.city[0] %>, <% } %><%= data.state[0] %>
+        
+        <span class="result-features">
+        <% var feature_list_prefix = '<strong>Features: </strong>' %>
+        <% var feature_list = feature_list_prefix %>
+        <% var feature_counter = 0 %>
+        <% for (feature in window.FEATURES) { %>
+            <% var feat = feature.replace(/-/g,'_') %>
+            <% if (data['feature_' + feat][0] == 1) { %>
+                <% if (feature_counter > 0) { %>
+                    <% feature_list += ', ' %>
+                <% } %>
+                <% feature_list += window.FEATURES[feature].term.toLowerCase() %>
+                <% feature_counter++ %>
+            <% } %>
+        <% } %>
+        <% if (feature_list != feature_list_prefix) { %>
+            <%= feature_list %>
+        <% } else { %>
+            Help us identify accessible features at this playground.
+        <% } %>
         </span>
     </div>
     <div class="result-meta">
@@ -15,6 +33,9 @@
             <% if (data.distance && data.latitude.length > 0) { %>
                  <%= (data.distance[0] / 1000).toFixed(1) %> miles
             <% } %>
+        </span>
+        <span class="result-city">
+            <% if (data.city[0]) { %><%= data.city[0] %>, <% } %><%= data.state[0] %>
         </span>
     </div>
 </li>
