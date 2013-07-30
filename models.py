@@ -94,6 +94,30 @@ class Playground(Model):
 
         return None
 
+    def to_dict(self):
+        """
+        Dumps a playground and features as JSON.
+        """
+        playground = self.__dict__['_data']
+
+        for field in ['entry', 'source', 'active', 'remarks', 'reverse_geocoded']:
+            playground.pop(field)
+
+        for k, v in playground.items():
+            try:
+                playground[k] = v.encode('utf-8')
+            except AttributeError:
+                pass
+
+        playground['features'] = []
+        if self.features:
+            for feature in self.features:
+                f = {}
+                f['name'] = feature.slug.replace('-', ' ')
+                playground['features'].append(f)
+
+        return playground
+
     @property
     def percent_complete(self):
         """
@@ -347,7 +371,7 @@ class Playground(Model):
                 'owner': self.owner or '',
                 'owner_type': self.owner_type or '',
                 'public_remarks': self.public_remarks or '',
-                'full_text': ' | '.join([self.name, self.city or '', self.state or '', self.agency or '', self.owner or '', self.public_remarks or '']),
+                'full_text': ' | '.join([self.name or '', self.city or '', self.state or '', self.agency or '', self.owner or '', self.public_remarks or '']),
                 'slug': self.slug,
                 'display_name': self.display_name
             }
@@ -391,7 +415,7 @@ class Playground(Model):
         if not self.latitude or not self.longitude:
             return []
 
-        return list(Playground.raw('SELECT *, distance(?, ?, latitude, longitude) as distance FROM playground WHERE distance IS NOT NULL AND id <> ? ORDER BY distance ASC LIMIT ?', self.latitude, self.longitude, self.id, n))
+        return list(Playground.raw('SELECT *, distance(?, ?, latitude, longitude) as distance FROM playground WHERE distance IS NOT NULL AND id <> ? AND active = 1 ORDER BY distance ASC LIMIT ?', self.latitude, self.longitude, self.id, n))
 
 @database.func()
 def distance(lat1, lng1, lat2, lng2):
@@ -420,7 +444,9 @@ def display_field_name(field_name):
     try:
         return getattr(Playground, field_name).verbose_name
     except AttributeError:
-        return copytext.COPY.feature_list[field_name]['term']
+        feature = next(f for f in copytext.COPY.feature_list if f.key == field_name)
+
+        return feature['term']
 
 
 def get_active_playgrounds():

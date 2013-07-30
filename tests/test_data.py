@@ -14,7 +14,7 @@ import app_config
 import app
 import data
 import models
-from models import Playground, PlaygroundFeature, Revision
+from models import Playground, PlaygroundFeature, Revision, get_active_playgrounds
 import tests.utils as utils
 
 

@@ -318,9 +318,7 @@ section#the-goods { margin-top: 44px; }
     &.nearby > li {
         background: none;
         
-        div {
-            border-top: 1px solid #eee;
-        }
+        div { border-top: 1px solid #eee; }
     }
     .result-letter,
     .result-meta,
@@ -330,7 +328,6 @@ section#the-goods { margin-top: 44px; }
         margin-bottom: 2px;
         border-bottom: 2px solid #fff;
     }
-
     .result-letter {
         display: table-cell;
         padding-left: 11px;
@@ -354,12 +351,10 @@ section#the-goods { margin-top: 44px; }
         padding-right: 20px;
         display: table-cell;
         
-        a {
-            margin-right: 6px;
-        }
-        .result-city {
+        a { margin-right: 6px; }
+        .result-features {
             font-size: 90%;
-            white-space: nowrap;
+            display: block;
         }
     }
     .result-meta {
@@ -370,6 +365,8 @@ section#the-goods { margin-top: 44px; }
         
         span {
             white-space: nowrap;
+
+            &.result-city { display: block; }
         }
     }
 }
