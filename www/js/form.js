@@ -429,7 +429,7 @@ $(function() {
 
 
             // Allow users to tab feature labels and descriptions to toggle checkbox
-            $('#form .feature label, #form .feature .help-block').each(function(){
+            $('#form .feature').find('label, .help-block, img').each(function(){
                 $(this).on('click', function() {
                     var input_checked = $(this).siblings('input').prop('checked');
                     $(this).siblings('input').prop('checked', !input_checked);
