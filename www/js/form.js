@@ -218,7 +218,7 @@ $(function() {
             }
 
             function error(){
-                $('#myTab a:last').tab('show');
+                $('#editor-tabs a:last').tab('show');
             }
 
             navigator.geolocation.getCurrentPosition(success, error);
@@ -314,7 +314,7 @@ $(function() {
             }
             this.fields.address_editor.addClass('hide');
             this.fields.address_editor_toggle.text('Edit');
-            $('#myTab a:first').tab('show');
+            $('#editor-tabs a:first').tab('show');
         },
         'reset_form': function() {
             $('#edit-playground').modal('hide'); 
@@ -429,7 +429,7 @@ $(function() {
 
 
             // Allow users to tab feature labels and descriptions to toggle checkbox
-            $('#form .feature label, #form .feature .help-block').each(function(){
+            $('#form .feature').find('label, .help-block, img').each(function(){
                 $(this).on('click', function() {
                     var input_checked = $(this).siblings('input').prop('checked');
                     $(this).siblings('input').prop('checked', !input_checked);
@@ -470,6 +470,13 @@ $(function() {
             if ( $('#edit-map') ) {
                 $(window).resize(_.debounce(playground.map.center_editor, 100));
             }
+
+            // Recenter the editor map when you activate the map pane
+            $('#editor-tabs a:first').on('click', function(e){
+                e.preventDefault();
+                $('this').tab('show');
+                setTimeout(playground.map.center_editor, 25);
+            })
 
             // All of this meta_hdr and meta_items stuff.
             playground.fields.meta_hdr.html(playground.fields.meta_hdr.html() + ' &rsaquo;');

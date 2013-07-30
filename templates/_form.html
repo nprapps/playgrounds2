@@ -23,11 +23,13 @@
     <div class="row-fluid">
         <div class="features span6">
             <h5>Features</h5>
-        {% for feature in features %}
-            <div class="feature">
-                {{ feature|safe }}
+            {% for feature in COPY.feature_list %}
+            <div class="feature control-group">
+                <img src="{% if 'placekitten' not in feature['photo_thumb'] %}{{ S3_BASE_URL }}{% endif %}{{ feature['photo_thumb'] }}" alt="{{ feature['term'] }}" />
+                <input type="checkbox" name="{{ feature['key'] }}"> <label class="checkbox">{{ feature['term'] }}</label>
+                <span class="help-block">{{ feature['definition_short'] }}</span>
             </div>
-        {% endfor %}
+            {% endfor %}
             <div class="alert">Don't see the feature you're looking for? <a href="#">Email us</a> or <a href="#">leave a tip</a>.</div>
         </div>
         <div class="basic-info span6">
@@ -113,7 +115,7 @@
     <h2 class="edit-address-hed">Edit location <a href="#" class="btn close" data-action="reset_location">&times;</a></h2>
     <div class="alerts"></div>
 
-    <ul class="nav nav-tabs" id="myTab">
+    <ul class="nav nav-tabs" id="editor-tabs">
       <li class="active"><a href="#map-pane" data-toggle="tab">Adjust position</a></li>
       <li><a href="#address-pane" data-toggle="tab">Edit address</a></li>
     </ul>
