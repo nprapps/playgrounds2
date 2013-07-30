@@ -129,7 +129,7 @@ def local_render_playgrounds():
 
 def remote_render_playgrounds():
     require('settings', provided_by=[production, staging])
-    run('fab local_render_playgrounds')
+    run('./render_playgrounds')
 
 def render():
     """
