@@ -242,17 +242,17 @@ section#the-goods { margin-top: 44px; }
 
 .help-prompt {
     margin: 44px 0 22px 0;
-    padding: 11px;
+    padding: 22px 22px 11px 22px;
     background-color: #f1f1f1;
     
     p {
-        margin: 0;
+        margin: 0 0 11px 0;
         text-align: center;
 
         &.prompt {
-            font-size: 13px;
+            font-size: 11px;
             color: #555;
-            margin-bottom: 6px;
+            margin-bottom: 11px;
 
             .icon {
                 color: @btnDangerBackground;
@@ -268,22 +268,31 @@ section#the-goods { margin-top: 44px; }
     &.help-prompt-features {
         margin-top: 11px;
     }
-}
-.index #main-content #playground-data.help-prompt {
-    padding-top: 15px;
-    margin-left: -11px;
-    margin-right: -11px;
+    
+    &#search-results-not-found {
+        margin-top: 0;
 
-    h3 {
-        font-size: 12px;
-        font-weight: bold;
-        margin-bottom: 6px;
-        color: #555;
+        h4 {
+            color: #121212;
+            margin: 0 0 11px 0;
+        }
+        p.prompt {
+            text-align: left;
+            margin-bottom: 11px;
+        }
     }
-    p {
-        text-align: left;
-        margin-bottom: 11px;
-        font-size: 12px;
+    
+    .index #main-content &#playground-data { // data download
+        h3 {
+            font-size: 14px;
+            font-weight: bold;
+            color: #555;
+            margin: 0 0 11px 0;
+        }
+        p {
+            text-align: left;
+            font-size: 12px;
+        }
     }
 }
 
@@ -305,8 +314,12 @@ section#the-goods { margin-top: 44px; }
         
         &.no-results {
             font-size: 16px;
-            background: none;
+            font-weight: bold;
             color: #121212;
+            text-align: center;
+            margin-bottom: 0;
+            padding: 11px 0;
+            display: block;
         }
         &.highlight {
             background-color: #FBF1CD; 
@@ -1242,7 +1255,8 @@ section#the-goods { margin-top: 44px; }
     #search-help,
     #search-help-prompt,
     #search-results,
-    #search-results-map-wrapper {
+    #search-results-map-wrapper,
+    #search-results-not-found {
         display: none;
     }
 }

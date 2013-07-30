@@ -30,6 +30,7 @@ var $search_results_map_wrapper = null;
 var $search_results_map = null;
 var $search_results_map_loading = null;
 var $search_results_map_loading_text = null;
+var $search_results_not_found = null;
 var $zoom_in = null;
 var $zoom_out = null;
 var $did_you_mean_wrapper = null;
@@ -136,8 +137,10 @@ function search() {
      */
     var latitude = parseFloat($search_latitude.val());
     var longitude = parseFloat($search_longitude.val());
+    var not_found = false;
 
     $search_results_ul.empty();
+    $search_results_not_found.hide();
     $search_help_prompt.hide();
     $selected_playground = null;
 
@@ -261,10 +264,10 @@ function search() {
                         $zoom_out.attr('disabled', 'disabled');
                         search();
                     } else {
-                        $search_results_ul.append('<li class="no-results">No playgrounds found</li>');
+                        not_found = true;
                     }
                 } else {
-                    $search_results_ul.append('<li class="no-results">No playgrounds found</li>');
+                    not_found = true;
                 }
             }
 
@@ -323,9 +326,15 @@ function search() {
                 $search_results_map_wrapper.show();
                 $results_address.show();
             }
-
-            $search_results.show();
-            $search_help_prompt.show();
+            
+            if (not_found) {
+                $search_results_not_found.show();
+                $search_results.hide();
+                $search_help_prompt.hide();
+            } else {
+                $search_results.show();
+                $search_help_prompt.show();
+            }
 
             if (!IS_MOBILE) {
                 desktop_map.invalidateSize();
@@ -420,6 +429,7 @@ $(function() {
     $search_results_map = $('#search-results-map');
     $search_results_map_loading = $('#search-results-map-loading');
     $search_results_map_loading_text = $('#search-results-map-loading-text');
+    $search_results_not_found = $('#search-results-not-found');
     $zoom_in = $('#zoom-in');
     $zoom_out = $('#zoom-out');
     $did_you_mean_wrapper = $('#search-help');
@@ -521,6 +531,7 @@ $(function() {
         $did_you_mean_wrapper.hide();
         $search_help_prompt.hide();
         $search_results_ul.empty();
+        $search_results_not_found.hide();
         $search_results_map_wrapper.hide();
         $results_address.hide();
         $no_geocode.hide();
