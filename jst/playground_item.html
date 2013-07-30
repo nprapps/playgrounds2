@@ -8,7 +8,7 @@
         </a>
         
         <span class="result-features">
-        <% var feature_list_prefix = '<strong>Features: </strong>' %>
+        <% var feature_list_prefix = '<strong>Features:</strong>&nbsp;' %>
         <% var feature_list = feature_list_prefix %>
         <% var feature_counter = 0 %>
         <% for (feature in window.FEATURES) { %>
@@ -24,7 +24,7 @@
         <% if (feature_list != feature_list_prefix) { %>
             <%= feature_list %>
         <% } else { %>
-            Help us identify accessible features at this playground.
+            <i class="icon-question-sign"></i>&nbsp;Help us identify accessible features at this playground.
         <% } %>
         </span>
     </div>
