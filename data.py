@@ -162,7 +162,7 @@ def render_playgrounds(playgrounds=None):
     jst()
 
     if not playgrounds:
-        playgrounds = Playground.select()
+        playgrounds = get_active_playgrounds()
 
     slugs = [p.slug for p in playgrounds]
 

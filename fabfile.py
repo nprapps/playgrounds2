@@ -571,7 +571,7 @@ def clear_search_index():
     app_config.configure_targets(env.get('settings', None))
 
     print 'Generating SDF batch...'
-    sdf = [playground.delete_sdf() for playground in models.Playground.select()]
+    sdf = [playground.delete_sdf() for playground in models.get_active_playgrounds()]
     payload = json.dumps(sdf)
 
     if len(payload) > 5000 * 1024:

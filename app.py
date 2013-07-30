@@ -13,7 +13,7 @@ import requests
 
 import app_config
 import copytext
-from models import Playground, Revision, display_field_name
+from models import Playground, Revision, display_field_name, get_active_playgrounds
 from render_utils import flatten_app_config, make_context
 
 import argparse
@@ -102,7 +102,7 @@ def index():
     Playgrounds index page.
     """
     context = make_context()
-    context['playgrounds'] = Playground.select().limit(10)
+    context['playgrounds'] = get_active_playgrounds().limit(10)
 
     return render_template('index.html', **context)
 
@@ -135,7 +135,7 @@ def sitemap():
 
     context['pages'].append(('/', now))
 
-    for playground in Playground.select():
+    for playground in get_active_playgrounds():
         context['pages'].append((url_for('_playground', playground_slug=playground.slug), now))
 
     sitemap = render_template('sitemap.xml', **context)
@@ -222,7 +222,7 @@ def _app_config_js():
     features = {}
 
     for feature in copytext.COPY.feature_list:
-        features[feature['key']] = feature._row 
+        features[feature['key']] = feature._row
 
     features = 'window.FEATURES = ' + json.dumps(features) + ';'
 
