@@ -50,6 +50,7 @@ var $selected_playground = null;
 var search_xhr = null;
 var geocode_xhr = null;
 var user_zoomed = false;
+var user_panned = false;
 
 function degToCloudSearch(degree) {
     /*
@@ -289,15 +290,17 @@ function search() {
 
                     desktop_markers.clearLayers();
 
-                    markers.push(L.mapbox.marker.style({
-                        'type': 'Feature',
-                        'geometry': {},
-                        'properties': {
-                            'marker-size': 'large',
-                            'marker-symbol': 'circle',
-                            'marker-color': '#006633'
-                        }
-                    }, [latitude, longitude]));
+                    if (!user_panned) {
+                        markers.push(L.mapbox.marker.style({
+                            'type': 'Feature',
+                            'geometry': {},
+                            'properties': {
+                                'marker-size': 'large',
+                                'marker-symbol': 'circle',
+                                'marker-color': '#006633'
+                            }
+                        }, [latitude, longitude]));
+                    }
 
                     _.each(markers, function(marker) {
                         desktop_markers.addLayer(marker);
@@ -350,6 +353,7 @@ function reset_zoom() {
     $zoom_out.removeAttr('disabled');
 
     user_zoomed = false;
+    user_panned = false;
 }
 
 function hashchange_callback() {
@@ -365,9 +369,12 @@ function hashchange_callback() {
 
     if (latitude && longitude) {
         if (!($search_latitude.val() == latitude && $search_longitude.val() == longitude)) {
-            $did_you_mean_wrapper.hide();
-            $search_results_ul.empty();
-            $results_address.hide();
+            $search_results_map_wrapper.hide();
+            $map_loading.text('Searching...').show();
+
+            user_panned = false;
+        } else {
+            $results_loading.show();
         }
 
         $search_latitude.val(latitude);
@@ -379,7 +386,6 @@ function hashchange_callback() {
             $results_address.text('Showing Results Near You');
         }
 
-        $results_loading.show();
 
         search();
     } else if (address) {
@@ -395,6 +401,7 @@ $(function() {
     $search_latitude = $('#search input[name="latitude"]');
     $search_longitude = $('#search input[name="longitude"]');
     $geolocate_button = $('#geolocate');
+    $search_results_wrapper = $('#search-results-wrapper');
     $search_results = $('#search-results');
     $search_results_ul = $search_results.find('ul');
     $search_results_map_wrapper = $('#search-results-map-wrapper');
@@ -489,8 +496,7 @@ $(function() {
 
         $did_you_mean_wrapper.hide();
 
-        $map_loading.show();
-        $map_loading.text('Searching...');
+        $map_loading.text('Searching...').show();
         navigate(false);
 
         return false;
@@ -513,7 +519,7 @@ $(function() {
         var address = $search_address.val();
 
         if (address) {
-            $map_loading.show();
+            $map_loading.text('Searching...').show();
 
             if (geocode_xhr) {
                 geocode_xhr.cancel();
@@ -602,9 +608,11 @@ $(function() {
             var current = new L.LatLng($search_latitude.val(), $search_longitude.val());
             zoom = desktop_map.getZoom();
 
-            if (!coordinatesApproxEqual(latlng, current, 100)) {
+            if (!coordinatesApproxEqual(latlng, current, 1000)) {
                 $search_latitude.val(latlng.lat);
                 $search_longitude.val(latlng.lng);
+
+                user_panned = true;
 
                 navigate();
             }
