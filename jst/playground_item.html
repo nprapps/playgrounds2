@@ -9,11 +9,10 @@
         
         <span class="result-features">
         <% if (features.length > 0) { %>
-            <strong>Features:</strong>&nbsp;
+            <strong>Features:</strong>
 
             <% for (i = 0; i < features.length; i++) { %>
-                <% if (i > 0) { %>, <% } %>
-                <%= features[i].term.toLowerCase() %>
+                <%= features[i].term.toLowerCase() %><% if (i < (features.length - 1)) { %>, <% } %>
             <% } %>
         <% } else { %>
             <i class="icon-question-sign"></i>&nbsp;Help us identify accessible features at this playground.
