@@ -50,89 +50,91 @@
 
 
     </div>#}
-    <div class="features span6">
-        <h5>Features</h5>
+    <div class="fluid-row">
+        <div class="features span6">
+            <h5>Features</h5>
 
-        {% for feature in COPY.feature_list %}
-        <div class="feature control-group">
-            <input type="checkbox" name="{{ feature['key'] }}"> <label class="checkbox">{{ feature['term'] }}</label>
-            <span class="help-block">{{ feature['definition_short'] }}</span>
-        </div>
-        {% endfor %}
-
-        <div class="alert">Don't see the feature you're looking for? <a href="#">Email us</a>.</div>
-    </div>
-    <div class="basic-info span6">
-        <div class="control-group">
-            <label class="control-label">Playground Name <span class="muted">(Optional)</span></label>
-            <div class="controls">
-                <input class="input-block-level input" type="text" name="name" value=""></input>
+            {% for feature in COPY.feature_list %}
+            <div class="feature control-group">
+                <input type="checkbox" name="{{ feature['key'] }}"> <label class="checkbox">{{ feature['term'] }}</label>
+                <span class="help-block">{{ feature['definition_short'] }}</span>
             </div>
-        </div>
+            {% endfor %}
 
-        <div class="control-group">
-            <label class="control-label">At (is this in a park or school?) <span class="muted">(Optional)</span></label>
-            <div class="controls">
-                <input class="input-block-level input" type="text" name="facility" value=""></input>
+            <div class="alert">Don't see the feature you're looking for? <a href="#">Email us</a>.</div>
+        </div>
+        <div class="basic-info span6">
+            <div class="control-group">
+                <label class="control-label">Playground Name <span class="muted">(Optional)</span></label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="name" value=""></input>
+                </div>
             </div>
-        </div>
 
-        <div class="control-group">
-            <label class="control-label">URL <span class="muted">(Optional)</span></label>
-            <div class="controls">
-                <input class="input-block-level input" type="text" name="url" value=""></input>
+            <div class="control-group">
+                <label class="control-label">At (is this in a park or school?) <span class="muted">(Optional)</span></label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="facility" value=""></input>
+                </div>
             </div>
-        </div>
 
-        <div class="control-group">
-            <label class="control-label">Agency <span class="muted">(Optional)</span></label>
-            <div class="controls">
-                <input class="input-block-level input" type="text" name="agency" value=""></input>
+            <div class="control-group">
+                <label class="control-label">URL <span class="muted">(Optional)</span></label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="url" value=""></input>
+                </div>
             </div>
-        </div>
 
-        <div class="control-group">
-            <label class="control-label">Owner <span class="muted">(Optional)</span></label>
-            <div class="controls">
-                <input class="input-block-level input" type="text" name="owner" value=""></input>
+            <div class="control-group">
+                <label class="control-label">Agency <span class="muted">(Optional)</span></label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="agency" value=""></input>
+                </div>
             </div>
-        </div>
 
-        <div class="control-group" style="display:none">
-            <label class="control-label">Remarks</label>
-            <div class="controls">
-                <input class="input-block-level input" type="text" name="public_remarks" value=""></input>
+            <div class="control-group">
+                <label class="control-label">Owner <span class="muted">(Optional)</span></label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="owner" value=""></input>
+                </div>
             </div>
-        </div>
 
-        <div class="control-group" style="display:none">
-            <label class="control-label">Id</label>
-            <div class="controls">
-                <input class="input-block-level input" type="text" name="id" value="" data-changed="true"></input>
+            <div class="control-group" style="display:none">
+                <label class="control-label">Remarks</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="public_remarks" value=""></input>
+                </div>
             </div>
-        </div>
 
-        <div class="control-group" style="display:none">
-            <label class="control-label">Reverse Geocoded</label>
-            <div class="controls">
-                <input type="checkbox" name="reverse_geocoded"></input>
+            <div class="control-group" style="display:none">
+                <label class="control-label">Id</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="id" value="" data-changed="true"></input>
+                </div>
             </div>
-        </div>
 
-        <div class="control-group" style="display:none">
-            <label class="control-label">Latitude</label>
-            <div class="controls">
-                <input class="input-block-level input" type="text" name="latitude" value=""></input>
+            <div class="control-group" style="display:none">
+                <label class="control-label">Reverse Geocoded</label>
+                <div class="controls">
+                    <input type="checkbox" name="reverse_geocoded"></input>
+                </div>
             </div>
-        </div>
 
-        <div class="control-group" style="display:none">
-            <label class="control-label">Longitude</label>
-            <div class="controls">
-                <input class="input-block-level input" type="text" name="longitude" value=""></input>
+            <div class="control-group" style="display:none">
+                <label class="control-label">Latitude</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="latitude" value=""></input>
+                </div>
             </div>
-        </div>
 
+            <div class="control-group" style="display:none">
+                <label class="control-label">Longitude</label>
+                <div class="controls">
+                    <input class="input-block-level input" type="text" name="longitude" value=""></input>
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
 <div class="create-footer">
@@ -246,6 +248,7 @@
     </div>
 </div>
 </form>
+<div class="modal-backdrop fade in"></div>
 {% endblock %}
 
 {% block scripts %}
