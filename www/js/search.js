@@ -169,6 +169,17 @@ function search() {
                 _.each(data['hits']['hit'], function(hit, i) {
                     var context = $.extend(APP_CONFIG, hit);
                     context['letter'] = LETTERS[i];
+                    
+                    context['features'] = [];
+                    
+                    // Generate a list of included features
+                    for (feature in window.FEATURES) {
+                        var key = 'feature_' + feature.replace(/-/g, '_');
+
+                        if (hit['data'][key][0] > 0) {
+                            context['features'].push(window.FEATURES[feature]);
+                        }
+                    }
 
                     var html = JST.playground_item(context);
                     $search_results_ul.append(html);

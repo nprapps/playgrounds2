@@ -8,21 +8,13 @@
         </a>
         
         <span class="result-features">
-        <% var feature_list_prefix = '<strong>Features:</strong>&nbsp;' %>
-        <% var feature_list = feature_list_prefix %>
-        <% var feature_counter = 0 %>
-        <% for (feature in window.FEATURES) { %>
-            <% var feat = feature.replace(/-/g,'_') %>
-            <% if (data['feature_' + feat][0] == 1) { %>
-                <% if (feature_counter > 0) { %>
-                    <% feature_list += ', ' %>
-                <% } %>
-                <% feature_list += window.FEATURES[feature].term.toLowerCase() %>
-                <% feature_counter++ %>
+        <% if (features.length > 0) { %>
+            <strong>Features:</strong>&nbsp;
+
+            <% for (i = 0; i < features.length; i++) { %>
+                <% if (i > 0) { %>, <% } %>
+                <%= features[i].term.toLowerCase() %>
             <% } %>
-        <% } %>
-        <% if (feature_list != feature_list_prefix) { %>
-            <%= feature_list %>
         <% } else { %>
             <i class="icon-question-sign"></i>&nbsp;Help us identify accessible features at this playground.
         <% } %>
