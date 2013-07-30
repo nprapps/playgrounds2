@@ -199,7 +199,7 @@ fab staging master deploy
 To deploy the playgrounds pages:
 
 ```
-fab staging deploy_playgrounds
+fab staging remote:deploy_playgrounds
 ```
 
 Deploy to EC2
