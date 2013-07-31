@@ -133,7 +133,7 @@ def remote(fab_command):
     We call it "fabcasting."
     """
     require('settings', provided_by=[production, staging])
-    run('cd %s && bash cron.sh fab $DEPLOYMENT_TARGET %s' % (env.repo_path, fab_command))
+    run('cd %s && bash cron.sh fab %s $DEPLOYMENT_TARGET %s' % (env.repo_path, env.branch, fab_command))
 
 def render():
     """
