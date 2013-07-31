@@ -67,6 +67,8 @@ $(function() {
                 require_us_address(locale);
                 playground.form.geocode_fields();
                 playground.fields.reverse_geocoded.attr('checked', 'checked');
+                    
+                $('#modal-locator-map').removeClass('hidden');
             }
         },
         'form': {
