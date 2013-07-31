@@ -54,7 +54,7 @@
             </div>
             {% endfor %}
 
-            <div class="alert">Don't see the feature you're looking for? <a href="#">Email us</a>.</div>
+            <div class="alert">Don't see the feature you're looking for? <a href="mailto:playgrounds@npr.org?subject=Missing Feature">Email us</a>.</div>
         </div>
         <div class="basic-info span6">
             <div class="control-group">
@@ -136,7 +136,7 @@
 
 <div class="address-editor">
     <h2 class="edit-address-hed">{{ COPY.content.create_title }}</h2>
-    <div class="alerts"></div>
+    <div class="modal-alerts"></div>
     <ul class="nav nav-tabs" id="editor-tabs">
       <li class="active"><a href="#map-pane" data-toggle="tab">I don't know the exact address</a></li>
       <li><a href="#address-pane" data-toggle="tab">I know the exact address</a></li>
@@ -251,9 +251,9 @@
     {{ JS.push('js/lib/moment.js') }}
     {{ JS.push('js/lib/bootstrap.js') }}
     {{ JS.push('js/templates.js') }}
+    {{ JS.push('js/utils.js') }}
     {{ JS.push('js/form.js') }}
     {{ JS.push('js/lookup_tables.js') }}
-    {{ JS.push('js/utils.js') }}
     {{ JS.render('js/app-edit-footer.min.js') }}
 {% endblock extra_foot_js %}
 
