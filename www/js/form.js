@@ -42,7 +42,7 @@ $(function() {
                     playground.address_change_accepted = true;
                 } else {
                     alert_text = "<strong>We're sorry! We couldn't find that place.</strong><br>Don't forget to add the street/avenue/boulevard.<br/>If you're still having trouble, try finding it on the map.";
-                    make_alert(alert_text, 'alert-error', 'div.modal-alerts');
+                    make_alert(alert_text, 'alert-error', 'div.modal-alerts')
                 }
             },
             'reverse_geocode': function(locale) {
