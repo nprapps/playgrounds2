@@ -1,3 +1,5 @@
+var RESULTS_DEFAULT_ZOOM = APP_CONFIG.RESULTS_DEFAULT_ZOOM;
+
 function coordinatesApproxEqual(ll1, ll2, accuracy) {
     /*
      * Check if coordinates are the same within a tenth of a degree
