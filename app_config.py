@@ -18,7 +18,7 @@ PROJECT_NAME = 'Where All Kids Play'
 
 # Project name used for paths on the filesystem and in urls
 # Use dashes, not underscores
-PROJECT_SLUG = 'playgrounds2'
+PROJECT_SLUG = 'where-all-kids-play'
 
 # The name of the repository containing the source
 REPOSITORY_NAME = 'playgrounds2'
