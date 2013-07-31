@@ -15,8 +15,6 @@ from playhouse.sqlite_ext import SqliteExtDatabase
 import requests
 
 import app_config
-import copytext
-
 
 database = SqliteExtDatabase('playgrounds.db')
 
@@ -325,6 +323,8 @@ class Playground(Model):
         """
         fields = []
 
+        import copytext
+
         features = copytext.COPY.feature_list
 
         for feature in features:
@@ -355,6 +355,8 @@ class Playground(Model):
         """
         Return a representation of this playground in CloudSearch SDF format.
         """
+        import copytext
+
         sdf = {
             'type': 'add',
             'id': '%s_%i' % (app_config.DEPLOYMENT_TARGET, self.id),
@@ -441,6 +443,8 @@ def display_field_name(field_name):
     Convert any field or feature on a playground to
     a display-friendly version.
     """
+    import copytext
+
     try:
         return getattr(Playground, field_name).verbose_name
     except AttributeError:
@@ -473,6 +477,8 @@ class PlaygroundFeature(Model):
 
     @property
     def copy(self):
+        import copytext
+
         for feature in copytext.COPY.feature_list:
             if feature['key'] == self.slug:
                 return feature
