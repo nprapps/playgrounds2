@@ -271,9 +271,7 @@ header {
             padding: 0;
             list-style: none;
             
-            @media @screen-tiny {
-                display: none;
-            }
+            @media @screen-tiny { display: none; }
             
             > li {
                 font-weight: bold;
@@ -290,21 +288,22 @@ header {
                     padding-left: 0;
                 }
                 a { color: #6d8ac4; }
-                &.home a { color: #555; }
+
+                &.home {
+                    text-transform: none;
+
+                    a { color: #555; }
+                }
             }
             
             i { 
                 display: none;
                 font-style: normal;
                 
-                @media @screen-medium {
-                    display: inline;
-                }
+                @media @screen-medium { display: inline; }
             }
             span {
-                @media @screen-medium {
-                    display: none;
-                }
+                @media @screen-medium { display: none; }
             }
         }
     }
