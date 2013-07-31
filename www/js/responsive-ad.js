@@ -76,7 +76,7 @@ $(document).ready(function () {
 	var winWidth = window.innerWidth;
     // No box ad when we have adhesion, so #header gets 12 columns
 //    if (winWidth <= 1024){
-    if (winWidth <= 979){
+    if (winWidth <= 979 && !$('body').hasClass('search')){
 //        $('#header').removeClass('span8').addClass('span12');
         $('#main-content').removeClass('span8').addClass('span12');
     }
