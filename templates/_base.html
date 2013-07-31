@@ -42,34 +42,18 @@
     {{ JS.render('js/app-header.min.js') }}
 
     <script>
-        // AddNamespace('NPR.serverVars');
-        // jQuery.extend(NPR.serverVars, {
-        //     "storyId": "{{ NPR_DFP.STORY_ID }}",
-        //     "serverType": "prod",
-        //     "DFPtarget": "{{ NPR_DFP.TARGET }}",
-        //     "DFPuserver": "u.npr.org",
-        //     "DFPserver": "ad.doubleclick.net",
-        //     "DFPnetwork": "n6735",
-        //     "DFPsite": "NPR",
-        //     "DFPmobile": "NPR.MOBILE",
-        //     "facebookAppId": "{{ FACEBOOK.APP_ID }}"
-        // });
-
         googletag.cmd.push(function() {
             try {
                 
                 if (DFP.shouldRenderForDevice('desktop')) {
-                    googletag.defineSlot("/6735/n6735.NPRTEST/News", [[300,250],[300,600]], 'ad-desktop').addService(googletag.pubads());
+                    googletag.defineSlot("/6735/n6735.{{ NPR_DFP.ENVIRONMENT }}/News_NPR_News_Investigations", [[300,250],[300,600]], 'ad-desktop').addService(googletag.pubads());
                 }                    
                 if (DFP.shouldRenderForDevice('88')) {
-                    googletag.defineSlot("/6735/n6735.NPRTEST/News", [88,31], 'ad-88').addService(googletag.pubads());
+                    googletag.defineSlot("/6735/n6735.{{ NPR_DFP.ENVIRONMENT }}/News_NPR_News_Investigations", [88,31], 'ad-88').addService(googletag.pubads());
                 }                    
-            
-                //googletag.pubads().setTargeting('agg', '103943429');
-                //googletag.pubads().setTargeting('theme', '103943429');
+           
                 googletag.pubads().setTargeting('storyId', '{{ NPR_DFP.STORY_ID }}');
-                //googletag.pubads().setTargeting('blog', '103943429');
-                googletag.pubads().setTargeting('testserver', 'true');
+                googletag.pubads().setTargeting('testserver', '{{ NPR_DFP.TESTSERVER }}');
                 
                 // device detection to send to ad server
                 var deviceString = '';
@@ -230,13 +214,10 @@
             }
             
             var targets = ';';
-            //targets += 'agg=103943429;';
-            //targets += 'theme=103943429;';
             targets += 'storyId={{ NPR_DFP.STORY_ID }};';
-            //targets += 'blog=103943429;';
-            targets += 'testserver=true;';
+            targets += 'testserver={{ NPR_DFP.TESTSERVER }};';
             
-            document.write('<scr' + 'ipt type="text/javascript" src="http://ad.doubleclick.net/N6735/adj/n6735.nprmobile/News' + targets + 'sz=' + sizes + ';ord=' + ord + '?"><\/script>');
+            document.write('<scr' + 'ipt type="text/javascript" src="http://ad.doubleclick.net/N6735/adj/n6735.nprmobile/News_NPR_News_Investigations' + targets + 'sz=' + sizes + ';ord=' + ord + '?"><\/script>');
         }
 
         // -->
