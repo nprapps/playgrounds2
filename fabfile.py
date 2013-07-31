@@ -570,6 +570,12 @@ def update_search_index(playgrounds=None):
     app_config.configure_targets(deployment_target)
 
 def clear_search_index():
+    """
+    Clear all documents from the search index. We use a hack for this:
+    Iterate through a wide range of unique id's and issue a delete for
+    all of them. This way we pick up one's that might not be in our
+    local database anymore.
+    """
     require('settings', provided_by=[production, staging])
 
     _confirm("You are about to delete the %(settings)s search index for this project.\nDo you know what you're doing?" % env)
@@ -579,7 +585,15 @@ def clear_search_index():
     app_config.configure_targets(env.get('settings', None))
 
     print 'Generating SDF batch...'
-    sdf = [playground.delete_sdf() for playground in models.get_active_playgrounds()]
+    sdf = []
+    
+    for i in range(0, 10000):
+        sdf.append({
+            'type': 'delete',
+            'id': '%s_%i' % (app_config.DEPLOYMENT_TARGET, i),
+            'version': int(time.time())
+        })
+
     payload = json.dumps(sdf)
 
     if len(payload) > 5000 * 1024:
