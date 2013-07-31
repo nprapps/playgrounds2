@@ -332,13 +332,26 @@ function navigate(nearby) {
         nearby = $.bbq.getState('nearby') == 'true';
     }
 
-    $.bbq.pushState({
-        'address': $search_address.val(),
-        'latitude': $search_latitude.val(),
-        'longitude': $search_longitude.val(),
-        'zoom': zoom,
-        'nearby': nearby
-    })
+    var state = $.bbq.getState();
+
+    // If we're changing state to exactly where we already are
+    // (e.g. because somebody clicked search twice) then don't
+    // adjust browser state but force the callback
+    if (state['address'] == $search_address.val() &&
+        state['latitude'] == $search_latitude.val() &&
+        state['longitude'] == $search_longitude.val() &&
+        state['zoom'] == zoom.toString() &&
+        state['nearby'] == nearby.toString()) {
+           hashchange_callback();
+    } else {
+        $.bbq.pushState({
+            'address': $search_address.val(),
+            'latitude': $search_latitude.val(),
+            'longitude': $search_longitude.val(),
+            'zoom': zoom,
+            'nearby': nearby
+        });
+    }
 }
 
 function reset_zoom() {
@@ -504,6 +517,8 @@ $(function() {
         if ($search_address.val() === '') {
             return false;
         }
+
+        console.log('searching');
 
         $did_you_mean_wrapper.hide();
         $search_help_prompt.hide();
