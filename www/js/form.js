@@ -42,7 +42,7 @@ $(function() {
                     playground.address_change_accepted = true;
                 } else {
                     alert_text = "<strong>We're sorry! We couldn't find that place.</strong><br>Don't forget to add the street/avenue/boulevard.<br/>If you're still having trouble, try finding it on the map.";
-                    make_alert(alert_text, 'alert-error');
+                    make_alert(alert_text, 'alert-error', 'div.modal-alerts');
                 }
             },
             'reverse_geocode': function(locale) {
@@ -232,7 +232,7 @@ $(function() {
                 'error': function(a, b, c) {
                     if (b == 'timeout'){
                         alert_text = "<h3>We're sorry!</h3>We're having a hard time finding this place.";
-                        make_alert(alert_text, 'warning');
+                        make_alert(alert_text, 'warning', 'div.alerts');
                     }
                 },
                 'success': function(data) {
@@ -256,7 +256,7 @@ $(function() {
                 'error': function(a, b, c) {
                     if (b == 'timeout'){
                         alert_text = "<h3>We're sorry!</h3>We're having a hard time finding this place.";
-                        make_alert(alert_text, 'warning');
+                        make_alert(alert_text, 'warning', 'div.alerts');
                     }
                 },
                 'success': function(data) {
@@ -280,10 +280,10 @@ $(function() {
             var has_zip = playground.fields.address.val() !== '';
             var use_city_state = has_street_address && has_city && has_state;
             var use_zip = has_street_address && has_zip;
-            
+
             if (!(use_city_state || use_zip)) {
                 alert_text = "<strong>We're sorry!</strong><br>We need more information to find this location. Please provide an address with a city and state or ZIP code.";
-                make_alert(alert_text, 'alert-error');
+                make_alert(alert_text, 'alert-error', 'div.alerts');
                 return;
             }
 
@@ -317,7 +317,7 @@ $(function() {
             $('#editor-tabs a:first').tab('show');
         },
         'reset_form': function() {
-            $('#edit-playground').modal('hide'); 
+            $('#edit-playground').modal('hide');
             $.each(this.inputs.text_input, function(){
                 $this = $(this);
                 $this.val($this.data('original')).attr('data-changed', 'false');

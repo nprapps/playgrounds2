@@ -30,7 +30,7 @@
                 <span class="help-block">{{ feature['definition_short'] }}</span>
             </div>
             {% endfor %}
-            <div class="alert">Don't see the feature you're looking for? <a href="#">Email us</a> or <a href="#">leave a tip</a>.</div>
+            <div class="alert">Don't see the feature you're looking for? <a href="mailto:playgrounds@npr.org?subject=Missing Feature">Email us</a> or <a href="#">leave a tip</a>.</div>
         </div>
         <div class="basic-info span6">
             <div class="control-group">
@@ -50,7 +50,7 @@
             <div class="control-group">
                 <label class="control-label">URL <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="url" value="{{ playground.facility }}"></input>
+                    <input class="input-block-level input" type="text" name="url" value="{{ playground.url }}"></input>
                 </div>
             </div>
 

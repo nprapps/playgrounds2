@@ -60,7 +60,7 @@ function formatMapQuestAddress(locale) {
 function require_us_address(locale) {
     var country = locale['adminArea1'];
     if (country !== 'US') {
-        make_alert('Please choose an address within the United States.', 'warning');
+        make_alert('Please choose an address within the United States.', 'warning', 'div.alerts');
     }
 }
 
@@ -70,12 +70,12 @@ function prevent_body_scroll(e) {
     }
 }
 
-function make_alert(text, klass){
+function make_alert(text, klass, target_element){
     // Generate a template.
     var alert_template = _.template('<div class="alert <%= klass %>"><%= text %></div>');
 
     // Blank the div and add our rendered template.
-    $('div.alerts').html(
+    $(target_element).html(
         alert_template({
             'text': text,
             'klass': klass
@@ -84,7 +84,7 @@ function make_alert(text, klass){
 
     // Make it disappear reasonably quickly after 2 seconds.
     var t = setTimeout(function(){
-        $('div.alerts').removeClass('slide-down');
+        $(target_element).removeClass('slide-down');
     }, 3000);
 }
 
