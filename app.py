@@ -12,7 +12,6 @@ from jinja2 import Template
 import requests
 
 import app_config
-import copytext
 from models import Playground, Revision, display_field_name, get_active_playgrounds
 from render_utils import flatten_app_config, make_context
 
@@ -216,6 +215,8 @@ def _app_config_js():
     """
     This includes both client-side config and some COPY vars we need in JS.
     """
+    import copytext
+
     config = flatten_app_config()
     js = 'window.APP_CONFIG = ' + json.dumps(config) + ';'
 
