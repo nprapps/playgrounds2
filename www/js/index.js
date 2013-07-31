@@ -9,6 +9,8 @@ var $geolocate_button = null;
 var $search_divider = null;
 var $playground_meta_hdr = null;
 var $playground_meta_items = null;
+var $sublink_help = null;
+var $sublink_data = null;
 
 $(function() {
     $search_form = $('#search');
@@ -20,6 +22,8 @@ $(function() {
     $playground_meta_hdr = $('#main-content').find('.about').find('h5.meta');
     $playground_meta_items = $('#main-content').find('.about').find('ul.meta');
     $alerts = $('.alerts');
+    $sublink_data = $('#sublink-data');
+    $sublink_help = $('#sublink-help');
 
     CONTENT_WIDTH = $('#main-content').width();
     RESULTS_MAP_WIDTH = CONTENT_WIDTH;
@@ -58,4 +62,11 @@ $(function() {
         $geolocate_button.show();
         $search_divider.show();
     }
+    
+    $sublink_data.on('click', function() {
+        $.smoothScroll({ scrollTarget: $(this).attr('href') });
+    });
+    $sublink_help.on('click', function() {
+        $.smoothScroll({ scrollTarget: $(this).attr('href') });
+    });
 });
