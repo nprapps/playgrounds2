@@ -3,17 +3,21 @@
 from flask import Markup
 import xlrd
 
+import app_config
+
 COPY_XLS = 'data/copy.xls'
+
 
 class CopyException(Exception):
     pass
+
 
 class Row(object):
     """
     Wraps a row of copy for error handling.
     """
     _sheet = None
-    _row = {} 
+    _row = {}
     _index = 0
 
     def __init__(self, sheet, data, index):
@@ -40,6 +44,7 @@ class Row(object):
 
     def __len__(self):
         return len(self._row)
+
 
 class Sheet(object):
     """
@@ -79,6 +84,7 @@ class Sheet(object):
     def __len__(self):
         return len(self._sheet)
 
+
 class Copy(object):
     """
     Wraps copy text, for multiple worksheets, for error handling.
@@ -101,7 +107,7 @@ class Copy(object):
         try:
             book = xlrd.open_workbook(COPY_XLS)
         except IOError:
-            raise CopyException('"%s" does not exist. Have you run "fab update_copy"?' % COPY_XLS)
+            os.system('curl -o data/copy.xls "%s"' % app_config.COPY_URL)
 
         for sheet in book.sheets():
             columns = sheet.row_values(0)
