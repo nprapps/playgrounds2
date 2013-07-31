@@ -33,6 +33,7 @@ var $map_loading = null;
 var $results_loading = null;
 var $playground_meta_hdr = null;
 var $playground_meta_items = null;
+var $create_link = null;
 
 var zoom = RESULTS_DEFAULT_ZOOM;
 var crs = null;
@@ -299,6 +300,8 @@ function search() {
 
                 $search_results_map_wrapper.show();
                 $results_address.show();
+
+                $create_link.attr('href', 'create.html?latitude=' + latitude + '&longitude=' + longitude); 
             }
             
             if (not_found) {
@@ -414,6 +417,7 @@ $(function() {
     $results_loading = $('#results-loading');
     $playground_meta_hdr = $('#main-content').find('.about').find('h5.meta');
     $playground_meta_items = $('#main-content').find('.about').find('ul.meta');
+    $create_link = $search_help_prompt.find('a');
     $alerts = $('.alerts');
 
     CONTENT_WIDTH = $('#main-content').width();
