@@ -820,6 +820,46 @@ section#the-goods { margin-top: 44px; }
     }
     #playground-help {
         margin-bottom: 44px;
+        
+        table.city-list {
+            margin: 0 0 1.3em 0;
+            padding: 0;
+            border-collapse: collapse;
+            width: 100%;
+
+            tr {
+                vertical-align: top;
+                
+                &.help td {
+                    background-color: #fcf8e3;
+                    font-weight: bold;
+                    color: #333;
+                }
+            }
+            th, td {
+                line-height: 1.3;
+                font-size: 14px;
+                
+                @media @screen-tiny {
+                    font-size: 12px;
+                }
+            }
+            th {
+                text-align: left;
+                padding: 0 11px 11px 11px;
+            }
+            td {
+                padding: 11px;
+                border-top: 1px solid #eee;
+                color: #666;
+            }
+            .city-rank { text-align: right; }
+            .city-name { }
+            .city-amt  {
+                text-align: right;
+                white-space: nowrap;
+            }
+        }
     }
     #playground-feature-primer {
         margin-bottom: 44px;
