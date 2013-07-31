@@ -1,19 +1,11 @@
 var BASE_LAYER = APP_CONFIG.MAPBOX_BASE_LAYER;
 var CONTENT_WIDTH;
 var GEOLOCATE = Modernizr.geolocation;
-var LOCATOR_DEFAULT_ZOOM = 15;
 var RESULTS_MAP_WIDTH = 500;
 var RESULTS_MAP_HEIGHT = 500;
 var RESULTS_MAX_ZOOM = 16;
 var RESULTS_MIN_ZOOM = 8;
-var RESULTS_DEFAULT_ZOOM = 15;
 var IS_MOBILE = Modernizr.touch;
-var RETINA = window.devicePixelRatio > 1;
-if (RETINA) {
-    BASE_LAYER = APP_CONFIG.MAPBOX_BASE_LAYER_RETINA;
-    LOCATOR_DEFAULT_ZOOM += 1;
-    RESULTS_DEFAULT_ZOOM += 1;
-}
 
 var LETTERS = 'abcdefghijklmnopqrstuvwxyz';
 
@@ -236,7 +228,7 @@ function search() {
                 });
             } else {
                 if (!user_zoomed) {
-                    if (zoom == 15) {
+                    if (zoom == RESULTS_DEFAULT_ZOOM) {
                         zoom = 11;
 
                         if (IS_MOBILE) {
@@ -271,19 +263,6 @@ function search() {
                 if (IS_MOBILE) {
                     var search_map_width = RESULTS_MAP_WIDTH;
                     var search_map_height = RESULTS_MAP_HEIGHT;
-
-                    if (RETINA) {
-                        search_map_width = search_map_width * 2;
-                        search_map_height = search_map_height * 2;
-
-                        if (search_map_width > 640) {
-                            search_map_width = 640;
-                        }
-
-                        if (search_map_height > 640) {
-                            search_map_height = 640;
-                        }
-                    }
 
                     markers.push(buildMapboxPin('l', 'circle', '006633', latitude, longitude));
 
