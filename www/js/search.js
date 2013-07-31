@@ -580,7 +580,7 @@ $(function() {
                         $search_address.val(display_name);
 
                         $results_address.html('Showing Results Near ' + display_name);
-
+                        $no_geocode.hide();
                         $map_loading.text('Searching...').show();
 
                         navigate(false);
@@ -588,14 +588,14 @@ $(function() {
                         // If there are many results,
                         // show the did-you-mean path.
                         $did_you_mean.empty();
-
+                        $no_geocode.hide();
                         _.each(data, function(locale) {
                             locale['display_name'] = locale['display_name'].replace(', United States of America', '');
                             var context = $.extend(APP_CONFIG, locale);
                             var html = JST.did_you_mean_item(context);
 
                             $did_you_mean.append(html);
-
+                            
                         });
 
                         $did_you_mean_wrapper.show();
