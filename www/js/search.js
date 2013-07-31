@@ -28,7 +28,6 @@ var $search_results = null;
 var $search_results_ul = null;
 var $search_results_map_wrapper = null;
 var $search_results_map = null;
-var $search_results_map_loading = null;
 var $search_results_map_loading_text = null;
 var $search_results_not_found = null;
 var $zoom_in = null;
@@ -145,7 +144,6 @@ function search() {
     $selected_playground = null;
 
     if (IS_MOBILE) {
-        $search_results_map_loading.show();
         $search_results_map_loading_text.show();
         $search_results_map.css('opacity', '0.25');
     } else {
@@ -242,7 +240,6 @@ function search() {
                         zoom = 11;
 
                         if (IS_MOBILE) {
-                            $search_results_map_loading.show();
                             $search_results_map_loading_text.text('Searching farther away...').show();
                             $search_results_map.css('opacity', '0.25');
                         } else {
@@ -254,7 +251,6 @@ function search() {
                         zoom = 8;
                         
                         if (IS_MOBILE) {
-                            $search_results_map_loading.show();
                             $search_results_map_loading_text.text('Searching far away...').show();
                             $search_results_map.css('opacity', '0.25');
                         } else {
@@ -292,7 +288,6 @@ function search() {
                     markers.push(buildMapboxPin('l', 'circle', '006633', latitude, longitude));
 
                     $search_results_map.on('load', function() {
-                        $search_results_map_loading.hide();
                         $search_results_map_loading_text.text('Searching...').hide();
                         $search_results_map.css('opacity', '1.0');
                         $search_results_map.off('load');
@@ -427,7 +422,6 @@ $(function() {
     $search_results_map_wrapper = $('#search-results-map-wrapper');
     $search_results_map_desktop = $('#search-results-map-desktop');
     $search_results_map = $('#search-results-map');
-    $search_results_map_loading = $('#search-results-map-loading');
     $search_results_map_loading_text = $('#search-results-map-loading-text');
     $search_results_not_found = $('#search-results-not-found');
     $zoom_in = $('#zoom-in');
