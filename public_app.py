@@ -106,14 +106,6 @@ def update_playground():
             except TypeError:
                 pass
 
-            # If there are weird blanks, make them appropriate Python nulls.
-            # Sucks when there are like three different kinds of "blank."
-            try:
-                if payload['playground'][field] in ['', 'None']:
-                    payload['playground'][field] = None
-            except KeyError:
-                pass
-
         # Special-case handling for zip_code, which is a string, not an int.
         try:
             payload['playground']['zip_code'] = str(payload['playground']['zip_code'])
@@ -188,25 +180,11 @@ def insert_playground():
             except TypeError:
                 pass
 
-            # If there are weird blanks, make them appropriate Python nulls.
-            # Sucks when there are like three different kinds of "blank."
-            try:
-                if payload['playground'][field] in ['', 'None']:
-                    payload['playground'][field] = None
-            except KeyError:
-                pass
-
         # Special-case handling for zip_code, which is a string, not an int.
         try:
             payload['playground']['zip_code'] = str(payload['playground']['zip_code'])
         except KeyError:
             pass
-
-        try:
-            if payload['playground']['zip_code'] == "None":
-                payload['playground']['zip_code'] = None
-        except KeyError:
-            payload['playground']['zip_code'] = None
 
         try:
             if payload['playground']['reverse_geocoded'] == "on":

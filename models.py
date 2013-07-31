@@ -47,29 +47,29 @@ class Playground(Model):
     The playground model for the sqlite database.
     """
     slug = CharField()
-    nprid = CharField(null=True)
-    name = CharField(verbose_name='Name', null=True)
+    nprid = CharField(null=False, default='')
+    name = CharField(verbose_name='Name', null=False, default='')
     facility = CharField(verbose_name='Facility', null=True)
-    facility_type = CharField(verbose_name='Facility type', null=True)
+    facility_type = CharField(verbose_name='Facility type', null=False, default='')
 
-    address = CharField(verbose_name='Address', null=True)
-    city = CharField(verbose_name='City', null=True)
-    state = CharField(verbose_name='State', null=True)
-    zip_code = CharField(verbose_name='Zip Code', null=True)
+    address = CharField(verbose_name='Address', null=False, default='')
+    city = CharField(verbose_name='City', null=False, default='')
+    state = CharField(verbose_name='State', null=False, default='')
+    zip_code = CharField(verbose_name='Zip Code', null=False, default='')
     latitude = FloatField(verbose_name='Latitude', null=True)
     longitude = FloatField(verbose_name='Longitude', null=True)
 
-    agency = CharField(verbose_name='Agency', null=True)
-    agency_type = CharField(verbose_name='Agency type', null=True)
+    agency = CharField(verbose_name='Agency', null=False, default='')
+    agency_type = CharField(verbose_name='Agency type', null=False, default='')
 
-    owner = CharField(verbose_name='Owner', null=True)
-    owner_type = CharField(verbose_name='Owner type', null=True)
-    remarks = TextField(null=True)
-    public_remarks = TextField(verbose_name='Remarks', null=True)
+    owner = CharField(verbose_name='Owner', null=False, default='')
+    owner_type = CharField(verbose_name='Owner type', null=False, default='')
+    remarks = TextField(null=False, default='')
+    public_remarks = TextField(verbose_name='Remarks', null=False, default='')
 
-    url = CharField(verbose_name='URL', null=True)
-    entry = CharField(null=True)
-    source = CharField(null=True)
+    url = CharField(verbose_name='URL', null=False, default='')
+    entry = CharField(null=False, default='')
+    source = CharField(null=False, default='')
 
     active = BooleanField(default=True)
 

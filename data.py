@@ -333,11 +333,6 @@ def process_update(record):
         # Ignore some keys because they aren't really what we want to update.
         if key not in ['id', 'features']:
 
-            # If the value is blank, make it null.
-            # Life is too short for many different kinds of emptyness.
-            if value == u'':
-                value = None
-
             # Update the record_dict with our new key/value pair.
             record_dict[key] = value
 
@@ -384,10 +379,6 @@ def process_update(record):
 
     # Loop over the key/value pairs in the new data we have.
     for key, value in new_data.items():
-
-        # Fix the variety of None that we bother maintaining.
-        if value is None:
-            new_data[key] = ''
 
         # Now, if the old data and the new data don't match, let's make a revision.
         if old_data[key] != new_data[key]:
@@ -454,11 +445,6 @@ def process_insert(record):
         # Ignore some keys because they aren't really what we want to update.
         if key not in ['id', 'features']:
 
-            # If the value is blank, make it null.
-            # Life is too short for many different kinds of emptyness.
-            if value == u'':
-                value = None
-
             # Update the record_dict with our new key/value pair.
             record_dict[key] = value
             setattr(playground, key, value)
@@ -474,10 +460,6 @@ def process_insert(record):
 
     # Loop over the key/value pairs in the new data we have.
     for key, value in new_data.items():
-
-        # Fix the variety of None that we bother maintaining.
-        if value is None:
-            new_data[key] = ''
 
         # Set up an intermediate data structure for the revision.
         revision_dict = {}
@@ -529,4 +511,3 @@ def render_sitemap():
 
     with open('www/sitemap.xml', 'w') as f:
         f.write(content.encode('utf-8'))
-
