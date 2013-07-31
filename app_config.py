@@ -105,6 +105,8 @@ CLOUD_SEARCH_DEFAULT_SEARCH_FIELD = ''  # empty string searches all text fields
 CLOUD_SEARCH_DEG_OFFSET = 180
 CLOUD_SEARCH_DEG_SCALE = 10000
 
+RESULTS_DEFAULT_ZOOM = 14
+
 ADMIN_EMAILS = [
     'playgrounds@npr.org',
     'jbowers@npr.org'
