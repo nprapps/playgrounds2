@@ -79,7 +79,7 @@ FACEBOOK = {
 
 NPR_DFP = {
     'STORY_ID': '203618536',
-    'TARGET': '\/News_NPR_News_Investigations;storyid=203618536',
+    'TARGET': 'News_NPR_News_Investigations',
     'ENVIRONMENT': 'NPRTEST',
     'TESTSERVER': 'true'
 }
