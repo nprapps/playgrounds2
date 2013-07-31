@@ -57,3 +57,5 @@ www/sitemap.xml
 .playgrounds_gzip
 *.bak
 www/npr-accessible-playgrounds.*
+data/backups/*.json
+data/backups/*.db

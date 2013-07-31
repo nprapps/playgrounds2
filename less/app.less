@@ -737,6 +737,7 @@ section#the-goods { margin-top: 44px; }
                     .border-radius(0);
                     text-align: center;
                     color: @white;
+                    margin: 0;
                 }
             }
         }
@@ -1115,7 +1116,12 @@ section#the-goods { margin-top: 44px; }
 
             #edit-map,
             #address-pane {
-                top: 100px;
+                top: 80px;
+            }
+
+            .nav-tabs {
+                position: relative;
+                z-index: 100;
             }
 
 
@@ -1134,6 +1140,11 @@ section#the-goods { margin-top: 44px; }
                 right: 0;
                 width: 100%;
                 margin-left: 0;
+
+                #edit-map,
+                #address-pane {
+                    top: 100px;
+                }
             }
         }
 

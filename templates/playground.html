@@ -29,7 +29,7 @@
     <div class="container">
         <div class="row">
             <div class="span12">
-                <h1><a href="../">{{ PROJECT_NAME }}</a></h1>
+                <h1><a href="{{ S3_BASE_URL }}">{{ PROJECT_NAME }}</a></h1>
             </div>
         </div>
     </div>
@@ -188,9 +188,11 @@
             <ul>
                 {% if revision.action == 'update' %}
                     {% for change in revision.get_log() %}
-                    <li>
-                    <strong>{{ display_field_name(change.field) }}</strong> {% if change.from == 0 and change.to == 1 %}selected{% elif change.from == 1 and change.to == 0 %}deselected{% elif not change.from %}set to <em>{{ change.to }}</em>{% elif not change.to %}unset from <em>{{ change.from }}</em>{% else %}changed from <em>{{ change.from }}</em> to <em>{{ change.to }}</em>{% endif %}.
-                    </li>
+                        {% if display_field_name(change.field) != 'Reverse Geocoded' %}
+                        <li>
+                        <strong>{{ display_field_name(change.field) }}</strong> {% if change.from == 0 and change.to == 1 %}selected{% elif change.from == 1 and change.to == 0 %}deselected{% elif not change.from %}set to <em>{{ change.to }}</em>{% elif not change.to %}unset from <em>{{ change.from }}</em>{% else %}changed from <em>{{ change.from }}</em> to <em>{{ change.to }}</em>{% endif %}.
+                        </li>
+                        {% endif %}
                     {% endfor %}
                 {% elif revision.action == 'insert' %}
                     <li>Playground created.</li>
