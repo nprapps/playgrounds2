@@ -411,6 +411,25 @@ $(function() {
                 playground.RESULTS_DEFAULT_ZOOM += 1;
             }
 
+            if(playground.fields.latitude.val() === '' || playground.fields.latitude.val() === 'None'){
+                var latitude = get_parameter_by_name('latitude');
+                var longitude = get_parameter_by_name('longitude');
+
+                if (latitude) {
+                    playground.fields.latitude.val(latitude);
+                }
+
+                if (longitude) {
+                    playground.fields.longitude.val(longitude);
+                }
+                
+                if (latitude && longitude) {
+                    playground.reverse_geocode(latitude, longitude, playground.callbacks.reverse_geocode);
+                } else {
+                    playground.locate_me();
+                }
+            }
+
             // Set up the map.
             playground.map.setup();
 
@@ -426,7 +445,6 @@ $(function() {
                     return false;
                 });
             });
-
 
             // Allow users to tab feature labels and descriptions to toggle checkbox
             $('#form .feature').find('label, .help-block, img').each(function(){
@@ -456,9 +474,6 @@ $(function() {
                 $('#' + playground.ACTION).toggleClass('hide');
             }
 
-            if(playground.fields.latitude.val() === '' || playground.fields.latitude.val() === 'None'){
-                playground.locate_me();
-            }
 
             // Do this thing with the map.
             if ( $('#locator-map') ) {
