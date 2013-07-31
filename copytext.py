@@ -110,6 +110,7 @@ class Copy(object):
             book = xlrd.open_workbook(COPY_XLS)
         except IOError:
             os.system('curl -o data/copy.xls "%s"' % app_config.COPY_URL)
+            book = xlrd.open_workbook(COPY_XLS)
 
         for sheet in book.sheets():
             columns = sheet.row_values(0)
