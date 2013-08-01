@@ -47,7 +47,7 @@ function buildCloudSearchParams(latitude, longitude, zoom, query) {
      */
     var deployment_target = (APP_CONFIG.DEPLOYMENT_TARGET || 'staging');
     var params = {};
-    var return_fields = ['name', 'display_name', 'city', 'state', 'latitude', 'longitude', 'public_remarks', 'slug'];
+    var return_fields = ['display_name', 'city', 'state', 'latitude', 'longitude', 'slug'];
 
     for (feature in window.FEATURES) {
         return_fields.push('feature_' + feature.replace(/-/g, '_'));
@@ -101,6 +101,7 @@ function buildCloudSearchParams(latitude, longitude, zoom, query) {
 
         params['rank'] = 'distance';
         params['rank-distance'] = rank_distance;
+        params['size'] = '26';  // We never need more than 26 results
 
         return_fields.push('distance');
     } else {
