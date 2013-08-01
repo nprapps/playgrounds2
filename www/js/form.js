@@ -20,8 +20,8 @@ $(function() {
             'modal_map': $('#modal-locator-map'),
             'address_editor': $('.address-editor'),
             'address_editor_toggle': $('#toggle-address-button'),
-            'meta_hdr': $('#main-content').find('.about').find('h5.meta'),
-            'meta_items': $('#main-content').find('.about').find('ul.meta'),
+            'meta_hdr': $('#main-content').find('.playground-features').find('h5.meta'),
+            'meta_items': $('#main-content').find('.playground-features').find('ul.meta'),
             'meta_comments': $('#main-content').find('.comments').find('p.meta'),
             'meta_guidelines': $('#main-content').find('.comments').find('p.guidelines'),
             'meta_changelog': $('#main-content').find('.changelog').find('h5.meta'),
@@ -503,7 +503,6 @@ $(function() {
             // Recenter the editor map when you activate the map pane
             $('#editor-tabs a:first').on('click', function(e){
                 e.preventDefault();
-                $('div.modal-alerts').hide();
                 $('this').tab('show');
                 setTimeout(playground.map.center_editor, 25);
             })

@@ -916,9 +916,10 @@ section#the-goods { margin-top: 44px; }
     h4 {
         margin: 0 0 22px 0;
         color: #333;
-        border-top: 2px solid #ebebeb;
+        border-top: 4px solid #ebebeb;
         padding-top: 33px;
-        font-size: 20px;
+        font-size: 22px;
+        font-weight: bold;
     }
     h5.meta, p.meta {
         font-size: 12px;
@@ -965,7 +966,6 @@ section#the-goods { margin-top: 44px; }
             }
         }
     }
-    .about,
     .address,
     .comments,
     .social {
@@ -991,10 +991,6 @@ section#the-goods { margin-top: 44px; }
         }
     }
     .changelog {
-        border-top: 1px solid #eee;
-        padding-top: 22px;
-        margin-top: 22px;
-
         ul {
             li {
                 font-size: 12px;
@@ -1035,35 +1031,36 @@ section#the-goods { margin-top: 44px; }
     .playground-features {
         margin-bottom: 22px;
 
-        ul {
+        ul.playground-feature-list {
             &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
-        }
-        li {
-            width: 45%;
-            float: left;
-            margin-right: 5%;
-            margin-bottom: 22px;
 
-            &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
-        }
-        img {
-            float: left;
-            width: 75px;
-            height: auto;
-        }
-        .feature-definition {
-            font-size: 12px;
-            color: #666;
-            line-height: 1.4;
-            margin-left: 85px;
+            li {
+                width: 45%;
+                float: left;
+                margin-right: 5%;
+                margin-bottom: 22px;
 
-            strong {
-                color: #111;
-                display: block;
-                text-transform: capitalize;
-                margin-bottom: 3px;
-                font-size: 14px;
-                font-weight: normal;
+                &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
+            }
+            img {
+                float: left;
+                width: 75px;
+                height: auto;
+            }
+            .feature-definition {
+                font-size: 12px;
+                color: #666;
+                line-height: 1.4;
+                margin-left: 85px;
+
+                strong {
+                    color: #111;
+                    display: block;
+                    text-transform: capitalize;
+                    margin-bottom: 3px;
+                    font-size: 14px;
+                    font-weight: normal;
+                }
             }
         }
     }
