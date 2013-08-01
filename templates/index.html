@@ -6,10 +6,6 @@
     {{ CSS.push('css/mapbox.css') }}
 {% endblock %}
 
-{% block extra_head %}
-    <script type='text/javascript' src="http://api.tiles.mapbox.com/mapbox.js/v1.1.0/mapbox.js"></script>
-{% endblock %}
-
 {% block header_content %}
 <header>
     <div class="container">
@@ -68,7 +64,7 @@
             <th class="city-name">Metropolitan area</th>
             <th class="city-amt">Known playgrounds</th>
         </tr>
-        {% for metro in metros %}<tr{% if metro.playground_count == 0 %} class="help"{% endif %}>
+        {% for metro in metros %}<tr{% if metro.playground_count <= 5 %} class="help"{% endif %}>
             <td class="city-rank">{{ loop.index }}.</th>
             <td class="city-name"><a href="search.html#address={{ metro.search_name }}">{{ metro.name }}</a></th>
             <td class="city-amt">{{ metro.playground_count }}</th>

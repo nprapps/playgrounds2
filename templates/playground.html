@@ -122,6 +122,7 @@
 <div class="comments">
     <h4>{{ COPY.content.playground_note_title }}</h4>
     <p class="description">{{ COPY.content.playground_note_description }}</p>
+    <p class="meta">Discusssion Guidelines</p>
     <p class="guidelines">{{ COPY.content.playground_terms }}</p>
     {% include '_comments.html' %}
 </div>
@@ -165,12 +166,10 @@
     <p><a href="#edit-playground" class="btn btn-blue btn-block" data-toggle="modal"><i class="icon-pencil"></i> {{ COPY.content.playground_help_button }}</a></p>
 </div>
 
-<p class="removal">Is this listing inappropriate? <a href="#remove-playground" role="button" data-toggle="modal">Suggest this playground for removal.</a></p>
-
 {% if revisions.count() > 0 %}
 <div class="changelog">
-    <h5>Changelog</h5>
-    <ul>
+    <h5 class="meta">Changelog</h5>
+    <ul class="meta">
         {% for revision in revisions %}
         <li>
             <span class="timestamp">{{ revision.get_est_time_formatted() }}</span>
@@ -192,6 +191,8 @@
     </ul>
 </div>
 {% endif %}
+
+<p class="removal">Is this listing inappropriate? <a href="#remove-playground" role="button" data-toggle="modal">Suggest this playground for removal.</a></p>
 
 
 <!-- update form -->
@@ -217,5 +218,5 @@
     {{ JS.push('js/form.js') }}
     {{ JS.push('js/lookup_tables.js') }}
     {{ JS.push('js/responsive-ad.js') }}
-    {{ JS.render('js/app-edit-footer.min.js') }}
+    {{ JS.render('js/app-playground-footer.min.js') }}
 {% endblock extra_foot_js %}

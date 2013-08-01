@@ -6,15 +6,10 @@
     {{ CSS.push('css/mapbox.css') }}
 {% endblock %}
 
-{% block extra_head %}
-    <script type='text/javascript' src="http://api.tiles.mapbox.com/mapbox.js/v1.1.0/mapbox.js"></script>
-{% endblock %}
-
 {% block header_content %}
 {% include '_nav-interior.html' %}
 {% include '_search_form.html' %}
 {% endblock %}
-
 
 {% block wide_content %}
 <div id="main-content" class="row-fluid">
