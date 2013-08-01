@@ -545,7 +545,7 @@ def bootstrap():
     put(local_path='playgrounds.db', remote_path='%(repo_path)s/playgrounds.db' % env)
 
 def process_updates():
-    if env.get(settings, None) in ['production', 'staging']:
+    if os.environ.get('DEPLOYMENT_TARGET', None) in ['production', 'staging']:
         write_snapshots()
         prepare_changes()
         deploy_playgrounds()
@@ -558,7 +558,7 @@ def process_updates():
 def prepare_changes():
     path = './'
 
-    if env.get(settings, None) in ['production', 'staging']:
+    if os.environ.get('DEPLOYMENT_TARGET', None) in ['production', 'staging']:
         path = '%s' % env.repo_path
 
     now_datetime = datetime.datetime.now(pytz.utc)
