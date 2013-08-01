@@ -21,9 +21,8 @@ function search(latitude, longitude) {
      */
     $results.empty();
 
-    console.log(latitude, longitude);
-
     map.removeLayer(markers);
+    markers.clearLayers();
 
     if (search_xhr != null) {
         search_xhr.abort();
@@ -37,8 +36,6 @@ function search(latitude, longitude) {
         },
         success: function(data) {
             // TODO: hide loading indicator
-
-            var markers = [];
 
             if (data['hits']['hit'].length > 0) {
                 _.each(data['hits']['hit'], function(hit, i) {
@@ -101,18 +98,11 @@ function search(latitude, longitude) {
                             $.smoothScroll({ scrollTarget: '#playground-' + this.letter });
                         });*/
 
-                        markers.push(marker);
+                        markers.addLayer(marker);
                     }
                 });
 
                 map.setView([latitude, longitude], zoom);
-
-                markers.clearLayers();
-
-                _.each(markers, function(marker) {
-                    markers.addLayer(marker);
-                });
-                
                 map.addLayer(markers);
 
                 // TODO: create link
