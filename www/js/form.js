@@ -245,7 +245,7 @@ $(function() {
                 'error': function(a, b, c) {
                     if (b == 'timeout'){
                         alert_text = "<h3>We're sorry!</h3>We're having a hard time finding this place.";
-                        make_alert(alert_text, 'warning', 'div.alerts');
+                        make_alert(alert_text, 'warning', 'div.modal-alerts');
                     }
                 },
                 'success': function(data) {
