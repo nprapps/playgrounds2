@@ -80,12 +80,12 @@ function make_alert(text, klass, target_element){
             'text': text,
             'klass': klass
         })
-    ).addClass('slide-down');
+    ).hide().slideDown();
 
-    // Make it disappear reasonably quickly after 2 seconds.
-    var t = setTimeout(function(){
-        $(target_element).removeClass('slide-down');
-    }, 3000);
+    // Make it disappear
+    setTimeout(function() {
+        $(target_element).slideUp();
+    }, 5000);
 }
 
 function set_driving_urls(){
