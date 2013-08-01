@@ -132,6 +132,129 @@ PUBLIC_FIELDS = [
     "longitude"
 ]
 
+METRO_AREAS = [
+    {
+        "name": "New York-Newark-Jersey City, NY-NJ-PA",
+        "zip_codes": [],
+        "playground_count": 0,
+        "search_name": "New York, NY",
+    },
+    {
+        "name": "Los Angeles-Long Beach-Anaheim, CA",
+        "zip_codes": [],
+        "playground_count": 0,
+        "search_name": "Los Angeles, CA",
+    },
+    {
+        "name": "Chicago-Naperville-Elgin, IL-IN-WI",
+        "zip_codes": [],
+        "playground_count": 0,
+        "search_name": "Chicago, IL",
+    },
+    {
+        "name": "Dallas-Fort Worth-Arlington, TX",
+        "zip_codes": [],
+        "playground_count": 0,
+        "search_name": "Arlington, TX",
+    },
+    {
+        "name": "Houston-The Woodlands-Sugar Land, TX",
+        "zip_codes": [],
+        "playground_count": 0,
+        "search_name": "Houston, TX",
+    },
+    {
+        "name": "Philadelphia-Camden-Wilmington, PA-NJ-DE-MD",
+        "zip_codes": [],
+        "playground_count": 0,
+        "search_name": "Philadelphia, PA",
+    },
+    {
+        "name": "Washington-Arlington-Alexandria, DC-VA-MD-WV",
+        "zip_codes": [20001, 20005, 20006, 20002, 20003, 20004, 20007],
+        "playground_count": 0,
+        "search_name": "Washington, DC",
+    },
+    {
+        "name": "Miami-Fort Lauderdale-West Palm Beach, FL",
+        "zip_codes": [],
+        "playground_count": 0,
+        "search_name": "Miami, FL",
+    },
+    {
+        "name": "Atlanta-Sandy Springs-Roswell, GA",
+        "zip_codes": [],
+        "playground_count": 0,
+        "search_name": "Atlanta, GA",
+    },
+    {
+        "name": "Boston-Cambridge-Newton, MA-NH",
+        "zip_codes": [],
+        "playground_count": 0,
+        "search_name": "Boston, MA",
+    },
+    {
+        "name": "San Francisco-Oakland-Fremont, CA",
+        "zip_codes": [],
+        "playground_count": 0,
+        "search_name": "San Francisco, CA",
+    },
+    {
+        "name": "Riverside-San Bernardino-Ontario, CA",
+        "zip_codes": [],
+        "playground_count": 0,
+        "search_name": "Riverside, CA",
+    },
+    {
+        "name": "Phoenix-Mesa-Scottsdale, AZ",
+        "zip_codes": [],
+        "playground_count": 0,
+        "search_name": "Phoenix, AZ",
+    },
+    {
+        "name": "Detroit-Warren-Dearborn, MI",
+        "zip_codes": [],
+        "playground_count": 0,
+        "search_name": "Detroit, MI",
+    },
+    {
+        "name": "Seattle-Tacoma-Bellevue, WA",
+        "zip_codes": [],
+        "playground_count": 0,
+        "search_name": "Seattle, WA",
+    },
+    {
+        "name": "Minneapolis-St. Paul-Bloomington, MN-WI",
+        "zip_codes": [],
+        "playground_count": 0,
+        "search_name": "Minneapolis, MN",
+    },
+    {
+        "name": "San Diego-Carlsbad, CA",
+        "zip_codes": [],
+        "playground_count": 0,
+        "search_name": "San Diego, CA",
+    },
+    {
+        "name": "Tampa-St. Petersburg-Clearwater, FL",
+        "zip_codes": [],
+        "playground_count": 0,
+        "search_name": "Tampa, FL",
+    },
+    {
+        "name": "St. Louis, MO-IL",
+        "zip_codes": [],
+        "playground_count": 0,
+        "search_name": "St. Louis, MO",
+    },
+    {
+        "name": "Baltimore-Columbia-Towson, MD",
+        "zip_codes": [],
+        "playground_count": 0,
+        "search_name": "Baltimore, MD",
+    },
+]
+
 """
 Utilities
 """
