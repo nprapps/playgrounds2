@@ -184,8 +184,8 @@ def configure_targets(deployment_target):
         S3_BASE_URL = 'http://%s/%s' % (S3_BUCKETS[0], PROJECT_SLUG)
         SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
 
-        NPR_DFP.ENVIRONMENT = 'NPR'
-        NPR_DFP.TESTSERVER = 'false'
+        NPR_DFP['ENVIRONMENT'] = 'NPR'
+        NPR_DFP['TESTSERVER'] = 'false'
         DISQUS_SHORTNAME = 'npr-playgrounds2'
 
     elif deployment_target == 'staging':
@@ -197,6 +197,8 @@ def configure_targets(deployment_target):
         S3_BASE_URL = 'http://%s/%s' % (S3_BUCKETS[0], PROJECT_SLUG)
         SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
 
+        NPR_DFP['ENVIRONMENT'] = 'NPRTEST'
+        NPR_DFP['TESTSERVER'] = 'true'
         DISQUS_SHORTNAME = 'npr-playgrounds2-staging'
 
     else:
@@ -208,6 +210,8 @@ def configure_targets(deployment_target):
         S3_BASE_URL = 'http://127.0.0.1:8000'
         SERVER_BASE_URL = 'http://127.0.0.1:8001/%s' % PROJECT_SLUG
 
+        NPR_DFP['ENVIRONMENT'] = 'NPRTEST'
+        NPR_DFP['TESTSERVER'] = 'true'
         DISQUS_SHORTNAME = 'npr-playgrounds2-staging'
 
     DEPLOYMENT_TARGET = deployment_target
