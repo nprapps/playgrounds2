@@ -83,20 +83,20 @@ function buildCloudSearchParams(latitude, longitude, zoom, query) {
         var coefficient = earth_radius_miles * 1000;
 
         // Points in the index have been scaled and offset
-        var that_latitude = '((latitude / ' + scale + ') - ' + offset + ')';
-        var that_longitude = '((longitude / ' + scale + ') - ' + offset + ')';
+        var that_latitude = '(((latitude / ' + scale + ') - ' + offset + ') * ' + pi_over_180 + ')';
+        var that_longitude = '(((longitude / ' + scale + ') - ' + offset + ') * ' + pi_over_180 + ')';
 
         // Compile ranking algorithm (spherical law of cosines)
         // Note results are scaled up by 1000x.
-        var rank_distance = coefficient + ' * Math.acos(' + sin_latitude + ' * Math.sin(' + that_latitude + ' * ' + pi_over_180 + ') + ' + cos_latitude + ' * Math.cos(' + that_latitude + ' * ' + pi_over_180 + ') * Math.cos((' + that_longitude + ' * ' + pi_over_180 + ') - ' + longitude_radians + '))';
+        var rank_distance = coefficient + ' * Math.acos(' + sin_latitude + ' * Math.sin(' + that_latitude + ') + ' + cos_latitude + ' * Math.cos(' + that_latitude + ') * Math.cos((' + that_longitude + ') - ' + longitude_radians + '))';
 
         //var x = (lon2-lon1) * Math.cos((lat1+lat2)/2);
         //var y = (lat2-lat1);
         //var d = Math.sqrt(x*x + y*y) * R;
 
-        // Alternate Equirectangular distance
-        //var x = '(' + that_longitude + ' - ' + longitude + ') * Math.cos((' + that_latitude + ' + ' + latitude + ') / 2)';
-        //var y = '(' + that_latitude + ' - ' + latitude + ')';
+        // Alternate Equirectangular distance (should be faster, but not working)
+        //var x = '(' + that_longitude + ' - ' + longitude_radians + ') * Math.cos((' + that_latitude + ' + ' + latitude_radians + ') / 2)';
+        //var y = '(' + that_latitude + ' - ' + latitude_radians + ')';
         //var rank_distance = 'Math.sqrt(Math.pow(' + x + ', 2) + Math.pow(' + y + ', 2)) * ' + coefficient;
 
         params['rank'] = 'distance';
