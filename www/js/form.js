@@ -20,8 +20,12 @@ $(function() {
             'modal_map': $('#modal-locator-map'),
             'address_editor': $('.address-editor'),
             'address_editor_toggle': $('#toggle-address-button'),
+            'meta_hdr': $('#main-content').find('.about').find('h5.meta'),
             'meta_items': $('#main-content').find('.about').find('ul.meta'),
-            'meta_hdr': $('#main-content').find('.about').find('h5.meta')
+            'meta_comments': $('#main-content').find('.comments').find('p.meta'),
+            'meta_guidelines': $('#main-content').find('.comments').find('p.guidelines'),
+            'meta_changelog': $('#main-content').find('.changelog').find('h5.meta'),
+            'meta_changes': $('#main-content').find('.changelog').find('ul.meta')
         },
         'inputs': {
             'text_input': $('#form input[type="text"], #form select'),
@@ -122,6 +126,13 @@ $(function() {
 
                 // Set the map state.
                 playground.map.resize_locator();
+            },
+            'twist_out': function(hed, subhed) {
+                hed.html(hed.html() + ' +');
+                subhed.hide();
+                hed.on('click', function() {
+                    subhed.slideToggle('fast');
+                });
             }
         },
         'map': {
@@ -316,6 +327,7 @@ $(function() {
             }
             this.fields.address_editor.addClass('hide');
             this.fields.address_editor_toggle.text('Edit');
+
             $('#editor-tabs a:first').tab('show');
         },
         'reset_form': function() {
@@ -491,16 +503,15 @@ $(function() {
             // Recenter the editor map when you activate the map pane
             $('#editor-tabs a:first').on('click', function(e){
                 e.preventDefault();
+                $('div.modal-alerts').hide();
                 $('this').tab('show');
                 setTimeout(playground.map.center_editor, 25);
             })
 
             // All of this meta_hdr and meta_items stuff.
-            playground.fields.meta_hdr.html(playground.fields.meta_hdr.html() + ' +');
-            playground.fields.meta_items.hide();
-            playground.fields.meta_hdr.on('click', function() {
-                playground.fields.meta_items.slideToggle('fast');
-            });
+            playground.form.twist_out(playground.fields.meta_hdr, playground.fields.meta_items);
+            playground.form.twist_out(playground.fields.meta_comments, playground.fields.meta_guidelines);
+            playground.form.twist_out(playground.fields.meta_changelog, playground.fields.meta_changes);
         }
     };
     // Initialize the playground object.
