@@ -147,6 +147,20 @@ def sitemap():
 
     return (sitemap, 200, { 'content-type': 'application/xml' })
 
+@app.route('/widget.html')
+def widget():
+    """
+    Embeddable widget example page.
+    """
+    return render_template('widget.html', **make_context())
+
+@app.route('/test_widget.html')
+def test_widget():
+    """
+    Example page displaying widget at different embed sizes.
+    """
+    return render_template('test_widget.html', **make_context())
+
 @app.route('/playground/<string:playground_slug>.html')
 def _playground(playground_slug):
     """
