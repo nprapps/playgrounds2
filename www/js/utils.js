@@ -78,7 +78,13 @@ function buildCloudSearchParams(latitude, longitude, zoom, query) {
 
         // Compile ranking algorithm (spherical law of cosines)
         // Note results are scaled up by 1000x.
-        var rank_distance = '3958.761 * Math.acos(Math.sin(' + latitude_radians + ') * Math.sin(((latitude / ' + scale + ') - ' + offset + ') * 3.14159 / 180) + Math.cos(' + latitude_radians + ') * Math.cos(((latitude / ' + scale + ') - ' + offset + ') * 3.14159 / 180) * Math.cos((((longitude / ' + scale + ') - ' + offset + ') * 3.14159 / 180) - ' + longitude_radians + ')) * 1000';
+        var sin_latitude = Math.sin(latitude_radians);
+        var cos_latitude = Math.cos(latitude_radians);
+        var pi_over_180 = 3.14159 / 180;
+        var earth_radius_miles = 3958.761;
+        var coefficient = earth_radius_miles * 1000;
+
+        var rank_distance = coefficient + ' * Math.acos(' + sin_latitude + ' * Math.sin(((latitude / ' + scale + ') - ' + offset + ') * ' + pi_over_180 + ') + ' + cos_latitude + ' * Math.cos(((latitude / ' + scale + ') - ' + offset + ') * ' + pi_over_180 + ') * Math.cos((((longitude / ' + scale + ') - ' + offset + ') * ' + pi_over_180 + ') - ' + longitude_radians + '))';
 
         params['rank'] = 'distance';
         params['rank-distance'] = rank_distance;
