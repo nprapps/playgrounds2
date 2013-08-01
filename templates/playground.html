@@ -25,15 +25,7 @@
 {% endblock %}
 
 {% block header_content %}
-<header>
-    <div class="container">
-        <div class="row">
-            <div class="span12">
-                <h1><a href="{{ S3_BASE_URL }}">{{ PROJECT_NAME }}</a></h1>
-            </div>
-        </div>
-    </div>
-</header>
+{% include '_nav-interior.html' %}
 {% endblock %}
 
 {% block content %}
@@ -174,9 +166,6 @@
 </div>
 
 <p class="removal">{{ COPY.content.playground_removal }}</p>
-
-<p class="learn-more">{{ COPY.content.playground_learn_more }}</p>
-
 
 {% if revisions.count() > 0 %}
 <div class="changelog">

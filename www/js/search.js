@@ -33,6 +33,7 @@ var $map_loading = null;
 var $results_loading = null;
 var $playground_meta_hdr = null;
 var $playground_meta_items = null;
+var $create_link = null;
 
 var zoom = RESULTS_DEFAULT_ZOOM;
 var crs = null;
@@ -299,6 +300,8 @@ function search() {
 
                 $search_results_map_wrapper.show();
                 $results_address.show();
+
+                $create_link.attr('href', 'create.html?latitude=' + latitude + '&longitude=' + longitude); 
             }
             
             if (not_found) {
@@ -329,13 +332,26 @@ function navigate(nearby) {
         nearby = $.bbq.getState('nearby') == 'true';
     }
 
-    $.bbq.pushState({
-        'address': $search_address.val(),
-        'latitude': $search_latitude.val(),
-        'longitude': $search_longitude.val(),
-        'zoom': zoom,
-        'nearby': nearby
-    })
+    var state = $.bbq.getState();
+
+    // If we're changing state to exactly where we already are
+    // (e.g. because somebody clicked search twice) then don't
+    // adjust browser state but force the callback
+    if (state['address'] == $search_address.val() &&
+        state['latitude'] == $search_latitude.val() &&
+        state['longitude'] == $search_longitude.val() &&
+        state['zoom'] == zoom.toString() &&
+        state['nearby'] == nearby.toString()) {
+           hashchange_callback();
+    } else {
+        $.bbq.pushState({
+            'address': $search_address.val(),
+            'latitude': $search_latitude.val(),
+            'longitude': $search_longitude.val(),
+            'zoom': zoom,
+            'nearby': nearby
+        });
+    }
 }
 
 function reset_zoom() {
@@ -414,6 +430,7 @@ $(function() {
     $results_loading = $('#results-loading');
     $playground_meta_hdr = $('#main-content').find('.about').find('h5.meta');
     $playground_meta_items = $('#main-content').find('.about').find('ul.meta');
+    $create_link = $search_help_prompt.find('a');
     $alerts = $('.alerts');
 
     CONTENT_WIDTH = $('#main-content').width();
@@ -500,6 +517,8 @@ $(function() {
         if ($search_address.val() === '') {
             return false;
         }
+
+        console.log('searching');
 
         $did_you_mean_wrapper.hide();
         $search_help_prompt.hide();

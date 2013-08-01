@@ -79,7 +79,9 @@ FACEBOOK = {
 
 NPR_DFP = {
     'STORY_ID': '203618536',
-    'TARGET': '\/News_NPR_News_Investigations;storyid=203618536'
+    'TARGET': 'News_NPR_News_Investigations',
+    'ENVIRONMENT': 'NPRTEST',
+    'TESTSERVER': 'true'
 }
 
 """
@@ -182,6 +184,8 @@ def configure_targets(deployment_target):
         S3_BASE_URL = 'http://%s/%s' % (S3_BUCKETS[0], PROJECT_SLUG)
         SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
 
+        NPR_DFP.ENVIRONMENT = 'NPR'
+        NPR_DFP.TESTSERVER = 'false'
         DISQUS_SHORTNAME = 'npr-playgrounds2'
 
     elif deployment_target == 'staging':

@@ -20,9 +20,9 @@
                     <h2>{{ COPY.content.app_description }}</h2>
 
                     <p class="sublinks">
-                        <a href="{{ COPY.content.header_help_link }}">{{ COPY.content.header_help_link_text }}</a> |
-                        <a href="{{ COPY.content.header_series_link }}">{{ COPY.content.header_series_link_text }}</a> |
-                        <a href="{{ COPY.content.header_about_link }}">{{ COPY.content.header_about_link_text }}</a>
+                        <a id="sublink-help" href="{{ COPY.content.header_help_link }}">{{ COPY.content.header_help_link_text }}</a> |
+                        <a id="sublink-series" href="{{ COPY.content.header_series_link }}">{{ COPY.content.header_series_link_text }}</a> |
+                        <a id="sublink-data" href="{{ COPY.content.header_about_link }}">{{ COPY.content.header_about_link_text }}</a>
                     </p>
 
                     <div class="mobile-prompt">
@@ -60,7 +60,117 @@
 
 <div id="playground-help">
     <h3 id="help-title">{{ COPY.content.help_title }}</h3>
-    <p id="help-description">{{ COPY.content.help_description }}</p>
+    <p id="help-description">{{ COPY.content.help_description_1 }}</p>
+    
+    <table class="city-list">
+        <tr>
+            <th class="city-rank">Rank</th>
+            <th class="city-name">Metropolitan area</th>
+            <th class="city-amt">Known playgrounds</th>
+        </tr>
+        <tr>
+            <td class="city-rank">1.</th>
+            <td class="city-name">New York-Newark-Jersey City, NY-NJ-PA</th>
+            <td class="city-amt">50 playgrounds</th>
+        </tr>
+        <tr>
+            <td class="city-rank">2.</td>
+            <td class="city-name">Los Angeles-Long Beach-Anaheim, CA</td>
+            <td class="city-amt">50 playgrounds</td>
+        </tr>
+        <tr class="help">
+            <td class="city-rank">3.</td>
+            <td class="city-name">Chicago-Naperville-Elgin, IL-IN-WI</td>
+            <td class="city-amt">0 playgrounds</td>
+        </tr>
+        <tr class="help">
+            <td class="city-rank">4.</td>
+            <td class="city-name">Dallas-Fort Worth-Arlington, TX</td>
+            <td class="city-amt">0 playgrounds</td>
+        </tr>
+        <tr>
+            <td class="city-rank">5.</td>
+            <td class="city-name">Houston-The Woodlands-Sugar Land, TX</td>
+            <td class="city-amt">50 playgrounds</td>
+        </tr>
+        <tr class="help">
+            <td class="city-rank">6.</td>
+            <td class="city-name">Philadelphia-Camden-Wilmington, PA-NJ-DE-MD</td>
+            <td class="city-amt">0 playgrounds</td>
+        </tr>
+        <tr class="help">
+            <td class="city-rank">7.</td>
+            <td class="city-name">Washington-Arlington-Alexandria, DC-VA-MD-WV</td>
+            <td class="city-amt">0 playgrounds</td>
+        </tr>
+        <tr>
+            <td class="city-rank">8.</td>
+            <td class="city-name">Miami-Fort Lauderdale-West Palm Beach, FL</td>
+            <td class="city-amt">50 playgrounds</td>
+        </tr>
+        <tr>
+            <td class="city-rank">9.</td>
+            <td class="city-name">Atlanta-Sandy Springs-Roswell, GA</td>
+            <td class="city-amt">50 playgrounds</td>
+        </tr>
+        <tr class="help">
+            <td class="city-rank">10.</td>
+            <td class="city-name">Boston-Cambridge-Newton, MA-NH</td>
+            <td class="city-amt">0 playgrounds</td>
+        </tr>
+        <tr class="help">
+            <td class="city-rank">11.</td>
+            <td class="city-name">San Francisco-Oakland-Fremont, CA</td>
+            <td class="city-amt">0 playgrounds</td>
+        </tr>
+        <tr>
+            <td class="city-rank">12.</td>
+            <td class="city-name">Riverside-San Bernardino-Ontario, CA</td>
+            <td class="city-amt">50 playgrounds</td>
+        </tr>
+        <tr>
+            <td class="city-rank">13.</td>
+            <td class="city-name">Phoenix-Mesa-Scottsdale, AZ</td>
+            <td class="city-amt">50 playgrounds</td>
+        </tr>
+        <tr class="help">
+            <td class="city-rank">14.</td>
+            <td class="city-name">Detroit-Warren-Dearborn, MI</td>
+            <td class="city-amt">0 playgrounds</td>
+        </tr>
+        <tr>
+            <td class="city-rank">15.</td>
+            <td class="city-name">Seattle-Tacoma-Bellevue, WA</td>
+            <td class="city-amt">50 playgrounds</td>
+        </tr>
+        <tr>
+            <td class="city-rank">16.</td>
+            <td class="city-name">Minneapolis-St. Paul-Bloomington, MN-WI</td>
+            <td class="city-amt">50 playgrounds</td>
+        </tr>
+        <tr>
+            <td class="city-rank">17.</td>
+            <td class="city-name">San Diego-Carlsbad, CA</td>
+            <td class="city-amt">50 playgrounds</td>
+        </tr>
+        <tr class="help">
+            <td class="city-rank">18.</td>
+            <td class="city-name">Tampa-St. Petersburg-Clearwater, FL</td>
+            <td class="city-amt">0 playgrounds</td>
+        </tr>
+        <tr class="help">
+            <td class="city-rank">19.</td>
+            <td class="city-name">St. Louis, MO-IL</td>
+            <td class="city-amt">0 playgrounds</td>
+        </tr>
+        <tr>
+            <td class="city-rank">20.</td>
+            <td class="city-name">Baltimore-Columbia-Towson, MD</td>
+            <td class="city-amt">50 playgrounds</td>
+        </tr>
+    </table>
+    
+    <p id="help-description">{{ COPY.content.help_description_2 }}</p>
 
     <a href="{{ COPY.content.help_search_link }}" class="btn btn-blue">{{ COPY.content.help_search_link_text }}</a>
 </div>
@@ -86,6 +196,7 @@
     {{ JS.push('js/lib/underscore.js') }}
     {{ JS.push('js/lib/moment.js') }}
     {{ JS.push('js/lib/bootstrap.js') }}
+    {{ JS.push('js/lib/jquery.smooth-scroll.js') }}
     {{ JS.push('js/templates.js') }}
     {{ JS.push('js/utils.js') }}
     {{ JS.push('js/index.js') }}

@@ -120,8 +120,10 @@ nav {
 // Header
 header {
     background-color: #EBEBEB;
-    padding: 50px 30px 30px 30px;
+    padding: 22px 30px 0 30px;
     margin: 0;
+    min-height: 44px;
+    position: relative;
     
     @media @screen-tiny { padding: 33px 20px; }
     
@@ -167,7 +169,8 @@ header {
             display: inline-block;
             padding: 11px 11px 11px 33px;
             margin: 22px 0 0 0;
-            background: rgba(255,255,255,.5) url(@icon-smartphone) no-repeat 11px center;
+            background: #eee url(@icon-smartphone) no-repeat 11px center;
+            background-color: rgba(255,255,255,.5);
 
             p {
                 font-size: 12px;
@@ -188,7 +191,8 @@ header {
             }
         }
         .project-info-wrapper {
-            background-color: rgba(255,255,255,.8);
+            background: #FFF;
+            background: rgba(255,255,255,.8);
             position: absolute;
             bottom: 0;
             left: 0;
@@ -237,16 +241,12 @@ header {
     .playground &,
     .search &,
     .create-playground & {
-        background: none;
-        background-color: #ebebeb;
-        padding-top: 22px;
-        padding-bottom: 22px;
         
         @media @screen-tiny {
             padding: 0;
             background: none;
             position: absolute;
-            top: 13px;
+            top: 11px;
             left: 117px;
             border: none;
         }
@@ -255,16 +255,61 @@ header {
             font-size: 20px;
             margin-bottom: 0;
             color: #555;
+            display: none;
             
             @media @screen-tiny {
+                display: inline-block;
                 font-size: 16px;
                 white-space: nowrap; // Android wraps this for some reason.
             }
 
             a { color: #555; }
         }
-        h2 { color: #666; }
+
+        ul.project-nav {
+            position: absolute;
+            bottom: 0;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            
+            @media @screen-tiny { display: none; }
+            
+            > li {
+                font-weight: bold;
+                text-transform: lowercase;
+                border-left: 2px solid #fff;
+                margin: 0;
+                padding: 0 16px;
+                display: inline-block;
+                line-height: 44px;
+                font-size: 14px;
+                
+                &:first-child {
+                    border-left: none;
+                    padding-left: 0;
+                }
+                a { color: #6d8ac4; }
+
+                &.home {
+                    text-transform: none;
+
+                    a { color: #555; }
+                }
+            }
+            
+            i { 
+                display: none;
+                font-style: normal;
+                
+                @media @screen-medium { display: inline; }
+            }
+            span {
+                @media @screen-medium { display: none; }
+            }
+        }
     }
+    .search & ul.project-nav li.search a { color: #999; }
 }
 
 
@@ -560,11 +605,11 @@ section#the-goods { margin-top: 44px; }
     }
 
     .alert {
-        position: static;
+        position: relative;
         #the-goods & {
             margin-left: 0;
             margin-right: 0;
-            margin-bottom: @baseLineHeight;
+            margin-bottom: 0;
             width: auto;
         }
     }
@@ -744,7 +789,7 @@ section#the-goods { margin-top: 44px; }
         }
 
         .address-pane {
-            position: absolute;
+            position: relative;
             top: 80px;
             bottom: 44px;
             width: 100%;
@@ -777,6 +822,46 @@ section#the-goods { margin-top: 44px; }
     }
     #playground-help {
         margin-bottom: 44px;
+        
+        table.city-list {
+            margin: 0 0 1.3em 0;
+            padding: 0;
+            border-collapse: collapse;
+            width: 100%;
+
+            tr {
+                vertical-align: top;
+                
+                &.help td {
+                    background-color: #fcf8e3;
+                    font-weight: bold;
+                    color: #333;
+                }
+            }
+            th, td {
+                line-height: 1.3;
+                font-size: 14px;
+                
+                @media @screen-tiny {
+                    font-size: 12px;
+                }
+            }
+            th {
+                text-align: left;
+                padding: 0 11px 11px 11px;
+            }
+            td {
+                padding: 11px;
+                border-top: 1px solid #eee;
+                color: #666;
+            }
+            .city-rank { text-align: right; }
+            .city-name { }
+            .city-amt  {
+                text-align: right;
+                white-space: nowrap;
+            }
+        }
     }
     #playground-feature-primer {
         margin-bottom: 44px;

@@ -42,7 +42,7 @@ $(function() {
                     playground.address_change_accepted = true;
                 } else {
                     alert_text = "<strong>We're sorry! We couldn't find that place.</strong><br>Don't forget to add the street/avenue/boulevard.<br/>If you're still having trouble, try finding it on the map.";
-                    make_alert(alert_text, 'alert-error', 'div.modal-alerts');
+                    make_alert(alert_text, 'alert-error', 'div.modal-alerts')
                 }
             },
             'reverse_geocode': function(locale) {
@@ -67,6 +67,8 @@ $(function() {
                 require_us_address(locale);
                 playground.form.geocode_fields();
                 playground.fields.reverse_geocoded.attr('checked', 'checked');
+                    
+                $('#modal-locator-map').removeClass('hidden');
             }
         },
         'form': {
@@ -411,6 +413,25 @@ $(function() {
                 playground.RESULTS_DEFAULT_ZOOM += 1;
             }
 
+            if(playground.fields.latitude.val() === '' || playground.fields.latitude.val() === 'None'){
+                var latitude = get_parameter_by_name('latitude');
+                var longitude = get_parameter_by_name('longitude');
+
+                if (latitude) {
+                    playground.fields.latitude.val(latitude);
+                }
+
+                if (longitude) {
+                    playground.fields.longitude.val(longitude);
+                }
+                
+                if (latitude && longitude) {
+                    playground.reverse_geocode(latitude, longitude, playground.callbacks.reverse_geocode);
+                } else {
+                    playground.locate_me();
+                }
+            }
+
             // Set up the map.
             playground.map.setup();
 
@@ -426,7 +447,6 @@ $(function() {
                     return false;
                 });
             });
-
 
             // Allow users to tab feature labels and descriptions to toggle checkbox
             $('#form .feature').find('label, .help-block, img').each(function(){
@@ -456,9 +476,6 @@ $(function() {
                 $('#' + playground.ACTION).toggleClass('hide');
             }
 
-            if(playground.fields.latitude.val() === '' || playground.fields.latitude.val() === 'None'){
-                playground.locate_me();
-            }
 
             // Do this thing with the map.
             if ( $('#locator-map') ) {
