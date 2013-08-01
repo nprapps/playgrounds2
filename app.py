@@ -102,7 +102,13 @@ def index():
     Playgrounds index page.
     """
     context = make_context()
-    context['playgrounds'] = get_active_playgrounds().limit(10)
+    metros = app_config.METRO_AREAS
+
+    for metro in metros:
+        for zip_code in metro['zip_codes']:
+            metro['playground_count'] += Playground.select().where(Playground.zip_code == zip_code).count()
+
+    context['metros'] = metros
 
     return render_template('index.html', **context)
 
@@ -118,7 +124,6 @@ def search():
 @app.route('/create.html')
 def playground_create():
     context = make_context()
-    context['fields'] = Playground.form()
     context['features'] = Playground.features_form()
 
     return render_template('create.html', **context)
@@ -153,7 +158,10 @@ def _playground(playground_slug):
     context['playground'] = Playground.get(slug=playground_slug)
     context['fields'] = context['playground'].update_form()
     context['features'] = context['playground'].update_features_form()
-    context['revisions'] = Revision.select().where(Revision.playground == context['playground'].id).where((Revision.action == 'insert') | (Revision.action == 'update')).order_by(Revision.timestamp.desc())
+    context['revisions'] = Revision.select()\
+                            .where(Revision.playground == context['playground'].id)\
+                            .where((Revision.action == 'insert') | (Revision.action == 'update'))\
+                            .order_by(Revision.timestamp.desc())
     context['display_field_name'] = display_field_name
     context['path'] = request.path
 
