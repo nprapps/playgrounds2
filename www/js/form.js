@@ -20,8 +20,10 @@ $(function() {
             'modal_map': $('#modal-locator-map'),
             'address_editor': $('.address-editor'),
             'address_editor_toggle': $('#toggle-address-button'),
+            'meta_hdr': $('#main-content').find('.about').find('h5.meta'),
             'meta_items': $('#main-content').find('.about').find('ul.meta'),
-            'meta_hdr': $('#main-content').find('.about').find('h5.meta')
+            'meta_comments': $('#main-content').find('.comments').find('h4.meta'),
+            'meta_guidelines': $('#main-content').find('.comments').find('p.guidelines'),
         },
         'inputs': {
             'text_input': $('#form input[type="text"], #form select'),
@@ -122,6 +124,13 @@ $(function() {
 
                 // Set the map state.
                 playground.map.resize_locator();
+            },
+            'twist_out': function(hed, subhed) {
+                hed.html(hed.html() + ' +');
+                subhed.hide();
+                hed.on('click', function() {
+                    subhed.slideToggle('fast');
+                });
             }
         },
         'map': {
@@ -496,11 +505,8 @@ $(function() {
             })
 
             // All of this meta_hdr and meta_items stuff.
-            playground.fields.meta_hdr.html(playground.fields.meta_hdr.html() + ' +');
-            playground.fields.meta_items.hide();
-            playground.fields.meta_hdr.on('click', function() {
-                playground.fields.meta_items.slideToggle('fast');
-            });
+            playground.form.twist_out(playground.fields.meta_hdr, playground.fields.meta_items);
+            playground.form.twist_out(playground.fields.meta_comments, playground.fields.meta_guidelines);
         }
     };
     // Initialize the playground object.
