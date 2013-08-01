@@ -36,7 +36,6 @@ var $playground_meta_items = null;
 var $create_link = null;
 
 var zoom = RESULTS_DEFAULT_ZOOM;
-var crs = null;
 var desktop_map = null;
 var desktop_markers = null;
 var $selected_playground = null;
@@ -44,77 +43,6 @@ var search_xhr = null;
 var geocode_xhr = null;
 var user_zoomed = false;
 var user_panned = false;
-
-function degToCloudSearch(degree) {
-    /*
-     * Convert a degree of lat or lon to our CloudSearch uint representation.
-     */
-    return parseInt((degree + APP_CONFIG.CLOUD_SEARCH_DEG_OFFSET) * APP_CONFIG.CLOUD_SEARCH_DEG_SCALE);
-}
-
-function cloudSearchToDeg(uint) {
-    /*
-     * Convert a CloudSearch uint into a degree of lat or lon.
-     */
-    return parseFloat((uint / APP_CONFIG.CLOUD_SEARCH_DEG_SCALE) - APP_CONFIG.CLOUD_SEARCH_DEG_OFFSET);
-}
-
-function buildCloudSearchParams() {
-    /*
-     * Reads the current state of the UI and builds appropraite CloudSearch query params.
-     */
-    var deployment_target = (APP_CONFIG.DEPLOYMENT_TARGET || 'staging');
-    //var query = $search_query.val();
-    var latitude = parseFloat($search_latitude.val());
-    var longitude = parseFloat($search_longitude.val());
-
-    var params = {};
-    var return_fields = ['name', 'display_name', 'city', 'state', 'latitude', 'longitude', 'public_remarks', 'slug'];
-
-    for (feature in window.FEATURES) {
-        return_fields.push('feature_' + feature.replace(/-/g, '_'));
-    }
-
-    var query_bits = ['deployment_target:\'' + deployment_target + '\''];
-
-    /*if (query) {
-        query_bits.push('full_text:\'' + query + '\'');
-    }*/
-
-    // If using geosearch
-    if (latitude) {
-        // Generate bounding box for map viewport
-        var point = crs.latLngToPoint(new L.LatLng(latitude, longitude), zoom);
-        var upper_left = point.subtract([RESULTS_MAP_WIDTH / 2, RESULTS_MAP_HEIGHT / 2]);
-        var lower_right = point.add([RESULTS_MAP_WIDTH / 2, RESULTS_MAP_HEIGHT / 2]);
-        var northwest = crs.pointToLatLng(upper_left, zoom);
-        var southeast = crs.pointToLatLng(lower_right, zoom);
-
-        query_bits.push('longitude:' + degToCloudSearch(northwest.lng) + '..' + degToCloudSearch(southeast.lng) + ' latitude:' + degToCloudSearch(southeast.lat) + '..' + degToCloudSearch(northwest.lat));
-
-        var latitude_radians = degToRad(latitude);
-        var longitude_radians = degToRad(longitude);
-        var offset = APP_CONFIG.CLOUD_SEARCH_DEG_OFFSET;
-        var scale = APP_CONFIG.CLOUD_SEARCH_DEG_SCALE;
-
-        // Compile ranking algorithm (spherical law of cosines)
-        // Note results are scaled up by 1000x.
-        var rank_distance = '3958.761 * Math.acos(Math.sin(' + latitude_radians + ') * Math.sin(((latitude / ' + scale + ') - ' + offset + ') * 3.14159 / 180) + Math.cos(' + latitude_radians + ') * Math.cos(((latitude / ' + scale + ') - ' + offset + ') * 3.14159 / 180) * Math.cos((((longitude / ' + scale + ') - ' + offset + ') * 3.14159 / 180) - ' + longitude_radians + ')) * 1000';
-
-        params['rank'] = 'distance';
-        params['rank-distance'] = rank_distance;
-
-        return_fields.push('distance');
-    } else {
-        params['rank'] = 'name';
-    }
-
-    params['bq'] = '(and ' + query_bits.join(' ') + ')';
-    params['return-fields'] = return_fields.join(',');
-    params['size'] = 26;
-
-    return params;
-}
 
 function buildMapboxPin(size, shape, color, lat, lng) {
     /*
@@ -148,7 +76,7 @@ function search() {
     }
 
     search_xhr = $.ajax({
-        url: APP_CONFIG.CLOUD_SEARCH_PROXY_BASE_URL + '/cloudsearch/2011-02-01/search?' + $.param(buildCloudSearchParams()),
+        url: APP_CONFIG.CLOUD_SEARCH_PROXY_BASE_URL + '/cloudsearch/2011-02-01/search?' + $.param(buildCloudSearchParams(latitude, longitude, zoom)),
         dataType: 'jsonp',
         complete: function() {
             search_xhr = null;
@@ -438,7 +366,6 @@ $(function() {
     RESULTS_MAP_WIDTH = SEARCH_WIDTH;
     RESULTS_MAP_HEIGHT = SEARCH_WIDTH;
 
-    crs = L.CRS.EPSG3857;
 
     // Fetches the key from the URL. This could easily be undefined or null.
     var action = get_parameter_by_name('action');
@@ -610,7 +537,7 @@ $(function() {
     }
 
     if (!IS_MOBILE) {
-        $search_results_map_desktop.css({ height: '500px' });
+        $search_results_map_desktop.css({ height: RESULTS_MAP_HEIGHT + 'px' });
 
         desktop_map = L.mapbox.map('search-results-map-desktop', null, {
             zoomControl: false,
