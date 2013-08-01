@@ -191,30 +191,36 @@ $(function() {
                 var lat = playground.fields.latitude.val();
                 var lon = playground.fields.longitude.val();
                 var map_path;
-                var new_height;
-                var new_width = playground.CONTENT_WIDTH;
+                var map_height;
+                var map_width = playground.CONTENT_WIDTH;
+                var modal_path;
+                var modal_width = $('#edit-playground').width();
+                var modal_height;
 
                 if (playground.PAGE_WIDTH > 480) {
-                    new_width = Math.floor(new_width / 2) - 22;
+                    map_width = Math.floor(map_width / 2) - 22;
                 }
-                new_height = Math.floor(playground.CONTENT_WIDTH / 3);
+                map_height = Math.floor(playground.CONTENT_WIDTH / 3);
+                modal_height = Math.floor(modal_width / 3);
 
                 if (playground.RETINA) {
-                    new_width = new_width * 2;
-                    if (new_width > 640) {
-                        new_width = 640;
+                    map_width = map_width * 2;
+                    if (map_width > 640) {
+                        map_width = 640;
                     }
-                    new_height = Math.floor(new_width / 3);
+                    map_height = Math.floor(map_width / 3);
                 }
 
                 // Set up the map image.
                 map_path = 'http://api.tiles.mapbox.com/v3/';
                 map_path += playground.BASE_LAYER + '/pin-m-star+ff6633(' + lon + ',' + lat + ')/';
                 map_path += lon + ',' + lat + ',' + playground.LOCATOR_DEFAULT_ZOOM + '/';
-                map_path += new_width + 'x' + new_height + '.png';
+                modal_path = map_path;
+                map_path += map_width + 'x' + map_height + '.png';
+                modal_path += modal_width + 'x' + modal_height + '.png';
 
                 playground.fields.locator_map.attr('src', map_path);
-                playground.fields.modal_map.attr('src', map_path);
+                playground.fields.modal_map.attr('src', modal_path);
 
                 // Set the placeholder text.
                 placeholder_text = playground.fields.address.val();
