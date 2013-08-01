@@ -22,7 +22,7 @@ $(function() {
             'address_editor_toggle': $('#toggle-address-button'),
             'meta_hdr': $('#main-content').find('.about').find('h5.meta'),
             'meta_items': $('#main-content').find('.about').find('ul.meta'),
-            'meta_comments': $('#main-content').find('.comments').find('h4.meta'),
+            'meta_comments': $('#main-content').find('.comments').find('p.meta'),
             'meta_guidelines': $('#main-content').find('.comments').find('p.guidelines'),
         },
         'inputs': {
