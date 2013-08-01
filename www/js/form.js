@@ -325,6 +325,7 @@ $(function() {
             }
             this.fields.address_editor.addClass('hide');
             this.fields.address_editor_toggle.text('Edit');
+
             $('#editor-tabs a:first').tab('show');
         },
         'reset_form': function() {
@@ -500,6 +501,7 @@ $(function() {
             // Recenter the editor map when you activate the map pane
             $('#editor-tabs a:first').on('click', function(e){
                 e.preventDefault();
+                $('div.modal-alerts').hide();
                 $('this').tab('show');
                 setTimeout(playground.map.center_editor, 25);
             })
