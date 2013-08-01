@@ -605,11 +605,11 @@ section#the-goods { margin-top: 44px; }
     }
 
     .alert {
-        position: relative;
+        position: static;
         #the-goods & {
             margin-left: 0;
             margin-right: 0;
-            margin-bottom: 0;
+            margin-bottom: @baseLineHeight;
             width: auto;
         }
     }
@@ -789,7 +789,7 @@ section#the-goods { margin-top: 44px; }
         }
 
         .address-pane {
-            position: relative;
+            position: absolute;
             top: 80px;
             bottom: 44px;
             width: 100%;
@@ -994,12 +994,6 @@ section#the-goods { margin-top: 44px; }
         padding-top: 22px;
         margin-top: 22px;
 
-        h5 {
-            margin: 0 0 15px 0;
-            font-size: 12px;
-            font-weight: bold;
-            color: #333;
-        }
         ul {
             li {
                 font-size: 12px;

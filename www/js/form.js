@@ -24,6 +24,8 @@ $(function() {
             'meta_items': $('#main-content').find('.about').find('ul.meta'),
             'meta_comments': $('#main-content').find('.comments').find('p.meta'),
             'meta_guidelines': $('#main-content').find('.comments').find('p.guidelines'),
+            'meta_changelog': $('#main-content').find('.changelog').find('h5.meta'),
+            'meta_changes': $('#main-content').find('.changelog').find('ul.meta')
         },
         'inputs': {
             'text_input': $('#form input[type="text"], #form select'),
@@ -509,6 +511,7 @@ $(function() {
             // All of this meta_hdr and meta_items stuff.
             playground.form.twist_out(playground.fields.meta_hdr, playground.fields.meta_items);
             playground.form.twist_out(playground.fields.meta_comments, playground.fields.meta_guidelines);
+            playground.form.twist_out(playground.fields.meta_changelog, playground.fields.meta_changes);
         }
     };
     // Initialize the playground object.
