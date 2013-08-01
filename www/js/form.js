@@ -503,7 +503,6 @@ $(function() {
             // Recenter the editor map when you activate the map pane
             $('#editor-tabs a:first').on('click', function(e){
                 e.preventDefault();
-                $('div.modal-alerts').hide();
                 $('this').tab('show');
                 setTimeout(playground.map.center_editor, 25);
             })
