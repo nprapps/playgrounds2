@@ -76,15 +76,28 @@ function buildCloudSearchParams(latitude, longitude, zoom, query) {
         var offset = APP_CONFIG.CLOUD_SEARCH_DEG_OFFSET;
         var scale = APP_CONFIG.CLOUD_SEARCH_DEG_SCALE;
 
-        // Compile ranking algorithm (spherical law of cosines)
-        // Note results are scaled up by 1000x.
         var sin_latitude = Math.sin(latitude_radians);
         var cos_latitude = Math.cos(latitude_radians);
         var pi_over_180 = 3.14159 / 180;
         var earth_radius_miles = 3958.761;
         var coefficient = earth_radius_miles * 1000;
 
-        var rank_distance = coefficient + ' * Math.acos(' + sin_latitude + ' * Math.sin(((latitude / ' + scale + ') - ' + offset + ') * ' + pi_over_180 + ') + ' + cos_latitude + ' * Math.cos(((latitude / ' + scale + ') - ' + offset + ') * ' + pi_over_180 + ') * Math.cos((((longitude / ' + scale + ') - ' + offset + ') * ' + pi_over_180 + ') - ' + longitude_radians + '))';
+        // Points in the index have been scaled and offset
+        var that_latitude = '((latitude / ' + scale + ') - ' + offset + ')';
+        var that_longitude = '((longitude / ' + scale + ') - ' + offset + ')';
+
+        // Compile ranking algorithm (spherical law of cosines)
+        // Note results are scaled up by 1000x.
+        var rank_distance = coefficient + ' * Math.acos(' + sin_latitude + ' * Math.sin(' + that_latitude + ' * ' + pi_over_180 + ') + ' + cos_latitude + ' * Math.cos(' + that_latitude + ' * ' + pi_over_180 + ') * Math.cos((' + that_longitude + ' * ' + pi_over_180 + ') - ' + longitude_radians + '))';
+
+        //var x = (lon2-lon1) * Math.cos((lat1+lat2)/2);
+        //var y = (lat2-lat1);
+        //var d = Math.sqrt(x*x + y*y) * R;
+
+        // Alternate Equirectangular distance
+        //var x = '(' + that_longitude + ' - ' + longitude + ') * Math.cos((' + that_latitude + ' + ' + latitude + ') / 2)';
+        //var y = '(' + that_latitude + ' - ' + latitude + ')';
+        //var rank_distance = 'Math.sqrt(Math.pow(' + x + ', 2) + Math.pow(' + y + ', 2)) * ' + coefficient;
 
         params['rank'] = 'distance';
         params['rank-distance'] = rank_distance;
