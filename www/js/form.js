@@ -20,8 +20,8 @@ $(function() {
             'modal_map': $('#modal-locator-map'),
             'address_editor': $('.address-editor'),
             'address_editor_toggle': $('#toggle-address-button'),
-            'meta_hdr': $('#main-content').find('.about').find('h5.meta'),
-            'meta_items': $('#main-content').find('.about').find('ul.meta'),
+            'meta_hdr': $('#main-content').find('.playground-features').find('h5.meta'),
+            'meta_items': $('#main-content').find('.playground-features').find('ul.meta'),
             'meta_comments': $('#main-content').find('.comments').find('p.meta'),
             'meta_guidelines': $('#main-content').find('.comments').find('p.guidelines'),
             'meta_changelog': $('#main-content').find('.changelog').find('h5.meta'),
@@ -245,7 +245,7 @@ $(function() {
                 'error': function(a, b, c) {
                     if (b == 'timeout'){
                         alert_text = "<h3>We're sorry!</h3>We're having a hard time finding this place.";
-                        make_alert(alert_text, 'warning', 'div.alerts');
+                        make_alert(alert_text, 'warning', 'div.modal-alerts');
                     }
                 },
                 'success': function(data) {

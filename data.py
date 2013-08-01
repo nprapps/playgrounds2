@@ -373,8 +373,8 @@ def process_update(record):
     # Create a list of revisions to apply.
     revisions = []
 
-    # Our old data was captured up top. It's called old_data.
-    # This is the new data. It's just the record_dict from above.
+    # Our old data was captured up top. It's called old_
+    # This is the new  It's just the record_dict from above.
     new_data = record_dict
 
     # Loop over the key/value pairs in the new data we have.
@@ -454,8 +454,8 @@ def process_insert(record):
     # Create a list of revisions that were applied.
     revisions = []
 
-    # Our old data was captured up top. It's called old_data.
-    # This is the new data. It's just the record_dict from above.
+    # Our old data was captured up top. It's called old_
+    # This is the new  It's just the record_dict from above.
     new_data = record_dict
 
     # Loop over the key/value pairs in the new data we have.

@@ -64,12 +64,16 @@
     </div>
 </div>
 
-{% if playground.features %}
 <!-- Categories / key features -->
 <div class="playground-features">
-    <h4>Key Features</h4>
+    <h4>About This Playground</h4>
 
-    <ul>{% for feature in playground.features %}
+    {% if playground.public_remarks %}
+    <p class="description">{{ playground.public_remarks }}</p>
+    {% endif %}
+
+    {% if playground.features %}
+    <ul class="playground-feature-list">{% for feature in playground.features %}
         <li>
             <img src="{% if 'placekitten' not in feature.copy['photo_thumb'] %}{{ S3_BASE_URL }}{% endif %}{{ feature.copy['photo_thumb'] }}" alt="{{ feature.copy['term'] }}" />
             <div class="feature-definition">
@@ -79,20 +83,7 @@
         </li>
         {% endfor %}
     </ul>
-
-</div>
-{% endif %}
-
-<!-- Description -->
-<div class="about">
-    <h4>About This Playground</h4>
-    <p class="description">
-    {% if playground.public_remarks %}
-        {{ playground.public_remarks }}
-    {% else %}
-        Description not available.
     {% endif %}
-    </p>
 
     <h5 class="meta">More Info</h5>
     <ul class="meta">
