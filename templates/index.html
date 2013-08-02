@@ -37,6 +37,9 @@
 
 {% block content %}
 <div id="playground-feature-primer">
+    <h3 id="feature-title">{{ COPY.content.help_title }}</h3>
+    <p id="feature-description">{{ COPY.content.help_description_2 }} Our database now contains {{ playground_count }} accessible playgrounds, which are designed to include kids with special needs, but {{ COPY.content.help_description_1 }}</p>
+        
     <h3 id="feature-title">{{ COPY.content.feature_title }}</h3>
     <p id="feature-description">{{ COPY.content.feature_description }}</p>
 
@@ -55,15 +58,9 @@
 
 
 <div id="playground-help">
-    <h3 id="help-title">{{ COPY.content.help_title }}</h3>
-    <p id="help-description">The database now contains {{ playground_count }} playgrounds located in 46 states and the District of Columbia. {{ COPY.content.help_description_1 }}</p>
-    <p id="help-button"><a href="{{ COPY.content.help_search_link }}" class="btn btn-blue">{{ COPY.content.help_search_link_text }}</a></p>
-
+    <h3>{{ COPY.content.help_table_title }}</h3>
+    <p>{{ COPY.content.help_table_subtitle }}</p>
     <table class="city-list">
-        <caption>
-            {{ COPY.content.help_table_title }}
-            <span>{{ COPY.content.help_table_subtitle }}</span>
-        </caption>
         <tr>
             <th class="city-name">Metropolitan area</th>
             <th class="city-amt">Known playgrounds</th>
@@ -73,8 +70,6 @@
             <td class="city-amt">{{ metro.playground_count }}</th>
         </tr>{% endfor %}
     </table>
-
-    <p id="help-description">{{ COPY.content.help_description_2 }}</p>
 </div>
 
 
