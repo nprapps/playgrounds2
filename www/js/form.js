@@ -72,7 +72,7 @@ $(function() {
                 playground.form.geocode_fields();
                 playground.fields.reverse_geocoded.attr('checked', 'checked');
                     
-                $('#modal-locator-map').removeClass('hidden');
+                playground.fields.locator_map.removeClass('hidden');
             }
         },
         'form': {
@@ -233,7 +233,7 @@ $(function() {
             function success(position){
                 map.setView([position.coords.latitude, position.coords.longitude], playground.LOCATOR_DEFAULT_ZOOM);
                 playground.reverse_geocode(position.coords.latitude, position.coords.longitude, playground.callbacks.reverse_geocode);
-                $('#modal-locator-map').removeClass('hidden');
+                playground.fields.locator_map.removeClass('hidden');
             }
 
             function error(){
