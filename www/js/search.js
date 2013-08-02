@@ -12,6 +12,7 @@ var LETTERS = 'abcdefghijklmnopqrstuvwxyz';
 var $search_form = null;
 var $search_address = null;
 var $search_divider = null;
+var $search_help_message = null;
 var $search_latitude = null;
 var $search_longitude = null;
 var $geolocate_button = null;
@@ -63,6 +64,7 @@ function search() {
     $search_results_not_found.hide();
     $search_help_prompt.hide();
     $selected_playground = null;
+    $search_help_message.hide();
 
     if (IS_MOBILE) {
         $search_results_map_loading_text.show();
@@ -331,9 +333,9 @@ function hashchange_callback() {
         $search_longitude.val(longitude);
 
         if (!nearby) {
-            $results_address.text('Showing Results Near ' + $search_address.val());
+            $results_address.text('Accessible Playgrounds Near ' + $search_address.val());
         } else {
-            $results_address.text('Showing Results Near You');
+            $results_address.text('Accessible Playgrounds Near You');
         }
 
 
@@ -364,6 +366,7 @@ $(function() {
     $did_you_mean_wrapper = $('#search-help');
     $did_you_mean = $('#search-help ul');
     $search_help_prompt = $('#search-help-prompt');
+    $search_help_message = $('#search-help-message');
     $results_address = $('#results-address');
     $no_geocode = $('#no-geocode');
     $map_loading = $('#map-loading');
@@ -442,7 +445,7 @@ $(function() {
         $search_address.val(display_name);
         $search_latitude.val(latitude);
         $search_longitude.val(longitude);
-        $results_address.html('Showing Results Near ' + display_name);
+        $results_address.html('Accessible Playgrounds Near ' + display_name);
 
         $did_you_mean_wrapper.hide();
 
@@ -508,7 +511,7 @@ $(function() {
                         $search_longitude.val(locale['lon']);
                         $search_address.val(display_name);
 
-                        $results_address.html('Showing Results Near ' + display_name);
+                        $results_address.html('Accessible Playgrounds Near ' + display_name);
                         $no_geocode.hide();
                         $map_loading.text('Searching...').show();
 
