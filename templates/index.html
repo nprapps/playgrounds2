@@ -68,7 +68,7 @@
             <th class="city-name">Metropolitan area</th>
             <th class="city-amt">Known playgrounds</th>
         </tr>
-        {% for metro in metros %}<tr{% if metro.playground_count < 6 %} class="help"{% endif %}>
+        {% for metro in metros %}<tr{% if metro.playground_count <= 10 %} class="help"{% endif %}>
             <td class="city-name"><a href="search.html#address={{ metro.search_name }}">{{ metro.name }}</a></th>
             <td class="city-amt">{{ metro.playground_count }}</th>
         </tr>{% endfor %}
