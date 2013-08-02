@@ -92,6 +92,8 @@ function search() {
                 this.tryCount += 1;
 
                 if (this.tryCount < this.retryLimit) {
+                    xhr = this;
+
                     console.log(this.tryCount);
                     window.setTimeout(function() { 
                         console.log('starting retry');
