@@ -4,7 +4,8 @@
     <h2>Edit Playground</h2>
     <p class="muted">Changes will be submitted for review and posted within 24 hours.</p>
 
-    <h5 class="address-label">Address
+    <h5 class="address-label">
+        Address
         <a id="toggle-address-button" data-action="toggle_address_editor" class="btn btn-success">Edit</a>
     </h5>
     <div id="address-placeholder">
@@ -18,6 +19,7 @@
             {% if playground.state %}{{ playground.state }} {% endif %}
             {% if playground.zip_code %}{{ playground.zip_code }}{% endif %}
             </p>
+
         </div>
     </div>
     <div class="row-fluid">
@@ -30,7 +32,7 @@
                 <span class="help-block">{{ feature['definition_short'] }}</span>
             </div>
             {% endfor %}
-            <div class="alert">Don't see the feature you're looking for? <a href="mailto:playgrounds@npr.org?subject=Missing Feature">Email us</a> or <a href="#">leave a tip</a>.</div>
+            <div class="alert">Don't see the feature you're looking for? <a href="mailto:playgrounds@npr.org?subject={{ PROJECT_NAME }}: Feedback">Email us</a>.</div>
         </div>
         <div class="basic-info span6">
             <div class="control-group">
@@ -113,7 +115,6 @@
 
 <div class="hide scrollable address-editor">
     <h2 class="edit-address-hed">Edit location <a href="#" class="btn close" data-action="reset_location">&times;</a></h2>
-    <div class="alerts"></div>
 
     <ul class="nav nav-tabs" id="editor-tabs">
       <li class="active"><a href="#map-pane" data-toggle="tab">Adjust position</a></li>
@@ -132,6 +133,7 @@
             </div>
         </div>
         <div id="address-pane" class="address-pane tab-pane">
+            <div class="modal-alerts"></div>
             <div class="control-group">
                 <label class="control-label">Address</label>
                 <div class="controls">

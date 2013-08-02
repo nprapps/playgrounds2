@@ -6,10 +6,6 @@
     {{ CSS.push('css/mapbox.css') }}
 {% endblock %}
 
-{% block extra_head %}
-    <script type='text/javascript' src="http://api.tiles.mapbox.com/mapbox.js/v1.1.0/mapbox.js"></script>
-{% endblock %}
-
 {% block header_content %}
 <header>
     <div class="container">
@@ -20,9 +16,9 @@
                     <h2>{{ COPY.content.app_description }}</h2>
 
                     <p class="sublinks">
-                        <a href="{{ COPY.content.header_help_link }}">{{ COPY.content.header_help_link_text }}</a> |
-                        <a href="{{ COPY.content.header_series_link }}">{{ COPY.content.header_series_link_text }}</a> |
-                        <a href="{{ COPY.content.header_about_link }}">{{ COPY.content.header_about_link_text }}</a>
+                        <a id="sublink-help" href="{{ COPY.content.header_help_link }}">{{ COPY.content.header_help_link_text }}</a> |
+                        <a id="sublink-series" href="{{ COPY.content.header_series_link }}">{{ COPY.content.header_series_link_text }}</a> |
+                        <a id="sublink-data" href="{{ COPY.content.header_about_link }}">{{ COPY.content.header_about_link_text }}</a>
                     </p>
 
                     <div class="mobile-prompt">
@@ -40,11 +36,20 @@
 
 
 {% block content %}
-<div id="playground-feature-primer">
-    <h3 id="feature-title">{{ COPY.content.feature_title }}</h3>
-    <p id="feature-description">{{ COPY.content.feature_description }}</p>
+<div id="playground-help">
+    <h3>{{ COPY.content.help_title }}</h3>
+    <p class="help-description">
+        {{ COPY.content.help_description_2 }} 
+        Our database now contains {{ playground_count }} accessible playgrounds, but 
+        {{ COPY.content.help_description_1 }}
+    </p>
+</div>
 
-    <div id="feature-list">
+<div id="playground-feature-primer">
+    <h3 class="feature-title">{{ COPY.content.feature_title }}</h3>
+    <p class="feature-description">{{ COPY.content.feature_description }}</p>
+
+    <div class="feature-list">
         {% for row in COPY.feature_list %}
         <div class="row-fluid">
             <div class="span12">
@@ -58,17 +63,25 @@
 </div>
 
 
-<div id="playground-help">
-    <h3 id="help-title">{{ COPY.content.help_title }}</h3>
-    <p id="help-description">{{ COPY.content.help_description }}</p>
-
-    <a href="{{ COPY.content.help_search_link }}" class="btn btn-blue">{{ COPY.content.help_search_link_text }}</a>
+<div id="playground-about">
+    <h3 class="about-title">{{ COPY.content.help_table_title }}</h3>
+    <p>{{ COPY.content.help_table_subtitle }}</p>
+    <table class="city-list">
+        <tr>
+            <th class="city-name">Metropolitan area</th>
+            <th class="city-amt">Known playgrounds</th>
+        </tr>
+        {% for metro in metros %}<tr{% if metro.playground_count <= 10 %} class="help"{% endif %}>
+            <td class="city-name"><a href="search.html#address={{ metro.search_name }}">{{ metro.name }}</a></th>
+            <td class="city-amt">{{ metro.playground_count }}</th>
+        </tr>{% endfor %}
+    </table>
 </div>
 
 
 <div id="playground-data" class="help-prompt">
-    <h3 id="about-title">{{ COPY.content.data_title }}</h3>
-    <p id="about-description">{{ COPY.content.data_description }}</p>
+    <h3 class="data-title">{{ COPY.content.data_title }}</h3>
+    <p class="data-description">{{ COPY.content.data_description }}</p>
 
     <a href="{{ COPY.content.data_link_csv }}" class="btn btn-blue">{{ COPY.content.data_link_csv_text }}</a>
     <a href="{{ COPY.content.data_link_json }}" class="btn btn-blue">{{ COPY.content.data_link_json_text }}</a>
@@ -86,6 +99,7 @@
     {{ JS.push('js/lib/underscore.js') }}
     {{ JS.push('js/lib/moment.js') }}
     {{ JS.push('js/lib/bootstrap.js') }}
+    {{ JS.push('js/lib/jquery.smooth-scroll.js') }}
     {{ JS.push('js/templates.js') }}
     {{ JS.push('js/utils.js') }}
     {{ JS.push('js/index.js') }}

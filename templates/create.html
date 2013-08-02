@@ -6,20 +6,8 @@
     {{ CSS.push('css/mapbox.css') }}
 {% endblock %}
 
-{% block extra_head %}
-    <script type='text/javascript' src="http://api.tiles.mapbox.com/mapbox.js/v1.1.0/mapbox.js"></script>
-{% endblock %}
-
 {% block header_content %}
-<header>
-    <div class="container">
-        <div class="row">
-            <div class="span12">
-                <h1><a href="{{ S3_BASE_URL }}">{{ PROJECT_NAME }}</a></h1>
-            </div>
-        </div>
-    </div>
-</header>
+{% include '_nav-interior.html' %}
 {% endblock %}
 
 {% block content %}
@@ -34,7 +22,7 @@
         <a id="toggle-address-button" <a id="toggle-address-button" data-action="toggle_address_editor" class="btn btn-success">Edit</a>
     </h5>
     <div id="address-placeholder">
-        <img id="modal-locator-map" class="hidden" data-longitude="" data-latitude="" />
+        <img id="locator-map" class="hidden" data-longitude="" data-latitude="" />
         <div class="address-meta">
             <p></p>
         </div>
@@ -62,7 +50,7 @@
             </div>
             {% endfor %}
 
-            <div class="alert">Don't see the feature you're looking for? <a href="mailto:playgrounds@npr.org?subject=Missing Feature">Email us</a>.</div>
+            <div class="alert">Don't see the feature you're looking for? <a href="mailto:playgrounds@npr.org?subject={{ PROJECT_NAME }}: Feedback">Email us</a>.</div>
         </div>
         <div class="basic-info span6">
             <div class="control-group">
@@ -144,7 +132,6 @@
 
 <div class="address-editor">
     <h2 class="edit-address-hed">{{ COPY.content.create_title }}</h2>
-    <div class="modal-alerts"></div>
     <ul class="nav nav-tabs" id="editor-tabs">
       <li class="active"><a href="#map-pane" data-toggle="tab">I don't know the exact address</a></li>
       <li><a href="#address-pane" data-toggle="tab">I know the exact address</a></li>
@@ -161,6 +148,7 @@
             </div>
         </div>
         <div id="address-pane" class="address-pane tab-pane">
+            <div class="modal-alerts"></div>
             <div class="control-group">
                 <label class="control-label" data-required="true">Address</label>
                 <div class="controls">
@@ -262,6 +250,6 @@
     {{ JS.push('js/utils.js') }}
     {{ JS.push('js/form.js') }}
     {{ JS.push('js/lookup_tables.js') }}
-    {{ JS.render('js/app-edit-footer.min.js') }}
+    {{ JS.render('js/app-create-footer.min.js') }}
 {% endblock extra_foot_js %}
 

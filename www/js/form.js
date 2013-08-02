@@ -20,8 +20,12 @@ $(function() {
             'modal_map': $('#modal-locator-map'),
             'address_editor': $('.address-editor'),
             'address_editor_toggle': $('#toggle-address-button'),
-            'meta_items': $('#main-content').find('.about').find('ul.meta'),
-            'meta_hdr': $('#main-content').find('.about').find('h5.meta')
+            'meta_hdr': $('#main-content').find('.playground-features').find('h5.meta'),
+            'meta_items': $('#main-content').find('.playground-features').find('ul.meta'),
+            'meta_comments': $('#main-content').find('.comments').find('p.meta'),
+            'meta_guidelines': $('#main-content').find('.comments').find('p.guidelines'),
+            'meta_changelog': $('#main-content').find('.changelog').find('h5.meta'),
+            'meta_changes': $('#main-content').find('.changelog').find('ul.meta')
         },
         'inputs': {
             'text_input': $('#form input[type="text"], #form select'),
@@ -42,7 +46,7 @@ $(function() {
                     playground.address_change_accepted = true;
                 } else {
                     alert_text = "<strong>We're sorry! We couldn't find that place.</strong><br>Don't forget to add the street/avenue/boulevard.<br/>If you're still having trouble, try finding it on the map.";
-                    make_alert(alert_text, 'alert-error', 'div.modal-alerts');
+                    make_alert(alert_text, 'alert-error', 'div.modal-alerts')
                 }
             },
             'reverse_geocode': function(locale) {
@@ -67,6 +71,8 @@ $(function() {
                 require_us_address(locale);
                 playground.form.geocode_fields();
                 playground.fields.reverse_geocoded.attr('checked', 'checked');
+                    
+                playground.fields.locator_map.removeClass('hidden');
             }
         },
         'form': {
@@ -120,6 +126,13 @@ $(function() {
 
                 // Set the map state.
                 playground.map.resize_locator();
+            },
+            'twist_out': function(hed, subhed) {
+                hed.html(hed.html() + ' +');
+                subhed.hide();
+                hed.on('click', function() {
+                    subhed.slideToggle('fast');
+                });
             }
         },
         'map': {
@@ -178,30 +191,36 @@ $(function() {
                 var lat = playground.fields.latitude.val();
                 var lon = playground.fields.longitude.val();
                 var map_path;
-                var new_height;
-                var new_width = playground.CONTENT_WIDTH;
+                var map_height;
+                var map_width = playground.CONTENT_WIDTH;
+                var modal_path;
+                var modal_width = $('#edit-playground').width();
+                var modal_height;
 
                 if (playground.PAGE_WIDTH > 480) {
-                    new_width = Math.floor(new_width / 2) - 22;
+                    map_width = Math.floor(map_width / 2) - 22;
                 }
-                new_height = Math.floor(playground.CONTENT_WIDTH / 3);
+                map_height = Math.floor(playground.CONTENT_WIDTH / 3);
+                modal_height = Math.floor(modal_width / 3);
 
                 if (playground.RETINA) {
-                    new_width = new_width * 2;
-                    if (new_width > 640) {
-                        new_width = 640;
+                    map_width = map_width * 2;
+                    if (map_width > 640) {
+                        map_width = 640;
                     }
-                    new_height = Math.floor(new_width / 3);
+                    map_height = Math.floor(map_width / 3);
                 }
 
                 // Set up the map image.
                 map_path = 'http://api.tiles.mapbox.com/v3/';
                 map_path += playground.BASE_LAYER + '/pin-m-star+ff6633(' + lon + ',' + lat + ')/';
                 map_path += lon + ',' + lat + ',' + playground.LOCATOR_DEFAULT_ZOOM + '/';
-                map_path += new_width + 'x' + new_height + '.png';
+                modal_path = map_path;
+                map_path += map_width + 'x' + map_height + '.png';
+                modal_path += modal_width + 'x' + modal_height + '.png';
 
                 playground.fields.locator_map.attr('src', map_path);
-                playground.fields.modal_map.attr('src', map_path);
+                playground.fields.modal_map.attr('src', modal_path);
 
                 // Set the placeholder text.
                 placeholder_text = playground.fields.address.val();
@@ -214,7 +233,7 @@ $(function() {
             function success(position){
                 map.setView([position.coords.latitude, position.coords.longitude], playground.LOCATOR_DEFAULT_ZOOM);
                 playground.reverse_geocode(position.coords.latitude, position.coords.longitude, playground.callbacks.reverse_geocode);
-                $('#modal-locator-map').removeClass('hidden');
+                playground.fields.locator_map.removeClass('hidden');
             }
 
             function error(){
@@ -232,7 +251,7 @@ $(function() {
                 'error': function(a, b, c) {
                     if (b == 'timeout'){
                         alert_text = "<h3>We're sorry!</h3>We're having a hard time finding this place.";
-                        make_alert(alert_text, 'warning', 'div.alerts');
+                        make_alert(alert_text, 'warning', 'div.modal-alerts');
                     }
                 },
                 'success': function(data) {
@@ -314,6 +333,7 @@ $(function() {
             }
             this.fields.address_editor.addClass('hide');
             this.fields.address_editor_toggle.text('Edit');
+
             $('#editor-tabs a:first').tab('show');
         },
         'reset_form': function() {
@@ -390,6 +410,7 @@ $(function() {
             });
 
             // Except for states because they're selectable.
+            // THIS #571
             playground.fields.state = $('select[name="state"]');
             playground.fields.state_selected = $('select[name="state"] option:selected');
 
@@ -411,6 +432,25 @@ $(function() {
                 playground.RESULTS_DEFAULT_ZOOM += 1;
             }
 
+            if(playground.fields.latitude.val() === '' || playground.fields.latitude.val() === 'None'){
+                var latitude = get_parameter_by_name('latitude');
+                var longitude = get_parameter_by_name('longitude');
+
+                if (latitude) {
+                    playground.fields.latitude.val(latitude);
+                }
+
+                if (longitude) {
+                    playground.fields.longitude.val(longitude);
+                }
+                
+                if (latitude && longitude) {
+                    playground.reverse_geocode(latitude, longitude, playground.callbacks.reverse_geocode);
+                } else {
+                    playground.locate_me();
+                }
+            }
+
             // Set up the map.
             playground.map.setup();
 
@@ -426,7 +466,6 @@ $(function() {
                     return false;
                 });
             });
-
 
             // Allow users to tab feature labels and descriptions to toggle checkbox
             $('#form .feature').find('label, .help-block, img').each(function(){
@@ -456,9 +495,6 @@ $(function() {
                 $('#' + playground.ACTION).toggleClass('hide');
             }
 
-            if(playground.fields.latitude.val() === '' || playground.fields.latitude.val() === 'None'){
-                playground.locate_me();
-            }
 
             // Do this thing with the map.
             if ( $('#locator-map') ) {
@@ -479,11 +515,9 @@ $(function() {
             })
 
             // All of this meta_hdr and meta_items stuff.
-            playground.fields.meta_hdr.html(playground.fields.meta_hdr.html() + ' +');
-            playground.fields.meta_items.hide();
-            playground.fields.meta_hdr.on('click', function() {
-                playground.fields.meta_items.slideToggle('fast');
-            });
+            playground.form.twist_out(playground.fields.meta_hdr, playground.fields.meta_items);
+            playground.form.twist_out(playground.fields.meta_comments, playground.fields.meta_guidelines);
+            playground.form.twist_out(playground.fields.meta_changelog, playground.fields.meta_changes);
         }
     };
     // Initialize the playground object.
