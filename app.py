@@ -105,7 +105,7 @@ def index():
     metros = app_config.METRO_AREAS
 
     for metro in metros:
-        metro['playground_count'] += Playground.select().where(Playground.zip_code << metro['zip_codes']).count()
+        metro['playground_count'] = Playground.select().where(Playground.zip_code << metro['zip_codes']).count()
 
     context['metros'] = metros
 
