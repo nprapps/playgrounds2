@@ -77,10 +77,30 @@ function search() {
 
     search_xhr = $.ajax({
         url: APP_CONFIG.CLOUD_SEARCH_PROXY_BASE_URL + '/cloudsearch/2011-02-01/search?' + $.param(buildCloudSearchParams(latitude, longitude, zoom)),
-        dataType: 'jsonp',
+        dataType: 'jsonp', 
+        tryCount: 0,
+        retryLimit: 3,
+        retryDelay: 1000,
         complete: function() {
             search_xhr = null;
         },
+        /*error: function(xhr, textStatus, errorThrown) {
+            console.log('here');
+            this.tryCount += 1;
+
+            if (this.tryCount < this.retryLimit) {
+                console.log(this.tryCount);
+                window.setTimeout(function() { 
+                    console.log('starting retry');
+                    search_xhr = $.ajax(xhr);
+                }, this.retryDelay);
+
+                return;
+            }
+
+            // TODO: REAL ERROR HANDLER
+            alert('FAILED THREE TIMES');
+        },*/
         success: function(data) {
             $map_loading.hide();
             $results_loading.hide();
