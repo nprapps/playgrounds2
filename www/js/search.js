@@ -71,13 +71,13 @@ function search() {
         desktop_map.removeLayer(desktop_markers);
     }
 
-    if (search_xhr != null) {
+    if (search_xhr !== null) {
         search_xhr.abort();
     }
 
     search_xhr = $.ajax({
         url: APP_CONFIG.CLOUD_SEARCH_PROXY_BASE_URL + '/cloudsearch/2011-02-01/search?' + $.param(buildCloudSearchParams(latitude, longitude, zoom)),
-        dataType: 'jsonp', 
+        dataType: 'jsonp',
         tryCount: 0,
         retryLimit: 3,
         retryDelay: 1000,
@@ -95,7 +95,7 @@ function search() {
                     xhr = this;
 
                     console.log(this.tryCount);
-                    window.setTimeout(function() { 
+                    window.setTimeout(function() {
                         console.log('starting retry');
                         search_xhr = $.ajax(xhr);
                     }, this.retryDelay);
@@ -118,11 +118,11 @@ function search() {
                 _.each(data['hits']['hit'], function(hit, i) {
                     var context = $.extend(APP_CONFIG, hit);
                     context['letter'] = LETTERS[i];
-                    
+
                     context['features'] = [];
-                    
+
                     // Generate a list of included features
-                    for (feature in window.FEATURES) {
+                    for (var feature in window.FEATURES) {
                         var key = 'feature_' + feature.replace(/-/g, '_');
 
                         if (hit['data'][key][0] > 0) {
@@ -155,7 +155,7 @@ function search() {
                             marker.on('mouseover', function() {
                                 $('.playground-list li').removeClass('highlight');
                                 $('#playground-' + this.letter).addClass('highlight');
-                                
+
                                 if ($selected_playground) {
                                     $selected_playground.addClass('highlight');
                                 }
@@ -163,7 +163,7 @@ function search() {
 
                             marker.on('mouseout', function() {
                                 $('.playground-list li').removeClass('highlight');
-                                
+
                                 if ($selected_playground) {
                                     $selected_playground.addClass('highlight');
                                 }
@@ -174,7 +174,7 @@ function search() {
 
                                 $('.playground-list li').removeClass('highlight');
                                 $selected_playground.addClass('highlight');
-                                
+
                                 $.smoothScroll({ scrollTarget: '#playground-' + this.letter });
                             });
 
@@ -197,7 +197,7 @@ function search() {
                         search();
                     } else if (zoom == 11) {
                         zoom = 8;
-                        
+
                         if (IS_MOBILE) {
                             $search_results_map_loading_text.text('Searching far away...').show();
                             $search_results_map.css('opacity', '0.25');
@@ -249,16 +249,16 @@ function search() {
                     _.each(markers, function(marker) {
                         desktop_markers.addLayer(marker);
                     });
-                    
+
                     desktop_map.addLayer(desktop_markers);
                 }
 
                 $search_results_map_wrapper.show();
                 $results_address.show();
 
-                $create_link.attr('href', 'create.html?latitude=' + latitude + '&longitude=' + longitude); 
+                $create_link.attr('href', 'create.html?latitude=' + latitude + '&longitude=' + longitude);
             }
-            
+
             if (not_found) {
                 $search_results_not_found.show();
                 $search_results.hide();
@@ -541,7 +541,7 @@ $(function() {
                             var html = JST.did_you_mean_item(context);
 
                             $did_you_mean.append(html);
-                            
+
                         });
 
                         $did_you_mean_wrapper.show();
@@ -588,7 +588,7 @@ $(function() {
 
         var tiles = L.mapbox.tileLayer('npr.map-s5q5dags', {
             detectRetina: true,
-            retinaVersion: 'npr.map-u1zkdj0e',
+            retinaVersion: 'npr.map-u1zkdj0e'
         });
 
         tiles.addTo(desktop_map);
