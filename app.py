@@ -216,6 +216,9 @@ def _cloudsearch_proxy(path):
 
     response = requests.get(url)
 
+    if response.status_code == 507:
+        return ('%s({ "error": "507" });' % callback, 200, response.headers);
+
     output = response.text
 
     if callback:

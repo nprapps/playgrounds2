@@ -36,11 +36,20 @@
 
 
 {% block content %}
-<div id="playground-feature-primer">
-    <h3 id="feature-title">{{ COPY.content.feature_title }}</h3>
-    <p id="feature-description">{{ COPY.content.feature_description }}</p>
+<div id="playground-help">
+    <h3>{{ COPY.content.help_title }}</h3>
+    <p class="help-description">
+        {{ COPY.content.help_description_2 }} 
+        Our database now contains {{ playground_count }} accessible playgrounds, but 
+        {{ COPY.content.help_description_1 }}
+    </p>
+</div>
 
-    <div id="feature-list">
+<div id="playground-feature-primer">
+    <h3 class="feature-title">{{ COPY.content.feature_title }}</h3>
+    <p class="feature-description">{{ COPY.content.feature_description }}</p>
+
+    <div class="feature-list">
         {% for row in COPY.feature_list %}
         <div class="row-fluid">
             <div class="span12">
@@ -54,16 +63,10 @@
 </div>
 
 
-<div id="playground-help">
-    <h3 id="help-title">{{ COPY.content.help_title }}</h3>
-    <p id="help-description">The database now contains {{ playground_count }} playgrounds located in 46 states and the District of Columbia. {{ COPY.content.help_description_1 }}</p>
-    <p id="help-button"><a href="{{ COPY.content.help_search_link }}" class="btn btn-blue">{{ COPY.content.help_search_link_text }}</a></p>
-
+<div id="playground-about">
+    <h3 class="about-title">{{ COPY.content.help_table_title }}</h3>
+    <p>{{ COPY.content.help_table_subtitle }}</p>
     <table class="city-list">
-        <caption>
-            {{ COPY.content.help_table_title }}
-            <span>{{ COPY.content.help_table_subtitle }}</span>
-        </caption>
         <tr>
             <th class="city-name">Metropolitan area</th>
             <th class="city-amt">Known playgrounds</th>
@@ -73,14 +76,12 @@
             <td class="city-amt">{{ metro.playground_count }}</th>
         </tr>{% endfor %}
     </table>
-
-    <p id="help-description">{{ COPY.content.help_description_2 }}</p>
 </div>
 
 
 <div id="playground-data" class="help-prompt">
-    <h3 id="about-title">{{ COPY.content.data_title }}</h3>
-    <p id="about-description">{{ COPY.content.data_description }}</p>
+    <h3 class="data-title">{{ COPY.content.data_title }}</h3>
+    <p class="data-description">{{ COPY.content.data_description }}</p>
 
     <a href="{{ COPY.content.data_link_csv }}" class="btn btn-blue">{{ COPY.content.data_link_csv_text }}</a>
     <a href="{{ COPY.content.data_link_json }}" class="btn btn-blue">{{ COPY.content.data_link_json_text }}</a>

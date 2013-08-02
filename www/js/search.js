@@ -84,19 +84,18 @@ function search() {
         complete: function() {
             search_xhr = null;
         },
-        /*error: function(xhr, textStatus, errorThrown) {
-            console.log('here');
-         },*/
         success: function(data) {
             if ('error' in data) {
                 this.tryCount += 1;
 
                 if (this.tryCount < this.retryLimit) {
+                    // Trim jquery callback as the retry is going to add another one
+                    var i = this.url.indexOf('callback=');
+                    this.url = this.url.substring(0, i - 1);
+
                     xhr = this;
 
-                    console.log(this.tryCount);
                     window.setTimeout(function() {
-                        console.log('starting retry');
                         search_xhr = $.ajax(xhr);
                     }, this.retryDelay);
 
@@ -220,8 +219,6 @@ function search() {
                     var search_map_width = RESULTS_MAP_WIDTH;
                     var search_map_height = RESULTS_MAP_HEIGHT;
 
-                    markers.push(buildMapboxPin('l', 'circle', '006633', latitude, longitude));
-
                     $search_results_map.on('load', function() {
                         $search_results_map_loading_text.text('Searching...').hide();
                         $search_results_map.css('opacity', '1.0');
@@ -233,18 +230,6 @@ function search() {
                     desktop_map.setView([latitude, longitude], zoom);
 
                     desktop_markers.clearLayers();
-
-                    if (!user_panned) {
-                        markers.push(L.mapbox.marker.style({
-                            'type': 'Feature',
-                            'geometry': {},
-                            'properties': {
-                                'marker-size': 'large',
-                                'marker-symbol': 'circle',
-                                'marker-color': '#006633'
-                            }
-                        }, [latitude, longitude]));
-                    }
 
                     _.each(markers, function(marker) {
                         desktop_markers.addLayer(marker);
@@ -471,8 +456,6 @@ $(function() {
         if ($search_address.val() === '') {
             return false;
         }
-
-        console.log('searching');
 
         $did_you_mean_wrapper.hide();
         $search_help_prompt.hide();
