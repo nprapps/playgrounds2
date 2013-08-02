@@ -568,11 +568,11 @@ def prepare_changes():
 
     if os.path.exists('%sdata/changes.json' % path):
 
-        os.system('rm -rf %s.playgrounds_html/' % path)
-        os.system('rm -rf %s.playgrounds_gzip/' % path)
-        os.system('cp %splaygrounds.db data/backups/%s-playgrounds.db' % (path, now))
-        os.system('cp %sdata/changes.json data/backups/%s-changes.json' % (path, now))
-        os.system('mv %sdata/changes.json %schanges-in-progress.json' % (path, path))
+        os.system('rm -rf %s/.playgrounds_html/' % path)
+        os.system('rm -rf %s/.playgrounds_gzip/' % path)
+        os.system('cp %s/playgrounds.db data/backups/%s-playgrounds.db' % (path, now))
+        os.system('cp %s/data/changes.json data/backups/%s-changes.json' % (path, now))
+        os.system('mv %s/data/changes.json %s/changes-in-progress.json' % (path, path))
 
         # Create our list of changed items and a revision group.
         changed_playgrounds, revision_group = data.process_changes()
@@ -584,9 +584,9 @@ def prepare_changes():
         data.send_revision_email(revision_group)
 
         # Remove files and old state.
-        os.system('rm -f %schanges-in-progress.json' % path)
-        os.system('rm -rf %s.playgrounds_html/' % path)
-        os.system('rm -rf %s.playgrounds_gzip/' % path)
+        os.system('rm -f %s/changes-in-progress.json' % path)
+        os.system('rm -rf %s/.playgrounds_html/' % path)
+        os.system('rm -rf %s/.playgrounds_gzip/' % path)
 
         # Show changes.
         changes = len(changed_playgrounds)
@@ -604,7 +604,7 @@ def prepare_changes():
         context['updates']['playgrounds'] = []
         context['updates']['total_revisions'] = 0
 
-        with open('%stemplates/_email.html' % path, 'rb') as read_template:
+        with open('%s/templates/_email.html' % path, 'rb') as read_template:
             payload = Template(read_template.read())
 
         payload = payload.render(**context)
