@@ -219,8 +219,6 @@ function search() {
                     var search_map_width = RESULTS_MAP_WIDTH;
                     var search_map_height = RESULTS_MAP_HEIGHT;
 
-                    markers.push(buildMapboxPin('l', 'circle', '006633', latitude, longitude));
-
                     $search_results_map.on('load', function() {
                         $search_results_map_loading_text.text('Searching...').hide();
                         $search_results_map.css('opacity', '1.0');
@@ -232,18 +230,6 @@ function search() {
                     desktop_map.setView([latitude, longitude], zoom);
 
                     desktop_markers.clearLayers();
-
-                    if (!user_panned) {
-                        markers.push(L.mapbox.marker.style({
-                            'type': 'Feature',
-                            'geometry': {},
-                            'properties': {
-                                'marker-size': 'large',
-                                'marker-symbol': 'circle',
-                                'marker-color': '#006633'
-                            }
-                        }, [latitude, longitude]));
-                    }
 
                     _.each(markers, function(marker) {
                         desktop_markers.addLayer(marker);
