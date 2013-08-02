@@ -12,23 +12,29 @@
 {% endblock %}
 
 {% block wide_content %}
-<div id="main-content" class="row-fluid">
-    <div class="span12">
-        {% include '_alerts.html' %}
-
-        <h3 id="results-address"></h3>
-
-        <div id="search-help">
-            <h3>Did you mean...?</h3>
-            <ul></ul>
+<div id="main-content">
+    <div id="search-help-message" class="row-fluid">
+        <div class="span12">
+            <p class="help-description">{{ COPY.content.search_help_prompt_initial }}</p>
         </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            {% include '_alerts.html' %}
 
-        <div id="map-loading">Searching...</div>
+            <h3 id="results-address"></h3>
 
-        <div id="no-geocode">
-            <h3>{{ COPY.content.search_cant_geocode }}</h3>
+            <div id="search-help">
+                <h3>Did you mean...?</h3>
+                <ul></ul>
+            </div>
+
+            <div id="map-loading">Searching...</div>
+
+            <div id="no-geocode">
+                <h3>{{ COPY.content.search_cant_geocode }}</h3>
+            </div>
         </div>
-
     </div>
     <div class="row-fluid">
         <div class="span6 col-push-6">
