@@ -56,24 +56,25 @@
 
 <div id="playground-help">
     <h3 id="help-title">{{ COPY.content.help_title }}</h3>
-    <p id="help-description">{{ COPY.content.help_description_1 }}</p>
+    <p id="help-description">The database now contains about 1,300 playgrounds located in 46 states and the District of Columbia. {{ COPY.content.help_description_1 }}</p>
+    <p id="help-button"><a href="{{ COPY.content.help_search_link }}" class="btn btn-blue">{{ COPY.content.help_search_link_text }}</a></p>
 
     <table class="city-list">
+        <caption>
+            {{ COPY.content.help_table_title }}
+            <span>{{ COPY.content.help_table_subtitle }}</span>
+        </caption>
         <tr>
-            <th class="city-rank">Rank</th>
             <th class="city-name">Metropolitan area</th>
             <th class="city-amt">Known playgrounds</th>
         </tr>
         {% for metro in metros %}<tr{% if metro.playground_count < 6 %} class="help"{% endif %}>
-            <td class="city-rank">{{ loop.index }}.</th>
             <td class="city-name"><a href="search.html#address={{ metro.search_name }}">{{ metro.name }}</a></th>
             <td class="city-amt">{{ metro.playground_count }}</th>
         </tr>{% endfor %}
     </table>
 
     <p id="help-description">{{ COPY.content.help_description_2 }}</p>
-
-    <a href="{{ COPY.content.help_search_link }}" class="btn btn-blue">{{ COPY.content.help_search_link_text }}</a>
 </div>
 
 
