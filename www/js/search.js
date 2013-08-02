@@ -86,22 +86,27 @@ function search() {
         },
         /*error: function(xhr, textStatus, errorThrown) {
             console.log('here');
-            this.tryCount += 1;
+         },*/
+        success: function(data) {
+            if ('error' in data) {
+                this.tryCount += 1;
 
-            if (this.tryCount < this.retryLimit) {
-                console.log(this.tryCount);
-                window.setTimeout(function() { 
-                    console.log('starting retry');
-                    search_xhr = $.ajax(xhr);
-                }, this.retryDelay);
+                if (this.tryCount < this.retryLimit) {
+                    console.log(this.tryCount);
+                    window.setTimeout(function() { 
+                        console.log('starting retry');
+                        search_xhr = $.ajax(xhr);
+                    }, this.retryDelay);
+
+                    return;
+                }
+
+                // TODO: REAL ERROR HANDLER
+                alert('FAILED THREE TIMES');
 
                 return;
             }
 
-            // TODO: REAL ERROR HANDLER
-            alert('FAILED THREE TIMES');
-        },*/
-        success: function(data) {
             $map_loading.hide();
             $results_loading.hide();
 
