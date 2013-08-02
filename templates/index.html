@@ -36,12 +36,18 @@
 
 
 {% block content %}
+<div id="playground-about">
+    <h3>{{ COPY.content.help_title }}</h3>
+    <p>
+        {{ COPY.content.help_description_2 }} 
+        Our database now contains {{ playground_count }} accessible playgrounds, which are designed to include kids with special needs, but 
+        {{ COPY.content.help_description_1 }}
+    </p>
+</div>
+
 <div id="playground-feature-primer">
-    <h3 id="feature-title">{{ COPY.content.help_title }}</h3>
-    <p id="feature-description">{{ COPY.content.help_description_2 }} Our database now contains {{ playground_count }} accessible playgrounds, which are designed to include kids with special needs, but {{ COPY.content.help_description_1 }}</p>
-        
-    <h3 id="feature-title">{{ COPY.content.feature_title }}</h3>
-    <p id="feature-description">{{ COPY.content.feature_description }}</p>
+    <h3>{{ COPY.content.feature_title }}</h3>
+    <p>{{ COPY.content.feature_description }}</p>
 
     <div id="feature-list">
         {% for row in COPY.feature_list %}
