@@ -17,7 +17,6 @@ import app_config
 import data
 from etc import github
 import models
-from process_updates import process_updates
 
 
 """
@@ -545,15 +544,75 @@ def bootstrap():
     local_bootstrap()
     put(local_path='playgrounds.db', remote_path='%(repo_path)s/playgrounds.db' % env)
 
-def run_update_cron():
-    require('settings', provided_by=[production, staging])
-    run('cd %s && source ../virtualenv/bin/activate && ../virtualenv/bin/python process_updates.py' % env.repo_path)
+def process_updates():
+    if os.environ.get('DEPLOYMENT_TARGET', None) in ['production', 'staging']:
+        write_snapshots()
+        prepare_changes()
+        deploy_playgrounds()
+        update_search_index()
+        deploy_data()
 
-def local_process_updates():
-    """
-    Parse any updates waiting to be processed, rerender playgrounds and send notification emails.
-    """
-    process_updates(path='./', local=True)
+    else:
+        prepare_changes()
+
+def prepare_changes():
+    path = './'
+
+    if os.environ.get('DEPLOYMENT_TARGET', None) in ['production', 'staging']:
+        path = '%s' % env.repo_path
+
+    now_datetime = datetime.datetime.now(pytz.utc)
+    now = time.mktime(now_datetime.timetuple())
+
+    changes = 0
+
+    if os.path.exists('%sdata/changes.json' % path):
+
+        os.system('rm -rf %s.playgrounds_html/' % path)
+        os.system('rm -rf %s.playgrounds_gzip/' % path)
+        os.system('cp %splaygrounds.db data/backups/%s-playgrounds.db' % (path, now))
+        os.system('cp %sdata/changes.json data/backups/%s-changes.json' % (path, now))
+        os.system('mv %sdata/changes.json %schanges-in-progress.json' % (path, path))
+
+        # Create our list of changed items and a revision group.
+        changed_playgrounds, revision_group = data.process_changes()
+
+        # Render and deploy.
+        data.render_sitemap()
+
+        # Send the revision email.
+        data.send_revision_email(revision_group)
+
+        # Remove files and old state.
+        os.system('rm -f %schanges-in-progress.json' % path)
+        os.system('rm -rf %s.playgrounds_html/' % path)
+        os.system('rm -rf %s.playgrounds_gzip/' % path)
+
+        # Show changes.
+        changes = len(changed_playgrounds)
+
+    else:
+        context = {}
+        context['total_revisions'] = 0
+        context['deletes'] = {}
+        context['deletes']['playgrounds'] = []
+        context['deletes']['total_revisions'] = 0
+        context['inserts'] = {}
+        context['inserts']['playgrounds'] = []
+        context['inserts']['total_revisions'] = 0
+        context['updates'] = {}
+        context['updates']['playgrounds'] = []
+        context['updates']['total_revisions'] = 0
+
+        with open('%stemplates/_email.html' % path, 'rb') as read_template:
+            payload = Template(read_template.read())
+
+        payload = payload.render(**context)
+        addresses = app_config.ADMIN_EMAILS
+        data.send_email(addresses, payload)
+
+    print '%s changes | %s' % (changes, now_datetime.isoformat())
+
 
 def update_search_index(playgrounds=None):
     """
@@ -587,7 +646,7 @@ def clear_search_index():
 
     print 'Generating SDF batch...'
     sdf = []
-    
+
     for i in range(0, 10000):
         sdf.append({
             'type': 'delete',

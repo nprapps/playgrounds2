@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
 from datetime import date
+from decimal import Decimal
 import json
 from mimetypes import guess_type
+import re
 from sets import Set
 import urllib
 
@@ -96,13 +98,32 @@ def _prepare_email(revision_group):
 
     return payload.render(**context)
 
+def intcomma(value):
+    """
+    Converts an integer to a string containing commas every three digits.
+    For example, 3000 becomes '3,000' and 45000 becomes '45,000'.
+    """
+    value = str(value)
+    new = re.sub("^(-?\d+)(\d{3})", '\g<1>,\g<2>', value)
+    if value == new:
+        return new
+    else:
+        return intcomma(new)
+
 @app.route('/')
 def index():
     """
     Playgrounds index page.
     """
     context = make_context()
-    context['playgrounds'] = get_active_playgrounds().limit(10)
+    metros = app_config.METRO_AREAS
+
+    for metro in metros:
+        metro['playground_count'] = Playground.select().where(Playground.zip_code << metro['zip_codes']).count()
+
+    context['playground_count'] = intcomma(Playground.select().count())
+
+    context['metros'] = metros
 
     return render_template('index.html', **context)
 
@@ -118,7 +139,6 @@ def search():
 @app.route('/create.html')
 def playground_create():
     context = make_context()
-    context['fields'] = Playground.form()
     context['features'] = Playground.features_form()
 
     return render_template('create.html', **context)
@@ -142,6 +162,20 @@ def sitemap():
 
     return (sitemap, 200, { 'content-type': 'application/xml' })
 
+@app.route('/widget.html')
+def widget():
+    """
+    Embeddable widget example page.
+    """
+    return render_template('widget.html', **make_context())
+
+@app.route('/test_widget.html')
+def test_widget():
+    """
+    Example page displaying widget at different embed sizes.
+    """
+    return render_template('test_widget.html', **make_context())
+
 @app.route('/playground/<string:playground_slug>.html')
 def _playground(playground_slug):
     """
@@ -153,7 +187,10 @@ def _playground(playground_slug):
     context['playground'] = Playground.get(slug=playground_slug)
     context['fields'] = context['playground'].update_form()
     context['features'] = context['playground'].update_features_form()
-    context['revisions'] = Revision.select().where(Revision.playground == context['playground'].id).where((Revision.action == 'insert') | (Revision.action == 'update')).order_by(Revision.timestamp.desc())
+    context['revisions'] = Revision.select()\
+                            .where(Revision.playground == context['playground'].id)\
+                            .where((Revision.action == 'insert') | (Revision.action == 'update'))\
+                            .order_by(Revision.timestamp.desc())
     context['display_field_name'] = display_field_name
     context['path'] = request.path
 
@@ -178,6 +215,9 @@ def _cloudsearch_proxy(path):
     url = 'http://%s/%s?%s' % (app_config.CLOUD_SEARCH_DOMAIN, path, urllib.urlencode(args))
 
     response = requests.get(url)
+
+    if response.status_code == 507:
+        return ('%s({ "error": "507" });' % callback, 200, response.headers);
 
     output = response.text
 
