@@ -84,19 +84,18 @@ function search() {
         complete: function() {
             search_xhr = null;
         },
-        /*error: function(xhr, textStatus, errorThrown) {
-            console.log('here');
-         },*/
         success: function(data) {
             if ('error' in data) {
                 this.tryCount += 1;
 
                 if (this.tryCount < this.retryLimit) {
+                    // Trim jquery callback as the retry is going to add another one
+                    var i = this.url.indexOf('callback=');
+                    this.url = this.url.substring(0, i - 1);
+
                     xhr = this;
 
-                    console.log(this.tryCount);
                     window.setTimeout(function() { 
-                        console.log('starting retry');
                         search_xhr = $.ajax(xhr);
                     }, this.retryDelay);
 
@@ -471,8 +470,6 @@ $(function() {
         if ($search_address.val() === '') {
             return false;
         }
-
-        console.log('searching');
 
         $did_you_mean_wrapper.hide();
         $search_help_prompt.hide();
