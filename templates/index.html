@@ -36,9 +36,9 @@
 
 
 {% block content %}
-<div id="playground-about">
+<div id="playground-help">
     <h3>{{ COPY.content.help_title }}</h3>
-    <p>
+    <p class="help-description">
         {{ COPY.content.help_description_2 }} 
         Our database now contains {{ playground_count }} accessible playgrounds, which are designed to include kids with special needs, but 
         {{ COPY.content.help_description_1 }}
@@ -47,9 +47,9 @@
 
 <div id="playground-feature-primer">
     <h3>{{ COPY.content.feature_title }}</h3>
-    <p>{{ COPY.content.feature_description }}</p>
+    <p class="feature-description">{{ COPY.content.feature_description }}</p>
 
-    <div id="feature-list">
+    <div class="feature-list">
         {% for row in COPY.feature_list %}
         <div class="row-fluid">
             <div class="span12">
@@ -63,7 +63,7 @@
 </div>
 
 
-<div id="playground-help">
+<div id="playground-about">
     <h3>{{ COPY.content.help_table_title }}</h3>
     <p>{{ COPY.content.help_table_subtitle }}</p>
     <table class="city-list">
@@ -80,8 +80,8 @@
 
 
 <div id="playground-data" class="help-prompt">
-    <h3 id="about-title">{{ COPY.content.data_title }}</h3>
-    <p id="about-description">{{ COPY.content.data_description }}</p>
+    <h3 class="data-title">{{ COPY.content.data_title }}</h3>
+    <p class="data-description">{{ COPY.content.data_description }}</p>
 
     <a href="{{ COPY.content.data_link_csv }}" class="btn btn-blue">{{ COPY.content.data_link_csv_text }}</a>
     <a href="{{ COPY.content.data_link_json }}" class="btn btn-blue">{{ COPY.content.data_link_json_text }}</a>

@@ -805,30 +805,35 @@ section#the-goods { margin-top: 44px; }
 }
 
 .index #main-content {
+    margin-top: -11px;
+
     h3 {
         font-size: 24px;
         color: #787878;
         margin: 0 0 22px 0;
+        padding-top: 11px;
+        
+        &.data-title { padding-top: 0; }
     }
     p {
         font-size: 14px;
         line-height: 1.5;
         margin-bottom: 22px;
-    }
-    #playground-about p {
-        font-size: 16px;
-        margin: 0;
-    }
-    #playground-data p { 
-        margin-bottom: 11px;
+        
+        &.data-description { margin-bottom: 11px; }
+        &.help-description { 
+            font-size: 16px;
+            margin-bottom: 0;
+        }
+        &.feature-description { font-size: 16px; }
     }
     #playground-about,
     #playground-data,
     #playground-feature-primer,
     #playground-help {
-        margin-bottom: 55px;
+        margin-bottom: 44px;
     }
-    #playground-help {
+    #playground-about {
         table.city-list {
             margin: 0 0 1.3em 0;
             padding: 0;
@@ -880,7 +885,7 @@ section#the-goods { margin-top: 44px; }
         }
     }
     #playground-feature-primer {
-        #feature-list {
+        .feature-list {
             .row-fluid {
                 margin-bottom: 22px;
                 background-color: #f1f1f1;
