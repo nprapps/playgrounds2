@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
 from datetime import date
+from decimal import Decimal
 import json
 from mimetypes import guess_type
+import re
 from sets import Set
 import urllib
 
@@ -96,6 +98,18 @@ def _prepare_email(revision_group):
 
     return payload.render(**context)
 
+def intcomma(value):
+    """
+    Converts an integer to a string containing commas every three digits.
+    For example, 3000 becomes '3,000' and 45000 becomes '45,000'.
+    """
+    value = str(value)
+    new = re.sub("^(-?\d+)(\d{3})", '\g<1>,\g<2>', value)
+    if value == new:
+        return new
+    else:
+        return intcomma(new)
+
 @app.route('/')
 def index():
     """
@@ -106,6 +120,8 @@ def index():
 
     for metro in metros:
         metro['playground_count'] = Playground.select().where(Playground.zip_code << metro['zip_codes']).count()
+
+    context['playground_count'] = intcomma(Playground.select().count())
 
     context['metros'] = metros
 
