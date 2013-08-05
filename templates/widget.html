@@ -26,19 +26,21 @@
         <h2>{{ COPY.content.widget_feature_title }}</h2>
         <h3>{{ COPY.content.widget_feature_description }}</h3>
 
-        <div class="slideshow">
-            <nav>
-                <button id="btn-back">Back</button>
-                <button id="btn-next">Next</button>
-                <div class="counter"><span>1</span> of <span>10</span></div>
-            </nav>
-            {% for row in COPY.feature_list %}
-            <div class="slideshow-item">
-                <img src="{% if row.photo != 'http://placekitten.com/624/350' %}{{ S3_BASE_URL }}{% endif %}{{ row.photo }}" alt="{{ row.term }}" />
-                <p><strong>{{ row.term }}:</strong> {{ row.definition }}</p>
-                <p class="photo-credit">{{ row.photo_credit }}</p>
+        <nav>
+            <button id="btn-back">Back</button>
+            <button id="btn-next">Next</button>
+            <div class="counter"><span>1</span> of <span>10</span></div>
+        </nav>
+        <div id="slideshow">
+            <div class="slide-wrapper">
+                {% for row in COPY.feature_list %}
+                <div class="slide" id="slide-{{ loop.index0 }}">
+                    <img src="{% if row.photo != 'http://placekitten.com/624/350' %}{{ S3_BASE_URL }}{% endif %}{{ row.photo }}" alt="{{ row.term }}" />
+                    <p><strong>{{ row.term }}:</strong> {{ row.definition }}</p>
+                    <p class="photo-credit">{{ row.photo_credit }}</p>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </section>
     
@@ -70,6 +72,7 @@
     </section>
 
 
+    {{ JS.push('js/lib/jquery.smooth-scroll.js') }}
     {{ JS.push('js/templates.js') }}
     {{ JS.push('js/utils.js') }}
     {{ JS.push('js/widget.js') }}

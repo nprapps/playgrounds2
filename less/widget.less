@@ -4,8 +4,6 @@ body {
     font: 13px/1.4 Arial, Helvetica, sans-serif;
     color: #121212;
     margin: 0;
-    margin-left: 50px;
-    width: 600px;
 }
 
 h1, h2, h3, h4, h5, h6, p {
@@ -110,6 +108,9 @@ input {
         
         &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
     }
+    #slideshow {
+        overflow: hidden;
+    }
     .counter {
         float: left;
         line-height: 33px;
@@ -119,6 +120,13 @@ input {
         text-transform: uppercase;
         
         span { font-size: 12px; }
+    }
+    .slide {
+        float: left;
+        display: none;
+    }
+    .slide-wrap {
+        &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
     }
 }
 
