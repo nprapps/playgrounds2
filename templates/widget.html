@@ -8,7 +8,6 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <base target="_top" />
 
-    {{ CSS.push('css/mapbox.css') }}
     {{ CSS.push('less/widget.less') }}
     {{ CSS.render('css/widget.min.css') }}
 
@@ -16,7 +15,14 @@
     {{ JS.push('js/console.js') }}
     {{ JS.push('js/lib/underscore.js') }}
     {{ JS.push('js/lib/jquery-1.8.3.js') }}
+
+    {{ JS.push('js/lib/jquery.responsiveiframe.js') }}
     {{ JS.render('js/widget-header.min.js') }}
+
+    <script>
+      var ri = responsiveIframe();
+      ri.allowResponsiveEmbedding();
+    </script>
 </head>
 <body>
     <h1>{{ COPY.content.widget_title }} <b></b></h1>
@@ -69,9 +75,6 @@
         </form>
     </section>
 
-
-    {{ JS.push('js/templates.js') }}
-    {{ JS.push('js/utils.js') }}
     {{ JS.push('js/widget.js') }}
     {{ JS.render('js/widget-footer.min.js') }}
 </body>
