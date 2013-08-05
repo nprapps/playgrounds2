@@ -104,8 +104,7 @@ function search() {
                     return;
                 }
 
-                // TODO: REAL ERROR HANDLER
-                alert('FAILED THREE TIMES');
+                alert('Our search feature is currently over capacity, please try again later.');
 
                 return;
             }
