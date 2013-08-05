@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <title>{{ PROJECT_NAME }}</title>    
+    <title>{{ PROJECT_NAME }}</title>
     <style type="text/css">
         iframe { border-width:0; overflow:hidden; }
     </style>
-    <script src="js/lib/jquery-1.8.3.js"></script>
-    <script src="js/lib/jquery.responsiveiframe.js"></script>
-
+</head>
+<body>
+	<!-- Embed starts here -->
+	<iframe id='where-all-kids-play' src="widget.html"></iframe>
+	<script src="js/lib/jquery-1.8.3.js"></script>
+	<script src="js/lib/jquery.responsiveiframe.js"></script>
 	<script>
 		var playgroundsJQuery = $.noConflict(true);
 		(function($){
@@ -17,11 +19,6 @@
 			});
 		})(playgroundsJQuery);
 	</script>
-
-</head>
-<body>
-
-<iframe id='where-all-kids-play' src="widget.html"></iframe>
-
+	<!-- Embed ends here -->
 </body>
 </html>
