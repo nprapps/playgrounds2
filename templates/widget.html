@@ -19,30 +19,34 @@
     {{ JS.render('js/widget-header.min.js') }}
 </head>
 <body>
-    <h1>{{ PROJECT_NAME }}</h1>
+    <h1>{{ COPY.content.widget_title }} <b></b></h1>
     
-    <div id="playground-feature-primer">
-        <h3 class="feature-title">{{ COPY.content.feature_title }}</h3>
-        <p class="feature-description">{{ COPY.content.feature_description }}</p>
+
+    <section id="playground-feature-primer">
+        <h2>{{ COPY.content.widget_feature_title }}</h2>
+        <h3>{{ COPY.content.widget_feature_description }}</h3>
 
         <div class="slideshow">
             {% for row in COPY.feature_list %}
             <div class="slideshow-item">
                 <img src="{% if row.photo != 'http://placekitten.com/624/350' %}{{ S3_BASE_URL }}{% endif %}{{ row.photo }}" alt="{{ row.term }}" />
-                <h4>{{ row.term }}</h4>
-                <p>{{ row.definition }}</p>
+                <p><strong>{{ row.term }}:</strong> {{ row.definition }}</p>
             </div>
             {% endfor %}
         </div>
-    </div>
+    </section>
+    
 
+    <section id="playground-search">
+        <h2>{{ COPY.content.widget_search_title }}</h2>
+        <h3>{{ COPY.content.widget_search_description }}</h3>
 
-    <div>Search for your zip code:</div>
+        <form>
+            <input type="text" id="zip-code"></input>
+            <input type="submit"></input>
+        </form>
+    </section>
 
-    <form>
-        <input type="text" id="zip-code"></input>
-        <input type="submit"></input>
-    </form>
 
     {{ JS.push('js/templates.js') }}
     {{ JS.push('js/utils.js') }}
