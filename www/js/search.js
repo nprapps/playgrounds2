@@ -104,8 +104,7 @@ function search() {
                     return;
                 }
 
-                // TODO: REAL ERROR HANDLER
-                alert('FAILED THREE TIMES');
+                alert('Our search feature is currently over capacity, please try again later.');
 
                 return;
             }
@@ -196,6 +195,8 @@ function search() {
                         }
 
                         search();
+
+                        return false;
                     } else if (zoom == 11) {
                         zoom = 8;
 
@@ -208,6 +209,8 @@ function search() {
 
                         $zoom_out.attr('disabled', 'disabled');
                         search();
+
+                        return false;
                     } else {
                         not_found = true;
                     }
@@ -229,6 +232,8 @@ function search() {
 
                     $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + search_map_width + 'x' + search_map_height + '.png');
                 } else {
+                    desktop_map.off('moveend', desktop_map_moveend);
+                    desktop_map.once('moveend', temp_desktop_map_moveend); 
                     desktop_map.setView([latitude, longitude], zoom);
 
                     desktop_markers.clearLayers();
@@ -256,6 +261,9 @@ function search() {
             }
 
             if (!IS_MOBILE) {
+                desktop_map.off('moveend', desktop_map_moveend);
+                desktop_map.once('moveend', temp_desktop_map_moveend); 
+
                 desktop_map.invalidateSize();
             }
 
@@ -308,6 +316,25 @@ function reset_zoom() {
     user_panned = false;
 }
 
+function desktop_map_moveend() {
+    var latlng = desktop_map.getCenter();
+    var current = new L.LatLng($search_latitude.val(), $search_longitude.val());
+    zoom = desktop_map.getZoom();
+
+    if (!coordinatesApproxEqual(latlng, current, 1000)) {
+        $search_latitude.val(latlng.lat);
+        $search_longitude.val(latlng.lng);
+
+        user_panned = true;
+
+        navigate();
+    }
+}
+
+function temp_desktop_map_moveend() {
+    desktop_map.on('moveend', desktop_map_moveend);
+}
+
 function hashchange_callback() {
     /*
      * React to changes in the url hash and update the search.
@@ -320,6 +347,10 @@ function hashchange_callback() {
     var nearby = ($.bbq.getState('nearby') == 'true') || false;
 
     if (latitude && longitude) {
+        $did_you_mean_wrapper.hide();
+        $search_help_prompt.hide();
+        $no_geocode.hide();
+
         if (!($search_latitude.val() == latitude && $search_longitude.val() == longitude)) {
             $search_results_map_wrapper.hide();
             $map_loading.text('Searching...').show();
@@ -337,7 +368,6 @@ function hashchange_callback() {
         } else {
             $results_address.text('Accessible Playgrounds Near You');
         }
-
 
         search();
     } else if (address) {
@@ -557,20 +587,7 @@ $(function() {
             scrollWheelZoom: false
         });
 
-        desktop_map.on('moveend', function() {
-            var latlng = desktop_map.getCenter();
-            var current = new L.LatLng($search_latitude.val(), $search_longitude.val());
-            zoom = desktop_map.getZoom();
-
-            if (!coordinatesApproxEqual(latlng, current, 1000)) {
-                $search_latitude.val(latlng.lat);
-                $search_longitude.val(latlng.lng);
-
-                user_panned = true;
-
-                navigate();
-            }
-        });
+        desktop_map.on('moveend', desktop_map_moveend);
 
         var tiles = L.mapbox.tileLayer('npr.map-s5q5dags', {
             detectRetina: true,
