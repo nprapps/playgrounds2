@@ -347,6 +347,10 @@ function hashchange_callback() {
     var nearby = ($.bbq.getState('nearby') == 'true') || false;
 
     if (latitude && longitude) {
+        $did_you_mean_wrapper.hide();
+        $search_help_prompt.hide();
+        $no_geocode.hide();
+
         if (!($search_latitude.val() == latitude && $search_longitude.val() == longitude)) {
             $search_results_map_wrapper.hide();
             $map_loading.text('Searching...').show();
