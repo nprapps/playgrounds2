@@ -410,7 +410,6 @@ $(function() {
             });
 
             // Except for states because they're selectable.
-            // THIS #571
             playground.fields.state = $('select[name="state"]');
             playground.fields.state_selected = $('select[name="state"] option:selected');
 
