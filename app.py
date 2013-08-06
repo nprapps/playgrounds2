@@ -176,6 +176,13 @@ def test_widget():
     """
     return render_template('test_widget.html', **make_context())
 
+@app.route('/js/embed-widget.js')
+def embed_widget():
+    """
+    Javascript to embed the widget
+    """
+    return render_template('embed_widget.js', **make_context())
+
 @app.route('/playground/<string:playground_slug>.html')
 def _playground(playground_slug):
     """
