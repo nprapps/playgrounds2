@@ -78,14 +78,14 @@ $(function() {
 
     $geolocate_button.click(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
-            top.location.href = APP_CONFIG.BASE_URL + '/search.html#latitude=' + position.coords.latitude + '&longitude=' + position.coords.longitude + '&zoom=' + APP_CONFIG.RESULTS_DEFAULT_ZOOM + '&nearby=true'; 
+            top.location.href = APP_CONFIG.S3_BASE_URL + '/search.html#latitude=' + position.coords.latitude + '&longitude=' + position.coords.longitude + '&zoom=' + APP_CONFIG.RESULTS_DEFAULT_ZOOM + '&nearby=true'; 
         });
 
         return false;
     });
 
     $search_form.submit(function() {
-        top.location.href = APP_CONFIG.BASE_URL + '/search.html#address=' + encodeURIComponent($search_address.val()); 
+        top.location.href = APP_CONFIG.S3_BASE_URL + '/search.html#address=' + encodeURIComponent($search_address.val()); 
 
         return false;
     });
