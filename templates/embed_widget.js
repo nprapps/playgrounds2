@@ -27,5 +27,5 @@ try {
 }
 
 document.write(
-'<iframe src="{{ S3_BASE_URL }}/widget.html?station=' + window.station + '" width="' + nprapps_widget_width + '" height="' + nprapps_widget_height + '" scrolling="auto" marginheight="0" marginwidth="0" frameborder="0"></iframe>',
+'<iframe src="{{ S3_BASE_URL }}/widget.html?station=' + window.station + '" width="' + nprapps_widget_width + '" height="' + nprapps_widget_height + '" scrolling="no" marginheight="0" marginwidth="0" frameborder="0"></iframe>',
 '');
