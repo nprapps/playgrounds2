@@ -109,21 +109,10 @@
 </div>
 
 
-<!-- disqus -->
-<div class="comments">
-    <h4>{{ COPY.content.playground_note_title }}</h4>
-    <p class="description">{{ COPY.content.playground_note_description }}</p>
-    <p class="meta">Discusssion Guidelines</p>
-    <p class="guidelines">{{ COPY.content.playground_terms }}</p>
-    {% include '_comments.html' %}
+<div class="help-prompt">
+    <p class="prompt">{{ COPY.content.playground_help_title }}</p>
+    <p><a href="#edit-playground" class="btn btn-blue btn-block" data-toggle="modal"><i class="icon-pencil"></i> {{ COPY.content.playground_help_button }}</a></p>
 </div>
-
-
-<!-- Share buttons -->
-<ul class="social">
-    <li class="facebook"><a rel="external" href="https://www.facebook.com/dialog/feed?app_id={{ FACEBOOK.APP_ID }}&amp;link={{ S3_BASE_URL }}{{ path }}&amp;name={{ PROJECT_NAME }}%3A+{{ playground.display_name }}&amp;picture={{ FACEBOOK.IMAGE_URL }}&amp;description={% if playground.public_remarks %}{{ playground.public_remarks|urlencode }}{% else %}{{ FACEBOOK.DESCRIPTION|urlencode }}{% endif %}&amp;redirect_uri={{ FACEBOOK.URL|urlencode }}" alt="Share on Facebook" target="_blank" onclick="_gaq.push(['_trackEvent', 'Social', 'Share Page On Facebook', '{{ PROJECT_NAME }}']);"><span>Like This On Facebook</span><b>Share This</b></a></li>
-    <li class="twitter"><a rel="external" href="http://twitter.com/share?text={{ PROJECT_NAME }}%3A+{{ playground.display_name }}&amp;url={{ S3_BASE_URL }}{{ path }}" alt="Share on Twitter" target="_blank" onclick="_gaq.push(['_trackEvent', 'Social', 'Share Page On Twitter', '{{ PROJECT_NAME }}']);"><span>Share This On Twitter</span><b>Tweet This</b></a></li>
-</ul>
 
 
 {% if playground.nearby(1)|length > 0 %}
@@ -152,10 +141,23 @@
 </div>
 {% endif %}
 
-<div class="help-prompt">
-    <p class="prompt">{{ COPY.content.playground_help_title }}</p>
-    <p><a href="#edit-playground" class="btn btn-blue btn-block" data-toggle="modal"><i class="icon-pencil"></i> {{ COPY.content.playground_help_button }}</a></p>
+<!-- disqus -->
+<div class="comments">
+    <h4>{{ COPY.content.playground_note_title }}</h4>
+    <p class="description">{{ COPY.content.playground_note_description }}</p>
+    <p class="meta">Discusssion Guidelines</p>
+    <p class="guidelines">{{ COPY.content.playground_terms }}</p>
+    {% include '_comments.html' %}
 </div>
+
+
+<!-- Share buttons -->
+<ul class="social">
+    <li class="facebook"><a rel="external" href="https://www.facebook.com/dialog/feed?app_id={{ FACEBOOK.APP_ID }}&amp;link={{ S3_BASE_URL }}{{ path }}&amp;name={{ PROJECT_NAME }}%3A+{{ playground.display_name }}&amp;picture={{ FACEBOOK.IMAGE_URL }}&amp;description={% if playground.public_remarks %}{{ playground.public_remarks|urlencode }}{% else %}{{ FACEBOOK.DESCRIPTION|urlencode }}{% endif %}&amp;redirect_uri={{ FACEBOOK.URL|urlencode }}" alt="Share on Facebook" target="_blank" onclick="_gaq.push(['_trackEvent', 'Social', 'Share Page On Facebook', '{{ PROJECT_NAME }}']);"><span>Like This On Facebook</span><b>Share This</b></a></li>
+    <li class="twitter"><a rel="external" href="http://twitter.com/share?text={{ PROJECT_NAME }}%3A+{{ playground.display_name }}&amp;url={{ S3_BASE_URL }}{{ path }}" alt="Share on Twitter" target="_blank" onclick="_gaq.push(['_trackEvent', 'Social', 'Share Page On Twitter', '{{ PROJECT_NAME }}']);"><span>Share This On Twitter</span><b>Tweet This</b></a></li>
+</ul>
+
+
 {% if revisions.count() > 0 %}
 <div class="changelog">
     <h5 class="meta">Changelog</h5>

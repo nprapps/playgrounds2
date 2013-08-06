@@ -1,31 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{{ PROJECT_NAME }}</title>
+<title>Content Widget: {{ PROJECT_NAME }}</title>
+
+<style type="text/css">
+body {
+    font: 14px/1.4 Arial, Helvetica, sans-serif;
+    color: #121212;
+    width: 950px;
+    margin: 0 auto;
+}
+</style>
 </head>
 <body>
 
-    <h1>500x850 (FROM STAGING)</h1>
-    <div style="width: 500px;">
-    <iframe id='where-all-kids-play' src="http://stage-apps.npr.org/where-all-kids-play/widget.html" style="width: 100%; height: 850px; border-width:0; overflow: hidden;"></iframe>
-    </div>
+<h1>Content Widget: {{ PROJECT_NAME }}</h1>
 
-    <h1>500x850 (target)</h1>
-    <script type="text/javascript">
-    nprapps_widget_width = 500;
-    nprapps_widget_height = 850;
-    </script>
+<p>
+    <strong>Preview:</strong> 
+    <a href="#preview500">500x850</a> (target) |
+    <a href="#preview900">900x1050</a> |
+    <a href="#preview300">300x600</a> (unsupported)
+</p>
+
+<h2>Embed Code</h2>
+
+<p>Default dimensions (500x850):</p>
+<textarea style="width: 500px; height: 50px;">
+<script type="text/javascript" src="{{ S3_BASE_URL }}/js/embed-widget.js"></script>
+</textarea>
+
+
+<p>Or customize the iframe dimensions:</p>
+<textarea style="width: 500px; height: 100px;">
+<script type="text/javascript">
+nprapps_widget_width = 500;
+nprapps_widget_height = 850;
+</script>
+<script type="text/javascript" src="{{ S3_BASE_URL }}/js/embed-widget.js"></script>
+</textarea>
+
+
+<hr />
+
+
+    <h2 id="preview500">Widget Preview: 500x850 (target)</h2>
     <script type="text/javascript" src="js/embed-widget.js"></script>
     
-    <h1>900x1050 (wide)</h1>
+    <h2 id="preview900">Widget Preview: 900x1050 (wide)</h2>
     <script type="text/javascript">
     nprapps_widget_width = 900;
     nprapps_widget_height = 1050;
     </script>
     <script type="text/javascript" src="js/embed-widget.js"></script>
 
-
-    <h1>300x600 (unsupported)</h1>
+    <h2 id="preview300">Widget Preview: 300x600 (unsupported)</h2>
     <script type="text/javascript">
     nprapps_widget_width = 300;
     nprapps_widget_height = 925;
