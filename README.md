@@ -18,6 +18,7 @@ playgrounds2
 * [Install cron jobs](#install-cron-jobs)
 * [Install web services](#install-web-services)
 * [Add fake changelog data](#add-fake-changelog-data)
+* [Run the remote cron](#run-the-remote-cron)
 * [If cron fails](#if-cron-fails)
 
 What is this?
@@ -258,6 +259,15 @@ Add fake changelog data
 ---------------------
 
 Call ```fab create_test_revisions``` and look at this playground: http://localhost:8000/playground/strong-reach-playground-bowdon-ga.html
+
+Run the remote cron
+-------------------
+
+To manually run the cron job on the remote server (which will also redeploy all playgrounds), use the following command:
+
+```
+fab [staging|production] [master|stable] remote:process_updates
+```
 
 If cron fails
 -------------
