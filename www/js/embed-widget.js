@@ -17,13 +17,13 @@ try {
 try {
 	if (nprapps_widget_width) {}
 } catch (err) {
-	nprapps_widget_width = '600';
+	nprapps_widget_width = '500';
 }
 
 try {
 	if (nprapps_widget_height) {}
 } catch (err) {
-	nprapps_widget_height = '500';
+	nprapps_widget_height = '850';
 }
 
 document.write(
