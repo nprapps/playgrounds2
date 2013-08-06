@@ -546,11 +546,21 @@ def bootstrap():
 
 def process_updates():
     if os.environ.get('DEPLOYMENT_TARGET', None) in ['production', 'staging']:
-        write_snapshots()
-        prepare_changes()
-        deploy_playgrounds()
-        update_search_index()
-        deploy_data()
+        try:
+            write_snapshots()
+            prepare_changes()
+            deploy_playgrounds()
+            update_search_index()
+            deploy_data()
+        except:
+            import traceback
+
+            connection = boto.ses.connect_to_region('us-east-1')
+            connection.send_email(
+                'NPR News Apps <nprapps@npr.org>',
+                'Playgrounds Cron Error! (%s, %s)' % (os.environ.get('DEPLOYMENT_TARGET'), datetime.datetime.now(pytz.utc).replace(tzinfo=pytz.utc).strftime('%m/%d')),
+                traceback.format_exc(),
+                'nprapps@npr.org')
 
     else:
         prepare_changes()
