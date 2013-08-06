@@ -32,7 +32,7 @@
             <div class="slide-wrapper">
                 {% for row in COPY.feature_list %}
                 <div class="slide" id="slide-{{ loop.index0 }}">
-                    <img src="{% if row.photo != 'http://placekitten.com/624/350' %}{{ S3_BASE_URL }}{% endif %}{{ row.photo }}" alt="{{ row.term }}" />
+                    <img src="{{ row.photo }}" alt="{{ row.term }}" />
                     <p><strong>{{ row.term }}:</strong> {{ row.definition }}</p>
                     <p class="photo-credit">{{ row.photo_credit }}</p>
                 </div>

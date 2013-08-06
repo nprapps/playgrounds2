@@ -66,7 +66,7 @@
         {% for row in COPY.feature_list %}
         <div class="row-fluid">
             <div class="span12">
-                <img src="{% if row.photo != 'http://placekitten.com/624/350' %}{{ S3_BASE_URL }}{% endif %}{{ row.photo }}" alt="{{ row.term }}" />
+                <img src="{{ row.photo }}" alt="{{ row.term }}" />
                 <h4>{{ row.term }}</h4>
                 <p>{{ row.definition }} (Photo: John Poole / NPR)</p>
             </div>
