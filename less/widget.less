@@ -13,9 +13,10 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 h1 {
-    background-color: #ebebeb;
+    background-color: #dadada;
     padding: 10px 20px;
     font-size: 14px;
+    border-top: 2px solid #FFF;
     
     b { 
         background: #ebebeb url('../img/npr_55x18.jpg') no-repeat;
@@ -24,6 +25,7 @@ h1 {
         display: inline-block;
         float: right;
     }
+    &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
 }
 
 h2 {
@@ -70,8 +72,8 @@ input {
 }
 
 #playground-feature-primer {
-    border-left: 2px solid #ebebeb;
-    border-right: 2px solid #ebebeb;
+    border: 2px solid #ebebeb;
+    border-bottom: none;
     padding: 22px 20px;
     
     img {

@@ -19,9 +19,6 @@
     {{ JS.render('js/widget-header.min.js') }}
 </head>
 <body>
-    <h1>{{ COPY.content.widget_title }} <b></b></h1>
-    
-
     <section id="playground-feature-primer">
         <h2>{{ COPY.content.widget_feature_title }}</h2>
         <h3>{{ COPY.content.widget_feature_description }}</h3>
@@ -64,6 +61,10 @@
             </p>
         </form>
     </section>
+    
+    <footer>
+        <h1><b></b><a href="{{ S3_BASE_URL }}">{{ COPY.content.widget_title }}</a></h1>
+    </footer>
 
     {{ JS.push('js/lib/jquery.smooth-scroll.js') }}
     {{ JS.push('js/widget.js') }}
