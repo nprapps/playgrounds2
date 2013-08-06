@@ -15,14 +15,8 @@
     {{ JS.push('js/console.js') }}
     {{ JS.push('js/lib/underscore.js') }}
     {{ JS.push('js/lib/jquery-1.8.3.js') }}
-
-    {{ JS.push('js/lib/jquery.responsiveiframe.js') }}
+    {{ JS.push('js/lib/modernizr.js') }}
     {{ JS.render('js/widget-header.min.js') }}
-
-    <script>
-      var ri = responsiveIframe();
-      ri.allowResponsiveEmbedding();
-    </script>
 </head>
 <body>
     <h1>{{ COPY.content.widget_title }} <b></b></h1>

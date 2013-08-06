@@ -1,9 +1,17 @@
+var GEOLOCATE = Modernizr.geolocation;
+
 var $slideshow = null;
 var $slide_back = null;
 var $slide_counter = null;
 var $slide_next = null;
 var $slide_wrapper = null;
 var $slides = null;
+var $search_form = null;
+var $search_latitude = null;
+var $search_longitude = null;
+var $search_address = null;
+var $geolocate_button = null;
+var $search_divider = null;
 
 var slide_current = 0;
 var slide_total = null;
@@ -63,6 +71,30 @@ $(function() {
     $slide_next = $('#btn-next');
     $slide_wrapper = $slideshow.find('.slide-wrapper');
     $slides = $slideshow.find('.slide');
+    $search_form = $('#search');
+    $search_address = $('#search input[name="address"]');
+    $search_latitude = $('#search input[name="latitude"]');
+    $search_longitude = $('#search input[name="longitude"]');
+    $geolocate_button = $('#geolocate');
+    $search_divider = $search_form.find('h6.divider');
+
+    $geolocate_button.click(function() {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            window.location.href = 'search.html#latitude=' + position.coords.latitude + '&longitude=' + position.coords.longitude + '&zoom=' + RESULTS_DEFAULT_ZOOM + '&nearby=true'; 
+        });
+    });
+
+    $search_form.submit(function() {
+        window.location.href = 'search.html#address=' + encodeURIComponent($search_address.val()); 
+
+        return false;
+    });
+
+    if (GEOLOCATE) {
+        $geolocate_button.show();
+        $search_divider.show();
+    }
+
 
     // set up slideshow
     slideshow_init();
