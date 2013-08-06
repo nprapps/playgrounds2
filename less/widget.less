@@ -31,9 +31,16 @@ h2 {
 }
 
 h3 {
-    margin-bottom: 22px;
-    color: #999;
+    margin-bottom: 11px;
+    color: #787878;
     font-weight: normal;
+}
+
+a {
+    color: #4774cc;
+    text-decoration: none;
+    
+    &:hover { opacity: 0.7; }
 }
 
 button {
@@ -125,7 +132,7 @@ input {
         float: left;
         display: none;
     }
-    .slide-wrap {
+    .slide-wrapper {
         &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
     }
 }
@@ -133,4 +140,45 @@ input {
 #playground-search {
     padding: 22px 22px;
     background-color: #ebebeb;
+    
+    #address-search {
+        width: 65%;
+        float: left;
+        
+        #search-btn {
+            width: 15%;
+            float: right;
+            padding: 0;
+            
+            i { margin-right: 0; }
+            span { display: none; }
+        }
+        .address-search-input {
+            float: left;
+            height: 32px;
+            width: 75%;
+        }
+        &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
+    }
+    #geolocate {
+        width: 25%;
+        float: right;
+        
+        i { font-size: 140%; }
+    }
+    .divider {
+        width: 10%;
+        text-align: center;
+        float: right;
+        line-height: 44px;
+        color: #787878;
+        font-size: 12px;
+    }
+    .example {
+        font-size: 12px;
+        color: #787878;
+        padding-top: 11px;
+        clear: both;
+    }
+    &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
 }
