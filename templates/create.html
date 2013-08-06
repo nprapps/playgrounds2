@@ -19,7 +19,7 @@
     <p class="muted">Changes will be submitted for review and posted within 24 hours.</p>
 
     <h5 class="address-label">Address
-         <a id="toggle-address-button" data-action="toggle_address_editor" class="btn btn-success">Edit</a>
+         <a id="toggle-address-button" data-action="toggle_address_editor" class="btn btn-success" role="button">Edit</a>
     </h5>
     <div id="address-placeholder">
         <img id="locator-map" class="hidden" data-longitude="" data-latitude="" />
@@ -45,7 +45,7 @@
             {% for feature in COPY.feature_list %}
             <div class="feature control-group">
                 <img src="{% if 'placekitten' not in feature['photo_thumb'] %}{{ S3_BASE_URL }}{% endif %}{{ feature['photo_thumb'] }}" alt="{{ feature['term'] }}" />
-                <input type="checkbox" name="{{ feature['key'] }}"> <label class="checkbox">{{ feature['term'] }}</label>
+                <input type="checkbox" name="{{ feature['key'] }}" aria-label="Does the playground have {{ feature['term'] }}?"> <label class="checkbox">{{ feature['term'] }}</label>
                 <span class="help-block">{{ feature['definition_short'] }}</span>
             </div>
             {% endfor %}
@@ -56,35 +56,35 @@
             <div class="control-group">
                 <label class="control-label">Playground Name <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="name" value=""></input>
+                    <input class="input-block-level input" type="text" name="name" value="" aria-label="Does this playground have a name?"></input>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label">At (is this in a park or school?) <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="facility" value=""></input>
+                    <input class="input-block-level input" type="text" name="facility" value="" aria-label="Where is this playground located?"></input>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label">URL <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="url" value=""></input>
+                    <input class="input-block-level input" type="text" name="url" value="" aria-label="Does this playground have a website?"></input>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label">Agency <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="agency" value=""></input>
+                    <input class="input-block-level input" type="text" name="agency" value="" aria-label="Is this playground managed by a particular agency?"></input>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label">Owner <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="owner" value=""></input>
+                    <input class="input-block-level input" type="text" name="owner" value="" aria-label="Is this playground managed by an individual?"></input>
                 </div>
             </div>
 
@@ -128,7 +128,7 @@
 </div>
 <div class="create-footer">
     <button class="btn btn-large" onclick="javascript:window.history.back(); return false;">Cancel</button>
-    <button id="playground-update" class="btn btn-large btn-success">Save</button>
+    <button id="playground-update" class="btn btn-large btn-success" role="button">Save</button>
 </div>
 
 <div class="address-editor">
