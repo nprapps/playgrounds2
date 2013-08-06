@@ -580,6 +580,7 @@ $(function() {
     }
 
     if (!IS_MOBILE) {
+        $search_results_map.hide();
         $search_results_map_desktop.css({ height: RESULTS_MAP_HEIGHT + 'px' });
 
         desktop_map = L.mapbox.map('search-results-map-desktop', null, {

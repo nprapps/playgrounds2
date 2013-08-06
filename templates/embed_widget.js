@@ -17,15 +17,15 @@ try {
 try {
 	if (nprapps_widget_width) {}
 } catch (err) {
-	nprapps_widget_width = '600';
+	nprapps_widget_width = '500';
 }
 
 try {
 	if (nprapps_widget_height) {}
 } catch (err) {
-	nprapps_widget_height = '500';
+	nprapps_widget_height = '850';
 }
 
 document.write(
-'<iframe src="widget.html?station=' + window.station + '" width="' + nprapps_widget_width + '" height="' + nprapps_widget_height + '" scrolling="auto" marginheight="0" marginwidth="0" frameborder="0"></iframe>',
+'<iframe src="{{ S3_BASE_URL }}/widget.html?station=' + window.station + '" width="' + nprapps_widget_width + '" height="' + nprapps_widget_height + '" scrolling="no" marginheight="0" marginwidth="0" frameborder="0"></iframe>',
 '');
