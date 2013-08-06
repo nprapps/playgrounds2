@@ -85,7 +85,7 @@
     </ul>
     {% endif %}
 
-    <h5 class="meta" aria-label="Click to hear more information about this playground">More Info</h5>
+    <h5 class="meta" aria-label="{{ COPY.aria.more_info }}">More Info</h5>
     <ul class="meta">
         <li class="agency">
             <strong>Agency:</strong>
@@ -117,7 +117,7 @@
 <div class="comments">
     <h4>{{ COPY.content.playground_note_title }}</h4>
     <p class="description">{{ COPY.content.playground_note_description }}</p>
-    <p class="meta" aria-label="Click to hear guidelines for leaving a comment">Discusssion Guidelines</p>
+    <p class="meta" aria-label="{{ COPY.aria.guidelines }}">Discusssion Guidelines</p>
     <p class="guidelines">{{ COPY.content.playground_terms }}</p>
     {% include '_comments.html' %}
 </div>
@@ -167,7 +167,7 @@
 
 
 {% if revisions.count() > 0 %}
-<div class="changelog" aria-label="Click to hear all edits made to this playground page">
+<div class="changelog" aria-label="{{ COPY.aria.changelog }}">
     <h5 class="meta">Changelog</h5>
     <ul class="meta">
         {% for revision in revisions %}

@@ -38,35 +38,35 @@
             <div class="control-group">
                 <label class="control-label">Playground Name <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="name" value="{{ playground.name }}" aria-label="Does this playground have a name?"></input>
+                    <input class="input-block-level input" type="text" name="name" value="{{ playground.name }}" aria-label="{{ COPY.aria.playground_name }}"></input>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label">At (is this in a park or school?) <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="facility" value="{{ playground.facility }}" aria-label="Where is this playground located?"></input>
+                    <input class="input-block-level input" type="text" name="facility" value="{{ playground.facility }}" aria-label="{{ COPY.aria.playground_facility }}"></input>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label">URL <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="url" value="{{ playground.url }}" aria-label="Does this playground have a website?"></input>
+                    <input class="input-block-level input" type="text" name="url" value="{{ playground.url }}" aria-label="{{ COPY.aria.playground_url }}"></input>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label">Agency <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="agency" value="{{ playground.agency }}" aria-label="Is this playground managed by a particular agency?"></input>
+                    <input class="input-block-level input" type="text" name="agency" value="{{ playground.agency }}" aria-label="{{ COPY.aria.playground_agency }}"></input>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label">Owner <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="owner" value="{{ playground.owner }}" aria-label="Is this playground managed by an individual?"></input>
+                    <input class="input-block-level input" type="text" name="owner" value="{{ playground.owner }}" aria-label="{{ COPY.aria.playground_owner }}"></input>
                 </div>
             </div>
 
@@ -152,7 +152,7 @@
                 <div class="controls">
                     <select class="span12" type="text" name="state" value="" role="menu" aria-haspopup="true">
                         {% for state in STATE_LIST %}
-                        <option value="{{state}}" role="menuitem" {% if state == playground.state %} selected {% endif %}>{{state}}</option>
+                        <option value="{{state}}" role="menuitem" {% if state == playground.state %} selected {% endif %}>{{ state }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -168,7 +168,7 @@
     </div>
 
     <div class="edit-address-footer">
-        <a id="accept-address" data-action="accept_address" class="btn btn-large btn-block btn-success">Done</a>
+        <a id="accept-address" data-action="accept_address" class="btn btn-large btn-block btn-success" role="button">Done</a>
     </div>
 </div>
 </form>
