@@ -75,7 +75,7 @@
     {% if playground.features %}
     <ul class="playground-feature-list">{% for feature in playground.features %}
         <li>
-            <img src="{{ feature.copy['photo_thumb'] }}" alt="{{ feature.copy['term'] }}" />
+            <img src="{{ S3_BASE_URL }}{{ feature.copy['photo_thumb'] }}" alt="{{ feature.copy['term'] }}" />
             <div class="feature-definition">
                 <strong>{{ feature.copy['term'] }}</strong>
                 {{ feature.copy['definition_short'] }}

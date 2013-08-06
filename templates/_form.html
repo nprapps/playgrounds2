@@ -27,7 +27,7 @@
             <h5>Features</h5>
             {% for feature in COPY.feature_list %}
             <div class="feature control-group">
-                <img src="{{ feature['photo_thumb'] }}" alt="{{ feature['term'] }}" />
+                <img src="{{ S3_BASE_URL }}{{ feature['photo_thumb'] }}" alt="{{ feature['term'] }}" />
                 <input type="checkbox" name="{{ feature['key'] }}" aria-label="Does the playground have {{ feature['term'] }}?"{% for feat in playground.features %}{% if feat.copy['key'] == feature['key'] %} checked {% endif %}{% endfor %}> <label class="checkbox">{{ feature['term'] }}</label>
                 <span class="help-block">{{ feature['definition_short'] }}</span>
             </div>
