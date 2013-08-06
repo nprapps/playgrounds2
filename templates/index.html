@@ -13,7 +13,7 @@
             <div class="span6 project-info-wrapper">
                 <div class="project-info">
                     <h1>{{ PROJECT_NAME }}</h1>
-                    <h2>{{ COPY.content.app_description }} Search {{ playground_count }} playgrounds. Help us add more!</h2>
+                    <h2>{{ COPY.content.app_description_1 }} {{ playground_count }}{{ COPY.content.app_description_2 }}</h2>
 
                     <p class="sublinks">
                         <a id="sublink-help" href="{{ COPY.content.header_help_link }}">{{ COPY.content.header_help_link_text }}</a> |
@@ -36,16 +36,31 @@
 
 
 {% block content %}
-<div id="playground-help">
-    <h3>{{ COPY.content.help_title }}</h3>
-    <p class="help-description">
-        {{ COPY.content.help_description_2 }}
+<div id="playground-important">
+    <h3>{{ COPY.content.important_title }}</h3>
+    <p class="important-description">
+        {{ COPY.content.important_description }}
     </p>
+</div>
+
+<div id="playground-help">
+    <h3 class="feature-title">{{ COPY.content.help_title }}</h3>
+    <ol>
+        <li>
+            <p>{{ COPY.content.help_step_one }}</p>
+        </li>
+        <li>
+            <p>{{ COPY.content.help_step_two }}</p>
+        </li>
+        <li>
+            <p>{{ COPY.content.help_step_three }}</p>
+        </li>
+    </ol>
 </div>
 
 <div id="playground-feature-primer">
     <h3 class="feature-title">{{ COPY.content.feature_title }}</h3>
-    <p class="feature-description">This database currently contains {{ playground_count }} playgrounds, and we're sure that there are many more. {{ COPY.content.feature_description }}</p>
+    <p class="feature-description">{{ COPY.content.feature_description }}</p>
 
     <div class="feature-list">
         {% for row in COPY.feature_list %}

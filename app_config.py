@@ -16,11 +16,11 @@ from metros import metro_areas
 NAMES
 """
 # Project name used for display
-PROJECT_NAME = 'Where All Kids Play'
+PROJECT_NAME = 'An Incomplete Guide to Accessible Playgrounds'
 
 # Project name used for paths on the filesystem and in urls
 # Use dashes, not underscores
-PROJECT_SLUG = 'where-all-kids-play'
+PROJECT_SLUG = 'playgrounds'
 
 # The name of the repository containing the source
 REPOSITORY_NAME = 'playgrounds2'
