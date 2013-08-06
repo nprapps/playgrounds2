@@ -17,6 +17,9 @@ playgrounds2
 * [Deploy to EC2](#deploy-to-ec2)
 * [Install cron jobs](#install-cron-jobs)
 * [Install web services](#install-web-services)
+* [Add fake changelog data](#add-fake-changelog-data)
+* [Run the remote cron](#run-the-remote-cron)
+* [If cron fails](#if-cron-fails)
 
 What is this?
 -------------
@@ -256,3 +259,19 @@ Add fake changelog data
 ---------------------
 
 Call ```fab create_test_revisions``` and look at this playground: http://localhost:8000/playground/strong-reach-playground-bowdon-ga.html
+
+Run the remote cron
+-------------------
+
+To manually run the cron job on the remote server (which will also redeploy all playgrounds), use the following command:
+
+```
+fab [staging|production] [master|stable] remote:process_updates
+```
+
+If cron fails
+-------------
+
+If the overnight cron job fails changes in process may not have been applied. The changes that were in process will have been staged in `changes-in-process.json` in the root directory of the repository. The accumulating changeset will have been deleted from `data/changes.json`. Depending on what stage of the cron job failed (processing or rendering) the changes may or may not have been applied in their entirety. It is virtually impossible to automatically handle every case that may arise, so instead you must manually investigate which changes were applied and determine if changes staged in `changes-in-process.json` need to be copied by into `data/changes.json` so they will be applied the next time the cron job is run. This can not be done automatically because it could result in duplicate playgrounds being created if, for example, the cron job failed half-way through the processing step.
+
+If you determine that all changes have been successfully applied (even if they were not rendered), simply delete `changes-in-process.json`, fix the bug and rerun the cron process to render those changes.

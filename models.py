@@ -92,7 +92,7 @@ class Playground(Model):
         if features.count() > 0:
             return features
 
-        return None
+        return [] 
 
     def to_dict(self):
         """
