@@ -5,27 +5,33 @@
 </head>
 <body>
 
-    <h1>500x600 (target)</h1>
+    <h1>500x850 (FROM STAGING)</h1>
     <div style="width: 500px;">
-	<!-- Embed starts here -->
-    <iframe id='where-all-kids-play' src="widget.html" style="width: 100%; height: 600px; border-width:0; overflow: hidden;"></iframe>
-	<!-- Embed ends here -->
+    <iframe id='where-all-kids-play' src="http://stage-apps.npr.org/where-all-kids-play/widget.html" style="width: 100%; height: 850px; border-width:0; overflow: hidden;"></iframe>
     </div>
 
-    <h1>500x600 (FROM STAGING)</h1>
-    <div style="width: 500px;">
-    <iframe id='where-all-kids-play' src="http://stage-apps.npr.org/where-all-kids-play/widget.html" style="width: 100%; height: 600px; border-width:0; overflow: hidden;"></iframe>
-    </div>
+    <h1>500x850 (target)</h1>
+    <script type="text/javascript">
+    nprapps_widget_width = 500;
+    nprapps_widget_height = 850;
+    </script>
+    <script type="text/javascript" src="js/embed-widget.js"></script>
+    
+    <h1>900x1050 (wide)</h1>
+    <script type="text/javascript">
+    nprapps_widget_width = 900;
+    nprapps_widget_height = 1050;
+    </script>
+    <script type="text/javascript" src="js/embed-widget.js"></script>
 
-    <h1>900x600 (wide)</h1>
-    <div style="width: 900px;">
-    <iframe id='where-all-kids-play' src="widget.html" style="width: 100%; height: 600px; border-width:0; overflow: hidden;"></iframe>
-    </div>
 
     <h1>300x600 (unsupported)</h1>
-    <div style="width: 300px;">
-    <iframe id='where-all-kids-play' src="widget.html" style="width: 100%; height: 600px; border-width:0; overflow: hidden;"></iframe>
-    </div>
+    <script type="text/javascript">
+    nprapps_widget_width = 300;
+    nprapps_widget_height = 925;
+    </script>
+    <script type="text/javascript" src="js/embed-widget.js"></script>
+
 
 </body>
 </html>
