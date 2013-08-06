@@ -80,10 +80,11 @@ $(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
             window.location.href = 'search.html#latitude=' + position.coords.latitude + '&longitude=' + position.coords.longitude + '&zoom=' + APP_CONFIG.RESULTS_DEFAULT_ZOOM + '&nearby=true'; 
         });
+
+        return false;
     });
 
     $search_form.submit(function() {
-        console.log('here');
         window.location.href = 'search.html#address=' + encodeURIComponent($search_address.val()); 
 
         return false;
