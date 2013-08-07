@@ -912,6 +912,10 @@ section#the-goods { margin-top: 44px; }
             display: table;
             margin: 0;
             padding: 0;
+            
+            @media @screen-small {
+                display: block;
+            }
         }
         li {
             display: table-cell;
@@ -920,7 +924,13 @@ section#the-goods { margin-top: 44px; }
             border-left: 4px solid #fff;
             background-color: #f1f1f1;
             
-            &:first-child {
+            &:first-child { border-left: none; }
+            p { margin: 0; }
+            strong { display: block; }
+            @media @screen-small {
+                display: block;
+                width: auto;
+                margin-bottom: 4px;
                 border: none;
             }
         }
