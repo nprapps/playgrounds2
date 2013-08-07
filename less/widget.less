@@ -10,6 +10,12 @@ body {
     margin: 0;
 }
 
+footer, section, .slide {
+    max-height: 2000px;
+    // for font scaling on Android Chrome: 
+    // http://stackoverflow.com/questions/11694767/android-chrome-ignoring-webkit-text-size-adjustnone-property-text-is-being-sc#answer-15137584
+}
+
 h1, h2, h3, h4, h5, h6, p {
     margin: 0;
     
@@ -33,10 +39,13 @@ h1 {
 }
 
 h2 {
+    font-size: 18px;
+    margin-bottom: 3px;
     font-weight: normal;
 }
 
 h3 {
+    font-size: 14px;
     margin-bottom: 11px;
     color: #787878;
     font-weight: normal;
