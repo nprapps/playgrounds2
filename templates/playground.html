@@ -85,9 +85,9 @@
     </ul>
     {% endif %}
 
-    <h5 class="meta" aria-label="{{ COPY.aria.more_info }}">More Info</h5>
-    <ul class="meta">
-        <li class="agency">
+    <h5 class="meta" aria-label="{{ COPY.content.ARIA_more_info }}">More Info</h5>
+    <ul class="meta" role="menu">
+        <li class="agency" role="menuitem">
             <strong>Agency:</strong>
             {% if playground.agency %}
                 {{ playground.agency }}
@@ -117,7 +117,7 @@
 <div class="comments">
     <h4>{{ COPY.content.playground_note_title }}</h4>
     <p class="description">{{ COPY.content.playground_note_description }}</p>
-    <p class="meta" aria-label="{{ COPY.aria.guidelines }}">Discusssion Guidelines</p>
+    <p class="meta" aria-label="{{ COPY.conent.ARIA_guidelines }}">Discusssion Guidelines</p>
     <p class="guidelines">{{ COPY.content.playground_terms }}</p>
     {% include '_comments.html' %}
 </div>
@@ -167,7 +167,7 @@
 
 
 {% if revisions.count() > 0 %}
-<div class="changelog" aria-label="{{ COPY.aria.changelog }}">
+<div class="changelog" aria-label="{{ COPY.content.ARIA_changelog }}" role="menu">
     <h5 class="meta">Changelog</h5>
     <ul class="meta">
         {% for revision in revisions %}
@@ -177,13 +177,13 @@
                 {% if revision.action == 'update' %}
                     {% for change in revision.get_log() %}
                         {% if display_field_name(change.field) != 'Reverse Geocoded' %}
-                        <li>
+                        <li role="menuitem">
                         <strong>{{ display_field_name(change.field) }}</strong> {% if change.from == 0 and change.to == 1 %}selected{% elif change.from == 1 and change.to == 0 %}deselected{% elif not change.from %}set to <em>{{ change.to }}</em>{% elif not change.to %}unset from <em>{{ change.from }}</em>{% else %}changed from <em>{{ change.from }}</em> to <em>{{ change.to }}</em>{% endif %}.
                         </li>
                         {% endif %}
                     {% endfor %}
                 {% elif revision.action == 'insert' %}
-                    <li>Playground created.</li>
+                    <li role="menuitem">Playground created.</li>
                 {% endif %}
             </ul>
         </li>

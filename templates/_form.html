@@ -28,7 +28,7 @@
             {% for feature in COPY.feature_list %}
             <div class="feature control-group">
                 <img src="{{ feature['photo_thumb'] }}" alt="{{ feature['term'] }}" />
-                <input type="checkbox" name="{{ feature['key'] }}" aria-label="Does the playground have {{ feature['term'] }}?"{% for feat in playground.features %}{% if feat.copy['key'] == feature['key'] %} checked {% endif %}{% endfor %}> <label class="checkbox">{{ feature['term'] }}</label>
+                <input type="checkbox" role="checkbox" name="{{ feature['key'] }}" {% for feat in playground.features %}{% if feat.copy['key'] == feature['key'] %} checked aria-checked:true{% endif %}{% endfor %}> <label class="checkbox" aria-label="Click if the playground has {{ feature['term'] }}?">{{ feature['term'] }}</label>
                 <span class="help-block">{{ feature['definition_short'] }}</span>
             </div>
             {% endfor %}
@@ -36,37 +36,37 @@
         </div>
         <div class="basic-info span6">
             <div class="control-group">
-                <label class="control-label">Playground Name <span class="muted">(Optional)</span></label>
+                <label class="control-label" for="name">Playground Name <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="name" value="{{ playground.name }}" aria-label="{{ COPY.aria.playground_name }}"></input>
+                    <input class="input-block-level input" type="text" name="name" value="{{ playground.name }}" id="name"></input>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label">At (is this in a park or school?) <span class="muted">(Optional)</span></label>
+                <label class="control-label" for="facility">At (is this in a park or school?) <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="facility" value="{{ playground.facility }}" aria-label="{{ COPY.aria.playground_facility }}"></input>
+                    <input class="input-block-level input" type="text" name="facility" value="{{ playground.facility }}" id="facility"></input>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label">URL <span class="muted">(Optional)</span></label>
+                <label class="control-label" for="URL">URL <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="url" value="{{ playground.url }}" aria-label="{{ COPY.aria.playground_url }}"></input>
+                    <input class="input-block-level input" type="text" name="url" value="{{ playground.url }}" id="URL"></input>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label">Agency <span class="muted">(Optional)</span></label>
+                <label class="control-label" for="agency">Agency <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="agency" value="{{ playground.agency }}" aria-label="{{ COPY.aria.playground_agency }}"></input>
+                    <input class="input-block-level input" type="text" name="agency" value="{{ playground.agency }}" id="agency"></input>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label">Owner <span class="muted">(Optional)</span></label>
+                <label class="control-label" for="owner">Owner <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="owner" value="{{ playground.owner }}" aria-label="{{ COPY.aria.playground_owner }}"></input>
+                    <input class="input-block-level input" type="text" name="owner" value="{{ playground.owner }}" id="owner"></input>
                 </div>
             </div>
 
@@ -114,54 +114,54 @@
 </div>
 
 <div class="hide scrollable address-editor">
-    <h2 class="edit-address-hed">Edit location <a href="#" class="btn close" data-action="reset_location">&times;</a></h2>
+    <h2 class="edit-address-hed">Edit location <a href="#" class="btn close" data-action="reset_location" role="button">&times;</a></h2>
 
-    <ul class="nav nav-tabs" id="editor-tabs">
-      <li class="active"><a href="#map-pane" data-toggle="tab">Adjust position</a></li>
-      <li><a href="#address-pane" data-toggle="tab">Edit address</a></li>
+    <ul class="nav nav-tabs" id="editor-tabs" role="tablist">
+      <li class="active"><a href="#map-pane" data-toggle="tab" role="tab">Adjust position</a></li>
+      <li><a href="#address-pane" data-toggle="tab" role="tab">Edit address</a></li>
     </ul>
 
     <div class="tab-content">
-        <div id="map-pane" class="map-pane tab-pane active">
+        <div id="map-pane" class="map-pane tab-pane active" role="tabpanel">
             <div class="edit-address-map">
                 <div id="edit-map">
                     <div id="edit-marker"></div>
-                    <a id="geolocate" data-action="locate_me" class="btn btn-large">
+                    <a id="geolocate" data-action="locate_me" class="btn btn-large" role="button" title="geolocate">
                         <i class="icon-location-arrow"></i>
                     </a>
                 </div>
             </div>
         </div>
-        <div id="address-pane" class="address-pane tab-pane">
+        <div id="address-pane" class="address-pane tab-pane" role="tabpanel">
             <div class="modal-alerts"></div>
             <div class="control-group">
-                <label class="control-label">Address</label>
+                <label class="control-label" for="address">Address</label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="address" value="{{ playground.address }}"></input>
+                    <input class="input-block-level input" type="text" name="address" value="{{ playground.address }}" id="address"></input>
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">City</label>
+                <label class="control-label" for="city">City</label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="city" value="{{ playground.city }}"></input>
+                    <input class="input-block-level input" type="text" name="city" value="{{ playground.city }}" id="city"></input>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label">State</label>
+                <label class="control-label" for="state">State</label>
                 <div class="controls">
-                    <select class="span12" type="text" name="state" value="" role="menu" aria-haspopup="true">
+                    <select class="span12" type="text" name="state" id="state" value="" role="menu" aria-haspopup="true">
                         {% for state in STATE_LIST %}
-                        <option value="{{state}}" role="menuitem" {% if state == playground.state %} selected {% endif %}>{{ state }}</option>
+                        <option value="{{state}}" role="menuitem" {% if state == playground.state %} selected aria-selected:true {% endif %}>{{ state }}</option>
                         {% endfor %}
                     </select>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label">Zip Code</label>
+                <label class="control-label" for="zip-code">Zip Code</label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="zip_code" value="{{ playground.zip_code }}"></input>
+                    <input class="input-block-level input" type="text" name="zip_code" value="{{ playground.zip_code }}" id="zip-code"></input>
                 </div>
             </div>
         </div>
