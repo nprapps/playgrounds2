@@ -823,6 +823,8 @@ def shiva_the_destroyer():
             env.s3_bucket = bucket
             local(s3cmd % ('s3://%(s3_bucket)s/%(project_slug)s' % env))
 
+        clear_search_index()
+
         if env['deploy_to_servers']:
             run('rm -rf %(path)s' % env)
 
