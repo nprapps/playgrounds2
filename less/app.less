@@ -206,7 +206,9 @@ header {
 
             @media @screen-small {
                 position: static;
-                top: auto; bottom: 0; left: auto;
+                top: auto; 
+                bottom: 0; 
+                left: auto;
             }
         }
         .project-info {
@@ -827,6 +829,7 @@ section#the-goods { margin-top: 44px; }
     #playground-about,
     #playground-data,
     #playground-feature-primer,
+    #playground-help,
     #playground-important {
         margin-bottom: 44px;
     }
@@ -902,6 +905,35 @@ section#the-goods { margin-top: 44px; }
                 margin: 0 22px 6px 22px;
             }
             p { margin: 0 22px 0 22px; }
+        }
+    }
+    #playground-help {
+        ol {
+            display: table;
+            margin: 0;
+            padding: 0;
+        }
+        li {
+            display: table-cell;
+            width: 33%;
+            padding: 22px;
+            border-left: 4px solid #fff;
+            background-color: #f1f1f1;
+            
+            &:first-child {
+                border: none;
+            }
+        }
+        .row-fluid {
+            p {
+                padding: 22px;
+                background-color: #ebebeb;
+            }
+            strong {
+                font-size: 110%;
+                display: block;
+                margin-bottom: 6px;
+            }
         }
     }
     #playground-meta {
