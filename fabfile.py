@@ -278,6 +278,7 @@ def install_requirements():
     require('settings', provided_by=[production, staging])
 
     run('%(virtualenv_path)s/bin/pip install -U -r %(repo_path)s/requirements.txt' % env)
+    run('cd %(repo_path)s; npm install less universal-jst' % env)
 
 def install_crontab():
     """
@@ -576,7 +577,7 @@ def prepare_changes():
 
     changes = 0
 
-    if os.path.exists('%sdata/changes.json' % path):
+    if os.path.exists('%s/data/changes.json' % path):
 
         os.system('rm -rf %s/.playgrounds_html/' % path)
         os.system('rm -rf %s/.playgrounds_gzip/' % path)
@@ -822,6 +823,8 @@ def shiva_the_destroyer():
         for bucket in env.s3_buckets:
             env.s3_bucket = bucket
             local(s3cmd % ('s3://%(s3_bucket)s/%(project_slug)s' % env))
+
+        clear_search_index()
 
         if env['deploy_to_servers']:
             run('rm -rf %(path)s' % env)
