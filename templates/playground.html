@@ -109,20 +109,6 @@
 </div>
 
 
-<div class="help-prompt">
-    <p class="prompt">{{ COPY.content.playground_help_title }}</p>
-    <p><a href="#edit-playground" class="btn btn-blue btn-block" data-toggle="modal" role="button"><i class="icon-pencil"></i> {{ COPY.content.playground_help_button }}</a></p>
-</div>
-
-<!-- disqus -->
-<div class="comments">
-    <h4>{{ COPY.content.playground_note_title }}</h4>
-    <p class="description">{{ COPY.content.playground_note_description }}</p>
-    <p class="meta" aria-label="{{ COPY.content.ARIA_guidelines }}">Discusssion Guidelines</p>
-    <p class="guidelines">{{ COPY.content.playground_terms }}</p>
-    {% include '_comments.html' %}
-</div>
-
 {% if playground.nearby(1)|length > 0 %}
 <!-- nearby parks -->
 <div class="nearby">
@@ -149,15 +135,19 @@
 </div>
 {% endif %}
 
+<div class="help-prompt">
+    <p class="prompt">{{ COPY.content.playground_help_title }}</p>
+    <p><a href="#edit-playground" class="btn btn-blue btn-block" data-toggle="modal" role="button"><i class="icon-pencil"></i> {{ COPY.content.playground_help_button }}</a></p>
+</div>
+
 <!-- disqus -->
-<!-- <div class="comments">
+<div class="comments">
     <h4>{{ COPY.content.playground_note_title }}</h4>
     <p class="description">{{ COPY.content.playground_note_description }}</p>
-    <p class="meta">Discusssion Guidelines</p>
+    <p class="meta" aria-label="{{ COPY.content.ARIA_guidelines }}">Discusssion Guidelines</p>
     <p class="guidelines">{{ COPY.content.playground_terms }}</p>
     {% include '_comments.html' %}
-</div> -->
-
+</div>
 
 <!-- Share buttons -->
 <ul class="social">
