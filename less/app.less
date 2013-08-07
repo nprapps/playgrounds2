@@ -925,24 +925,26 @@ section#the-goods { margin-top: 44px; }
             background-color: #f1f1f1;
             
             &:first-child { border-left: none; }
-            p { margin: 0; }
-            strong { display: block; }
+            p { margin: 0 0 0 43px; }
+            strong { 
+                display: block;
+                background-color: #ff6706;
+                color: #fff;
+                margin: 0 11px 0 -43px;
+                width: 33px;
+                height: 33px;
+                line-height: 33px;
+                border-radius: 25px;
+                float: left;
+                text-align: center;
+                font-size: 18px;
+            }
+
             @media @screen-small {
                 display: block;
                 width: auto;
                 margin-bottom: 4px;
                 border: none;
-            }
-        }
-        .row-fluid {
-            p {
-                padding: 22px;
-                background-color: #ebebeb;
-            }
-            strong {
-                font-size: 110%;
-                display: block;
-                margin-bottom: 6px;
             }
         }
     }
@@ -1344,18 +1346,14 @@ section#the-goods { margin-top: 44px; }
         display: inline-block;
         margin-right: 11px;
     }
-    #search {
-        clear: both;
-    }
+    #search { clear: both; }
     #geolocate {
         display: none;
         font-size: 14px;
         width: 45%;
         float: right;
 
-        i {
-            font-size: 140%;
-        }
+        i { font-size: 140%; }
     }
     #address-search {
         width: 45%;
