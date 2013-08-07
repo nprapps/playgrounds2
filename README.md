@@ -213,7 +213,7 @@ For running a Web application:
 * In ``fabfile.py`` set ``env.deploy_to_servers`` to ``True``.
 * Also in ``fabfile.py`` set ``env.deploy_web_services`` to ``True``.
 * Run ``fab staging master setup`` to configure the server.
-* Run ``fab staging master remote:bootstrap`` to bootstrap the database.
+* Run ``fab staging master bootstrap`` to bootstrap the database.
 * Run ``fab staging master deploy`` to deploy the app.
 * Run ``fab staging master remote:deploy_playgrounds`` to render and deploy the playgrounds pages.
 
