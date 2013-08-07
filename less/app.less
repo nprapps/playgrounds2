@@ -1015,7 +1015,8 @@ section#the-goods { margin-top: 44px; }
             margin-bottom: 11px;
         }
         .address-meta { margin-bottom: 11px; }
-        .directions {
+        .directions-wrapper {
+            h5 { margin: 22px 0 11px 0; }
             .icon-google-plus:before {
                 width: 7px;
                 overflow: hidden;
@@ -1047,6 +1048,33 @@ section#the-goods { margin-top: 44px; }
             .directions-wrapper { 
                 text-align: right;
                 vertical-align: top;
+            }
+            
+            &.apps {
+                margin-bottom: 33px;
+
+                #locator-map { margin-bottom: 11px; }
+                .address-meta-wrapper { 
+                    display: block;
+                    width: auto;
+                }
+                .address-meta,
+                .directions-wrapper {
+                    display: block;
+                    padding: 0;
+                    text-align: left;
+                }
+                .directions-wrapper {
+                    border-top: 1px solid #ebebeb;
+                    padding-top: 22px;
+                    margin-top: 22px;
+
+                    h5 {
+                        margin: 0 11px 0 0;
+                        line-height: 44px;
+                        float: left;
+                    }
+                }
             }
         }
     }

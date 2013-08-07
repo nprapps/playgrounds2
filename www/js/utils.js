@@ -179,7 +179,7 @@ function make_alert(text, klass, target_element){
 function set_driving_urls(){
     var $directions_wrapper = $('.directions-wrapper');
     var $directions_link = $('#directions-link');
-    var directions_header = $('<h4>Get Driving Directions</h4>');
+    var directions_header = $('<h5>Get Driving Directions</h5>');
     var $google_maps_link = $('<a class="btn btn-blue"><i class="icon icon-google-plus"></i>Google Maps</a>');
 
     $directions_link.attr('href', $directions_link.data('ios-map'));
@@ -187,6 +187,8 @@ function set_driving_urls(){
 
     $directions_link.parent().before(directions_header);
     $directions_link.after($google_maps_link);
+    
+    $('div.address').addClass('apps');
 
     $google_maps_link.on('click', function(){
         var now = new Date().valueOf();
