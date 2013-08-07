@@ -32,11 +32,21 @@
             <div class="slide-wrapper">
                 {% for row in COPY.feature_list %}
                 <div class="slide" id="slide-{{ loop.index0 }}">
-                    <img src="{{ row.photo }}" alt="{{ row.term }}" />
+                    <img src="{{ S3_BASE_URL }}{{ row.photo }}" alt="{{ row.term }}" />
                     <p><strong>{{ row.term }}:</strong> {{ row.definition }}</p>
                     <p class="photo-credit">{{ row.photo_credit }}</p>
                 </div>
                 {% endfor %}
+                <div class="slide">
+                    <div id="playground-important">
+                        <h3 class="feature-title">{{ COPY.content.help_title }}</h3>
+                        <ol>
+                            <li>{{ COPY.content.help_step_one }}</li>
+                            <li>{{ COPY.content.help_step_two }}</li>
+                            <li>{{ COPY.content.help_step_three }}</li>
+                        </ol>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

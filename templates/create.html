@@ -44,7 +44,7 @@
 
             {% for feature in COPY.feature_list %}
             <div class="feature control-group">
-                <img src="{{ feature['photo_thumb'] }}" alt="{{ feature['term'] }}" />
+                <img src="{{ S3_BASE_URL }}{{ feature['photo_thumb'] }}" alt="{{ feature['term'] }}" />
                 <input type="checkbox" role="checkbox" name="{{ feature['key'] }}" id="{{ feature['key'] }}"> <label for="{{ feature['key'] }}" class="checkbox"  aria-label="Click if the playground has {{ feature['term'] }}?">{{ feature['term'] }}</label>
                 <span class="help-block">{{ feature['definition_short'] }}</span>
             </div>
