@@ -324,7 +324,9 @@ def _gzip(src='www', dst='gzip'):
     """
     data.gzip(src, dst)
     os.system('rm -rf %s/live-data' % dst)
-    os.system('rm -rf %s/sitemap.xml' % dst)
+    
+    if os.environ.get('DEPLOYMENT_TARGET', None) not in ['production', 'staging']:
+        os.system('rm -rf %s/sitemap.xml' % dst)
 
 
 def render_confs():
@@ -588,7 +590,7 @@ def prepare_changes():
         # Create our list of changed items and a revision group.
         changed_playgrounds, revision_group = data.process_changes()
 
-        # Render and deploy.
+        # Render update sitemap.
         data.render_sitemap()
 
         # Send the revision email.

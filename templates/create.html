@@ -45,7 +45,7 @@
             {% for feature in COPY.feature_list %}
             <div class="feature control-group">
                 <img src="{{ S3_BASE_URL }}{{ feature['photo_thumb'] }}" alt="{{ feature['term'] }}" />
-                <input type="checkbox" name="{{ feature['key'] }}" aria-label="Does the playground have {{ feature['term'] }}?"> <label class="checkbox">{{ feature['term'] }}</label>
+                <input type="checkbox" role="checkbox" name="{{ feature['key'] }}" id="{{ feature['key'] }}"> <label for="{{ feature['key'] }}" class="checkbox"  aria-label="Click if the playground has {{ feature['term'] }}?">{{ feature['term'] }}</label>
                 <span class="help-block">{{ feature['definition_short'] }}</span>
             </div>
             {% endfor %}
@@ -54,37 +54,37 @@
         </div>
         <div class="basic-info span6">
             <div class="control-group">
-                <label class="control-label">Playground Name <span class="muted">(Optional)</span></label>
+                <label class="control-label" id="playground">Playground Name <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="name" value="" aria-label="{{ COPY.aria.playground_name }}"></input>
+                    <input class="input-block-level input" type="text" name="name" for="playground"></input>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label">At (is this in a park or school?) <span class="muted">(Optional)</span></label>
+                <label class="control-label" id="facility">At (is this in a park or school?) <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="facility" value="" aria-label="{{ COPY.aria.playground_facility }}"></input>
+                    <input class="input-block-level input" type="text" name="facility" value="" for="facility"></input>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label">URL <span class="muted">(Optional)</span></label>
+                <label class="control-label" id="URL">URL <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="url" value="" aria-label="{{ COPY.aria.playground_url }}"></input>
+                    <input class="input-block-level input" type="text" name="url" value="" for="URL"></input>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label">Agency <span class="muted">(Optional)</span></label>
+                <label class="control-label" id="agency">Agency <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="agency" value="" aria-label="{{ COPY.aria.playground_agency }}"></input>
+                    <input class="input-block-level input" type="text" name="agency" value="" for="agency"></input>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label">Owner <span class="muted">(Optional)</span></label>
+                <label class="control-label" id="owner">Owner <span class="muted">(Optional)</span></label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="owner" value="" aria-label="{{ COPY.aria.playground_owner }}"></input>
+                    <input class="input-block-level input" type="text" name="owner" value="" for="owner"></input>
                 </div>
             </div>
 
@@ -127,7 +127,7 @@
     </div>
 </div>
 <div class="create-footer">
-    <button class="btn btn-large" onclick="javascript:window.history.back(); return false;">Cancel</button>
+    <button class="btn btn-large" onclick="javascript:window.history.back(); return false;" role="button">Cancel</button>
     <button id="playground-update" class="btn btn-large btn-success" role="button">Save</button>
 </div>
 
@@ -151,89 +151,89 @@
         <div id="address-pane" class="address-pane tab-pane">
             <div class="modal-alerts"></div>
             <div class="control-group">
-                <label class="control-label" data-required="true">Address</label>
+                <label class="control-label" data-required="true" for="address">Address</label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="address" value=""></input>
+                    <input class="input-block-level input" type="text" name="address" id="address" value=""></input>
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" data-required="true">City</label>
+                <label class="control-label" data-required="true" for="city">City</label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="city" value=""></input>
+                    <input class="input-block-level input" type="text" name="city" id="city" value=""></input>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label">State</label>
+                <label class="control-label" for="state">State</label>
                 <div class="controls">
-                    <select class="span12" type="text" name="state" value="" data-required="true">
-                        <option value=""></option>
-                        <option value="AL">AL</option>
-                        <option value="AK">AK</option>
-                        <option value="AZ">AZ</option>
-                        <option value="AR">AR</option>
-                        <option value="CA">CA</option>
-                        <option value="CO">CO</option>
-                        <option value="CT">CT</option>
-                        <option value="DE">DE</option>
-                        <option value="DC">DC</option>
-                        <option value="FL">FL</option>
-                        <option value="GA">GA</option>
-                        <option value="HI">HI</option>
-                        <option value="ID">ID</option>
-                        <option value="IL">IL</option>
-                        <option value="IN">IN</option>
-                        <option value="IA">IA</option>
-                        <option value="KS">KS</option>
-                        <option value="KY">KY</option>
-                        <option value="LA">LA</option>
-                        <option value="ME">ME</option>
-                        <option value="MD">MD</option>
-                        <option value="MA">MA</option>
-                        <option value="MI">MI</option>
-                        <option value="MN">MN</option>
-                        <option value="MS">MS</option>
-                        <option value="MO">MO</option>
-                        <option value="MT">MT</option>
-                        <option value="NE">NE</option>
-                        <option value="NV">NV</option>
-                        <option value="NH">NH</option>
-                        <option value="NJ">NJ</option>
-                        <option value="NM">NM</option>
-                        <option value="NY">NY</option>
-                        <option value="NC">NC</option>
-                        <option value="ND">ND</option>
-                        <option value="OH">OH</option>
-                        <option value="OK">OK</option>
-                        <option value="OR">OR</option>
-                        <option value="PA">PA</option>
-                        <option value="RI">RI</option>
-                        <option value="SC">SC</option>
-                        <option value="SD">SD</option>
-                        <option value="TN">TN</option>
-                        <option value="TX">TX</option>
-                        <option value="UT">UT</option>
-                        <option value="VT">VT</option>
-                        <option value="VA">VA</option>
-                        <option value="WA">WA</option>
-                        <option value="WV">WV</option>
-                        <option value="WI">WI</option>
-                        <option value="WY">WY</option>
+                    <select class="span12" type="text" name="state" id="state" value="" data-required="true" role="menu" aria-haspopup="true">
+                        <option value="" role="menuitem"></option>
+                        <option value="AL" role="menuitem">AL</option>
+                        <option value="AK" role="menuitem">AK</option>
+                        <option value="AZ" role="menuitem">AZ</option>
+                        <option value="AR" role="menuitem">AR</option>
+                        <option value="CA" role="menuitem">CA</option>
+                        <option value="CO" role="menuitem">CO</option>
+                        <option value="CT" role="menuitem">CT</option>
+                        <option value="DE" role="menuitem">DE</option>
+                        <option value="DC" role="menuitem">DC</option>
+                        <option value="FL" role="menuitem">FL</option>
+                        <option value="GA" role="menuitem">GA</option>
+                        <option value="HI" role="menuitem">HI</option>
+                        <option value="ID" role="menuitem">ID</option>
+                        <option value="IL" role="menuitem">IL</option>
+                        <option value="IN" role="menuitem">IN</option>
+                        <option value="IA" role="menuitem">IA</option>
+                        <option value="KS" role="menuitem">KS</option>
+                        <option value="KY" role="menuitem">KY</option>
+                        <option value="LA" role="menuitem">LA</option>
+                        <option value="ME" role="menuitem">ME</option>
+                        <option value="MD" role="menuitem">MD</option>
+                        <option value="MA" role="menuitem">MA</option>
+                        <option value="MI" role="menuitem">MI</option>
+                        <option value="MN" role="menuitem">MN</option>
+                        <option value="MS" role="menuitem">MS</option>
+                        <option value="MO" role="menuitem">MO</option>
+                        <option value="MT" role="menuitem">MT</option>
+                        <option value="NE" role="menuitem">NE</option>
+                        <option value="NV" role="menuitem">NV</option>
+                        <option value="NH" role="menuitem">NH</option>
+                        <option value="NJ" role="menuitem">NJ</option>
+                        <option value="NM" role="menuitem">NM</option>
+                        <option value="NY" role="menuitem">NY</option>
+                        <option value="NC" role="menuitem">NC</option>
+                        <option value="ND" role="menuitem">ND</option>
+                        <option value="OH" role="menuitem">OH</option>
+                        <option value="OK" role="menuitem">OK</option>
+                        <option value="OR" role="menuitem">OR</option>
+                        <option value="PA" role="menuitem">PA</option>
+                        <option value="RI" role="menuitem">RI</option>
+                        <option value="SC" role="menuitem">SC</option>
+                        <option value="SD" role="menuitem">SD</option>
+                        <option value="TN" role="menuitem">TN</option>
+                        <option value="TX" role="menuitem">TX</option>
+                        <option value="UT" role="menuitem">UT</option>
+                        <option value="VT" role="menuitem">VT</option>
+                        <option value="VA" role="menuitem">VA</option>
+                        <option value="WA" role="menuitem">WA</option>
+                        <option value="WV" role="menuitem">WV</option>
+                        <option value="WI" role="menuitem">WI</option>
+                        <option value="WY" role="menuitem">WY</option>
                     </select>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label">Zip Code</label>
+                <label class="control-label" for="zip-code">Zip Code</label>
                 <div class="controls">
-                    <input class="input-block-level input" type="text" name="zip_code" value="" data-required="true"></input>
+                    <input class="input-block-level input" type="text" name="zip_code" value="" data-required="true" id="zip-code"></input>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="edit-address-footer">
-        <a id="accept-address" data-action="accept_address" class="btn btn-large btn-block btn-success">Done</a>
+        <a id="accept-address" data-action="accept_address" class="btn btn-large btn-block btn-success" role="button">Done</a>
     </div>
 </div>
 </form>
