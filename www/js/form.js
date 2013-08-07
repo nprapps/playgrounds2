@@ -197,9 +197,12 @@ $(function() {
                 var modal_width = $('#edit-playground').width();
                 var modal_height;
 
-                if (playground.PAGE_WIDTH > 480) {
+                console.log(map_width);
+
+                /*if (playground.PAGE_WIDTH > 480 && !$('body').hasClass('create-playground')) {
                     map_width = Math.floor(map_width / 2) - 22;
-                }
+                    console.log(map_width);
+                }*/
                 map_height = Math.floor(playground.CONTENT_WIDTH / 3);
                 modal_height = Math.floor(modal_width / 3);
 
@@ -224,7 +227,7 @@ $(function() {
 
                 // Set the placeholder text.
                 placeholder_text = playground.fields.address.val();
-                placeholder_text += '<br>' + playground.fields.city.val();
+                placeholder_text += ' ' + playground.fields.city.val();
                 placeholder_text += ', ' + playground.fields.state.val();
                 $('#address-placeholder p').html(placeholder_text);
             }
