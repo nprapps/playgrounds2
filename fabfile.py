@@ -577,7 +577,7 @@ def prepare_changes():
 
     changes = 0
 
-    if os.path.exists('%sdata/changes.json' % path):
+    if os.path.exists('%s/data/changes.json' % path):
 
         os.system('rm -rf %s/.playgrounds_html/' % path)
         os.system('rm -rf %s/.playgrounds_gzip/' % path)
