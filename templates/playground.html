@@ -45,12 +45,13 @@
     {% endif %}
     <div class="address-meta">
         <p>
-        {% if playground.address %}{{ playground.address }}{% if playground.address_approximate %} (approximate){% endif %}<br />{% endif %}
+        {% if playground.address %}{{ playground.address }}{% if playground.address_approximate %} (approximate){% endif %} {% endif %}
         {% if playground.city %}{{ playground.city }}, {% endif %}
         {% if playground.state %}{{ playground.state }} {% endif %}
         {% if playground.zip_code %}{{ playground.zip_code }}{% endif %}
         {% if playground.url %}<br /><a href="{{ playground.url }}">Website</a>{% endif %}
         </p>
+    </div>
 
         <!-- Directions -->
         {#
@@ -61,7 +62,6 @@
         {% endif %}
         #}
         <p class="directions-wrapper"><a id="directions-link" href="https://maps.google.com/maps?saddr=&daddr={{ playground.latitude }},{{ playground.longitude }}&z=16" target="_blank" class="btn btn-blue" data-ios-map="http://maps.apple.com/?daddr={{ playground.latitude }},{{ playground.longitude }}" data-ios-gmap="comgooglemaps://?daddr={{ playground.latitude }},{{ playground.longitude }}&views=traffic">Get Driving Directions</a></p>
-    </div>
 </div>
 
 <!-- Categories / key features -->
