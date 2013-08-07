@@ -16,7 +16,8 @@ from metros import metro_areas
 NAMES
 """
 # Project name used for display
-PROJECT_NAME = 'An Incomplete Guide to Accessible Playgrounds'
+# When you change this, also change app_header_title in the copy spreadsheet
+PROJECT_NAME = 'Playgrounds For Everyone'
 
 # Project name used for paths on the filesystem and in urls
 # Use dashes, not underscores

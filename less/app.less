@@ -137,7 +137,8 @@ header {
         margin-bottom: 11px;
         color: #444;
         font-family: Helvetica, Arial, sans-serif;
-        font-size: 42px;
+        font-size: 44px;
+        width:300px;
 
         @media @screen-medium { font-size: 32px; }
         @media @screen-small  { font-size: 36px; }
@@ -148,7 +149,6 @@ header {
         color: #666;
         line-height: 1.4;
         font-size: 17px;
-        font-style: italic;
 
         @media @screen-medium { font-size: 14px; }
     }
@@ -206,7 +206,9 @@ header {
 
             @media @screen-small {
                 position: static;
-                top: auto; bottom: 0; left: auto;
+                top: auto; 
+                bottom: 0; 
+                left: auto;
             }
         }
         .project-info {
@@ -223,20 +225,6 @@ header {
                 height: auto;
                 position: absolute;
                 bottom: 0;
-            }
-        }
-        .sublinks {
-            font-size: 12px;
-            margin-top: 11px;
-            margin-bottom: 0;
-            color: #999;
-
-            a {
-                font-weight: bold;
-                margin: 0 4px;
-                white-space: nowrap;
-
-                &:first-child { margin-left: 0; }
             }
         }
     }
@@ -841,6 +829,7 @@ section#the-goods { margin-top: 44px; }
     #playground-about,
     #playground-data,
     #playground-feature-primer,
+    #playground-help,
     #playground-important {
         margin-bottom: 44px;
     }
@@ -916,6 +905,35 @@ section#the-goods { margin-top: 44px; }
                 margin: 0 22px 6px 22px;
             }
             p { margin: 0 22px 0 22px; }
+        }
+    }
+    #playground-help {
+        ol {
+            display: table;
+            margin: 0;
+            padding: 0;
+        }
+        li {
+            display: table-cell;
+            width: 33%;
+            padding: 22px;
+            border-left: 4px solid #fff;
+            background-color: #f1f1f1;
+            
+            &:first-child {
+                border: none;
+            }
+        }
+        .row-fluid {
+            p {
+                padding: 22px;
+                background-color: #ebebeb;
+            }
+            strong {
+                font-size: 110%;
+                display: block;
+                margin-bottom: 6px;
+            }
         }
     }
     #playground-meta {

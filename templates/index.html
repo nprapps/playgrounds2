@@ -10,16 +10,10 @@
 <header>
     <div class="container">
         <div class="row">
-            <div class="span6 project-info-wrapper">
+            <div class="span5 project-info-wrapper">
                 <div class="project-info">
-                    <h1>{{ PROJECT_NAME }}</h1>
+                    <h1>{{ COPY.content.app_header_title }}</h1>
                     <h2>{{ COPY.content.app_description_1 }} {{ playground_count }}{{ COPY.content.app_description_2 }}</h2>
-
-                    <p class="sublinks">
-                        <a id="sublink-help" href="{{ COPY.content.header_help_link }}">{{ COPY.content.header_help_link_text }}</a> |
-                        <a id="sublink-series" href="{{ COPY.content.header_series_link }}">{{ COPY.content.header_series_link_text }}</a> |
-                        <a id="sublink-data" href="{{ COPY.content.header_about_link }}">{{ COPY.content.header_about_link_text }}</a>
-                    </p>
 
                     <div class="mobile-prompt">
                         <p>{{ COPY.content.mobile_prompt }}</p>
@@ -112,7 +106,6 @@
     {{ JS.push('js/lib/underscore.js') }}
     {{ JS.push('js/lib/moment.js') }}
     {{ JS.push('js/lib/bootstrap.js') }}
-    {{ JS.push('js/lib/jquery.smooth-scroll.js') }}
     {{ JS.push('js/templates.js') }}
     {{ JS.push('js/utils.js') }}
     {{ JS.push('js/index.js') }}
