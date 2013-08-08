@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 from datetime import date
-from decimal import Decimal
 import json
 from mimetypes import guess_type
 import re

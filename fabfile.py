@@ -190,6 +190,11 @@ def render():
 
         with open(filename, 'w') as f:
             f.write(content.encode('utf-8'))
+    
+    # We choose a sample playground to render so its JS will
+    # be rendered. We don't deploy it.
+    sample_playgrounds = models.Playground.select().limit(1)
+    data.render_playgrounds(sample_playgrounds)
 
     # Un-fake-out deployment target
     app_config.configure_targets(deployment_target)
