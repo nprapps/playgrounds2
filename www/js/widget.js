@@ -25,9 +25,14 @@ function slideshow_init() {
     slide_total = $slides.length;
     slide_width = $slideshow.width();
     
-    $slides.each(function() {
+    $slides.each(function(k) {
+        var idx = k;
         $(this).css('width', slide_width + 'px');
+        if (idx == (slide_total - 1)) {
+            $(this).attr('id', 'slide-' + idx);
+        }
     }).show();
+    
     $slide_wrapper.css('width', slide_width * slide_total + 'px');
     
     // init buttons
@@ -94,7 +99,6 @@ $(function() {
         $geolocate_button.show();
         $search_divider.show();
     }
-
 
     // set up slideshow
     slideshow_init();
