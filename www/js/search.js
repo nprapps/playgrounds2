@@ -183,7 +183,7 @@ function search() {
                     }
                 });
             } else {
-                if (!user_zoomed) {
+                if (!user_zoomed && !user_panned) {
                     if (zoom == RESULTS_DEFAULT_ZOOM) {
                         zoom = 11;
 
@@ -230,7 +230,11 @@ function search() {
                         $search_results_map.off('load');
                     });
 
-                    $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + search_map_width + 'x' + search_map_height + '.png');
+                    if (markers.length == 0) {
+                        $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/' + longitude + ',' + latitude + ',' + zoom + '/' + search_map_width + 'x' + search_map_height + '.png');
+                    } else {
+                        $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + search_map_width + 'x' + search_map_height + '.png');
+                    }
                 } else {
                     desktop_map.off('moveend', desktop_map_moveend);
                     desktop_map.once('moveend', temp_desktop_map_moveend); 
@@ -557,9 +561,7 @@ $(function() {
                             var html = JST.did_you_mean_item(context);
 
                             $did_you_mean.append(html);
-
                         });
-
                         $did_you_mean_wrapper.show();
                     }
                 }
@@ -598,6 +600,8 @@ $(function() {
         tiles.addTo(desktop_map);
 
         desktop_markers = L.layerGroup();
+    } else {
+        $search_results_map_wrapper.css({ height: RESULTS_MAP_HEIGHT + 'px' });
     }
 
     // Check to see if we've got a message to show.
