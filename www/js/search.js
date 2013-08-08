@@ -183,7 +183,7 @@ function search() {
                     }
                 });
             } else {
-                if (!user_zoomed) {
+                if (!user_zoomed && !user_panned) {
                     if (zoom == RESULTS_DEFAULT_ZOOM) {
                         zoom = 11;
 
