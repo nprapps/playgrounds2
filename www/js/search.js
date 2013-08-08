@@ -600,6 +600,8 @@ $(function() {
         tiles.addTo(desktop_map);
 
         desktop_markers = L.layerGroup();
+    } else {
+        $search_results_map_wrapper.css({ height: RESULTS_MAP_HEIGHT + 'px' });
     }
 
     // Check to see if we've got a message to show.
