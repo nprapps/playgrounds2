@@ -79,6 +79,7 @@ $(document).ready(function () {
     if (winWidth <= 979 && !$('body').hasClass('search')){
 //        $('#header').removeClass('span8').addClass('span12');
         $('#main-content').removeClass('span8').addClass('span12');
+        $('#bigbox').hide();
     }
 });
 
