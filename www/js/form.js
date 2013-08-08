@@ -40,7 +40,7 @@ $(function() {
                     require_us_address(locale);
                     playground.form.geocode_fields();
                     playground.hide_address_editor();
-                    map.off('moveend');
+                    map.off('moveend', playground.map.process_map_location);
                     playground.map.reset_editor();
                     map.on('moveend', playground.map.process_map_location);
                     playground.address_change_accepted = true;
@@ -162,7 +162,7 @@ $(function() {
                 playground.map.center_editor();
             },
             'center_editor': function() {
-                map.off('moveend');
+                map.off('moveend', playground.map.process_map_location);
                 map.invalidateSize(false);
                 var marker_left = $('#edit-map').width()/2 - 8;
                 var marker_top = $('#edit-map').height()/2 - 8;
