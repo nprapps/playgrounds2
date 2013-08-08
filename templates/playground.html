@@ -21,7 +21,7 @@
 {% endblock social_head %}
 
 {% block extra_head %}
-    <script type='text/javascript' src="http://api.tiles.mapbox.com/mapbox.js/v1.1.0/mapbox.js"></script>
+    <script type='text/javascript' src="{{ S3_BASE_URL }}/js/lib/mapbox.js"></script>
 {% endblock %}
 
 {% block header_content %}
@@ -63,7 +63,7 @@
             <p><a id="directions-link" href="https://maps.google.com/maps?saddr=&daddr={{ playground.address }}+{{ playground.city }}+{{ playground.state }}+{{ playground.zip }}&z=16" target="_blank" class="btn btn-blue" data-ios-map="http://maps.apple.com/?daddr={{ playground.latitude }},{{ playground.longitude }}" data-ios-gmap="comgooglemaps://?daddr={{ playground.latitude }},{{ playground.longitude }}&views=traffic"><i class="icon-road"></i> Get Driving Directions</a></p>
             {% endif %}
             #}
-            <p class="directions"><a id="directions-link" href="https://maps.google.com/maps?saddr=&daddr={{ playground.latitude }},{{ playground.longitude }}&z=16" target="_blank" class="btn btn-blue" data-ios-map="http://maps.apple.com/?daddr={{ playground.latitude }},{{ playground.longitude }}" data-ios-gmap="comgooglemaps://?daddr={{ playground.latitude }},{{ playground.longitude }}&views=traffic">Get Driving Directions</a></p>
+            <p class="directions"><a id="directions-link" href="https://maps.google.com/maps?saddr=&daddr={{ playground.latitude }},{{ playground.longitude }}&z=16" target="_blank" class="btn btn-blue" data-ios-map="http://maps.apple.com/?daddr={{ playground.latitude }},{{ playground.longitude }}" data-ios-gmap="comgooglemaps://?daddr={{ playground.latitude }},{{ playground.longitude }}&views=traffic"><i class="icon-road"></i> Get Driving Directions</a></p>
         </div>
     </div>
 </div>

@@ -486,29 +486,31 @@ section#the-goods { margin-top: 44px; }
             color: @errorText;
         }
     }
+    
+    .address-meta {
+        border-bottom: 1px solid #ebebeb;
+        margin-bottom: 15px;
+        
+        p { padding-top: 10px; }
+        &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
+    }
 
     h5 {
         margin-bottom: @baseLineHeight/2;
     }
-
-    .address-label {
-        .btn {
-            float: right;
-            margin-top: -5px;
-        }
-    }
-
+    
     #modal-locator-map {
         margin-bottom: @baseLineHeight/2;
     }
 
-    #search-help {
-        display: none;
+    #toggle-address-button { 
+        float: right;
+        margin-bottom: 11px;
     }
 
-    #no-geocode {
-        display: none;
-    }
+    #search-help { display: none; }
+
+    #no-geocode { display: none; }
 
     #search-form {
         input[type="text"],
@@ -591,9 +593,7 @@ section#the-goods { margin-top: 44px; }
         }
     }
 
-    .checkbox {
-        line-height: 1.3;
-    }
+    .checkbox { line-height: 1.3; }
 
     .basic-info {
         input[type="text"],
@@ -1015,7 +1015,8 @@ section#the-goods { margin-top: 44px; }
             margin-bottom: 11px;
         }
         .address-meta { margin-bottom: 11px; }
-        .directions {
+        .directions-wrapper {
+            h5 { margin: 22px 0 11px 0; }
             .icon-google-plus:before {
                 width: 7px;
                 overflow: hidden;
@@ -1035,6 +1036,7 @@ section#the-goods { margin-top: 44px; }
             .address-meta-wrapper {
                 display: table;
                 width: 100%;
+                clear: both;
             }
             .address-meta,
             .directions-wrapper {
@@ -1047,6 +1049,33 @@ section#the-goods { margin-top: 44px; }
             .directions-wrapper { 
                 text-align: right;
                 vertical-align: top;
+            }
+            
+            &.apps {
+                margin-bottom: 33px;
+
+                #locator-map { margin-bottom: 11px; }
+                .address-meta-wrapper { 
+                    display: block;
+                    width: auto;
+                }
+                .address-meta,
+                .directions-wrapper {
+                    display: block;
+                    padding: 0;
+                    text-align: left;
+                }
+                .directions-wrapper {
+                    border-top: 1px solid #ebebeb;
+                    padding-top: 22px;
+                    margin-top: 22px;
+
+                    h5 {
+                        margin: 0 11px 0 0;
+                        line-height: 44px;
+                        float: left;
+                    }
+                }
             }
         }
     }

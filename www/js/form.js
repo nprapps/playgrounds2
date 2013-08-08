@@ -197,12 +197,6 @@ $(function() {
                 var modal_width = $('#edit-playground').width();
                 var modal_height;
 
-                console.log(map_width);
-
-                /*if (playground.PAGE_WIDTH > 480 && !$('body').hasClass('create-playground')) {
-                    map_width = Math.floor(map_width / 2) - 22;
-                    console.log(map_width);
-                }*/
                 map_height = Math.floor(playground.CONTENT_WIDTH / 3);
                 modal_height = Math.floor(modal_width / 3);
 
