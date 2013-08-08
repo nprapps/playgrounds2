@@ -557,9 +557,7 @@ $(function() {
                             var html = JST.did_you_mean_item(context);
 
                             $did_you_mean.append(html);
-
                         });
-
                         $did_you_mean_wrapper.show();
                     }
                 }
