@@ -179,7 +179,7 @@ function make_alert(text, klass, target_element){
 function set_driving_urls(){
     var $directions_wrapper = $('.directions-wrapper');
     var $directions_link = $('#directions-link');
-    var directions_header = $('<h5>Get Driving Directions</h5>');
+    var directions_header = $('<h5>Get Directions</h5>');
     var $google_maps_link = $('<a class="btn btn-blue"><i class="icon icon-google-plus"></i>Google Maps</a>');
 
     $directions_link.attr('href', $directions_link.data('ios-map'));
