@@ -13,6 +13,8 @@
 
 
 // Breakpoints
+@screen-mega-above: ~"screen and (min-width: 1440px)";
+@screen-large: ~"screen and (max-width: 1200px)";
 @screen-medium: ~"screen and (max-width: 979px)";
 @screen-small-above: ~"screen and (min-width: 768px)";
 @screen-small: ~"screen and (max-width: 767px)";
@@ -126,7 +128,6 @@ header {
         font-size: 44px;
 
         @media @screen-medium { font-size: 32px; }
-        @media @screen-small  { font-size: 36px; }
     }
     h2 {
         margin: 0;
@@ -137,22 +138,31 @@ header {
         @media @screen-medium { font-size: 14px; }
     }
     .index & {
-        background: #ccc url('@{img-root}/playground-1200.jpg') no-repeat 50% 60%;
+        background: #ccc url('@{img-root}/playground-1200.jpg') no-repeat 50% 80%;
         background-size: cover;
         padding: 0 30px 0 30px;
-        height: 400px;
-
+        height: 550px;
+        
+        @media @screen-mega-above {
+            background-image: url('@{img-root}/playground-1440.jpg');
+            background-position: 50% 35%;
+            height: 610px;
+        }
         @media @screen-medium {
             background-image: url('@{img-root}/playground-980.jpg');
+            background-position: 50% 85%;
+            height: 425px;
         }
         @media @screen-small {
             background-image: url('@{img-root}/playground-768.jpg');
+            background-position: 50% 30%;
             padding: 0;
             position: relative;
-            height: 350px;
+            height: 375px;
         }
         @media @screen-tiny {
             background-image: url('@{img-root}/playground-480.jpg');
+            background-position: 50% 45%;
             height: 350px;
         }
 
@@ -184,26 +194,20 @@ header {
         .project-info-wrapper {
             background: #FFF;
             background: rgba(255,255,255,.8);
-            position: absolute;
-            bottom: 0;
-            left: 0;
+            margin-top: 44px;
 
             @media @screen-small {
-                position: static;
-                top: auto; 
                 bottom: 0; 
-                left: auto;
             }
         }
         .project-info {
             padding: 33px;
 
-            @media @screen-small { padding-top: 22px; }
-            @media @screen-tiny  { padding: 11px 20px; }
+            @media @screen-small { padding: 22px 20px; }
         }
         .row {
             position: relative;
-            height: 400px;
+            height: 550px;
 
             @media @screen-small {
                 height: auto;
