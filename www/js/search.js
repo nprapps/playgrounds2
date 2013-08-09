@@ -1,5 +1,6 @@
 var BASE_LAYER = APP_CONFIG.MAPBOX_BASE_LAYER;
 var CONTENT_WIDTH;
+var PAGE_WIDTH;
 var GEOLOCATE = Modernizr.geolocation;
 var RESULTS_MAP_WIDTH = 500;
 var RESULTS_MAP_HEIGHT = 500;
@@ -379,6 +380,19 @@ function hashchange_callback() {
     }
 }
 
+function config_map_affix() {
+    /*
+     * Use Bootstrap affix to anchor slippy map to the top of the page
+     * as the user scrolls down a long list of results (e.g., NYC)
+     */
+    var mc_pos = $('#main-content').position();
+
+    $search_results_wrapper.attr('data-spy', 'affix');
+    $search_results_wrapper.attr('data-offset-top', mc_pos.top + 35);
+    
+    $('<style type="text/css"> #search-results-wrapper.affix { top: 0; right: ' + mc_pos.left + 'px; margin-right: -8px; width: ' + RESULTS_MAP_WIDTH + 'px; } </style>').appendTo('head');
+}
+
 $(function() {
     $search_form = $('#search');
     $search_address = $('#search input[name="address"]');
@@ -410,6 +424,7 @@ $(function() {
     $create_link = $search_help_prompt.find('a');
     $alerts = $('.alerts');
 
+    PAGE_WIDTH = $(window).width();
     CONTENT_WIDTH = $('#main-content').width();
     SEARCH_WIDTH = $('#main-content').find('.span6:eq(1)').width();
     RESULTS_MAP_WIDTH = SEARCH_WIDTH;
@@ -602,6 +617,10 @@ $(function() {
         desktop_markers = L.layerGroup();
     } else {
         $search_results_map_wrapper.css({ height: RESULTS_MAP_HEIGHT + 'px' });
+    }
+    
+    if (PAGE_WIDTH > 767 && !IS_MOBILE) {
+        config_map_affix();
     }
 
     // Check to see if we've got a message to show.
