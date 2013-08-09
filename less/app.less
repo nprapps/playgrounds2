@@ -614,6 +614,11 @@ section#the-goods { margin-top: 44px; }
     .checkbox { line-height: 1.3; }
 
     .basic-info {
+        @media @screen-small-above {
+            width: 47%;
+            margin-left: 6%;
+        }
+        
         input[type="text"],
         textarea {
             line-height: 44px;
@@ -627,6 +632,10 @@ section#the-goods { margin-top: 44px; }
     }
 
     .features {
+        @media @screen-small-above {
+            width: 47%;
+        }
+
         .feature {
             position: relative;
             padding-bottom: 10px;
@@ -641,7 +650,6 @@ section#the-goods { margin-top: 44px; }
                 height: 35px;
                 z-index: 10;
             }
-
 
             .checkbox {
                 padding-left: 45px;
@@ -1225,6 +1233,10 @@ section#the-goods { margin-top: 44px; }
             }
         }
 
+        @media @screen-small-above {
+            width: 700px;
+            margin-left: -350px;
+        }
         @media @screen-tiny {
             top: 0;
             bottom: 0;
@@ -1232,13 +1244,9 @@ section#the-goods { margin-top: 44px; }
             left: 0;
             border-radius: 0;
 
-            &.fade.in {
-                top: 0;
-            }
+            &.fade.in { top: 0; }
 
-            .playground-form {
-                height: 100%;
-            }
+            .playground-form { height: 100%; }
 
             .modal-body {
                 box-sizing: border-box;
@@ -1286,17 +1294,13 @@ section#the-goods { margin-top: 44px; }
 
     .modal-backdrop {
         z-index: -1;
-        &.in {
-            z-index: 100;
-        }
+        &.in { z-index: 100; }
     }
 
     #address-placeholder {
         margin-bottom: 30px;
 
-        .address-meta {
-            margin-top: 10px;
-        }
+        .address-meta { margin-top: 10px; }
 
         #toggle-address-button {
             margin-top: 10px;
