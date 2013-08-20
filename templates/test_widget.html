@@ -17,7 +17,7 @@ body {
 <h1>Content Widget: {{ PROJECT_NAME }}</h1>
 
 <p>
-    <strong>Preview:</strong> 
+    <strong>Preview:</strong>
     <a href="#preview500">500x850</a> (target) |
     <a href="#preview900">900x1050</a> |
     <a href="#preview300">300x600</a> (unsupported)
@@ -45,21 +45,21 @@ nprapps_widget_height = 850;
 
 
     <h2 id="preview500">Widget Preview: 500x850 (target)</h2>
-    <script type="text/javascript" src="js/embed-widget.js"></script>
-    
+    <script type="text/javascript" src="{{ S3_BASE_URL }}/js/embed-widget.js"></script>
+
     <h2 id="preview900">Widget Preview: 900x1050 (wide)</h2>
     <script type="text/javascript">
     nprapps_widget_width = 900;
     nprapps_widget_height = 1050;
     </script>
-    <script type="text/javascript" src="js/embed-widget.js"></script>
+    <script type="text/javascript" src="{{ S3_BASE_URL }}/js/embed-widget.js"></script>
 
     <h2 id="preview300">Widget Preview: 300x600 (unsupported)</h2>
     <script type="text/javascript">
     nprapps_widget_width = 300;
     nprapps_widget_height = 925;
     </script>
-    <script type="text/javascript" src="js/embed-widget.js"></script>
+    <script type="text/javascript" src="{{ S3_BASE_URL }}/js/embed-widget.js"></script>
 
 
 </body>
