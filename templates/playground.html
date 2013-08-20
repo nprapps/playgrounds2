@@ -9,8 +9,12 @@
 {% endblock %}
 
 {% block social_head %}
+    {# Twitter #}
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@nprapps">
+    <meta name="twitter:image" content="{{ TWITTER.IMAGE_URL }}" />
+
+    {# Facebook #}
     <meta property="og:title" content="{{ FACEBOOK.TITLE }}: {{ playground.display_name }} : NPR" />
     <meta property="og:url" content="{{ S3_BASE_URL }}{{ path }}" />
     <meta property="og:type" content="article" />
@@ -18,6 +22,9 @@
     <meta property="og:image" content="{{ FACEBOOK.IMAGE_URL }}" />
     <meta property="og:site_name" content="NPR.org" />
     <meta property="fb:app_id" content="{{ FACEBOOK.APP_ID }}" />
+
+    {# Google News #}
+    <meta name="thumbnail" content="{{ GOOGLE.IMAGE_URL }}" />
 {% endblock social_head %}
 
 {% block extra_head %}
