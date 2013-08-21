@@ -64,9 +64,10 @@ COPY_URL = 'https://docs.google.com/spreadsheet/pub?key=%s&output=xls' % COPY_GO
 SHARING
 """
 SHARE_URL = 'http://%s/%s/' % (PRODUCTION_S3_BUCKETS[0], PROJECT_SLUG)
+PROJECT_DESCRIPTION = 'Playgrounds For Everyone is NPR\'s community-edited guide to accessible playgrounds. Help us out!'
 
 TWITTER = {
-    'TEXT': 'Playgrounds For Everyone is NPR\'s community-edited guide to accessible playgrounds. Help us out!',
+    'TEXT': PROJECT_DESCRIPTION,
     'URL': SHARE_URL,
     # Will be resized to 120x120, can't be larger than 1MB
     'IMAGE_URL': ''
