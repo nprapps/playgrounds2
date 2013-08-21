@@ -76,7 +76,7 @@ TWITTER = {
 FACEBOOK = {
     'TITLE': 'Playgrounds For Everyone',
     'URL': SHARE_URL,
-    'DESCRIPTION': "Wood chips don't work for kids in wheelchairs. Some playgrounds are specially designed so that *all* kids can play alongside friends, siblings or any other child. NPR is building a guide to these playgrounds. You can help!",
+    'DESCRIPTION': "Wood chips don't work for kids in wheelchairs. NPR is building a guide to playgrounds designed so that *all* kids can play alongside friends, siblings or any other child. You can help!",
     # Should be square. No documented restrictions on size
     'IMAGE_URL': TWITTER['IMAGE_URL'],
     'APP_ID': '138837436154588'
