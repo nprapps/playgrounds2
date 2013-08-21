@@ -1,1 +1,1 @@
-0 4 * * * ubuntu bash /home/ubuntu/apps/playgrounds/repository/cron.sh fab $DEPLOYMENT_TARGET $BRANCH process_updates >> /var/log/playgrounds-crontab.log 2>&1
+0 9 * * * ubuntu bash /home/ubuntu/apps/playgrounds/repository/cron.sh fab $DEPLOYMENT_TARGET $BRANCH process_updates >> /var/log/playgrounds-crontab.log 2>&1
