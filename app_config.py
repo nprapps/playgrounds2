@@ -90,7 +90,7 @@ GOOGLE = {
 
 NPR_DFP = {
     'STORY_ID': '213812844',
-    'TARGET': 'News_NPR_News_Investigations',
+    'TARGET': 'Apps_Playground',
     'ENVIRONMENT': 'NPRTEST',
     'TESTSERVER': 'true'
 }
