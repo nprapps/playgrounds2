@@ -63,21 +63,20 @@ COPY_URL = 'https://docs.google.com/spreadsheet/pub?key=%s&output=xls' % COPY_GO
 """
 SHARING
 """
-PROJECT_DESCRIPTION = 'An opinionated project template for (mostly) server-less apps.'
 SHARE_URL = 'http://%s/%s/' % (PRODUCTION_S3_BUCKETS[0], PROJECT_SLUG)
-
+PROJECT_DESCRIPTION = "Playgrounds For Everyone is NPR's community-edited guide to accessible playgrounds. Help us out!"
 
 TWITTER = {
-    'TEXT': PROJECT_NAME,
+    'TEXT': PROJECT_DESCRIPTION,
     'URL': SHARE_URL,
-    # Will be resized to 120x120, can't be larger than 1MB 
-    'IMAGE_URL': ''
+    # Will be resized to 120x120, can't be larger than 1MB
+    'IMAGE_URL': 'http://apps.npr.org/playgrounds/img/og-image-playgrounds.jpg'
 }
 
 FACEBOOK = {
-    'TITLE': PROJECT_NAME,
+    'TITLE': 'Playgrounds For Everyone',
     'URL': SHARE_URL,
-    'DESCRIPTION': PROJECT_DESCRIPTION,
+    'DESCRIPTION': "Wood chips don't work for kids in wheelchairs. NPR is building a guide to playgrounds designed so that *all* kids can play alongside friends, siblings or any other child. You can help!",
     # Should be square. No documented restrictions on size
     'IMAGE_URL': TWITTER['IMAGE_URL'],
     'APP_ID': '138837436154588'
