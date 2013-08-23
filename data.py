@@ -28,32 +28,23 @@ def write_data_csv(playgrounds=None):
     if not playgrounds:
         playgrounds = get_active_playgrounds()
 
-    features = [
-        'smooth surface throughout',
-        'safety fence',
-        'ramps to play components',
-        'transfer stations to play components',
-        'sight impaired play components',
-        'sound play components',
-        'accessible swing'
-    ]
-
     fields = get_active_playgrounds()[0].__dict__['_data'].keys()
-    fields.extend(features)
+    fields.extend([f['key'] for f in copytext.COPY.feature_list])
 
     with open('www/npr-accessible-playgrounds.csv', 'wb') as csvfile:
         csvwriter = csv.DictWriter(csvfile, fields)
         csvwriter.writeheader()
+
         for playground in get_active_playgrounds():
             playground_dict = playground.to_dict()
             playground_dict.pop('features')
 
-            for feature in features:
-                playground_dict[feature] = False
+            for feature in copytext.COPY.feature_list:
+                playground_dict[feature['key']] = False
 
             if playground.features:
                 for f in playground.features:
-                    playground_dict[f.slug.replace('-', ' ')] = True
+                    playground_dict[f.slug] = True
 
             csvwriter.writerow(playground_dict)
 
