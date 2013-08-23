@@ -595,8 +595,11 @@ def prepare_changes():
         # Create our list of changed items and a revision group.
         changed_playgrounds, revision_group = data.process_changes()
 
-        # Render update sitemap.
+        # Render updated sitemap.
         data.render_sitemap()
+
+        # Render updated index.
+        render()
 
         # Send the revision email.
         data.send_revision_email(revision_group)
