@@ -36,7 +36,8 @@
     <p>
     {% for playground in deletes.playgrounds %}
         <a href="{{ playground.site_url }}" target="_blank">{{ playground.display_name }}</a> |
-        <a href="{{ playground.delete_url }}" target="_blank" class="delete">Delete</a><br/>
+        <a href="{{ playground.delete_url }}" target="_blank" class="delete">Delete</a>
+        <p>{{ playground.text }}</p>
     {% endfor %}
     </p>{% endif %}
     {% if inserts.playgrounds|length > 0 %}<h2 style="color: #468847;">Inserts ({{ inserts.playgrounds|length }})</h2>
