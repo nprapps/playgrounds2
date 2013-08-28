@@ -5,11 +5,15 @@
     <body>
         <h1>CloudSearch query tool</h1>
 
-        Enter a CloudSearch query:
-        <input type="text" id="query"></input>
-        <button type="button" id="go">Show me where</button>
+        <p>
+            Enter a CloudSearch query:<br />
+            <input type="text" id="query" style="width: 600px;"></input><br />
+            <button type="button" id="go">Show me where</button>
+        </p>
 
-        <a id="location" href=""></a>
+        <p>
+            <a id="location" href=""></a>
+        </p>
 
         <script type="text/javascript" src="js/lib/underscore.js"></script>
         <script type="text/javascript" src="js/lib/jquery-1.8.3.js"></script>
@@ -58,6 +62,8 @@
                 var url = 'http://maps.google.com/?z=11&ll=' + lat + ',' + lng;
 
                 $('#location').attr('href', url).text(url);
+
+                window.open(url, '_blank');
 
                 return false;
             });
