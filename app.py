@@ -63,6 +63,9 @@ def _prepare_email(revision_group):
             playground_dict['site_url'] = '%s/playground/%s.html' % (app_config.S3_BASE_URL, revision.playground.slug)
             playground_dict['delete_url'] = '%s/delete-playground/%s/' % (app_config.S3_BASE_URL, revision.playground.slug)
             playground_dict['revision_group'] = int(revision_group)
+            for item in json.loads(revision.log):
+                if item.get('field', None) == "reason":
+                    playground_dict['text'] = item.get('to')
             playground_dict['headers'] = revision.get_headers()
             context['deletes']['playgrounds'].append(playground_dict)
         context['deletes']['playgrounds'] = sorted(context['deletes']['playgrounds'], key=lambda p: p['name'])
