@@ -1,0 +1,66 @@
+<html>
+    <head>
+        <title>CloudSearch query tool</title>
+    </head>
+    <body>
+        <h1>CloudSearch query tool</h1>
+
+        Enter a CloudSearch query:
+        <input type="text" id="query"></input>
+        <button type="button" id="go">Show me where</button>
+
+        <a id="location" href=""></a>
+
+        <script type="text/javascript" src="js/lib/underscore.js"></script>
+        <script type="text/javascript" src="js/lib/jquery-1.8.3.js"></script>
+        <script type="text/javascript" src="js/app_config.js"></script>
+        <script type="text/javascript" src="js/utils.js"></script>
+        <script type="text/javascript">
+            if (typeof String.prototype.startsWith != 'function') {
+                String.prototype.startsWith = function (str) {
+                    return this.indexOf(str) == 0;
+                };
+            }
+
+            $('#go').on('click', function() {
+                // Queries look like:
+                // (and deployment_target:'production' longitude:1025532..1033360 latitude:2186318..2192407)
+                var query = $('#query').val();
+
+                var bits = query.split(' ');
+                var lng = null;
+                var lat = null;
+
+                function parseBit(bit) {
+                    var dim = bit.split(':')[1]; 
+                    var coords = dim.split('..');
+
+                    return (parseInt(coords[1]) + parseInt(coords[0])) / 2;
+                }
+
+                _.each(bits, function(bit) {
+                    if (bit.startsWith('longitude:')) {
+                        lng = parseBit(bit); 
+                    } else if (bit.startsWith('latitude:')) {
+                        lat = parseBit(bit);
+                    }
+                });
+
+                if (lng === null || lat === null) {
+                    alert("Couldn't parse that query!")
+
+                    return false;
+                }
+
+                lng = cloudSearchToDeg(lng);
+                lat = cloudSearchToDeg(lat);
+
+                var url = 'http://maps.google.com/?z=11&ll=' + lat + ',' + lng;
+
+                $('#location').attr('href', url).text(url);
+
+                return false;
+            });
+        </script>
+    </body>
+</html>
