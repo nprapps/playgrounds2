@@ -57,7 +57,7 @@
             {% if playground.city %}{{ playground.city }}, {% endif %}
             {% if playground.state %}{{ playground.state }} {% endif %}
             {% if playground.zip_code %}{{ playground.zip_code }}{% endif %}
-            {% if playground.url %}<br /><a href="{{ playground.url }}">Website</a>{% endif %}
+            {% if playground.url %}<br /><a href="{% if playground.url[:4] != 'http' %}http://{% endif %}{{ playground.url }}">Website</a>{% endif %}
             </p>
         </div>
 
