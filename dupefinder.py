@@ -5,7 +5,20 @@ from models import Playground
 
 SEARCH_DISTANCE = 0.001
 
+matched = set()
+
+def print_playground(playground):
+    print '%s: http://%s/%s/playground/%s' % (
+        playground.name or 'unnamed',
+        app_config.PRODUCTION_S3_BUCKETS[0],
+        app_config.PROJECT_SLUG,
+        playground.slug
+    )
+
 for playground in Playground.select():
+    if playground.id in matched:
+        continue
+
     lat = playground.latitude
     lng = playground.longitude
 
@@ -21,16 +34,16 @@ for playground in Playground.select():
         )
     )
 
+
     if nearby.count() > 1:
-        print playground.name
+        print_playground(playground)
 
         for n in nearby:
             if n.id == playground.id:
                 continue
 
-            print '  %s: http://%s/%s/playground/%s' % (
-                n.name or 'unnamed',
-                app_config.PRODUCTION_S3_BUCKETS[0],
-                app_config.PROJECT_SLUG,
-                n.slug
-            )
+            print_playground(n)
+    
+            matched.add(n.id)
+
+        print ''
