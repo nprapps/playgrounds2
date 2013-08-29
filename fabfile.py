@@ -8,6 +8,7 @@ import time
 import boto.cloudsearch
 import boto.ses
 from fabric.api import *
+from fabric.operations import get
 from jinja2 import Template
 import pytz
 import requests
@@ -190,7 +191,7 @@ def render():
 
         with open(filename, 'w') as f:
             f.write(content.encode('utf-8'))
-    
+
     # We choose a sample playground to render so its JS will
     # be rendered. We don't deploy it.
     sample_playgrounds = models.Playground.select().limit(1)
@@ -329,7 +330,7 @@ def _gzip(src='www', dst='gzip'):
     """
     data.gzip(src, dst)
     os.system('rm -rf %s/live-data' % dst)
-    
+
     if os.environ.get('DEPLOYMENT_TARGET', None) not in ['production', 'staging']:
         os.system('rm -rf %s/sitemap.xml' % dst)
 
@@ -769,6 +770,12 @@ def create_test_revisions():
         cookies='',
         revision_group=2
     )
+
+
+def get_remote_db():
+    require('settings', provided_by=[production, staging])
+    local('rm -rf playgrounds.db')
+    get('%s/playgrounds.db' % env.repo_path, 'playgrounds.db')
 
 
 """
