@@ -61,7 +61,7 @@ def _prepare_email(revision_group):
             playground_dict = playground_dict = p.__dict__['_data']
             playground_dict['display_name'] = p.display_name
             playground_dict['site_url'] = '%s/playground/%s.html' % (app_config.S3_BASE_URL, revision.playground.slug)
-            playground_dict['delete_url'] = '%s/delete-playground/%s/' % (app_config.S3_BASE_URL, revision.playground.slug)
+            playground_dict['delete_url'] = '%s/delete-playground/%s/' % (app_config.SERVER_BASE_URL, revision.playground.slug)
             playground_dict['revision_group'] = int(revision_group)
             for item in json.loads(revision.log):
                 if item.get('field', None) == "reason":

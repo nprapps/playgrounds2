@@ -92,7 +92,7 @@ class Playground(Model):
         if features.count() > 0:
             return features
 
-        return [] 
+        return []
 
     def to_dict(self):
         """
@@ -197,11 +197,12 @@ class Playground(Model):
         conn = boto.connect_s3()
 
         # loop over buckets, we have more than one, and remove this playground.
-        for bucket in app_config.S3_BUCKETS:
-            b = Bucket(conn, bucket)
-            k = Key(b)
-            k.key = '%s/playground/%s.html' % (app_config.PROJECT_SLUG, self.slug)
-            b.delete_key(k)
+        if app_config.S3_BUCKETS:
+            for bucket in app_config.S3_BUCKETS:
+                b = Bucket(conn, bucket)
+                k = Key(b)
+                k.key = '%s/playground/%s.html' % (app_config.PROJECT_SLUG, self.slug)
+                b.delete_key(k)
 
     def remove_from_search_index(self):
         """
