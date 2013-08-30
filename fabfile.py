@@ -549,9 +549,12 @@ def local_bootstrap():
     load_data()
 
 def bootstrap():
+    """
     require('settings', provided_by=[production, staging])
     local_bootstrap()
     put(local_path='playgrounds.db', remote_path='%(repo_path)s/playgrounds.db' % env)
+    """
+    print 'Bootstrap command disabled! (Remote database is now the canonical version.)'
 
 def process_updates():
     if os.environ.get('DEPLOYMENT_TARGET', None) in ['production', 'staging']:
@@ -770,12 +773,6 @@ def create_test_revisions():
         cookies='',
         revision_group=2
     )
-
-
-def get_remote_db():
-    require('settings', provided_by=[production, staging])
-    local('rm -rf playgrounds.db')
-    get('%s/playgrounds.db' % env.repo_path, 'playgrounds.db')
 
 
 """
