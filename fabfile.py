@@ -520,19 +520,25 @@ def deploy_playgrounds():
 """
 Application specific
 """
-def download_data():
+def _download_data():
     """
     Download the latest playgrounds data CSV.
     """
-    local('curl -o data/playgrounds.csv "%s"' % app_config.DATA_URL)
+    print 'Cloning database from %s...' % env.settings
+
+    get(remote_path='%(repo_path)s/playgrounds.db' % env, local_path='playgrounds.db')
+    #local('curl -o data/playgrounds.csv "%s"' % app_config.DATA_URL)
 
 def load_data():
     """
     Clear and reload playground data from CSV into sqlite.
     """
+    """
     models.delete_tables()
     models.create_tables()
     data.load_playgrounds()
+    """
+    print 'Deprecated! Databases should now be cloned from staging/production for local testing. Use "local_bootstrap".'
 
 def runserver(port='8000'):
     """
@@ -544,9 +550,10 @@ def local_bootstrap():
     """
     Get and load all data required to make the app run.
     """
+    require('settings', provided_by=[production, staging], used_for='specifying which server to clone the database from. (Usually "staging".)')
+
     update_copy()
-    download_data()
-    load_data()
+    _download_data()
 
 def bootstrap():
     """
@@ -554,7 +561,7 @@ def bootstrap():
     local_bootstrap()
     put(local_path='playgrounds.db', remote_path='%(repo_path)s/playgrounds.db' % env)
     """
-    print 'Bootstrap command disabled! (Remote database is now the canonical version.)'
+    print 'Deprecated! Remote database is now the canonical version. Did you mean "local_bootstrap"?'
 
 def process_updates():
     if os.environ.get('DEPLOYMENT_TARGET', None) in ['production', 'staging']:
