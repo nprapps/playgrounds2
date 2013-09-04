@@ -50,7 +50,7 @@ def write_data(payload, path='data/changes.json'):
     output.append(payload)
 
     # Write the output to the file.
-    f.write(json.dumps(output))
+    f.write(json.dumps(output, indent=4))
 
     f.close()
 
@@ -86,6 +86,8 @@ def update_playground():
         payload['timestamp'] = time.mktime(datetime.datetime.now(pytz.utc).timetuple())
         payload['playground'] = {}
         payload['request'] = {}
+        payload['request']['ip_address'] = request.remote_addr
+        payload['request']['cookies'] = request.cookies
         payload['request']['headers'] = {}
 
         # Write the request headers to the payload.
@@ -93,12 +95,8 @@ def update_playground():
         for key, value in request.headers:
             payload['request']['headers'][key.lower().replace('-', '_')] = value
 
-        # Write the request cookies to the payload.
-        payload['request']['cookies'] = request.cookies
-
         # Loop over all of the model fields looking to see if they're present in the POST.
         for field in playground_fields:
-
             # Transform integers into ints when possible.
             try:
                 payload['playground'][field] = float(request.form.get(field, None))
@@ -160,15 +158,14 @@ def insert_playground():
         payload['timestamp'] = time.mktime(datetime.datetime.now(pytz.utc).timetuple())
         payload['playground'] = {}
         payload['request'] = {}
+        payload['request']['ip_address'] = request.remote_addr
+        payload['request']['cookies'] = request.cookies
         payload['request']['headers'] = {}
 
         # Write the request headers to the payload.
         # It's nicer when they use underscores instead of dashes.
         for key, value in request.headers:
             payload['request']['headers'][key.lower().replace('-', '_')] = value
-
-        # Write the request cookies to the payload.
-        payload['request']['cookies'] = request.cookies
 
         # Loop over all of the model fields looking to see if they're present in the POST.
         for field in playground_fields:
@@ -239,15 +236,14 @@ def delete_playground():
         payload['timestamp'] = time.mktime(datetime.datetime.now(pytz.utc).timetuple())
         payload['playground'] = {}
         payload['request'] = {}
+        payload['request']['ip_address'] = request.remote_addr
+        payload['request']['cookies'] = request.cookies
         payload['request']['headers'] = {}
 
         # Write the request headers to the payload.
         # It's nicer when they use underscores instead of dashes.
         for key, value in request.headers:
             payload['request']['headers'][key.lower().replace('-', '_')] = value
-
-        # Write the request cookies to the payload.
-        payload['request']['cookies'] = request.cookies
 
         # Write the playground info to the payload.
         payload['playground']['slug'] = playground_slug
