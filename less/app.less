@@ -1371,6 +1371,32 @@ section#the-goods { margin-top: 44px; }
 
 
 // Search
+.search {
+    .alerts {
+        .alert {
+            padding: 15px 30px;
+            position: relative;
+
+            .close {
+                position: absolute;
+                top: 5px;
+                right: 15px;
+            }
+
+            p {
+                margin-bottom: 0;
+            }
+
+            @media @screen-tiny {
+                padding: 20px;
+            }
+
+            @media @screen-small {
+                padding: 15px 33px 15px 20px;
+            }
+        }
+    }
+}
 #playground-search {
     background-color: #f5f5f5;
     border-bottom: 2px solid #ebebeb;
