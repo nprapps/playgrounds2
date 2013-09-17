@@ -142,7 +142,7 @@ header {
         background-size: cover;
         padding: 0 30px 0 30px;
         height: 550px;
-        
+
         @media @screen-mega-above {
             background-image: url('@{img-root}/playground-1440.jpg');
             background-position: 50% 35%;
@@ -197,7 +197,7 @@ header {
             margin-top: 44px;
 
             @media @screen-small {
-                bottom: 0; 
+                bottom: 0;
             }
         }
         .project-info {
@@ -295,8 +295,8 @@ header {
 
 
 // Cube ad
-.ad-desktop-wrap { 
-    zoom: 1; 
+.ad-desktop-wrap {
+    zoom: 1;
     padding: 0 0 12px 0;
     width: 300px;
     margin: 0 auto;
@@ -306,11 +306,11 @@ header {
         width: 300px;
         margin: 0 auto;
     }
-    p { 
-        margin: 6px 0 0 0; 
-        font-size: 11px; 
+    p {
+        margin: 6px 0 0 0;
+        font-size: 11px;
         color: #999;
-        
+
         &.left { float: left; }
         &.right { float: right; }
         a { color: #6d8ac4; }
@@ -322,13 +322,13 @@ header {
 section#the-goods { margin-top: 44px; }
 
 .alert {
-    margin: 0 0 33px 0;
+    margin: 0 0 2px 0;
     color: #A8803C;
     border: none;
 
     #the-goods & {
         @media @screen-tiny {
-            margin-left: 3px;
+            /* margin-left: 3px; */
             margin-right: 0;
         }
     }
@@ -485,7 +485,6 @@ section#the-goods { margin-top: 44px; }
     }
 }
 
-
 // Shared styles for creating or editing a playground
 .playground-form {
     margin-bottom: 0;
@@ -505,12 +504,13 @@ section#the-goods { margin-top: 44px; }
         .alert {
             color: @errorText;
         }
+
     }
-    
+
     .address-meta {
         border-bottom: 1px solid #ebebeb;
         margin-bottom: 15px;
-        
+
         p { padding-top: 10px; }
         &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
     }
@@ -521,12 +521,12 @@ section#the-goods { margin-top: 44px; }
         font-size: 14px;
         margin: 0 0 @baseLineHeight/2 0;
     }
-    
+
     #modal-locator-map {
         margin-bottom: @baseLineHeight/2;
     }
 
-    #toggle-address-button { 
+    #toggle-address-button {
         float: right;
         margin-bottom: 11px;
     }
@@ -623,7 +623,7 @@ section#the-goods { margin-top: 44px; }
             width: 47%;
             margin-left: 6%;
         }
-        
+
         input[type="text"],
         textarea {
             line-height: 44px;
@@ -840,7 +840,7 @@ section#the-goods { margin-top: 44px; }
         &.important-description {
             font-size: 16px;
             margin-bottom: 0;
-            
+
             &.radio-story-link {
                 margin-top: 1.5em;
                 font-weight: bold;
@@ -939,7 +939,7 @@ section#the-goods { margin-top: 44px; }
             display: table;
             margin: 0;
             padding: 0;
-            
+
             @media @screen-small {
                 display: block;
             }
@@ -950,10 +950,10 @@ section#the-goods { margin-top: 44px; }
             padding: 22px;
             border-left: 4px solid #fff;
             background-color: #f1f1f1;
-            
+
             &:first-child { border-left: none; }
             p { margin: 0 0 0 43px; }
-            strong { 
+            strong {
                 display: block;
                 background-color: #ff6706;
                 color: #fff;
@@ -1077,16 +1077,16 @@ section#the-goods { margin-top: 44px; }
             .address-meta {
                 vertical-align: middle;
             }
-            .directions-wrapper { 
+            .directions-wrapper {
                 text-align: right;
                 vertical-align: top;
             }
-            
+
             &.apps {
                 margin-bottom: 33px;
 
                 #locator-map { margin-bottom: 11px; }
-                .address-meta-wrapper { 
+                .address-meta-wrapper {
                     display: block;
                     width: auto;
                 }
@@ -1156,7 +1156,7 @@ section#the-goods { margin-top: 44px; }
                 float: left;
                 margin-right: 5%;
                 margin-bottom: 22px;
-                
+
                 @media @screen-tiny {
                     width: 100%;
                     float: none;
@@ -1378,7 +1378,7 @@ section#the-goods { margin-top: 44px; }
 
     h1 {
         margin: 0 0 11px 0;
-        
+
         span {
             font-size: 60%;
             margin-left: 11px;
