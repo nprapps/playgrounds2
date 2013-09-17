@@ -293,12 +293,20 @@ def process_changes(path='changes-in-progress.json'):
 
         timestamp = datetime.datetime.fromtimestamp(record['timestamp']).replace(tzinfo=pytz.utc)
 
+        # Assign the request headers to a variable.
+        # Need to modify the headers to add the remote IP address which is
+        # on the request object but not in the headers area.
+        # Why? Because we don't want to add an additional field to the
+        # Revisions model because we don't have DB migrations.
+        headers = record['request']['headers']
+        headers['remote_ip_address'] = record['request'].get('ip_address', None)
+
         Revision.create(
             timestamp=timestamp,
             action=record['action'],
             playground=playground,
             log=json.dumps(revisions),
-            headers=json.dumps(record['request']['headers']),
+            headers=json.dumps(headers),
             cookies=json.dumps(record['request']['cookies']),
             revision_group=revision_group
         )

@@ -50,7 +50,7 @@
     <p>
     {% for playground in updates.playgrounds %}<a href="{{ playground.site_url }}" target="_blank">{{ playground.display_name }}</a>
         <ul>{% for revision in playground.revisions %}
-            <li>Submitted by {{ revision.headers.host }}
+            <li>Submitted by {% if revision.headers.remote_ip_address %}{{ revision.headers.remote_ip_address }}{% else %}<em>unknown</em>{% endif %}
                 <ul>{% for field in revision.fields %}
                     <li>{{ field.field }} changed from
                         {% if field.from == '' %}<em>none</em>{% else %}{{ field.from }}{% endif %} to
