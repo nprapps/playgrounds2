@@ -79,6 +79,10 @@ class Playground(Model):
         database = database
 
     @property
+    def feature_count(self):
+        return PlaygroundFeature.select().join(Playground).where(Playground.id == self.id).count()
+
+    @property
     def features(self):
         """
         Returns the associated features of this playground.

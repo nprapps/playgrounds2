@@ -1,0 +1,4 @@
+<h1>Revision Groups</h1>
+{% for date,revision_group in revision_groups %}
+    <a href="{{ revision_group }}">{{ date.strftime('%Y %m %d') }}</a><br/>
+{% endfor %}

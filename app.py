@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from datetime import date
+import datetime
 import json
 from mimetypes import guess_type
 import re
@@ -27,6 +28,7 @@ def _prepare_email(revision_group):
     revisions = Revision.select().where(Revision.revision_group == int(revision_group))
 
     context = {}
+    context['base_url'] = '%s/playground/' % app_config.S3_BASE_URL
     context['total_revisions'] = revisions.count()
     context['deletes'] = {}
     context['deletes']['playgrounds'] = []
@@ -50,6 +52,12 @@ def _prepare_email(revision_group):
             playground_dict['site_url'] = '%s/playground/%s.html' % (app_config.S3_BASE_URL, revision.playground.slug)
             playground_dict['revision_group'] = int(revision_group)
             playground_dict['headers'] = revision.get_headers()
+            playground_dict['feature_count'] = int(p.feature_count)
+            nearby = p.nearby(3)
+            playground_dict['nearby'] = []
+            for n in nearby:
+                if n.distance < 0.5:
+                    playground_dict['nearby'].append(n)
             context['inserts']['playgrounds'].append(playground_dict)
         context['inserts']['playgrounds'] = sorted(context['inserts']['playgrounds'], key=lambda p: p['name'])
 
@@ -99,6 +107,24 @@ def _prepare_email(revision_group):
         payload = Template(read_template.read())
 
     return payload.render(**context)
+
+
+@app.route('/email/')
+def _list_revision_groups():
+
+    context = {}
+    context['revision_groups'] = Set([])
+
+    revisions = Revision.select()
+
+    for revision in revisions:
+        revision_date = datetime.datetime.fromtimestamp(revision.revision_group)
+        context['revision_groups'].add((revision_date, revision.revision_group))
+
+    context['revision_groups'] = sorted(context['revision_groups'], key=lambda g: g[0], reverse=True)
+
+    return render_template('_email_list.html', **context)
+
 
 def intcomma(value):
     """
