@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import cgi
 from datetime import date
 import datetime
 import json
@@ -73,7 +74,7 @@ def _prepare_email(revision_group):
             playground_dict['revision_group'] = int(revision_group)
             for item in json.loads(revision.log):
                 if item.get('field', None) == "reason":
-                    playground_dict['text'] = item.get('to')
+                    playground_dict['text'] = cgi.escape(item.get('to'))
             playground_dict['headers'] = revision.get_headers()
             context['deletes']['playgrounds'].append(playground_dict)
         context['deletes']['playgrounds'] = sorted(context['deletes']['playgrounds'], key=lambda p: p['name'])
