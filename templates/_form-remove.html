@@ -2,7 +2,6 @@
     <div class="modal-body">
         <h2>{{ COPY.content.form_remove_title }}</h2>
         <p class="muted">{{ COPY.content.form_remove_description }}</p>
-        <textarea name="text"></textarea>
         <input style="display:none" name="slug" value="{{ playground.slug }}"></input>
     </div>
     <div class="modal-footer">
@@ -10,3 +9,10 @@
         <button id="playground-update" class="btn btn-large btn-success">Save</button>
     </div>
 </form>
+
+<script type="text/javascript">
+    $(function() {
+        // Append with JS to hopefully quiet spambots
+        $('#remove-form .modal-body').append('<textarea name="text"></textarea>');    
+    });
+</script>
