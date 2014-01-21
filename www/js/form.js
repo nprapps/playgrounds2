@@ -1,3 +1,9 @@
+var geocoder;
+var street_number;
+var street_name;
+var city_name;
+var state_abbreviation;
+var zip_code;
 var playground = {};
 
 $(function() {
@@ -33,11 +39,11 @@ $(function() {
         },
         'initial_field_values': {},
         'callbacks': {
-            'geocode': function(locale) {
-                if (locale){
-                    playground.fields.latitude.attr('value', locale['latLng']['lat']);
-                    playground.fields.longitude.attr('value', locale['latLng']['lng']);
-                    require_us_address(locale);
+            'geocode': function(address_components, latlng) {
+                if (address_components){
+                    playground.fields.latitude.attr('value', latlng['location']['d']);
+                    playground.fields.longitude.attr('value', latlng['location']['e']);
+                    require_us_address(address_components);
                     playground.form.geocode_fields();
                     playground.hide_address_editor();
                     map.off('moveend', playground.map.process_map_location);
@@ -49,29 +55,46 @@ $(function() {
                     make_alert(alert_text, 'alert-error', 'div.modal-alerts')
                 }
             },
-            'reverse_geocode': function(locale) {
-                playground.fields.address.val(locale['street']);
-                playground.fields.city.val(locale['adminArea5']);
+            'reverse_geocode': function(address_components, latlng) {
+                console.log(address_components);
+                address_components.forEach(function(address) {
+                    console.log(address['types'][0])
+                    if (address['types'][0] == 'street_number') {
+                        street_number = address['long_name'];
+                    }
+                    if (address['types'][0] == 'route' || address['types'][0] == 'bus_station') {
+                        street_name = address['long_name'];
+                    }
+                    if (address['types'][0] == 'administrative_area_level_3') {
+                        city_name = address['long_name'];
+                    }
+                    if (address['types'][0] == 'administrative_area_level_1') {
+                        state_abbreviation = address['short_name'];
+                    }
+                    if (address['types'][0] == 'postal_code') {
+                        zip_code = address['long_name'];
+                    }
+                });
+
+                // sometimes there aren't street numbers
+                if (street_number) {
+                    playground.fields.address.val(street_number + ' ' + street_name);
+                }
+                playground.fields.city.val(city_name);
 
                 // States are special. Handle them specially.
-                if (locale['adminArea3'] == 'District of Columbia') {
-                    var short_state = STATE_NAME_TO_CODE[locale['adminArea3']];
-                    playground.fields.state.val(short_state);
-                    $('select[name="state"] option[value="'+ short_state +'""]').attr('selected', 'selected');
-                } else {
-                    playground.fields.state.val(locale['adminArea3']);
-                    $('select[name="state"] option[value="'+ locale['adminArea3'] +'""]').attr('selected', 'selected');
-                }
+                playground.fields.state.val(state_abbreviation);
+                $('select[name="state"] option[value="'+ state_abbreviation +'""]').attr('selected', 'selected');
 
                 // playground.fields.state.attr('selected', 'selected');
-                playground.fields.zip_code.val(locale['postalCode']);
-                playground.fields.latitude.val(locale['latLng']['lat']);
-                playground.fields.longitude.val(locale['latLng']['lng']);
+                playground.fields.zip_code.val(zip_code);
+                playground.fields.latitude.val(latlng['d']);
+                playground.fields.longitude.val(latlng['e']);
 
-                require_us_address(locale);
+                require_us_address(address_components);
                 playground.form.geocode_fields();
                 playground.fields.reverse_geocoded.attr('checked', 'checked');
-                    
+
                 playground.fields.locator_map.removeClass('hidden');
             }
         },
@@ -95,21 +118,17 @@ $(function() {
                 $(required_field).addClass('flagged');
             },
             'prepare_geocode_object': function() {
-                geocode_string = '{location:{';
-                geocode_string += 'street:"' + playground.fields.address.val() +'",';
-                if (playground.fields.city.val() !== '' && playground.fields.state.val() !== 'DC') {
-                    geocode_string += 'adminArea5:"' + playground.fields.city.val() +'",';
+                geocode_string = playground.fields.address.val() + ' ';
+                if (playground.fields.city.val() !== '') {
+                    geocode_string += playground.fields.city.val() +', ';
                 }
-                if (playground.fields.state.val() !== '' && playground.fields.state.val() !== 'DC') {
-                    geocode_string += 'adminArea3:"' + STATE_CODE_TO_NAME[playground.fields.state.val()] +'",';
-                }
-                if (playground.fields.state.val() == 'DC') {
-                    geocode_string += 'adminArea4:"District of Columbia",';
+                if (playground.fields.state.val() !== '') {
+                    geocode_string += STATE_CODE_TO_NAME[playground.fields.state.val()] + ' ';
                 }
                 if (playground.fields.zip_code.val() !== '') {
-                    geocode_string += 'postalCode:"' + playground.fields.zip_code.val() +'",';
+                    geocode_string +=  playground.fields.zip_code.val();
                 }
-                return geocode_string + '}}';
+                return geocode_string;
             },
             'geocode_fields': function() {
                 // Set the base location fields to 'changed' so that they will POST.
@@ -240,54 +259,37 @@ $(function() {
             navigator.geolocation.getCurrentPosition(success, error);
         },
         'geocode': function(geocode_object, callback) {
-            $.ajax({
-                'url': 'http://open.mapquestapi.com/geocoding/v1/?inFormat=json&json='+ geocode_object,
-                'dataType': 'jsonp',
-                'contentType': 'application/json',
-                'timeout': 5000,
-                'error': function(a, b, c) {
-                    if (b == 'timeout'){
-                        alert_text = "<h3>We're sorry!</h3>We're having a hard time finding this place.";
-                        make_alert(alert_text, 'warning', 'div.modal-alerts');
-                    }
-                },
-                'success': function(data) {
-                    var locales = data['results'][0]['locations'];
-                    var locale;
-                    if (locales.length !== 0) {
-                        locale = locales[0];
-                    }
-                    var zip_list = [];
-                    callback(locale);
+            console.log(geocode_object);
+            geocoder = new google.maps.Geocoder();
+            geocoder.geocode({'address': geocode_object}, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    var locales = results[0]['address_components'];
+                    var latlng = results[0]['geometry'];
+                    callback(locales, latlng);
                 }
-            });
+                else {
+                    alert_text = "<h3>We're sorry!</h3>We're having a hard time finding this place.";
+                    make_alert(alert_text, 'warning', 'div.alerts');
+                }
+            })
         },
         'reverse_geocode': function(latitude, longitude, callback) {
-            $.ajax({
-                'url': 'http://open.mapquestapi.com/geocoding/v1/reverse',
-                'data': { 'location': latitude + ',' + longitude },
-                'dataType': 'jsonp',
-                'contentType': 'application/json',
-                'timeout': 5000,
-                'error': function(a, b, c) {
-                    if (b == 'timeout'){
+            geocoder = new google.maps.Geocoder();
+            var latlng = new google.maps.LatLng(latitude, longitude);
+            if (geocoder) {
+                geocoder.geocode({'latLng': latlng}, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        console.log(results);
+                        var locales = results[0]['address_components'];
+                        console.log(locales);
+                        callback(locales, latlng);
+                    }
+                    else {
                         alert_text = "<h3>We're sorry!</h3>We're having a hard time finding this place.";
                         make_alert(alert_text, 'warning', 'div.alerts');
                     }
-                },
-                'success': function(data) {
-                    var locales = data['results'][0]['locations'];
-                    var locale = locales[0];
-                    var zip_list = [];
-
-                    if (locale['adminArea4'] == 'District of Columbia')  {
-                        locale['adminArea5'] = 'Washington';
-                        locale['adminArea3'] = 'District of Columbia';
-                    }
-
-                    callback(locale);
-                }
-            });
+                });
+            };
         },
         'accept_address': function() {
             var has_street_address = playground.fields.address.val() !== '';
@@ -439,7 +441,7 @@ $(function() {
                 if (longitude) {
                     playground.fields.longitude.val(longitude);
                 }
-                
+
                 if (latitude && longitude) {
                     playground.reverse_geocode(latitude, longitude, playground.callbacks.reverse_geocode);
                 } else {
