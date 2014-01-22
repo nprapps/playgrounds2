@@ -36,7 +36,7 @@ def load_from_google_spreadsheet(key):
             payload[feature_name] = "on"
         payload.pop('features')
 
-        p = requests.post('http://apps.npr.org/playgrounds/insert-playground/', data=payload)
+        p = requests.post('http://54.214.20.225/playgrounds/insert-playground/', data=payload)
         print p.status_code
 
 def write_data_csv(playgrounds=None):
