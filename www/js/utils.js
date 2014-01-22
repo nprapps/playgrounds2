@@ -145,12 +145,13 @@ function formatMapQuestAddress(locale) {
     }
 }
 
-function require_us_address(locale) {
-    var country = locale['adminArea1'];
-    if (country !== 'US') {
-        make_alert('Please choose an address within the United States.', 'warning', 'div.alerts');
-    }
-}
+function require_us_address(address_components) {
+    address_components.forEach(function(address) {
+        if (address['types'][0] == 'country' && address['long_name'] !== 'United States') {
+            make_alert('Please choose an address within the United States.', 'warning', 'div.alerts');
+        };
+    });
+};
 
 function prevent_body_scroll(e) {
     if (!$('.scrollable').has($(e.target)).length) {
@@ -187,7 +188,7 @@ function set_driving_urls(){
 
     $directions_link.parent().before(directions_header);
     $directions_link.after($google_maps_link);
-    
+
     $('div.address').addClass('apps');
 
     $google_maps_link.on('click', function(){

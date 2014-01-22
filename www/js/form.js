@@ -65,7 +65,7 @@ $(function() {
                     if (address['types'][0] == 'route' || address['types'][0] == 'bus_station') {
                         street_name = address['long_name'];
                     }
-                    if (address['types'][0] == 'administrative_area_level_3') {
+                    if (address['types'][0] == 'administrative_area_level_3' || address['types'][0] == 'locality') {
                         city_name = address['long_name'];
                     }
                     if (address['types'][0] == 'administrative_area_level_1') {
@@ -279,9 +279,7 @@ $(function() {
             if (geocoder) {
                 geocoder.geocode({'latLng': latlng}, function(results, status) {
                     if (status == google.maps.GeocoderStatus.OK) {
-                        console.log(results);
                         var locales = results[0]['address_components'];
-                        console.log(locales);
                         callback(locales, latlng);
                     }
                     else {
