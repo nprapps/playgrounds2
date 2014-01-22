@@ -23,7 +23,6 @@ import argparse
 
 app = Flask(app_config.PROJECT_NAME)
 
-
 @app.route('/email/<revision_group>/')
 def _prepare_email(revision_group):
     revisions = Revision.select().where(Revision.revision_group == int(revision_group))
@@ -275,14 +274,14 @@ def _less(filename):
     except IOError:
         abort(404)
 
-    r = envoy.run('node_modules/bin/lessc -', data=less)
+    r = envoy.run('%s/lessc -' % app_config.APPS_NODE_PATH, data=less)
 
     return r.std_out, 200, { 'Content-Type': 'text/css' }
 
 # Render JST templates on-demand
 @app.route('/js/templates.js')
 def _templates_js():
-    r = envoy.run('node_modules/bin/jst --template underscore jst')
+    r = envoy.run('%s/jst --template underscore jst' % app_config.APPS_NODE_PATH)
 
     return r.std_out, 200, { 'Content-Type': 'application/javascript' }
 

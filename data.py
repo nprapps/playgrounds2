@@ -153,11 +153,11 @@ def less():
         name = os.path.splitext(filename)[0]
         out_path = 'www/css/%s.less.css' % name
 
-        os.system('node_modules/bin/lessc %s %s' % (path, out_path))
+        os.system('%s/lessc %s %s' % (app_config.APPS_NODE_PATH, path, out_path))
 
 
 def jst():
-    os.system('node_modules/bin/jst --template underscore jst www/js/templates.js')
+    os.system('%s/jst --template underscore jst www/js/templates.js' % app_config.APPS_NODE_PATH)
 
 
 def render_playgrounds(playgrounds=None):
