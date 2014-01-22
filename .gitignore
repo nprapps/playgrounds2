@@ -60,3 +60,4 @@ www/npr-accessible-playgrounds.*
 data/backups/*.json
 data/backups/*.db
 www/js/embed-widget.js
+data/gdoc-*.csv

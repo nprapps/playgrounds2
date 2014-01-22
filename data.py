@@ -21,6 +21,24 @@ import copytext
 from models import Playground, PlaygroundFeature, Revision, get_active_playgrounds
 
 
+def load_from_google_spreadsheet(key):
+    r = requests.get("https://docs.google.com/spreadsheet/pub?hl=en&hl=en&key=%s&output=csv" % (key))
+    with open('data/gdoc-%s.csv' % (key), 'wb') as writefile:
+        writefile.write(r.content)
+
+    with open('data/gdoc-%s.csv' % (key), 'rb') as readfile:
+        csvfile = list(csv.DictReader(readfile))
+
+    for row in csvfile:
+        payload = dict(row)
+        for feature in payload['features'].split(','):
+            feature_name = feature.strip().lower().replace(' ', '-')
+            payload[feature_name] = "on"
+        payload.pop('features')
+
+        p = requests.post('http://apps.npr.org/playgrounds/insert-playground/', data=payload)
+        print p.status_code
+
 def write_data_csv(playgrounds=None):
     """
     Outputs a CSV-ified version of our playgrounds DB.

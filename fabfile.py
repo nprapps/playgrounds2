@@ -781,6 +781,9 @@ def create_test_revisions():
         revision_group=2
     )
 
+def load_from_google_spreadsheet(key):
+    data.load_from_google_spreadsheet(key)
+
 
 """
 Cron jobs
