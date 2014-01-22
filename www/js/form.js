@@ -58,7 +58,6 @@ $(function() {
             'reverse_geocode': function(address_components, latlng) {
                 console.log(address_components);
                 address_components.forEach(function(address) {
-                    console.log(address['types'][0])
                     if (address['types'][0] == 'street_number') {
                         street_number = address['long_name'];
                     }
@@ -259,10 +258,10 @@ $(function() {
             navigator.geolocation.getCurrentPosition(success, error);
         },
         'geocode': function(geocode_object, callback) {
-            console.log(geocode_object);
             geocoder = new google.maps.Geocoder();
             geocoder.geocode({'address': geocode_object}, function(results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
+                if (status == google.maps.GeocoderStatus.OK && results[0]['partial_match'] !== true) {
+                    console.log(results);
                     var locales = results[0]['address_components'];
                     var latlng = results[0]['geometry'];
                     callback(locales, latlng);
