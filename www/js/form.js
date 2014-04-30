@@ -41,8 +41,8 @@ $(function() {
         'callbacks': {
             'geocode': function(address_components, latlng) {
                 if (address_components){
-                    playground.fields.latitude.attr('value', latlng['location']['d']);
-                    playground.fields.longitude.attr('value', latlng['location']['e']);
+                    playground.fields.latitude.attr('value', latlng['location'].lat());
+                    playground.fields.longitude.attr('value', latlng['location'].lng());
                     require_us_address(address_components);
                     playground.form.geocode_fields();
                     playground.hide_address_editor();
@@ -56,7 +56,6 @@ $(function() {
                 }
             },
             'reverse_geocode': function(address_components, latlng) {
-                console.log(address_components);
                 address_components.forEach(function(address) {
                     if (address['types'][0] == 'street_number') {
                         street_number = address['long_name'];
@@ -87,8 +86,8 @@ $(function() {
 
                 // playground.fields.state.attr('selected', 'selected');
                 playground.fields.zip_code.val(zip_code);
-                playground.fields.latitude.val(latlng['d']);
-                playground.fields.longitude.val(latlng['e']);
+                playground.fields.latitude.val(latlng.lat());
+                playground.fields.longitude.val(latlng.lng());
 
                 require_us_address(address_components);
                 playground.form.geocode_fields();
@@ -261,7 +260,6 @@ $(function() {
             geocoder = new google.maps.Geocoder();
             geocoder.geocode({'address': geocode_object}, function(results, status) {
                 if (status == google.maps.GeocoderStatus.OK && results[0]['partial_match'] !== true) {
-                    console.log(results);
                     var locales = results[0]['address_components'];
                     var latlng = results[0]['geometry'];
                     callback(locales, latlng);
@@ -276,7 +274,7 @@ $(function() {
             geocoder = new google.maps.Geocoder();
             var latlng = new google.maps.LatLng(latitude, longitude);
             if (geocoder) {
-                geocoder.geocode({'latLng': latlng}, function(results, status) {
+                geocoder.geocode({ 'latLng': latlng }, function(results, status) {
                     if (status == google.maps.GeocoderStatus.OK) {
                         var locales = results[0]['address_components'];
                         callback(locales, latlng);
