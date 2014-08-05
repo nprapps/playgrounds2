@@ -471,7 +471,7 @@ class PlaygroundFeature(Model):
     A feature at a single playground.
     """
     slug = CharField()
-    playground = ForeignKeyField(Playground, cascade=False)
+    playground = ForeignKeyField(Playground)
 
     class Meta:
         database = database
@@ -507,7 +507,7 @@ class Revision(Model):
 
     action = CharField()
     log = TextField()
-    playground = ForeignKeyField(Playground, cascade=False)
+    playground = ForeignKeyField(Playground)
     headers = TextField(null=True)
     cookies = TextField(null=True)
     revision_group = IntegerField()
