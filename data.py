@@ -177,7 +177,7 @@ def render_playgrounds(playgrounds=None):
 
     app_config_js()
 
-    compiled_includes = []
+    compiled_includes = {}
 
     updated_paths = []
 
