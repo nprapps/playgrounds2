@@ -6,6 +6,7 @@ import os
 import time
 
 from flask import Flask, redirect, abort
+import peewee
 import pytz
 
 import app_config
@@ -14,6 +15,14 @@ from models import Playground
 
 app = Flask(app_config.PROJECT_NAME)
 
+FIELD_OPS = {
+    peewee.FloatField: float,
+    peewee.CharField: unicode,
+    peewee.IntegerField: int,
+    peewee.BooleanField: bool,
+    peewee.PrimaryKeyField: int,
+    peewee.TextField: unicode
+}
 
 def write_data(payload, path='data/changes.json'):
     """
@@ -96,24 +105,19 @@ def update_playground():
             payload['request']['headers'][key.lower().replace('-', '_')] = value
 
         # Loop over all of the model fields looking to see if they're present in the POST.
+
         for field in playground_fields:
-            # Transform integers into ints when possible.
-            try:
-                # Special-case handling for zip_code, which is a string, not an int.
-                if field == 'zip_code':
-                    payload['playground']['zip_code'] = str(request.form.get(field, None))
+            if field in ['slug', 'nprid']:
+                continue
+            if request.form.get(field, None):
+                op = FIELD_OPS[getattr(Playground, field).__class__]
+                payload['playground'][field] = op(request.form.get(field, None))
+
+            else:
+                if getattr(Playground, field).null:
+                    payload['playground'][field] = None
                 else:
-                    payload['playground'][field] = float(request.form.get(field, None))
-
-                    if payload['playground'][field]:
-                        print field, payload['playground'][field]
-
-                    if payload['playground'][field].is_integer():
-                        payload['playground'][field] = int(payload['playground'][field])
-            except ValueError:
-                payload['playground'][field] = request.form.get(field, None)
-            except TypeError:
-                pass
+                    payload['playground'][field] = ''
 
         try:
             if payload['playground']['reverse_geocoded'] == "on":
@@ -170,23 +174,18 @@ def insert_playground():
 
         # Loop over all of the model fields looking to see if they're present in the POST.
         for field in playground_fields:
-            # Transform integers into ints when possible.
-            try:
-                payload['playground'][field] = float(request.form.get(field, None))
+            if field in ['slug', 'nprid']:
+                continue
+            if request.form.get(field, None):
 
-                if payload['playground'][field].is_integer():
-                    payload['playground'][field] = int(payload['playground'][field])
+                op = FIELD_OPS[getattr(Playground, field).__class__]
+                payload['playground'][field] = op(request.form.get(field, None))
 
-            except ValueError:
-                payload['playground'][field] = request.form.get(field, None)
-            except TypeError:
-                pass
-
-        # Special-case handling for zip_code, which is a string, not an int.
-        try:
-            payload['playground']['zip_code'] = str(payload['playground']['zip_code'])
-        except KeyError:
-            pass
+            else:
+                if getattr(Playground, field).null:
+                    payload['playground'][field] = None
+                else:
+                    payload['playground'][field] = ''
 
         try:
             if payload['playground']['reverse_geocoded'] == "on":
