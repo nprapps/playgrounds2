@@ -238,7 +238,7 @@ function search() {
                     }
                 } else {
                     desktop_map.off('moveend', desktop_map_moveend);
-                    desktop_map.once('moveend', temp_desktop_map_moveend); 
+                    desktop_map.once('moveend', temp_desktop_map_moveend);
                     desktop_map.setView([latitude, longitude], zoom);
 
                     desktop_markers.clearLayers();
@@ -267,7 +267,7 @@ function search() {
 
             if (!IS_MOBILE) {
                 desktop_map.off('moveend', desktop_map_moveend);
-                desktop_map.once('moveend', temp_desktop_map_moveend); 
+                desktop_map.once('moveend', temp_desktop_map_moveend);
 
                 desktop_map.invalidateSize();
             }
@@ -389,8 +389,48 @@ function config_map_affix() {
 
     $search_results_wrapper.attr('data-spy', 'affix');
     $search_results_wrapper.attr('data-offset-top', mc_pos.top + 35);
-    
+
     $('<style type="text/css"> #search-results-wrapper.affix { top: 0; right: ' + mc_pos.left + 'px; margin-right: -8px; width: ' + RESULTS_MAP_WIDTH + 'px; } </style>').appendTo('head');
+}
+
+function parse_geocode_results(results, status) {
+    $map_loading.hide();
+    if (status == google.maps.GeocoderStatus.OK && results[0]['partial_match'] !== true) {
+        if (results.length == 1) {
+            // If there's one result, render it.
+            var result = results[0];
+            var latlng = result['geometry']['location'];
+
+            var display_name = result['formatted_address'].replace(', USA', '');
+            $search_latitude.val(latlng.lat());
+            $search_longitude.val(latlng.lng());
+            $search_address.val(display_name);
+
+            $results_address.html('Accessible Playgrounds Near ' + display_name);
+            $no_geocode.hide();
+            $map_loading.text('Searching...').show();
+
+            navigate(false);
+        }
+        else {
+            // If there are many results,
+            // show the did-you-mean path.
+            $did_you_mean.empty();
+            $no_geocode.hide();
+            _.each(results, function(result) {
+                result['formatted_address'] = result['formatted_address'].replace(', USA', '');
+                var context = $.extend(APP_CONFIG, result);
+                var html = JST.did_you_mean_item(context);
+
+                $did_you_mean.append(html);
+            });
+            $did_you_mean_wrapper.show();
+        }
+    }
+    else {
+        $did_you_mean.append('<li>No results</li>');
+        $no_geocode.show();
+    }
 }
 
 $(function() {
@@ -528,59 +568,12 @@ $(function() {
                 geocode_xhr.cancel();
             }
 
-            geocode_xhr = $.ajax({
-                'url': 'http://open.mapquestapi.com/nominatim/v1/search.php?format=json&json_callback=playgroundCallback&q=' + address,
-                'type': 'GET',
-                'dataType': 'jsonp',
-                'cache': true,
-                'jsonp': false,
-                'jsonpCallback': 'playgroundCallback',
-                'contentType': 'application/json',
-                'complete': function() {
-                    geocode_xhr = null;
-                },
-                'success': function(data) {
-                    // US addresses only, plzkthxbai.
-                    data = _.filter(data, function(locale) {
-                        return locale['display_name'].indexOf("United States of America") > 0;
-                    });
+            geocoder = new google.maps.Geocoder();
+            geocoder.geocode({
+                'address': address,
+                'region': 'us'
+            }, parse_geocode_results);
 
-                    $map_loading.hide();
-
-                    if (data.length === 0) {
-                        // If there are no results, show a nice message.
-                        $did_you_mean.append('<li>No results</li>');
-                        $no_geocode.show();
-                    } else if (data.length == 1) {
-                        // If there's one result, render it.
-                        var locale = data[0];
-
-                        var display_name = locale['display_name'].replace(', United States of America', '');
-                        $search_latitude.val(locale['lat']);
-                        $search_longitude.val(locale['lon']);
-                        $search_address.val(display_name);
-
-                        $results_address.html('Accessible Playgrounds Near ' + display_name);
-                        $no_geocode.hide();
-                        $map_loading.text('Searching...').show();
-
-                        navigate(false);
-                    } else {
-                        // If there are many results,
-                        // show the did-you-mean path.
-                        $did_you_mean.empty();
-                        $no_geocode.hide();
-                        _.each(data, function(locale) {
-                            locale['display_name'] = locale['display_name'].replace(', United States of America', '');
-                            var context = $.extend(APP_CONFIG, locale);
-                            var html = JST.did_you_mean_item(context);
-
-                            $did_you_mean.append(html);
-                        });
-                        $did_you_mean_wrapper.show();
-                    }
-                }
-            });
         } else {
             $search_latitude.val('');
             $search_longitude.val('');
@@ -590,6 +583,7 @@ $(function() {
 
         return false;
     });
+
 
     if (GEOLOCATE) {
         $geolocate_button.show();
@@ -618,7 +612,7 @@ $(function() {
     } else {
         $search_results_map_wrapper.css({ height: RESULTS_MAP_HEIGHT + 'px' });
     }
-    
+
     if (PAGE_WIDTH > 767 && !IS_MOBILE) {
         config_map_affix();
     }
