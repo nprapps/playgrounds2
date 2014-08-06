@@ -99,20 +99,26 @@ def update_playground():
         for field in playground_fields:
             # Transform integers into ints when possible.
             try:
-                payload['playground'][field] = float(request.form.get(field, None))
+                if field == 'zip_code':
+                    payload['playground']['zip_code'] = str(request.form.get(field, None))
+                else:
+                    payload['playground'][field] = float(request.form.get(field, None))
 
-                if payload['playground'][field].is_integer():
-                    payload['playground'][field] = int(payload['playground'][field])
+                    if payload['playground'][field]:
+                        print field, payload['playground'][field]
+
+                    if payload['playground'][field].is_integer():
+                        payload['playground'][field] = int(payload['playground'][field])
             except ValueError:
                 payload['playground'][field] = request.form.get(field, None)
             except TypeError:
                 pass
 
-        # Special-case handling for zip_code, which is a string, not an int.
-        try:
-            payload['playground']['zip_code'] = str(payload['playground']['zip_code'])
-        except KeyError:
-            pass
+        # # Special-case handling for zip_code, which is a string, not an int.
+        # try:
+        #     payload['playground']['zip_code'] = str(payload['playground']['zip_code'])
+        # except KeyError:
+        #     pass
 
         try:
             if payload['playground']['reverse_geocoded'] == "on":
