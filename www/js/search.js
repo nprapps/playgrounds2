@@ -45,6 +45,7 @@ var search_xhr = null;
 var geocode_xhr = null;
 var user_zoomed = false;
 var user_panned = false;
+var move_end_listener = null;
 
 function buildMapboxPin(size, shape, color, lat, lng) {
     /*
@@ -59,6 +60,8 @@ function search() {
      */
     var latitude = parseFloat($search_latitude.val());
     var longitude = parseFloat($search_longitude.val());
+
+    var latlng = new google.maps.LatLng(latitude, longitude);
     var not_found = false;
 
     $search_results_ul.empty();
@@ -71,7 +74,8 @@ function search() {
         $search_results_map_loading_text.show();
         $search_results_map.css('opacity', '0.25');
     } else {
-        desktop_map.removeLayer(desktop_markers);
+        // TKTKTK
+        // desktop_map.removeLayer(desktop_markers);
     }
 
     if (search_xhr !== null) {
@@ -237,17 +241,23 @@ function search() {
                         $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + search_map_width + 'x' + search_map_height + '.png');
                     }
                 } else {
-                    desktop_map.off('moveend', desktop_map_moveend);
-                    desktop_map.once('moveend', temp_desktop_map_moveend);
-                    desktop_map.setView([latitude, longitude], zoom);
+                    // desktop_map.off('moveend', desktop_map_moveend);
+                    // desktop_map.once('moveend', temp_desktop_map_moveend);
+                    // desktop_map.setView([latitude, longitude], zoom);
 
-                    desktop_markers.clearLayers();
+                    google.maps.event.removeListener(move_end_listener);
+                    move_end_listener = google.maps.event.addListenerOnce(google_desktop_map, 'dragend', temp_desktop_map_moveend);
 
-                    _.each(markers, function(marker) {
-                        desktop_markers.addLayer(marker);
-                    });
+                    google_desktop_map.setCenter(latlng);
+                    google_desktop_map.setZoom(zoom);
 
-                    desktop_map.addLayer(desktop_markers);
+                    // desktop_markers.clearLayers();
+
+                    // _.each(markers, function(marker) {
+                    //     desktop_markers.addLayer(marker);
+                    // });
+
+                    // desktop_map.addLayer(desktop_markers);
                 }
 
                 $search_results_map_wrapper.show();
@@ -266,10 +276,8 @@ function search() {
             }
 
             if (!IS_MOBILE) {
-                desktop_map.off('moveend', desktop_map_moveend);
-                desktop_map.once('moveend', temp_desktop_map_moveend);
-
-                desktop_map.invalidateSize();
+                google.maps.event.removeListener(move_end_listener);
+                move_end_listener = google.maps.event.addListenerOnce(google_desktop_map, 'dragend', temp_desktop_map_moveend);
             }
 
             $.smoothScroll({ scrollTarget: '#results-address' });
@@ -337,7 +345,9 @@ function desktop_map_moveend() {
 }
 
 function temp_desktop_map_moveend() {
-    desktop_map.on('moveend', desktop_map_moveend);
+    // desktop_map.on('moveend', desktop_map_moveend);
+
+    google.maps.event.addListener(google_desktop_map, 'dragend', desktop_map_moveend);
 }
 
 function hashchange_callback() {
@@ -432,6 +442,16 @@ function parse_geocode_results(results, status) {
         $no_geocode.show();
     }
 }
+
+function initialize_google_map() {
+    var mapOptions = {
+        center: new google.maps.LatLng(-34.397, 150.644),
+        zoom: 8
+    };
+    google_desktop_map = new google.maps.Map($('#google-map')[0],
+        mapOptions);
+}
+
 
 $(function() {
     $search_form = $('#search');
@@ -591,24 +611,7 @@ $(function() {
     }
 
     if (!IS_MOBILE) {
-        $search_results_map.hide();
-        $search_results_map_desktop.css({ height: RESULTS_MAP_HEIGHT + 'px' });
-
-        desktop_map = L.mapbox.map('search-results-map-desktop', null, {
-            zoomControl: false,
-            scrollWheelZoom: false
-        });
-
-        desktop_map.on('moveend', desktop_map_moveend);
-
-        var tiles = L.mapbox.tileLayer('npr.map-s5q5dags', {
-            detectRetina: true,
-            retinaVersion: 'npr.map-u1zkdj0e'
-        });
-
-        tiles.addTo(desktop_map);
-
-        desktop_markers = L.layerGroup();
+        initialize_google_map();
     } else {
         $search_results_map_wrapper.css({ height: RESULTS_MAP_HEIGHT + 'px' });
     }
