@@ -230,6 +230,9 @@ function search() {
             }
 
             if (latitude) {
+                $search_results_map_wrapper.show();
+                $results_address.show();
+
                 if (IS_MOBILE) {
                     var search_map_width = RESULTS_MAP_WIDTH;
                     var search_map_height = RESULTS_MAP_HEIGHT;
@@ -246,12 +249,10 @@ function search() {
                         $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + search_map_width + 'x' + search_map_height + '.png');
                     }
                 } else {
+                    google.maps.event.trigger(google_desktop_map, 'resize');
                     google_desktop_map.setCenter(latlng);
                     google_desktop_map.setZoom(zoom);
                 }
-
-                $search_results_map_wrapper.show();
-                $results_address.show();
 
                 $create_link.attr('href', 'create.html?latitude=' + latitude + '&longitude=' + longitude);
             }
@@ -264,8 +265,6 @@ function search() {
                 $search_results.show();
                 $search_help_prompt.show();
             }
-
-            $.smoothScroll({ scrollTarget: '#results-address' });
         },
         cache: true
     });
@@ -347,8 +346,10 @@ function hashchange_callback() {
         $no_geocode.hide();
 
         if (!($search_latitude.val() == latitude && $search_longitude.val() == longitude)) {
-            $search_results_map_wrapper.hide();
-            $map_loading.text('Searching...').show();
+            if (!user_panned) {
+                $search_results_map_wrapper.hide();
+                $map_loading.text('Searching...').show();
+            }
 
             user_panned = false;
         } else {
@@ -426,12 +427,23 @@ function parse_geocode_results(results, status) {
 function initialize_google_map() {
     var mapOptions = {
         center: new google.maps.LatLng(-34.397, 150.644),
+        mapTypeControl: false,
+        overviewMapControl: false,
+        panControl: false,
+        rotateControl: false,
+        scaleControl: false,
+        scrollwheel: false,
+        streetViewControl: false,
+        zoomControl: false,
         zoom: 8
     };
     google_desktop_map = new google.maps.Map($('#google-map')[0],
         mapOptions);
 
-    google.maps.event.addListener(google_desktop_map, 'dragend', desktop_map_moveend);
+    var debounced_moveend = _.debounce(desktop_map_moveend, 200);
+
+    google.maps.event.addListener(google_desktop_map, 'center_changed', debounced_moveend);
+    google.maps.event.addListener(google_desktop_map, 'zoom_changed', debounced_moveend);
 }
 
 
