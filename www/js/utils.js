@@ -66,12 +66,10 @@ function buildCloudSearchParams(latitude, longitude, zoom, query) {
         var numTiles = 1 << zoom;
         var proj = new MercatorProjection();
         var point = proj.fromLatLngToPoint(new google.maps.LatLng(latitude, longitude));
-        console.log(latitude, longitude, zoom);
         var pixel_coordinates = new google.maps.Point(
               point.x * numTiles,
               point.y * numTiles
         );
-        console.log(point, pixel_coordinates);
 
         var upper_left = new google.maps.Point(pixel_coordinates.x - (RESULTS_MAP_WIDTH / 2), pixel_coordinates.y - (RESULTS_MAP_HEIGHT / 2));
         var lower_right = new google.maps.Point(pixel_coordinates.x + (RESULTS_MAP_WIDTH / 2), pixel_coordinates.y + (RESULTS_MAP_HEIGHT / 2));
@@ -88,8 +86,6 @@ function buildCloudSearchParams(latitude, longitude, zoom, query) {
 
         var northwest = proj.fromPointToLatLng(upper_left_world_coordinates);
         var southeast = proj.fromPointToLatLng(lower_right_world_coordinates);
-
-        console.log(northwest, southeast);
 
         query_bits.push('longitude:' + degToCloudSearch(northwest.lng()) + '..' + degToCloudSearch(southeast.lng()) + ' latitude:' + degToCloudSearch(southeast.lat()) + '..' + degToCloudSearch(northwest.lat()));
 
