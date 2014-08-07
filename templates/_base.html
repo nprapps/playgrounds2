@@ -17,6 +17,9 @@
     <!-- CHARTBEAT -->
     <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
 
+    <!-- FONTS -->
+    {% include '_fonts.html' %}
+
     <!-- CSS -->
     {{ CSS.push('less/app.less') }}
     {% block extra_css %}{% endblock extra_css %}
@@ -129,7 +132,7 @@
 </head>
 <body class="{% block body_class %}{% endblock body_class %}">
     {% block outer_content %}
-    <nav>
+<!--     <nav>
         <ul class="site-links">
             <li class="npr"><a href="http://npr.org"><img src="http://media.npr.org/chrome/news/nprlogo_138x46.gif" alt="NPR" /></a></li>
             <li class="news"><a href="http://www.npr.org/sections/news/">News</a></li>
@@ -146,7 +149,7 @@
             <li class="donate"><a href="http://www.npr.org/stations/donate/index.php">Donate</a></li>
             <li class="shop"><a href="http://shop.npr.org">Shop</a></li>
         </ul>
-    </nav>
+    </nav> -->
 
     {% block header_content %}
     {% endblock header_content %}
