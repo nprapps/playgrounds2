@@ -10,8 +10,6 @@ See get_secrets() below for a fast way to access them.
 
 import os
 
-from metros import metro_areas
-
 """
 NAMES
 """
@@ -196,8 +194,6 @@ STATE_LIST = [
     'WI',
     'WY'
 ]
-
-METRO_AREAS = metro_areas
 
 """
 Utilities
