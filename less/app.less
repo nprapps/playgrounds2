@@ -1609,8 +1609,10 @@ section#the-goods { margin-top: 44px; }
 }
 
 #google-map {
-    width: 500px;
-    height: 500px;
+    @media @screen-small-above {
+        width: 500px;
+        height: 500px;
+    }
 }
 
 // Footer
