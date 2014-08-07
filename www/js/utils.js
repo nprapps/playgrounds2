@@ -9,8 +9,8 @@ function coordinatesApproxEqual(ll1, ll2, accuracy) {
         accuracy = 10;
     }
 
-    return (Math.round(ll1.lat * accuracy) / accuracy == Math.round(ll2.lat * accuracy) / accuracy &&
-        Math.round(ll1.lng * accuracy) / accuracy == Math.round(ll2.lng * accuracy) / accuracy);
+    return (Math.round(ll1.lat() * accuracy) / accuracy == Math.round(ll2.lat() * accuracy) / accuracy &&
+        Math.round(ll1.lng() * accuracy) / accuracy == Math.round(ll2.lng() * accuracy) / accuracy);
 }
 
 function degToRad(degree) {

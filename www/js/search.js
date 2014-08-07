@@ -46,6 +46,8 @@ var geocode_xhr = null;
 var user_zoomed = false;
 var user_panned = false;
 var move_end_listener = null;
+var markers = [];
+
 
 function buildMapboxPin(size, shape, color, lat, lng) {
     /*
@@ -74,8 +76,9 @@ function search() {
         $search_results_map_loading_text.show();
         $search_results_map.css('opacity', '0.25');
     } else {
-        // TKTKTK
-        // desktop_map.removeLayer(desktop_markers);
+        for (var i=0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
     }
 
     if (search_xhr !== null) {
@@ -117,7 +120,13 @@ function search() {
             $map_loading.hide();
             $results_loading.hide();
 
-            var markers = [];
+            if (!IS_MOBILE) {
+                for (var i=0; i < markers.length; i++) {
+                    markers[i].setMap(null);
+                }
+            }
+
+            markers = [];
 
             if (data['hits']['hit'].length > 0) {
                 _.each(data['hits']['hit'], function(hit, i) {
@@ -145,28 +154,24 @@ function search() {
                         if (IS_MOBILE) {
                             markers.push(buildMapboxPin('m', context['letter'], 'ff6633', lat, lng));
                         } else {
-                            var marker = L.mapbox.marker.style({
-                                'type': 'Feature',
-                                'geometry': {},
-                                'properties': {
-                                    'marker-size': 'medium',
-                                    'marker-symbol': context['letter'],
-                                    'marker-color': '#ff6633'
-                                }
-                            }, [lat, lng]);
+                            var marker = new google.maps.Marker({
+                                map: google_desktop_map,
+                                position: new google.maps.LatLng(lat, lng),
+                                icon: "http://maps.google.com/mapfiles/marker" + context['letter'].toUpperCase() + ".png",
+                            });
 
-                            marker.letter = context['letter'];
+                            var letter = context['letter'];
 
-                            marker.on('mouseover', function() {
+                            google.maps.event.addListener(marker, 'mouseover', function() {
                                 $('.playground-list li').removeClass('highlight');
-                                $('#playground-' + this.letter).addClass('highlight');
+                                $('#playground-' + letter).addClass('highlight');
 
                                 if ($selected_playground) {
                                     $selected_playground.addClass('highlight');
                                 }
                             });
 
-                            marker.on('mouseout', function() {
+                            google.maps.event.addListener(marker, 'mouseout', function() {
                                 $('.playground-list li').removeClass('highlight');
 
                                 if ($selected_playground) {
@@ -174,14 +179,14 @@ function search() {
                                 }
                             });
 
-                            marker.on('click', function() {
-                                $selected_playground = $('#playground-' + this.letter);
+                            google.maps.event.addListener(marker, 'click', function() {
+                                $selected_playground = $('#playground-' + letter);
 
                                 $('.playground-list li').removeClass('highlight');
                                 $selected_playground.addClass('highlight');
 
-                                $.smoothScroll({ scrollTarget: '#playground-' + this.letter });
-                            });
+                                $.smoothScroll({ scrollTarget: '#playground-' + letter });
+                            })
 
                             markers.push(marker);
                         }
@@ -241,23 +246,8 @@ function search() {
                         $search_results_map.attr('src', 'http://api.tiles.mapbox.com/v3/' + BASE_LAYER + '/' + markers.join(',') + '/' + longitude + ',' + latitude + ',' + zoom + '/' + search_map_width + 'x' + search_map_height + '.png');
                     }
                 } else {
-                    // desktop_map.off('moveend', desktop_map_moveend);
-                    // desktop_map.once('moveend', temp_desktop_map_moveend);
-                    // desktop_map.setView([latitude, longitude], zoom);
-
-                    google.maps.event.removeListener(move_end_listener);
-                    move_end_listener = google.maps.event.addListenerOnce(google_desktop_map, 'dragend', temp_desktop_map_moveend);
-
                     google_desktop_map.setCenter(latlng);
                     google_desktop_map.setZoom(zoom);
-
-                    // desktop_markers.clearLayers();
-
-                    // _.each(markers, function(marker) {
-                    //     desktop_markers.addLayer(marker);
-                    // });
-
-                    // desktop_map.addLayer(desktop_markers);
                 }
 
                 $search_results_map_wrapper.show();
@@ -273,11 +263,6 @@ function search() {
             } else {
                 $search_results.show();
                 $search_help_prompt.show();
-            }
-
-            if (!IS_MOBILE) {
-                google.maps.event.removeListener(move_end_listener);
-                move_end_listener = google.maps.event.addListenerOnce(google_desktop_map, 'dragend', temp_desktop_map_moveend);
             }
 
             $.smoothScroll({ scrollTarget: '#results-address' });
@@ -330,24 +315,19 @@ function reset_zoom() {
 }
 
 function desktop_map_moveend() {
-    var latlng = desktop_map.getCenter();
-    var current = new L.LatLng($search_latitude.val(), $search_longitude.val());
-    zoom = desktop_map.getZoom();
+    var latlng = google_desktop_map.getCenter();
+    console.log(latlng);
+    var current = new google.maps.LatLng($search_latitude.val(), $search_longitude.val());
+    zoom = google_desktop_map.getZoom();
 
     if (!coordinatesApproxEqual(latlng, current, 1000)) {
-        $search_latitude.val(latlng.lat);
-        $search_longitude.val(latlng.lng);
+        $search_latitude.val(latlng.lat());
+        $search_longitude.val(latlng.lng());
 
         user_panned = true;
 
         navigate();
     }
-}
-
-function temp_desktop_map_moveend() {
-    // desktop_map.on('moveend', desktop_map_moveend);
-
-    google.maps.event.addListener(google_desktop_map, 'dragend', desktop_map_moveend);
 }
 
 function hashchange_callback() {
@@ -450,6 +430,8 @@ function initialize_google_map() {
     };
     google_desktop_map = new google.maps.Map($('#google-map')[0],
         mapOptions);
+
+    google.maps.event.addListener(google_desktop_map, 'dragend', desktop_map_moveend);
 }
 
 
