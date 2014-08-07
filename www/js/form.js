@@ -5,6 +5,7 @@ var city_name;
 var state_abbreviation;
 var zip_code;
 var playground = {};
+var move_end_listener = null;
 
 $(function() {
     playground = {
@@ -46,9 +47,9 @@ $(function() {
                     require_us_address(address_components);
                     playground.form.geocode_fields();
                     playground.hide_address_editor();
-                    map.off('moveend', playground.map.process_map_location);
+                    google.maps.event.removeListener(move_end_listener);
                     playground.map.reset_editor();
-                    map.on('moveend', playground.map.process_map_location);
+                    move_end_listener = google.maps.event.addListener(map, 'center_changed', playground.map.process_map_location);
                     playground.address_change_accepted = true;
                 } else {
                     alert_text = "<strong>We're sorry! We couldn't find that place.</strong><br>Don't forget to add the street/avenue/boulevard.<br/>If you're still having trouble, try finding it on the map.";
@@ -94,6 +95,7 @@ $(function() {
                 playground.fields.reverse_geocoded.attr('checked', 'checked');
 
                 playground.fields.locator_map.removeClass('hidden');
+
             }
         },
         'form': {
@@ -160,45 +162,61 @@ $(function() {
 
                 $('#edit-marker').hide();
 
-                map = L.map('edit-map', {
-                    minZoom: 11,
-                    maxZoom: 17,
-                    scrollWheelZoom: false
-                });
+                var mapOptions = {
+                    center: new google.maps.LatLng(-34.397, 150.644),
+                    mapTypeControl: false,
+                    noClear: true,
+                    overviewMapControl: false,
+                    panControl: false,
+                    rotateControl: false,
+                    scaleControl: false,
+                    scrollwheel: false,
+                    streetViewControl: false,
+                    zoomControl: false,
+                    zoom: playground.LOCATOR_DEFAULT_ZOOM
+                };
 
-                map_layer = L.mapbox.tileLayer(playground.BASE_LAYER).addTo(map);
-                grid_layer = L.mapbox.gridLayer(playground.BASE_LAYER).addTo(map);
-                map.addControl(L.mapbox.gridControl(grid_layer));
+                map = new google.maps.Map($('#edit-map')[0], mapOptions);
+                // map = L.map('edit-map', {
+                //     minZoom: 11,
+                //     maxZoom: 17,
+                //     scrollWheelZoom: false
+                // });
+
+                // map_layer = L.mapbox.tileLayer(playground.BASE_LAYER).addTo(map);
+                // grid_layer = L.mapbox.gridLayer(playground.BASE_LAYER).addTo(map);
+                // map.addControl(L.mapbox.gridControl(grid_layer));
 
                 if (playground.fields.latitude.val() !== '' && playground.fields.latitude.val() !== 'None') {
-                    map.setView([
-                            playground.fields.latitude.val(),
-                            playground.fields.longitude.val()],
-                        playground.LOCATOR_DEFAULT_ZOOM);
+                    var latlng = new google.maps.LatLng(playground.fields.latitude.val(), playground.fields.longitude.val());
+                    map.setCenter(latlng);
                 }
                 playground.map.center_editor();
             },
             'center_editor': function() {
-                map.off('moveend', playground.map.process_map_location);
-                map.invalidateSize(false);
+                google.maps.event.removeListener(move_end_listener);
                 var marker_left = $('#edit-map').width()/2 - 8;
                 var marker_top = $('#edit-map').height()/2 - 8;
                 $('#loading-spinner').hide();
+                if (playground.fields.latitude.val() !== '' && playground.fields.latitude.val() !== 'None') {
+                    var latlng = new google.maps.LatLng(playground.fields.latitude.val(), playground.fields.longitude.val());
+                    map.setCenter(latlng);
+                }
                 $('#edit-marker').css({'left': marker_left, 'top': marker_top}).show();
-                map.on('moveend', playground.map.process_map_location);
+                move_end_listener = google.maps.event.addListener(map, 'center_changed', playground.map.process_map_location);
             },
             'reset_editor': function() {
+                google.maps.event.trigger(map, 'resize');
                 if (playground.fields.latitude.val() !== '' && playground.fields.latitude.val() !== 'None') {
-                    map.setView([
-                            playground.fields.latitude.val(),
-                            playground.fields.longitude.val()],
-                        playground.LOCATOR_DEFAULT_ZOOM);
+                    var latlng = new google.maps.LatLng(playground.fields.latitude.val(), playground.fields.longitude.val());
+                    map.setCenter(latlng);
+                    map.setZoom(playground.LOCATOR_DEFAULT_ZOOM);
                 }
             },
-            'process_map_location': function() {
+            'process_map_location': _.debounce(function() {
                 var latlng = map.getCenter();
-                playground.reverse_geocode(latlng.lat, latlng.lng, playground.callbacks.reverse_geocode);
-            },
+                playground.reverse_geocode(latlng.lat(), latlng.lng(), playground.callbacks.reverse_geocode);
+            }, 200),
             'resize_locator': function() {
                 // Set the width.
                 playground.CONTENT_WIDTH = $('#main-content').width();
@@ -245,9 +263,10 @@ $(function() {
         },
         'locate_me': function() {
             function success(position){
-                map.setView([position.coords.latitude, position.coords.longitude], playground.LOCATOR_DEFAULT_ZOOM);
+                var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 playground.reverse_geocode(position.coords.latitude, position.coords.longitude, playground.callbacks.reverse_geocode);
-                playground.fields.locator_map.removeClass('hidden');
+                map.setCenter(latlng);
+                map.setZoom(playground.LOCATOR_DEFAULT_ZOOM);
             }
 
             function error(){
@@ -316,6 +335,7 @@ $(function() {
         'show_address_editor': function(){
             this.fields.address_editor.removeClass('hide');
             this.fields.address_editor_toggle.text('Cancel');
+            google.maps.event.trigger(map, 'resize');
             this.map.center_editor();
             if ($('body').hasClass('create-playground')){
                 $('.modal-backdrop').toggleClass('in');
@@ -449,7 +469,10 @@ $(function() {
 
             // Watch the map.
             // Perform a reverse geocode when the map is finished moving.
-            map.on('moveend', playground.map.process_map_location);
+
+            move_end_listener = google.maps.event.addListener(map, 'center_changed', playground.map.process_map_location);
+
+            google.maps.event.trigger(map, 'resize');
 
             // Sets up the click functions for each of the buttons.
             // Requires a data-action attribute on the button element.
@@ -504,6 +527,7 @@ $(function() {
             $('#editor-tabs a:first').on('click', function(e){
                 e.preventDefault();
                 $('this').tab('show');
+                google.maps.event.trigger(map, 'resize');
                 setTimeout(playground.map.center_editor, 25);
             })
 
