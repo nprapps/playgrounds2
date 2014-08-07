@@ -41,6 +41,7 @@ $(function() {
         'initial_field_values': {},
         'callbacks': {
             'geocode': function(address_components, latlng) {
+                console.log(address_components);
                 if (address_components){
                     playground.fields.latitude.attr('value', latlng['location'].lat());
                     playground.fields.longitude.attr('value', latlng['location'].lng());
@@ -278,6 +279,7 @@ $(function() {
         'geocode': function(geocode_object, callback) {
             geocoder = new google.maps.Geocoder();
             geocoder.geocode({'address': geocode_object}, function(results, status) {
+                console.log(results, status);
                 if (status == google.maps.GeocoderStatus.OK && results[0]['partial_match'] !== true) {
                     var locales = results[0]['address_components'];
                     var latlng = results[0]['geometry'];
@@ -285,7 +287,7 @@ $(function() {
                 }
                 else {
                     alert_text = "<h3>We're sorry!</h3>We're having a hard time finding this place.";
-                    make_alert(alert_text, 'warning', 'div.alerts');
+                    make_alert(alert_text, 'warning', 'div.modal-alerts');
                 }
             })
         },
