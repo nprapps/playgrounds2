@@ -490,6 +490,15 @@ $(function() {
         $('#' + action).toggleClass('hide');
     }
 
+    var add = get_parameter_by_name('add');
+    if (add === 'true'){
+        var $searchTitle = $('#search-title');
+        $('.help-description').hide();
+
+        $helpText = $('<p>To add a playground, first search to see if it&rsquo;s already in our database.</p>');
+        $helpText.insertAfter($searchTitle);
+    }
+
     $geolocate_button.click(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
             $search_address.val('');

@@ -23,17 +23,18 @@
     </div>
     {% include '_search_form.html' %}
 </header>
-<div class="intro-poster">
+
+<div class="poster-wrapper">
+    <div class="intro-poster"></div>
+
     <div class="container">
         <div class="row">
             <div class="span5 project-info-wrapper">
                 <div class="project-info">
-                    <h3>{{ COPY.content.important_title }}</h3>
-                    <p class="important-description">{{ COPY.content.important_description }}</p>
-<!--
-                    <div class="mobile-prompt">
-                        <p>{{ COPY.content.mobile_prompt }}</p>
-                    </div> -->
+                    <h3 class="feature-title">{{ COPY.content.help_title }}</h3>
+                   <p>{{ COPY.content.help_description }}</p>
+                   <p><a href="search.html?add=true" class="btn btn-blue btn-lg btn-block" role="button"><i class="icon-plus-sign"></i> {{ COPY.content.search_help_button }}</a></p>
+                   <p class="share-bulk">{{ COPY.content.help_add_many }}</p>
                 </div>
             </div>
         </div>
@@ -48,12 +49,7 @@
 
 </div>
 
-<div id="playground-help">
-    <h3 class="feature-title">{{ COPY.content.help_title }}</h3>
-    <p>{{ COPY.content.help_description }}</p>
-    <p><a href="create.html" class="btn btn-blue btn-block" role="button"><i class="icon-plus-sign"></i> {{ COPY.content.search_help_button }}</a></p>
-    <p class="share-bulk">{{ COPY.content.help_add_many }}</p>
-</div>
+
 
 <div id="playground-data" class="help-prompt">
     <h3 class="data-title">{{ COPY.content.data_title }}</h3>

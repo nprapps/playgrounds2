@@ -35,6 +35,11 @@ h3, h4, h5, h6 { font-weight: bold; line-height: 1.2; color: #333; margin-bottom
 p { margin-bottom: 1.3em; }
 //a, a:link, a:visited { color: #4774cc; text-decoration: none; }
 //a:hover, a:active { color: #bccae5; text-decoration: none; }
+
+.btn:focus {
+    outline: 5px auto fade(@green, 80%);
+}
+
 .btn.btn-blue, a.btn.btn-blue {
     background: none;
     background-color: @green; //#7598c9;
@@ -267,6 +272,45 @@ header {
 }
 
 // Homepage poster
+
+.poster-wrapper {
+    position: relative;
+
+    .project-info-wrapper {
+        position: absolute;
+        background: #FFF;
+        background: rgba(255,255,255,.8);
+        margin-top: 44px;
+        top: 0;
+
+        @media @screen-small {
+            position: static;
+        }
+    }
+    .project-info {
+        padding: 33px;
+        font-size: 14px;
+        line-height: 1.4;
+
+        @media @screen-small {
+            padding: 0;
+            font-size: 16px;
+        }
+
+        h3, p {
+            margin-bottom: 11px;
+
+            @media @screen-small-above {
+                margin-bottom: 22px;
+            }
+        }
+
+        .btn {
+            font-size: 16px;
+        }
+    }
+}
+
 .intro-poster {
     background: #ccc url('@{img-root}/playground-1200.jpg') no-repeat 50% 80%;
     background-size: cover;
@@ -321,21 +365,7 @@ header {
             display: none;
         }
     }
-    .project-info-wrapper {
-        background: #FFF;
-        background: rgba(255,255,255,.8);
-        margin-top: 44px;
 
-        @media @screen-small {
-            bottom: 0;
-        }
-    }
-    .project-info {
-        padding: 33px;
-        font-size: 14px;
-
-        @media @screen-small { padding: 22px 20px; }
-    }
     .row {
         position: relative;
         height: 550px;
@@ -916,6 +946,15 @@ section#the-goods { margin-top: 44px; }
     #playground-meta {
         margin-bottom: 44px;
     }
+
+    #playground-data {
+        padding-bottom: 22px;
+
+        .btn {
+            margin-bottom: 11px;
+        }
+    }
+
     #playground-about {
         table.city-list {
             margin: 0 0 1.3em 0;
@@ -1459,11 +1498,16 @@ section#the-goods { margin-top: 44px; }
     padding: 33px 0;
 
     h1 {
+        line-height: 1.1;
         margin: 0 0 11px 0;
 
-        span {
+        .subtitle {
             font-size: 60%;
             margin-left: 11px;
+        }
+
+        + p {
+            margin-bottom: 11px;
         }
     }
     h6.divider {
@@ -1491,11 +1535,11 @@ section#the-goods { margin-top: 44px; }
     #search { clear: both; }
     #geolocate {
         display: none;
-        font-size: 14px;
+        font-size: 16px;
         width: 45%;
         float: right;
 
-        i { font-size: 140%; }
+        i { font-size: 120%; }
     }
     #address-search {
         width: 45%;
