@@ -10,14 +10,12 @@ See get_secrets() below for a fast way to access them.
 
 import os
 
-from metros import metro_areas
-
 """
 NAMES
 """
 # Project name used for display
 # When you change this, also change app_header_title in the copy spreadsheet
-PROJECT_NAME = 'Playgrounds For Everyone'
+PROJECT_NAME = 'Accessible Playgrounds'
 
 # Project name used for paths on the filesystem and in urls
 # Use dashes, not underscores
@@ -98,7 +96,12 @@ NPR_DFP = {
 """
 SERVICES
 """
-GOOGLE_ANALYTICS_ID = 'UA-5828686-4'
+GOOGLE_ANALYTICS = {
+'ACCOUNT_ID': 'UA-5828686-4',
+'DOMAIN': PRODUCTION_S3_BUCKETS[0],
+'TOPICS': '' # e.g. '[1014,3,1003,1002,1001]'
+}
+
 DISQUS_SHORTNAME = 'npr-playgrounds2'
 
 """
@@ -195,8 +198,6 @@ STATE_LIST = [
     'WI',
     'WY'
 ]
-
-METRO_AREAS = metro_areas
 
 """
 Utilities

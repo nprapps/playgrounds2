@@ -22,17 +22,22 @@
 @screen-tiny: ~"screen and (max-width: 480px)";
 
 
+// Colors
+
+@green: #019875;
+
+
 // General styles
-body { font: 16px/1.5em Helvetica, Arial, sans-serif; color: #111; -webkit-font-smoothing: antialiased; }
-h1 { font: normal 32px/1.125 Georgia, serif; margin: 0 0 22px 0; }
+body { font: 18px/1.5em "Gotham SSm", Helvetica, Arial, sans-serif; color: #111; }
+h1 { font-size: 32px; margin: 0 0 22px 0; }
 h2 { font-weight: normal; line-height: 1.2; color: #333; margin-bottom: 22px; font-size: 22px; }
-h3, h4, h5, h6 { font-weight: normal; line-height: 1.2; color: #999; margin-bottom: 22px; }
+h3, h4, h5, h6 { font-weight: bold; line-height: 1.2; color: #333; margin-bottom: 22px; }
 p { margin-bottom: 1.3em; }
 //a, a:link, a:visited { color: #4774cc; text-decoration: none; }
 //a:hover, a:active { color: #bccae5; text-decoration: none; }
 .btn.btn-blue, a.btn.btn-blue {
     background: none;
-    background-color: #7598c9;
+    background-color: @green; //#7598c9;
     border: none;
     border-radius: 0;
     line-height: 44px;
@@ -48,7 +53,7 @@ p { margin-bottom: 1.3em; }
     &:hover { opacity: 0.7; }
     &:hover, &:active {
         color: #fff;
-        background-color: #7598c9;
+        background-color: fade(@green, 80%); //#7598c9;
         background-position: auto;
         -webkit-transition: none; -moz-transition: none; -o-transition: none; transition: none;
     }
@@ -119,13 +124,14 @@ header {
     min-height: 44px;
     position: relative;
     overflow: hidden;
+    overflow: hidden;
 
     @media @screen-tiny { padding: 33px 20px; }
 
     h1 {
         margin-bottom: 11px;
         color: #444;
-        font-family: Helvetica, Arial, sans-serif;
+        font-family: "Gotham SSm", Helvetica, Arial, sans-serif;
         font-size: 44px;
 
         @media @screen-medium { font-size: 32px; }
@@ -138,85 +144,46 @@ header {
 
         @media @screen-medium { font-size: 14px; }
     }
+
     .index & {
-        background: #ccc url('@{img-root}/playground-1200.jpg') no-repeat 50% 80%;
-        background-size: cover;
-        padding: 0 30px 0 30px;
-        height: 550px;
+        background: #fff;
+        padding: 22px 0 0 0;
 
-        @media @screen-mega-above {
-            background-image: url('@{img-root}/playground-1440.jpg');
-            background-position: 50% 35%;
-            height: 610px;
+
+        .logo {
+            width: 69px;
+            height: 23px;
+            margin-bottom: 11px;
         }
-        @media @screen-medium {
-            background-image: url('@{img-root}/playground-980.jpg');
-            background-position: 50% 85%;
-            height: 425px;
+
+        h1 {
+            font-size: 60px;
+            line-height: 1.1;
+            font-weight: normal;
+
+            @media @screen-small {
+                font-size: 36px;
+            }
+
+            @media @screen-tiny {
+                font-size: 24px;
+            }
         }
+
+        #playground-search {
+            h1 {
+                font-weight: bold;
+                font-size: 24px;
+                line-height: 1.1;
+            }
+        }
+
+        .title-banner {
+            margin-bottom: 22px;
+        }
+
         @media @screen-small {
-            background-image: url('@{img-root}/playground-768.jpg');
-            background-position: 50% 30%;
-            padding: 0;
-            position: relative;
-            height: 375px;
-        }
-        @media @screen-tiny {
-            background-image: url('@{img-root}/playground-480.jpg');
-            background-position: 50% 45%;
-            height: 350px;
-        }
-
-        .mobile-prompt {
-            display: inline-block;
-            padding: 11px 11px 11px 33px;
-            margin: 22px 0 0 0;
-            background: #eee url(@icon-smartphone) no-repeat 11px center;
-            background-color: rgba(255,255,255,.5);
-
-            p {
-                font-size: 12px;
-                line-height: 1.4;
-                color: #444;
-                margin: 0;
-
-                b {
-                    background-color: rgba(117,152,201,.3);
-                    padding: 2px 5px;
-                    margin: 0 2px;
-                }
-            }
-
-            .NPRtablet &,
-            .NPRphone & {
-                display: none;
-            }
-        }
-        .project-info-wrapper {
-            background: #FFF;
-            background: rgba(255,255,255,.8);
-            margin-top: 44px;
-
-            @media @screen-small {
-                bottom: 0;
-            }
-        }
-        .project-info {
-            padding: 33px;
-
-            @media @screen-small { padding: 22px 20px; }
-        }
-        .row {
-            position: relative;
-            height: 550px;
-
-            @media @screen-small {
-                height: auto;
-                position: absolute;
-                bottom: 0;
-                right: 0;
-                left: 0;
-            }
+            padding: 20px;
         }
     }
 
@@ -231,6 +198,11 @@ header {
             top: 11px;
             left: 117px;
             border: none;
+        }
+
+        .logo {
+            display: inline-block;
+            margin-right: 10px;
         }
 
         h1 {
@@ -271,7 +243,7 @@ header {
                     border-left: none;
                     padding-left: 0;
                 }
-                a { color: #6d8ac4; }
+                a { color: @inlineLink; }
 
                 &.home {
                     text-transform: none;
@@ -294,6 +266,89 @@ header {
     .search & ul.project-nav li.search a { color: #999; }
 }
 
+// Homepage poster
+.intro-poster {
+    background: #ccc url('@{img-root}/playground-1200.jpg') no-repeat 50% 80%;
+    background-size: cover;
+    padding: 0 30px 0 30px;
+    height: 550px;
+
+    @media @screen-mega-above {
+        background-image: url('@{img-root}/playground-1440.jpg');
+        background-position: 50% 35%;
+        height: 610px;
+    }
+    @media @screen-medium {
+        background-image: url('@{img-root}/playground-980.jpg');
+        background-position: 50% 85%;
+        height: 425px;
+    }
+    @media @screen-small {
+        background-image: url('@{img-root}/playground-768.jpg');
+        background-position: 50% 30%;
+        padding: 0;
+        position: relative;
+        height: 375px;
+    }
+    @media @screen-tiny {
+        background-image: url('@{img-root}/playground-480.jpg');
+        background-position: 50% 45%;
+        height: 350px;
+    }
+
+    .mobile-prompt {
+        display: inline-block;
+        padding: 11px 11px 11px 33px;
+        margin: 22px 0 0 0;
+        background: #eee url(@icon-smartphone) no-repeat 11px center;
+        background-color: rgba(255,255,255,.5);
+
+        p {
+            font-size: 12px;
+            line-height: 1.4;
+            color: #444;
+            margin: 0;
+
+            b {
+                background-color: rgba(117,152,201,.3);
+                padding: 2px 5px;
+                margin: 0 2px;
+            }
+        }
+
+        .NPRtablet &,
+        .NPRphone & {
+            display: none;
+        }
+    }
+    .project-info-wrapper {
+        background: #FFF;
+        background: rgba(255,255,255,.8);
+        margin-top: 44px;
+
+        @media @screen-small {
+            bottom: 0;
+        }
+    }
+    .project-info {
+        padding: 33px;
+        font-size: 14px;
+
+        @media @screen-small { padding: 22px 20px; }
+    }
+    .row {
+        position: relative;
+        height: 550px;
+
+        @media @screen-small {
+            height: auto;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+        }
+    }
+}
 
 // Cube ad
 .ad-desktop-wrap {
@@ -321,6 +376,11 @@ header {
 
 // Content
 section#the-goods { margin-top: 44px; }
+
+.logo {
+    width: 69px;
+    height: 23px;
+}
 
 .alert {
     margin: 0 0 2px 0;
@@ -387,12 +447,12 @@ section#the-goods { margin-top: 44px; }
         h3 {
             font-size: 14px;
             font-weight: bold;
-            color: #555;
+            color: #333;
             margin: 0 0 11px 0;
         }
         p {
             text-align: left;
-            font-size: 12px;
+            font-size: 16px;
         }
     }
 }
@@ -565,7 +625,7 @@ section#the-goods { margin-top: 44px; }
         right: 0;
         line-height: 34px;
         color: @white;
-        background: @secondaryControl;
+        background: desaturate(lighten(@inlineLink, 40%), 50%);
         text-shadow: none;
     }
 
@@ -667,7 +727,7 @@ section#the-goods { margin-top: 44px; }
                     left:0;
                     top: 0;
                     z-index: 1;
-                    border: 2px solid lighten(@deepBlue, 20%);
+                    border: 2px solid fade(@inlineLink, 50%);
                     width: 30px;
                     height: 30px;
 
@@ -679,7 +739,7 @@ section#the-goods { margin-top: 44px; }
 
             input[type="checkbox"]:checked ~ .checkbox {
                 &:before {
-                    background: lighten(@deepBlue, 5%);
+                    background: fade(@inlineLink, 50%);
                     box-shadow: inset 0 0 0 1px #fff;
                     .icon-FontAwesome();
                     content: @ok;
@@ -779,10 +839,10 @@ section#the-goods { margin-top: 44px; }
                 display: table-cell;
                 width: 50%;
                 float: none;
-                background: @secondaryControl;
+                background: fade(@inlineLink, 50%);
 
                 &.active {
-                    background: @primaryControl;
+                    background: @inlineLink;
                 }
 
                 a {
@@ -821,19 +881,14 @@ section#the-goods { margin-top: 44px; }
 
     h3 {
         font-size: 24px;
-        color: #787878;
+        color: #333;
         margin: 0 0 22px 0;
         padding-top: 11px;
 
         &.data-title { padding-top: 0; }
-        &.about-title,
-        &.feature-title {
-            border-top: 4px solid #ebebeb;
-            padding-top: 44px;
-        }
     }
     p {
-        font-size: 14px;
+        font-size: 16px;
         line-height: 1.5;
         margin-bottom: 22px;
 
@@ -1400,7 +1455,7 @@ section#the-goods { margin-top: 44px; }
 }
 #playground-search {
     background-color: #f5f5f5;
-    border-bottom: 2px solid #ebebeb;
+    // border-bottom: 2px solid #ebebeb;
     padding: 33px 0;
 
     h1 {
@@ -1462,13 +1517,7 @@ section#the-goods { margin-top: 44px; }
         &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
     }
 }
-.index #playground-search {
-    h1 {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 22px;
-        color: #787878;
-    }
-}
+
 .search #main-content {
     padding-bottom: 44px;
 
@@ -1581,6 +1630,12 @@ section#the-goods { margin-top: 44px; }
     }
 }
 
+#google-map {
+    @media @screen-small-above {
+        width: 500px;
+        height: 500px;
+    }
+}
 
 // Footer
 footer {

@@ -28,7 +28,7 @@
 {% endblock social_head %}
 
 {% block extra_head %}
-    <script type='text/javascript' src="{{ S3_BASE_URL }}/js/lib/mapbox.js"></script>
+    <meta name="description" content="{% if playground.public_remarks %}{{ playground.public_remarks }}{% else %}{{ PROJECT_DESCRIPTION }}{% endif %}">
 {% endblock %}
 
 {% block header_content %}
@@ -49,7 +49,7 @@
 <!-- Map / Address -->
 <div class="address">
     {% if playground.latitude and playground.longitude %}
-    <img id="locator-map" data-longitude="{{ playground.longitude }}" data-latitude="{{ playground.latitude }}" />
+    <img id="locator-map" data-longitude="{{ playground.longitude }}" data-latitude="{{ playground.latitude }}" alt="{{ playground.display_name }} : {{ playground.address }}, {{ playground.city }}, {{ playground.state }} {{ playground.zip_code }}" />
     {% endif %}
     <div class="address-meta-wrapper">
         <div class="address-meta">
@@ -212,6 +212,8 @@
 {% endblock %}
 
 {% block extra_foot_js %}
+    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
     {{ JS.push('js/lib/underscore.js') }}
     {{ JS.push('js/lib/moment.js') }}
     {{ JS.push('js/lib/bootstrap.js') }}
@@ -219,6 +221,5 @@
     {{ JS.push('js/utils.js') }}
     {{ JS.push('js/form.js') }}
     {{ JS.push('js/lookup_tables.js') }}
-    {{ JS.push('js/responsive-ad.js') }}
     {{ JS.render('js/app-playground-footer.min.js') }}
 {% endblock extra_foot_js %}
