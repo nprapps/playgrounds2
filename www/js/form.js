@@ -164,7 +164,7 @@ $(function() {
                 $('#edit-marker').hide();
 
                 var mapOptions = {
-                    center: new google.maps.LatLng(-34.397, 150.644),
+                    center: new google.maps.LatLng(38.90389140432581, -77.00848319555666),
                     mapTypeControl: false,
                     noClear: true,
                     overviewMapControl: false,
@@ -194,6 +194,7 @@ $(function() {
                 if (playground.fields.latitude.val() !== '' && playground.fields.latitude.val() !== 'None') {
                     var latlng = new google.maps.LatLng(playground.fields.latitude.val(), playground.fields.longitude.val());
                     map.setCenter(latlng);
+                    console.log(latlng);
                 }
                 $('#edit-marker').css({'left': marker_left, 'top': marker_top}).show();
                 move_end_listener = google.maps.event.addListener(map, 'center_changed', playground.map.process_map_location);
