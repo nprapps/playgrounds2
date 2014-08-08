@@ -125,7 +125,6 @@ RESULTS_DEFAULT_ZOOM = 14
 
 ADMIN_EMAILS = [
     'playgrounds@npr.org',
-    'jbowers@npr.org'
 ]
 
 PUBLIC_FIELDS = [

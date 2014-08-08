@@ -160,7 +160,7 @@ def jst():
     os.system('%s/jst --template underscore jst www/js/templates.js' % app_config.APPS_NODE_PATH)
 
 
-def render_playgrounds(playgrounds=None):
+def render_playgrounds(playgrounds=None, compiled_includes={}):
     """
     Render the playgrounds pages.
     """
@@ -176,8 +176,6 @@ def render_playgrounds(playgrounds=None):
     slugs = [p.slug for p in playgrounds]
 
     app_config_js()
-
-    compiled_includes = {}
 
     updated_paths = []
 
