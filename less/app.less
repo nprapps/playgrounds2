@@ -22,17 +22,22 @@
 @screen-tiny: ~"screen and (max-width: 480px)";
 
 
+// Colors
+
+@green: #019875;
+
+
 // General styles
-body { font: 16px/1.5em "Gotham SSm", Helvetica, Arial, sans-serif; color: #111; }
-h1 { font: normal 32px/1.125 Georgia, serif; margin: 0 0 22px 0; }
+body { font: 18px/1.5em "Gotham SSm", Helvetica, Arial, sans-serif; color: #111; }
+h1 { font-size: 32px; margin: 0 0 22px 0; }
 h2 { font-weight: normal; line-height: 1.2; color: #333; margin-bottom: 22px; font-size: 22px; }
-h3, h4, h5, h6 { font-weight: normal; line-height: 1.2; color: #999; margin-bottom: 22px; }
+h3, h4, h5, h6 { font-weight: bold; line-height: 1.2; color: #333; margin-bottom: 22px; }
 p { margin-bottom: 1.3em; }
 //a, a:link, a:visited { color: #4774cc; text-decoration: none; }
 //a:hover, a:active { color: #bccae5; text-decoration: none; }
 .btn.btn-blue, a.btn.btn-blue {
     background: none;
-    background-color: #7598c9;
+    background-color: @green; //#7598c9;
     border: none;
     border-radius: 0;
     line-height: 44px;
@@ -48,7 +53,7 @@ p { margin-bottom: 1.3em; }
     &:hover { opacity: 0.7; }
     &:hover, &:active {
         color: #fff;
-        background-color: #7598c9;
+        background-color: fade(@green, 80%); //#7598c9;
         background-position: auto;
         -webkit-transition: none; -moz-transition: none; -o-transition: none; transition: none;
     }
@@ -142,6 +147,8 @@ header {
 
     .index & {
         background: #fff;
+        padding: 22px 0 0 0;
+
 
         .logo {
             width: 69px;
@@ -150,18 +157,33 @@ header {
         }
 
         h1 {
-            font-weight: bold;
+            font-size: 60px;
+            line-height: 1.1;
+            font-weight: normal;
+
+            @media @screen-small {
+                font-size: 36px;
+            }
+
+            @media @screen-tiny {
+                font-size: 24px;
+            }
         }
 
         #playground-search {
-            background: transparent;
-
             h1 {
-                font-size: 17px;
-                font-weight: normal;
-                text-transform: none;
-                color: #999;
+                font-weight: bold;
+                font-size: 24px;
+                line-height: 1.1;
             }
+        }
+
+        .title-banner {
+            margin-bottom: 22px;
+        }
+
+        @media @screen-small {
+            padding: 20px;
         }
     }
 
@@ -425,12 +447,12 @@ section#the-goods { margin-top: 44px; }
         h3 {
             font-size: 14px;
             font-weight: bold;
-            color: #555;
+            color: #333;
             margin: 0 0 11px 0;
         }
         p {
             text-align: left;
-            font-size: 12px;
+            font-size: 16px;
         }
     }
 }
@@ -859,14 +881,14 @@ section#the-goods { margin-top: 44px; }
 
     h3 {
         font-size: 24px;
-        color: #787878;
+        color: #333;
         margin: 0 0 22px 0;
         padding-top: 11px;
 
         &.data-title { padding-top: 0; }
     }
     p {
-        font-size: 14px;
+        font-size: 16px;
         line-height: 1.5;
         margin-bottom: 22px;
 
@@ -1433,7 +1455,7 @@ section#the-goods { margin-top: 44px; }
 }
 #playground-search {
     background-color: #f5f5f5;
-    border-bottom: 2px solid #ebebeb;
+    // border-bottom: 2px solid #ebebeb;
     padding: 33px 0;
 
     h1 {
