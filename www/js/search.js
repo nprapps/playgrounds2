@@ -493,6 +493,7 @@ $(function() {
     var add = get_parameter_by_name('add');
     if (add === 'true'){
         var $searchTitle = $('#search-title');
+        $searchTitle.text('Add An Accessible Playground');
         $('.help-description').hide();
 
         $helpText = $('<p>To add a playground, first search to see if it&rsquo;s already in our database.</p>');
