@@ -178,15 +178,6 @@ $(function() {
                 };
 
                 map = new google.maps.Map($('#edit-map')[0], mapOptions);
-                // map = L.map('edit-map', {
-                //     minZoom: 11,
-                //     maxZoom: 17,
-                //     scrollWheelZoom: false
-                // });
-
-                // map_layer = L.mapbox.tileLayer(playground.BASE_LAYER).addTo(map);
-                // grid_layer = L.mapbox.gridLayer(playground.BASE_LAYER).addTo(map);
-                // map.addControl(L.mapbox.gridControl(grid_layer));
 
                 if (playground.fields.latitude.val() !== '' && playground.fields.latitude.val() !== 'None') {
                     var latlng = new google.maps.LatLng(playground.fields.latitude.val(), playground.fields.longitude.val());
@@ -199,6 +190,7 @@ $(function() {
                 var marker_left = $('#edit-map').width()/2 - 8;
                 var marker_top = $('#edit-map').height()/2 - 8;
                 $('#loading-spinner').hide();
+                google.maps.event.trigger(map, 'resize');
                 if (playground.fields.latitude.val() !== '' && playground.fields.latitude.val() !== 'None') {
                     var latlng = new google.maps.LatLng(playground.fields.latitude.val(), playground.fields.longitude.val());
                     map.setCenter(latlng);
