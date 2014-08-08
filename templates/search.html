@@ -58,7 +58,7 @@
             <div id="search-results-not-found" class="help-prompt">
                 <h4>{{ COPY.content.search_not_found }}</h4>
                 <p class="prompt">{{ COPY.content.search_not_found_text }}</p>
-                <p><a href="create.html" class="btn btn-blue btn-block"><i class="icon-plus-sign"></i> {{ COPY.content.search_help_button }}</a></p>
+                <p><a href="create.html" class="btn btn-blue btn-block create"><i class="icon-plus-sign"></i> {{ COPY.content.search_help_button }}</a></p>
             </div>
 
             <div id="search-results">
@@ -69,7 +69,7 @@
 
             <div id="search-help-prompt" class="help-prompt">
                 <p class="prompt">{{ COPY.content.search_help_title }}</p>
-                <p><a href="create.html" class="btn btn-blue btn-block" role="button"><i class="icon-plus-sign"></i> {{ COPY.content.search_help_button }}</a></p>
+                <p><a href="create.html" class="btn btn-blue btn-block create" role="button"><i class="icon-plus-sign"></i> {{ COPY.content.search_help_button }}</a></p>
                 <p class="add-many">{{ COPY.content.help_add_many }}</p>
             </div>
 
@@ -80,6 +80,7 @@
 
 
 {% block extra_foot_js %}
+    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
     {{ JS.push('js/lib/underscore.js') }}
     {{ JS.push('js/lib/moment.js') }}
     {{ JS.push('js/lib/bootstrap.js') }}

@@ -61,15 +61,33 @@ function buildCloudSearchParams(latitude, longitude, zoom, query) {
 
     // If using geosearch
     if (latitude) {
-        // Generate bounding box for map viewport
-        var crs = L.CRS.EPSG3857;
-        var point = crs.latLngToPoint(new L.LatLng(latitude, longitude), zoom);
-        var upper_left = point.subtract([RESULTS_MAP_WIDTH / 2, RESULTS_MAP_HEIGHT / 2]);
-        var lower_right = point.add([RESULTS_MAP_WIDTH / 2, RESULTS_MAP_HEIGHT / 2]);
-        var northwest = crs.pointToLatLng(upper_left, zoom);
-        var southeast = crs.pointToLatLng(lower_right, zoom);
 
-        query_bits.push('longitude:' + degToCloudSearch(northwest.lng) + '..' + degToCloudSearch(southeast.lng) + ' latitude:' + degToCloudSearch(southeast.lat) + '..' + degToCloudSearch(northwest.lat));
+        // Generate bounding box for map viewport
+        var numTiles = 1 << zoom;
+        var proj = new MercatorProjection();
+        var point = proj.fromLatLngToPoint(new google.maps.LatLng(latitude, longitude));
+        var pixel_coordinates = new google.maps.Point(
+              point.x * numTiles,
+              point.y * numTiles
+        );
+
+        var upper_left = new google.maps.Point(pixel_coordinates.x - (RESULTS_MAP_WIDTH / 2), pixel_coordinates.y - (RESULTS_MAP_HEIGHT / 2));
+        var lower_right = new google.maps.Point(pixel_coordinates.x + (RESULTS_MAP_WIDTH / 2), pixel_coordinates.y + (RESULTS_MAP_HEIGHT / 2));
+
+        var upper_left_world_coordinates = new google.maps.Point(
+            upper_left.x / numTiles,
+            upper_left.y / numTiles
+        );
+
+        var lower_right_world_coordinates = new google.maps.Point(
+            lower_right.x / numTiles,
+            lower_right.y / numTiles
+        );
+
+        var northwest = proj.fromPointToLatLng(upper_left_world_coordinates);
+        var southeast = proj.fromPointToLatLng(lower_right_world_coordinates);
+
+        query_bits.push('longitude:' + degToCloudSearch(northwest.lng()) + '..' + degToCloudSearch(southeast.lng()) + ' latitude:' + degToCloudSearch(southeast.lat()) + '..' + degToCloudSearch(northwest.lat()));
 
         var latitude_radians = degToRad(latitude);
         var longitude_radians = degToRad(longitude);
@@ -208,3 +226,49 @@ $(function(){
         set_driving_urls();
     }
 });
+
+/*
+// Got this from Google. https://developers.google.com/maps/documentation/javascript/examples/map-coordinates
+*/
+
+function bound(value, opt_min, opt_max) {
+  if (opt_min != null) value = Math.max(value, opt_min);
+  if (opt_max != null) value = Math.min(value, opt_max);
+  return value;
+}
+
+var TILE_SIZE = 256;
+
+function MercatorProjection() {
+  this.pixelOrigin_ = new google.maps.Point(TILE_SIZE / 2,
+      TILE_SIZE / 2);
+  this.pixelsPerLonDegree_ = TILE_SIZE / 360;
+  this.pixelsPerLonRadian_ = TILE_SIZE / (2 * Math.PI);
+}
+
+MercatorProjection.prototype.fromLatLngToPoint = function(latLng,
+    opt_point) {
+  var me = this;
+  var point = opt_point || new google.maps.Point(0, 0);
+  var origin = me.pixelOrigin_;
+
+  point.x = origin.x + latLng.lng() * me.pixelsPerLonDegree_;
+
+  // Truncating to 0.9999 effectively limits latitude to 89.189. This is
+  // about a third of a tile past the edge of the world tile.
+  var siny = bound(Math.sin(degToRad(latLng.lat())), -0.9999,
+      0.9999);
+  point.y = origin.y + 0.5 * Math.log((1 + siny) / (1 - siny)) *
+      -me.pixelsPerLonRadian_;
+  return point;
+};
+
+MercatorProjection.prototype.fromPointToLatLng = function(point) {
+  var me = this;
+  var origin = me.pixelOrigin_;
+  var lng = (point.x - origin.x) / me.pixelsPerLonDegree_;
+  var latRadians = (point.y - origin.y) / -me.pixelsPerLonRadian_;
+  var lat = radToDeg(2 * Math.atan(Math.exp(latRadians)) -
+      Math.PI / 2);
+  return new google.maps.LatLng(lat, lng);
+};

@@ -10,8 +10,6 @@ See get_secrets() below for a fast way to access them.
 
 import os
 
-from metros import metro_areas
-
 """
 NAMES
 """
@@ -98,7 +96,12 @@ NPR_DFP = {
 """
 SERVICES
 """
-GOOGLE_ANALYTICS_ID = 'UA-5828686-4'
+GOOGLE_ANALYTICS = {
+'ACCOUNT_ID': 'UA-5828686-4',
+'DOMAIN': PRODUCTION_S3_BUCKETS[0],
+'TOPICS': '' # e.g. '[1014,3,1003,1002,1001]'
+}
+
 DISQUS_SHORTNAME = 'npr-playgrounds2'
 
 """
@@ -196,8 +199,6 @@ STATE_LIST = [
     'WI',
     'WY'
 ]
-
-METRO_AREAS = metro_areas
 
 """
 Utilities

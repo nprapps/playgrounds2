@@ -28,7 +28,6 @@
 {% endblock social_head %}
 
 {% block extra_head %}
-    <script type='text/javascript' src="{{ S3_BASE_URL }}/js/lib/mapbox.js"></script>
 {% endblock %}
 
 {% block header_content %}
@@ -212,6 +211,8 @@
 {% endblock %}
 
 {% block extra_foot_js %}
+    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
     {{ JS.push('js/lib/underscore.js') }}
     {{ JS.push('js/lib/moment.js') }}
     {{ JS.push('js/lib/bootstrap.js') }}
@@ -219,6 +220,5 @@
     {{ JS.push('js/utils.js') }}
     {{ JS.push('js/form.js') }}
     {{ JS.push('js/lookup_tables.js') }}
-    {{ JS.push('js/responsive-ad.js') }}
     {{ JS.render('js/app-playground-footer.min.js') }}
 {% endblock extra_foot_js %}

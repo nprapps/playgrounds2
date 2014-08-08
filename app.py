@@ -144,14 +144,7 @@ def index():
     Playgrounds index page.
     """
     context = make_context()
-    metros = app_config.METRO_AREAS
-
-    for metro in metros:
-        metro['playground_count'] = Playground.select().where(Playground.zip_code << metro['zip_codes']).count()
-
     context['playground_count'] = intcomma(Playground.select().count())
-
-    context['metros'] = metros
 
     return render_template('index.html', **context)
 

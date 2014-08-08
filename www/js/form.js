@@ -41,6 +41,7 @@ $(function() {
         'initial_field_values': {},
         'callbacks': {
             'geocode': function(address_components, latlng) {
+                console.log(address_components);
                 if (address_components){
                     playground.fields.latitude.attr('value', latlng['location'].lat());
                     playground.fields.longitude.attr('value', latlng['location'].lng());
@@ -177,15 +178,6 @@ $(function() {
                 };
 
                 map = new google.maps.Map($('#edit-map')[0], mapOptions);
-                // map = L.map('edit-map', {
-                //     minZoom: 11,
-                //     maxZoom: 17,
-                //     scrollWheelZoom: false
-                // });
-
-                // map_layer = L.mapbox.tileLayer(playground.BASE_LAYER).addTo(map);
-                // grid_layer = L.mapbox.gridLayer(playground.BASE_LAYER).addTo(map);
-                // map.addControl(L.mapbox.gridControl(grid_layer));
 
                 if (playground.fields.latitude.val() !== '' && playground.fields.latitude.val() !== 'None') {
                     var latlng = new google.maps.LatLng(playground.fields.latitude.val(), playground.fields.longitude.val());
@@ -198,6 +190,7 @@ $(function() {
                 var marker_left = $('#edit-map').width()/2 - 8;
                 var marker_top = $('#edit-map').height()/2 - 8;
                 $('#loading-spinner').hide();
+                google.maps.event.trigger(map, 'resize');
                 if (playground.fields.latitude.val() !== '' && playground.fields.latitude.val() !== 'None') {
                     var latlng = new google.maps.LatLng(playground.fields.latitude.val(), playground.fields.longitude.val());
                     map.setCenter(latlng);
@@ -278,6 +271,7 @@ $(function() {
         'geocode': function(geocode_object, callback) {
             geocoder = new google.maps.Geocoder();
             geocoder.geocode({'address': geocode_object}, function(results, status) {
+                console.log(results, status);
                 if (status == google.maps.GeocoderStatus.OK && results[0]['partial_match'] !== true) {
                     var locales = results[0]['address_components'];
                     var latlng = results[0]['geometry'];
@@ -285,7 +279,7 @@ $(function() {
                 }
                 else {
                     alert_text = "<h3>We're sorry!</h3>We're having a hard time finding this place.";
-                    make_alert(alert_text, 'warning', 'div.alerts');
+                    make_alert(alert_text, 'warning', 'div.modal-alerts');
                 }
             })
         },

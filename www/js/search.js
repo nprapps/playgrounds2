@@ -62,6 +62,11 @@ function search() {
      */
     var latitude = parseFloat($search_latitude.val());
     var longitude = parseFloat($search_longitude.val());
+    console.log($create_link.attr('href'));
+    $create_link.attr('href', 'create.html?latitude=' + latitude + '&longitude=' + longitude);
+    console.log($create_link.attr('href'));
+
+
 
     var latlng = new google.maps.LatLng(latitude, longitude);
     var not_found = false;
@@ -253,8 +258,6 @@ function search() {
                     google_desktop_map.setCenter(latlng);
                     google_desktop_map.setZoom(zoom);
                 }
-
-                $create_link.attr('href', 'create.html?latitude=' + latitude + '&longitude=' + longitude);
             }
 
             if (not_found) {
@@ -315,7 +318,6 @@ function reset_zoom() {
 
 function desktop_map_moveend() {
     var latlng = google_desktop_map.getCenter();
-    console.log(latlng);
     var current = new google.maps.LatLng($search_latitude.val(), $search_longitude.val());
     zoom = google_desktop_map.getZoom();
 
@@ -475,7 +477,7 @@ $(function() {
     $results_loading = $('#results-loading');
     $playground_meta_hdr = $('#main-content').find('.about').find('h5.meta');
     $playground_meta_items = $('#main-content').find('.about').find('ul.meta');
-    $create_link = $search_help_prompt.find('a');
+    $create_link = $('.create');
     $alerts = $('.alerts');
 
     PAGE_WIDTH = $(window).width();
