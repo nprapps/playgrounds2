@@ -62,11 +62,7 @@ function search() {
      */
     var latitude = parseFloat($search_latitude.val());
     var longitude = parseFloat($search_longitude.val());
-    console.log($create_link.attr('href'));
     $create_link.attr('href', 'create.html?latitude=' + latitude + '&longitude=' + longitude);
-    console.log($create_link.attr('href'));
-
-
 
     var latlng = new google.maps.LatLng(latitude, longitude);
     var not_found = false;
