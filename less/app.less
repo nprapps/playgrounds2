@@ -197,11 +197,11 @@ header {
     .create-playground & {
 
         @media @screen-tiny {
-            padding: 0;
-            background: none;
-            position: absolute;
-            top: 11px;
-            left: 117px;
+            padding: 0 20px;
+            // background: none;
+            // position: absolute;
+            // top: 11px;
+            // left: 117px;
             border: none;
         }
 
@@ -214,12 +214,15 @@ header {
             font-size: 20px;
             margin-bottom: 0;
             color: #555;
-            display: none;
 
             @media @screen-tiny {
                 display: inline-block;
                 font-size: 16px;
                 white-space: nowrap; // Android wraps this for some reason.
+            }
+
+            @media @screen-small-above {
+                display: none;
             }
 
             a { color: #555; }
@@ -232,7 +235,7 @@ header {
             padding: 0;
             list-style: none;
 
-            @media @screen-tiny { display: none; }
+            @media @screen-small { display: none; }
 
             > li {
                 font-weight: bold;
