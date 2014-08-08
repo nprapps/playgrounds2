@@ -49,7 +49,7 @@
 <!-- Map / Address -->
 <div class="address">
     {% if playground.latitude and playground.longitude %}
-    <img id="locator-map" data-longitude="{{ playground.longitude }}" data-latitude="{{ playground.latitude }}" />
+    <img id="locator-map" data-longitude="{{ playground.longitude }}" data-latitude="{{ playground.latitude }}" alt="{{ playground.display_name }} : {{ playground.address }}, {{ playground.city }}, {{ playground.state }} {{ playground.zip_code }}" />
     {% endif %}
     <div class="address-meta-wrapper">
         <div class="address-meta">
