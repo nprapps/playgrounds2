@@ -114,7 +114,7 @@ def update_playground():
                 payload['playground'][field] = op(request.form.get(field, None))
 
             else:
-                if getattr(Playground, field).null:
+                if getattr(Playground, field) is None:
                     payload['playground'][field] = None
                 else:
                     payload['playground'][field] = ''
@@ -182,7 +182,7 @@ def insert_playground():
                 payload['playground'][field] = op(request.form.get(field, None))
 
             else:
-                if getattr(Playground, field).null:
+                if getattr(Playground, field) is None:
                     payload['playground'][field] = None
                 else:
                     payload['playground'][field] = ''
