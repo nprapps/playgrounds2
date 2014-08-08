@@ -243,7 +243,7 @@ header {
                     border-left: none;
                     padding-left: 0;
                 }
-                a { color: #6d8ac4; }
+                a { color: @inlineLink; }
 
                 &.home {
                     text-transform: none;
@@ -625,7 +625,7 @@ section#the-goods { margin-top: 44px; }
         right: 0;
         line-height: 34px;
         color: @white;
-        background: @secondaryControl;
+        background: desaturate(lighten(@inlineLink, 40%), 50%);
         text-shadow: none;
     }
 
@@ -727,7 +727,7 @@ section#the-goods { margin-top: 44px; }
                     left:0;
                     top: 0;
                     z-index: 1;
-                    border: 2px solid lighten(@deepBlue, 20%);
+                    border: 2px solid fade(@inlineLink, 50%);
                     width: 30px;
                     height: 30px;
 
@@ -739,7 +739,7 @@ section#the-goods { margin-top: 44px; }
 
             input[type="checkbox"]:checked ~ .checkbox {
                 &:before {
-                    background: lighten(@deepBlue, 5%);
+                    background: fade(@inlineLink, 50%);
                     box-shadow: inset 0 0 0 1px #fff;
                     .icon-FontAwesome();
                     content: @ok;
@@ -839,10 +839,10 @@ section#the-goods { margin-top: 44px; }
                 display: table-cell;
                 width: 50%;
                 float: none;
-                background: @secondaryControl;
+                background: fade(@inlineLink, 50%);
 
                 &.active {
-                    background: @primaryControl;
+                    background: @inlineLink;
                 }
 
                 a {
