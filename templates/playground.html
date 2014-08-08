@@ -28,6 +28,7 @@
 {% endblock social_head %}
 
 {% block extra_head %}
+    <meta name="description" content="{% if playground.public_remarks %}{{ playground.public_remarks }}{% else %}{{ PROJECT_DESCRIPTION }}{% endif %}">
 {% endblock %}
 
 {% block header_content %}
