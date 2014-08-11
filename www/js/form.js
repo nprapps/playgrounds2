@@ -41,7 +41,6 @@ $(function() {
         'initial_field_values': {},
         'callbacks': {
             'geocode': function(address_components, latlng) {
-                console.log(address_components);
                 if (address_components){
                     playground.fields.latitude.attr('value', latlng['location'].lat());
                     playground.fields.longitude.attr('value', latlng['location'].lng());
@@ -93,6 +92,7 @@ $(function() {
 
                 require_us_address(address_components);
                 playground.form.geocode_fields();
+                console.log('checked on');
                 playground.fields.reverse_geocoded.attr('checked', 'checked');
 
                 playground.fields.locator_map.removeClass('hidden');
@@ -194,7 +194,6 @@ $(function() {
                 if (playground.fields.latitude.val() !== '' && playground.fields.latitude.val() !== 'None') {
                     var latlng = new google.maps.LatLng(playground.fields.latitude.val(), playground.fields.longitude.val());
                     map.setCenter(latlng);
-                    console.log(latlng);
                 }
                 $('#edit-marker').css({'left': marker_left, 'top': marker_top}).show();
                 move_end_listener = google.maps.event.addListener(map, 'center_changed', playground.map.process_map_location);
@@ -209,7 +208,10 @@ $(function() {
             },
             'process_map_location': _.debounce(function() {
                 var latlng = map.getCenter();
-                playground.reverse_geocode(latlng.lat(), latlng.lng(), playground.callbacks.reverse_geocode);
+                if (playground.fields.reverse_geocoded.attr('checked') == 'checked'){
+                    console.log('calling reverse geocode');
+                    playground.reverse_geocode(latlng.lat(), latlng.lng(), playground.callbacks.reverse_geocode);
+                }
             }, 200),
             'resize_locator': function() {
                 // Set the width.
@@ -258,6 +260,7 @@ $(function() {
         'locate_me': function() {
             function success(position){
                 var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                console.log('calling reverse geocode');
                 playground.reverse_geocode(position.coords.latitude, position.coords.longitude, playground.callbacks.reverse_geocode);
                 map.setCenter(latlng);
                 map.setZoom(playground.LOCATOR_DEFAULT_ZOOM);
@@ -272,7 +275,6 @@ $(function() {
         'geocode': function(geocode_object, callback) {
             geocoder = new google.maps.Geocoder();
             geocoder.geocode({'address': geocode_object}, function(results, status) {
-                console.log(results, status);
                 if (status == google.maps.GeocoderStatus.OK && results[0]['partial_match'] !== true) {
                     var locales = results[0]['address_components'];
                     var latlng = results[0]['geometry'];
@@ -384,6 +386,7 @@ $(function() {
                 playground.geocode(playground.form.prepare_geocode_object(), playground.callbacks.geocode);
             } else {
                 playground.form.geocode_fields();
+                console.log('checked on');
                 playground.fields.reverse_geocoded.attr('checked', 'checked');
                 playground.fields.reverse_geocoded.attr('data-changed', 'true');
                 $('#form').submit();
@@ -453,6 +456,7 @@ $(function() {
                 }
 
                 if (latitude && longitude) {
+                    console.log('calling reverse geocode');
                     playground.reverse_geocode(latitude, longitude, playground.callbacks.reverse_geocode);
                 } else {
                     playground.locate_me();
@@ -497,6 +501,7 @@ $(function() {
             });
 
             $('#address-pane input, #address-pane select').blur(function(){
+                console.log('checked off');
                 playground.fields.reverse_geocoded.removeAttr('checked');
             })
 

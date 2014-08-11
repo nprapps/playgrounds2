@@ -107,7 +107,7 @@ def update_playground():
         # Loop over all of the model fields looking to see if they're present in the POST.
 
         for field in playground_fields:
-            if field in ['slug', 'nprid']:
+            if field in ['slug', 'nprid', 'reverse_geocoded']:
                 continue
             if request.form.get(field, None):
                 op = FIELD_OPS[getattr(Playground, field).__class__]
@@ -118,12 +118,6 @@ def update_playground():
                     payload['playground'][field] = None
                 else:
                     payload['playground'][field] = ''
-
-        try:
-            if payload['playground']['reverse_geocoded'] == "on":
-                payload['playground']['reverse_geocoded'] = True
-        except KeyError:
-            pass
 
         # Set up a list for features.
         payload['playground']['features'] = []
@@ -174,24 +168,18 @@ def insert_playground():
 
         # Loop over all of the model fields looking to see if they're present in the POST.
         for field in playground_fields:
-            if field in ['slug', 'nprid']:
+            if field in ['slug', 'nprid', 'reverse_geocoded']:
                 continue
             if request.form.get(field, None):
 
                 op = FIELD_OPS[getattr(Playground, field).__class__]
                 payload['playground'][field] = op(request.form.get(field, None))
-
+                print field, request.form.get(field, None)
             else:
                 if getattr(Playground, field) is None:
                     payload['playground'][field] = None
                 else:
                     payload['playground'][field] = ''
-
-        try:
-            if payload['playground']['reverse_geocoded'] == "on":
-                payload['playground']['reverse_geocoded'] = True
-        except KeyError:
-            pass
 
         # Set up a list for features.
         payload['playground']['features'] = []
