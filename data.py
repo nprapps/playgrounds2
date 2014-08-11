@@ -18,7 +18,7 @@ import pytz
 import app
 import app_config
 import copytext
-from models import Playground, PlaygroundFeature, Revision, get_active_playgrounds
+from models import Playground, PlaygroundFeature, Revision, database, get_active_playgrounds
 
 
 def load_from_google_spreadsheet(key):
@@ -326,6 +326,8 @@ def process_changes(path='changes-in-progress.json'):
             cookies=json.dumps(record['request']['cookies']),
             revision_group=revision_group
         )
+
+    database.commit()
 
     return (changed_playgrounds, revision_group)
 
