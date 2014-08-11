@@ -46,9 +46,36 @@ class Playground(Model):
     """
     The playground model for the sqlite database.
     """
+    USER_EDITABLE_FIELDS = [
+        'name',
+        'facility',
+        'address',
+        'city',
+        'state',
+        'zip_code',
+        'latitude',
+        'longitude',
+        'agency',
+        'owner',
+        'public_remarks',
+        'url',
+        'reverse_geocoded'
+    ]
+
+    FIELD_OPS = {
+        FloatField: float,
+        CharField: unicode,
+        IntegerField: int,
+        BooleanField: bool,
+        TextField: unicode
+    }
+
     slug = CharField()
     nprid = CharField(null=False, default='')
+
     name = CharField(verbose_name='Name', null=False, default='')
+
+    # This should be null=False, but it's been wrong and we don't want to migrate it
     facility = CharField(verbose_name='Facility', null=True)
     facility_type = CharField(verbose_name='Facility type', null=False, default='')
 
@@ -64,13 +91,13 @@ class Playground(Model):
 
     owner = CharField(verbose_name='Owner', null=False, default='')
     owner_type = CharField(verbose_name='Owner type', null=False, default='')
+
     remarks = TextField(null=False, default='')
     public_remarks = TextField(verbose_name='Remarks', null=False, default='')
 
     url = CharField(verbose_name='URL', null=False, default='')
     entry = CharField(null=False, default='')
     source = CharField(null=False, default='')
-
     active = BooleanField(default=True)
 
     reverse_geocoded = BooleanField(verbose_name='Reverse Geocoded', default=False)
@@ -87,16 +114,12 @@ class Playground(Model):
         """
         Returns the associated features of this playground.
         """
-
-        # Get a queryset of the features.
         features = PlaygroundFeature.select().join(Playground).where(Playground.id == self.id)
 
-        # If there aren't any, return none instead of an empty list.
-        # So barbaric, empty lists.
-        if features.count() > 0:
-            return features
+        if not features.count():
+            return []
 
-        return []
+        return features
 
     def to_dict(self):
         """

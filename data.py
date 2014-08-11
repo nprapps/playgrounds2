@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from collections import defaultdict
+import copy
 import csv
 import datetime
 from glob import glob
@@ -33,7 +34,8 @@ def load_from_google_spreadsheet(key):
         payload = dict(row)
         for feature in payload['features'].split(','):
             feature_name = feature.strip().lower().replace(' ', '-')
-            payload[feature_name] = "on"
+            payload[feature_name] = 'on'
+
         payload.pop('features')
 
         p = requests.post('http://54.214.20.225/playgrounds/insert-playground/', data=payload)
@@ -233,6 +235,8 @@ def send_email(addresses, payload):
 def load_playgrounds(path='data/playgrounds.csv'):
     """
     Load playground data from the CSV into sqlite.
+
+    NOTE: THIS HAS NOT BEEN TESTED IN A VERY LONG TIME.
     """
     features = copytext.COPY.feature_list
 
@@ -294,18 +298,19 @@ def process_changes(path='changes-in-progress.json'):
     with open(path) as f:
         changes = json.load(f)
 
-    # A list new or updated playgrounds
     changed_playgrounds = []
 
+    ACTIONS = {
+        'update': process_update,
+        'insert': process_insert,
+        'delete-request': process_delete
+    }
+
     for record in changes:
-        if record['action'] == 'update':
-            playground, revisions = process_update(record)
-            changed_playgrounds.append(playground)
-        elif record['action'] == 'insert':
-            playground, revisions = process_insert(record)
-            changed_playgrounds.append(playground)
-        elif record['action'] == 'delete-request':
-            playground, revisions = process_delete(record)
+        action = ACTIONS[record['action']]
+
+        playground, revisions = action(record)
+        changed_playgrounds.append(playground)
 
         timestamp = datetime.datetime.fromtimestamp(record['timestamp']).replace(tzinfo=pytz.utc)
 
@@ -327,125 +332,10 @@ def process_changes(path='changes-in-progress.json'):
             revision_group=revision_group
         )
 
+    # Ensure all changes have been written to disk
     database.commit()
 
     return (changed_playgrounds, revision_group)
-
-
-def process_update(record):
-    """
-    Process a single update record from changes.json.
-    """
-    playground_id = record['playground']['id']
-
-    # First, capture the old data from this playground.
-    old_data = Playground.get(id=playground_id).__dict__['_data']
-
-    # This is an intermediate data store for this record.
-    record_dict = {}
-
-    # Loop through each of the key/value pairs in the playground record.
-    for key, value in record['playground'].items():
-
-        # Ignore some keys because they aren't really what we want to update.
-        if key not in ['id', 'active', 'features', 'reverse_geocoded']:
-
-            # Update the record_dict with our new key/value pair.
-            record_dict[key] = value
-
-    # Run the update query against this playground.
-    # Pushes any updates in the record_dict to the model.
-    playground = Playground.get(id=playground_id)
-
-    if (record_dict):
-        for k, v in record_dict.items():
-            setattr(playground, k, v)
-            playground.save()
-
-    # Set up the list of old features.
-    # We're going to remove them all.
-    # We'll re-add anything that stuck around.
-    old_features = []
-
-    # Append the old features to the list.
-    for feature in PlaygroundFeature.select().where(PlaygroundFeature.playground == playground_id):
-        old_features.append(feature.slug)
-
-    # Delete any features attached to this playground.
-    PlaygroundFeature.delete().where(PlaygroundFeature.playground == playground_id).execute()
-
-    # Check to see if we have any incoming features.
-    try:
-        features = record['playground']['features']
-    except KeyError:
-        features = []
-
-    for slug in features:
-        PlaygroundFeature.create(
-            slug=slug,
-            playground=playground
-        )
-
-    # Now, let's set up some revisions.
-    # Create a list of revisions to apply.
-    revisions = []
-
-    # Our old data was captured up top. It's called old_
-    # This is the new  It's just the record_dict from above.
-    new_data = record_dict
-
-    # Loop over the key/value pairs in the new data we have.
-    for key, value in new_data.items():
-
-        # Now, if the old data and the new data don't match, let's make a revision.
-        if old_data[key] != new_data[key]:
-
-            # Set up an intermediate data structure for the revision.
-            revision_dict = {}
-
-            # Set up the data for this revision.
-            revision_dict['field'] = key
-            revision_dict['from'] = old_data[key]
-            revision_dict['to'] = new_data[key]
-
-            # Append it to the revisions list.
-            revisions.append(revision_dict)
-
-    # Let's get started on features.
-    # First, let's figure out the new features coming from the Web.
-    try:
-        # If there are any new features, create a list for them.
-        new_features = record['playground']['features']
-    except:
-        # Otherwise, empty list.
-        new_features = []
-
-    # First case: If the list of old and new features is identical, don't do anything.
-    if old_features != new_features:
-        # So there's a difference between the old and new feature lists.
-        # Since the Web can both add new features and remove old features,
-        # we have to prepare for each path.
-        # First, let's loop over the list of features that are available.
-        for feature in copytext.COPY.feature_list:
-            slug = feature['key']
-
-            # If the slug is in the old feature set, let's check it against the new.
-            if slug in old_features:
-
-                # If it's not in the new feature set but IS in the old feature set,
-                # let's append a revision taking it from 1 to 0.
-                if slug not in new_features:
-                    revisions.append({"field": slug, "from": 1, "to": 0})
-
-            # Similarly, if the slug in the new feature set, let's check it agains the old.
-            if slug in new_features:
-
-                # If it's not in the old_feature set but IS in the new feature set,
-                # let's append a revision taking it from 0 to 1.
-                if slug not in old_features:
-                    revisions.append({"field": slug, "from": 0, "to": 1})
-
-    return playground, revisions
 
 
 def process_insert(record):
@@ -454,48 +344,25 @@ def process_insert(record):
     """
     playground = Playground()
 
-    record_dict = {}
+    new_data = {}
 
-    # Loop through each of the key/value pairs in the playground record.
     for key, value in record['playground'].items():
-
-        # Ignore some keys because they aren't really what we want to update.
         if key not in ['id', 'features']:
-
-            # Update the record_dict with our new key/value pair.
-            record_dict[key] = value
+            new_data[key] = value
             setattr(playground, key, value)
 
     playground.save()
 
-    # Create a list of revisions that were applied.
     revisions = []
 
-    # Our old data was captured up top. It's called old_
-    # This is the new  It's just the record_dict from above.
-    new_data = record_dict
-
-    # Loop over the key/value pairs in the new data we have.
     for key, value in new_data.items():
+        revisions.append({
+            'field': key,
+            'from': '',
+            'to': new_data[key]
+        })
 
-        # Set up an intermediate data structure for the revision.
-        revision_dict = {}
-
-        # Set up the data for this revision.
-        revision_dict['field'] = key
-        revision_dict['from'] = ''
-        revision_dict['to'] = new_data[key]
-
-        # Append it to the revisions list.
-        revisions.append(revision_dict)
-
-    # Check to see if we have any incoming features.
-    try:
-        features = record['playground']['features']
-    except KeyError:
-        features = []
-
-    for feature in features:
+    for feature in record['playground']['features']:
         PlaygroundFeature.create(
             slug=feature,
             playground=playground
@@ -506,6 +373,65 @@ def process_insert(record):
     return (playground, revisions)
 
 
+def process_update(record):
+    """
+    Process a single update record from changes.json.
+    """
+    playground_id = record['playground']['id']
+
+    playground = Playground.get(id=playground_id)
+    old_data = copy.copy(playground.__dict__['_data'])
+
+    new_data = {}
+
+    for key, value in record['playground'].items():
+        if key not in ['id', 'features']:
+            new_data[key] = value
+            setattr(playground, key, value)
+
+    playground.save()
+
+    old_features = []
+
+    for feature in PlaygroundFeature.select().where(PlaygroundFeature.playground == playground_id):
+        old_features.append(feature.slug)
+
+    # Delete any features already attached to this playground.
+    PlaygroundFeature.delete().where(PlaygroundFeature.playground == playground_id).execute()
+
+    new_features = record['playground']['features']
+
+    for slug in new_features:
+        PlaygroundFeature.create(
+            slug=slug,
+            playground=playground
+        )
+
+    revisions = []
+
+    for key, value in new_data.items():
+        if old_data[key] != new_data[key]:
+            revisions.append({
+                'field': key,
+                'from': old_data[key],
+                'to': new_data[key]
+            })
+
+    if set(old_features) != set(new_features):
+        for feature in copytext.COPY.feature_list:
+            slug = feature['key']
+
+            # Removed
+            if slug in old_features and slug not in new_features:
+                revisions.append({'field': slug, 'from': 1, 'to': 0})
+
+            # Added
+            if slug in new_features and slug not in old_features:
+                revisions.append({'field': slug, 'from': 0, 'to': 1})
+
+    return playground, revisions
+
+
 def process_delete(record):
     """
     Create a revision from the delete requests.
@@ -514,7 +440,10 @@ def process_delete(record):
 
     playground = Playground.get(slug=playground_slug)
 
-    revisions = [{"field": "active", "from": True, "to": False}, {"field": "reason", "from": "", "to": record['playground']['text']}]
+    revisions = [
+        { 'field': 'active', 'from': True, 'to': False},
+        { 'field': 'reason', 'from': '', 'to': record['playground']['text'] }
+    ]
 
     return (playground, revisions)
 
