@@ -348,7 +348,7 @@ def process_update(record):
     for key, value in record['playground'].items():
 
         # Ignore some keys because they aren't really what we want to update.
-        if key not in ['id', 'active', 'features']:
+        if key not in ['id', 'active', 'features', 'reverse_geocoded']:
 
             # Update the record_dict with our new key/value pair.
             record_dict[key] = value

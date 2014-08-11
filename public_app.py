@@ -107,7 +107,7 @@ def update_playground():
         # Loop over all of the model fields looking to see if they're present in the POST.
 
         for field in playground_fields:
-            if field in ['slug', 'nprid', 'reverse_geocoded']:
+            if field in ['slug', 'nprid']:
                 continue
             if request.form.get(field, None):
                 op = FIELD_OPS[getattr(Playground, field).__class__]
@@ -168,7 +168,7 @@ def insert_playground():
 
         # Loop over all of the model fields looking to see if they're present in the POST.
         for field in playground_fields:
-            if field in ['slug', 'nprid', 'reverse_geocoded']:
+            if field in ['slug', 'nprid']:
                 continue
             if request.form.get(field, None):
 
