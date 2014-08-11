@@ -1,12 +1,7 @@
 #!/usr/bin/env python
 
-import glob
-import os
-import time
-import urllib
-
 from cssmin import cssmin
-from flask import Markup, g, render_template, request
+from flask import Markup, g, request
 from slimit import minify
 
 import app_config
@@ -15,25 +10,22 @@ import copytext
 class Includer(object):
     """
     Base class for Javascript and CSS psuedo-template-tags.
-
-    See `make_context` for an explanation of `asset_depth`.
     """
-    def __init__(self, asset_depth=0):
+    def __init__(self):
         self.includes = []
         self.tag_string = None
-        self.asset_depth = asset_depth
 
     def push(self, path):
-        self.includes.append(path)
+            self.includes.append(path)
 
-        return ''
+            return ""
 
     def _compress(self):
         raise NotImplementedError()
 
     def _relativize_path(self, path):
         relative_path = path
-        depth = len(request.path.split('/')) - (2 + self.asset_depth)
+        depth = len(request.path.split('/')) - 2
 
         while depth > 0:
             relative_path = '../%s' % relative_path
@@ -43,32 +35,18 @@ class Includer(object):
 
     def render(self, path):
         if getattr(g, 'compile_includes', False):
-            if path in g.compiled_includes:
-                timestamp_path = g.compiled_includes[path]
-            else:
-                # Add a timestamp to the rendered filename to prevent caching
-                timestamp = int(time.time())
-                front, back = path.rsplit('.', 1)
-                timestamp_path = '%s.%i.%s' % (front, timestamp, back)
+            out_filename = 'www/%s' % path
 
-                # Delete old rendered versions, just to be tidy
-                old_versions = glob.glob('www/%s.*.%s' % (front, back))
+            if out_filename not in g.compiled_includes:
+                print 'Rendering %s' % out_filename
 
-                for f in old_versions:
-                    os.remove(f)
-
-            out_path = 'www/%s' % timestamp_path
-
-            if path not in g.compiled_includes:
-                print 'Rendering %s' % out_path
-
-                with open(out_path, 'w') as f:
-                    f.write(self._compress().encode('utf-8'))
+                with open(out_filename, 'w') as f:
+                    f.write(self._compress())
 
             # See "fab render"
-            g.compiled_includes[path] = timestamp_path
+            g.compiled_includes.append(out_filename)
 
-            markup = Markup(self.tag_string % self._relativize_path(timestamp_path))
+            markup = Markup(self.tag_string % self._relativize_path(path))
         else:
             response = ','.join(self.includes)
 
@@ -86,8 +64,8 @@ class JavascriptIncluder(Includer):
     """
     Psuedo-template tag that handles collecting Javascript and serving appropriate clean or compressed versions.
     """
-    def __init__(self, *args, **kwargs):
-        Includer.__init__(self, *args, **kwargs)
+    def __init__(self):
+        Includer.__init__(self)
 
         self.tag_string = '<script type="text/javascript" src="%s"></script>'
 
@@ -100,13 +78,10 @@ class JavascriptIncluder(Includer):
 
             with open('www/%s' % src) as f:
                 print '- compressing %s' % src
-                output.append(minify(f.read().encode('utf-8')))
+                output.append(minify(f.read()))
 
         context = make_context()
         context['paths'] = src_paths
-
-        header = render_template('_js_header.js', **context)
-        output.insert(0, header)
 
         return '\n'.join(output)
 
@@ -114,8 +89,8 @@ class CSSIncluder(Includer):
     """
     Psuedo-template tag that handles collecting CSS and serving appropriate clean or compressed versions.
     """
-    def __init__(self, *args, **kwargs):
-        Includer.__init__(self, *args, **kwargs)
+    def __init__(self):
+        Includer.__init__(self)
 
         self.tag_string = '<link rel="stylesheet" type="text/css" href="%s" />'
 
@@ -135,14 +110,10 @@ class CSSIncluder(Includer):
 
             with open('www/%s' % src) as f:
                 print '- compressing %s' % src
-                output.append(cssmin(f.read().encode('utf-8')))
+                output.append(cssmin(f.read()))
 
         context = make_context()
         context['paths'] = src_paths
-
-        header = render_template('_css_header.css', **context)
-        output.insert(0, header)
-
 
         return '\n'.join(output)
 
@@ -160,36 +131,16 @@ def flatten_app_config():
 
     return config
 
-def make_context(asset_depth=0):
+def make_context():
     """
     Create a base-context for rendering views.
     Includes app_config and JS/CSS includers.
-
-    `asset_depth` indicates how far into the url hierarchy
-    the assets are hosted. If 0, then they are at the root.
-    If 1 then at /foo/, etc.
     """
     context = flatten_app_config()
 
     context['COPY'] = copytext.Copy()
-    context['JS'] = JavascriptIncluder(asset_depth=asset_depth)
-    context['CSS'] = CSSIncluder(asset_depth=asset_depth)
+    context['JS'] = JavascriptIncluder()
+    context['CSS'] = CSSIncluder()
 
     return context
-
-def urlencode_filter(s):
-    """
-    Filter to urlencode strings.
-    """
-    if type(s) == 'Markup':
-        s = s.unescape()
-
-    # Evaulate COPY elements
-    if type(s) is not unicode:
-        s = unicode(s)
-
-    s = s.encode('utf8')
-    s = urllib.quote_plus(s)
-
-    return Markup(s)
 

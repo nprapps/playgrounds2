@@ -160,7 +160,7 @@ def jst():
     os.system('%s/jst --template underscore jst www/js/templates.js' % app_config.APPS_NODE_PATH)
 
 
-def render_playgrounds(playgrounds=None, compiled_includes={}):
+def render_playgrounds(playgrounds=None, compiled_includes=[]):
     """
     Render the playgrounds pages.
     """
