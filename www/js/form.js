@@ -82,8 +82,6 @@ $(function() {
                 }
                 playground.fields.city.val(city_name);
 
-                console.log(address_components);
-
                 // States are special. Handle them specially.
                 playground.fields.state.val(state_abbreviation);
                 $('select[name="state"] option[value="'+ state_abbreviation +'""]').attr('selected', 'selected');
@@ -292,7 +290,6 @@ $(function() {
             })
         },
         'reverse_geocode': function(latitude, longitude, callback) {
-            console.log('firing');
             geocoder = new google.maps.Geocoder();
             var latlng = new google.maps.LatLng(latitude, longitude);
             if (geocoder) {
