@@ -298,7 +298,7 @@ $(function() {
                     }
                     else {
                         alert_text = "<h3>We're sorry!</h3>We're having a hard time finding this place.";
-                        make_alert(alert_text, 'warning', 'div.alerts');
+                        make_alert(alert_text, 'warning', 'div.modal-alerts');
                     }
                 });
             };
@@ -313,7 +313,7 @@ $(function() {
 
             if (!(use_city_state || use_zip)) {
                 alert_text = "<strong>We're sorry!</strong><br>We need more information to find this location. Please provide an address with a city and state or ZIP code.";
-                make_alert(alert_text, 'alert-error', 'div.alerts');
+                make_alert(alert_text, 'alert-error', 'div.modal-alerts');
                 return;
             }
 
