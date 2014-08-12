@@ -213,7 +213,6 @@ $(function() {
                 var latlng = map.getCenter();
                 playground.fields.reverse_geocoded.attr('checked', 'checked');
                 if (playground.fields.reverse_geocoded.attr('checked') == 'checked'){
-                    console.log('heeeeey');
                     playground.reverse_geocode(latlng.lat(), latlng.lng(), playground.callbacks.reverse_geocode);
                 }
             }, 200),
