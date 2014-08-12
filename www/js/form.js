@@ -211,6 +211,7 @@ $(function() {
             },
             'process_map_location': _.debounce(function() {
                 var latlng = map.getCenter();
+                playground.fields.reverse_geocoded.attr('checked', 'checked');
                 if (playground.fields.reverse_geocoded.attr('checked') == 'checked'){
                     playground.reverse_geocode(latlng.lat(), latlng.lng(), playground.callbacks.reverse_geocode);
                 }
