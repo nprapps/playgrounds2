@@ -92,7 +92,6 @@ $(function() {
 
                 require_us_address(address_components);
                 playground.form.geocode_fields();
-                console.log('checked on');
                 playground.fields.reverse_geocoded.attr('checked', 'checked');
 
                 playground.fields.locator_map.removeClass('hidden');
@@ -209,7 +208,6 @@ $(function() {
             'process_map_location': _.debounce(function() {
                 var latlng = map.getCenter();
                 if (playground.fields.reverse_geocoded.attr('checked') == 'checked'){
-                    console.log('calling reverse geocode');
                     playground.reverse_geocode(latlng.lat(), latlng.lng(), playground.callbacks.reverse_geocode);
                 }
             }, 200),
@@ -260,7 +258,6 @@ $(function() {
         'locate_me': function() {
             function success(position){
                 var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                console.log('calling reverse geocode');
                 playground.reverse_geocode(position.coords.latitude, position.coords.longitude, playground.callbacks.reverse_geocode);
                 map.setCenter(latlng);
                 map.setZoom(playground.LOCATOR_DEFAULT_ZOOM);
@@ -386,7 +383,6 @@ $(function() {
                 playground.geocode(playground.form.prepare_geocode_object(), playground.callbacks.geocode);
             } else {
                 playground.form.geocode_fields();
-                console.log('checked on');
                 playground.fields.reverse_geocoded.attr('checked', 'checked');
                 playground.fields.reverse_geocoded.attr('data-changed', 'true');
                 $('#form').submit();
@@ -456,7 +452,6 @@ $(function() {
                 }
 
                 if (latitude && longitude) {
-                    console.log('calling reverse geocode');
                     playground.reverse_geocode(latitude, longitude, playground.callbacks.reverse_geocode);
                 } else {
                     playground.locate_me();
@@ -501,7 +496,6 @@ $(function() {
             });
 
             $('#address-pane input, #address-pane select').blur(function(){
-                console.log('checked off');
                 playground.fields.reverse_geocoded.removeAttr('checked');
             })
 
