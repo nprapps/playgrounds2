@@ -312,7 +312,7 @@ $(function() {
             var use_zip = has_street_address && has_zip;
 
             if (!(use_city_state || use_zip)) {
-                alert_text = "<strong>We're sorry!</strong><br>We need more information to find this location. Please provide an address with a city and state or ZIP code.";
+                alert_text = "<strong>We're sorry!</strong><br>We cannot find a specific street address for this location. Try adjusting the map.";
                 make_alert(alert_text, 'alert-error', 'div.modal-alerts');
                 return;
             }
