@@ -182,6 +182,10 @@ $(function() {
                     var latlng = new google.maps.LatLng(playground.fields.latitude.val(), playground.fields.longitude.val());
                     map.setCenter(latlng);
                 }
+                else {
+                    var latlng = map.getCenter();
+                    playground.reverse_geocode(latlng.lat(), latlng.lng(), playground.callbacks.reverse_geocode);
+                }
                 playground.map.center_editor();
             },
             'center_editor': function() {
