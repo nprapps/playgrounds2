@@ -27,10 +27,10 @@ REPOSITORY_NAME = 'playgrounds2'
 """
 DEPLOYMENT
 """
-PRODUCTION_S3_BUCKETS = ['apps.npr.org', 'apps2.npr.org']
+PRODUCTION_S3_BUCKETS = ['www.playgroundsforeveryone.com.s3-website-us-east-1.amazonaws.com']
 PRODUCTION_SERVERS = ['54.214.20.225']
 
-STAGING_S3_BUCKETS = ['stage-apps.npr.org']
+STAGING_S3_BUCKETS = ['staging.playgroundsforeveryone.com.s3-website-us-east-1.amazonaws.com']
 STAGING_SERVERS = ['54.214.20.232']
 
 # Should code be deployed to the web/cron servers?
@@ -61,7 +61,7 @@ COPY_URL = 'https://docs.google.com/spreadsheet/pub?key=%s&output=xls' % COPY_GO
 """
 SHARING
 """
-SHARE_URL = 'http://%s/%s/' % (PRODUCTION_S3_BUCKETS[0], PROJECT_SLUG)
+SHARE_URL = 'http://%s/' % (PRODUCTION_S3_BUCKETS[0])
 PROJECT_DESCRIPTION = "Playgrounds For Everyone is NPR's community-edited guide to accessible playgrounds. Help us out!"
 
 TWITTER = {
@@ -255,7 +255,7 @@ def configure_targets(deployment_target):
         DEBUG = False
 
         CLOUD_SEARCH_PROXY_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
-        S3_BASE_URL = 'http://%s/%s' % (S3_BUCKETS[0], PROJECT_SLUG)
+        S3_BASE_URL = 'http://%s' % (S3_BUCKETS[0])
         SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
 
         NPR_DFP['ENVIRONMENT'] = 'NPR'
@@ -268,7 +268,7 @@ def configure_targets(deployment_target):
         DEBUG = True
 
         CLOUD_SEARCH_PROXY_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
-        S3_BASE_URL = 'http://%s/%s' % (S3_BUCKETS[0], PROJECT_SLUG)
+        S3_BASE_URL = 'http://%s' % (S3_BUCKETS[0])
         SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
 
         NPR_DFP['ENVIRONMENT'] = 'NPRTEST'
