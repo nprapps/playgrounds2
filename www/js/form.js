@@ -6,6 +6,7 @@ var state_abbreviation;
 var zip_code;
 var playground = {};
 var move_end_listener = null;
+var reverse_geocode_listener = null;
 
 $(function() {
     playground = {
@@ -49,7 +50,7 @@ $(function() {
                     playground.hide_address_editor();
                     google.maps.event.removeListener(move_end_listener);
                     playground.map.reset_editor();
-                    move_end_listener = google.maps.event.addListener(map, 'center_changed', playground.map.process_map_location);
+                    move_end_listener = google.maps.event.addListener(map, 'dragend', playground.map.process_map_location);
                     playground.address_change_accepted = true;
                 } else {
                     alert_text = "<strong>We're sorry! We couldn't find that place.</strong><br>Don't forget to add the street/avenue/boulevard.<br/>If you're still having trouble, try finding it on the map.";
@@ -180,7 +181,7 @@ $(function() {
 
                 if (playground.fields.latitude.val() !== '' && playground.fields.latitude.val() !== 'None') {
                     var latlng = new google.maps.LatLng(playground.fields.latitude.val(), playground.fields.longitude.val());
-                    map.setCenter(latlng);
+                    // map.setCenter(latlng);
                 }
                 else {
                     var latlng = map.getCenter();
@@ -199,7 +200,7 @@ $(function() {
                     map.setCenter(latlng);
                 }
                 $('#edit-marker').css({'left': marker_left, 'top': marker_top}).show();
-                move_end_listener = google.maps.event.addListener(map, 'center_changed', playground.map.process_map_location);
+                move_end_listener = google.maps.event.addListener(map, 'dragend', playground.map.process_map_location);
             },
             'reset_editor': function() {
                 google.maps.event.trigger(map, 'resize');
@@ -283,7 +284,7 @@ $(function() {
                     callback(locales, latlng);
                 }
                 else {
-                    alert_text = "<h3>We're sorry!</h3>We're having a hard time finding this place.";
+                    alert_text = "<strong>We're sorry!</strong><br>We're having a hard time finding this place.";
                     make_alert(alert_text, 'warning', 'div.modal-alerts');
                 }
             })
@@ -298,7 +299,7 @@ $(function() {
                         callback(locales, latlng);
                     }
                     else {
-                        alert_text = "<h3>We're sorry!</h3>We're having a hard time finding this place.";
+                        alert_text = "<strong>We're sorry!</strong><br>We're having a hard time finding this place.";
                         make_alert(alert_text, 'warning', 'div.modal-alerts');
                     }
                 });
@@ -469,9 +470,9 @@ $(function() {
             // Watch the map.
             // Perform a reverse geocode when the map is finished moving.
 
-            move_end_listener = google.maps.event.addListener(map, 'center_changed', playground.map.process_map_location);
-
             google.maps.event.trigger(map, 'resize');
+
+            move_end_listener = google.maps.event.addListener(map, 'dragend', playground.map.process_map_location);
 
             // Sets up the click functions for each of the buttons.
             // Requires a data-action attribute on the button element.
