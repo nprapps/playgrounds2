@@ -641,6 +641,7 @@ section#the-goods { margin-top: 44px; }
         position: absolute;
         top: 79px;
         bottom: 44px;
+        z-index: -1;
         //margin-top: 10px;
         //margin-bottom: 10px;
     }
@@ -1069,6 +1070,16 @@ section#the-goods { margin-top: 44px; }
     }
 }
 
+#map-pane {
+    .modal-alerts {
+        z-index: 100000;
+        background-color: @green;
+        .alert {
+            padding: 20px;
+            color: white;
+        }
+    }
+}
 
 .playground #main-content {
     h4 {

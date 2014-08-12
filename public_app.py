@@ -55,23 +55,15 @@ def _dynamic_page():
     """
     return datetime.datetime.now().isoformat()
 
-@app.route('/%s/insert-playground/' % app_config.PROJECT_SLUG, methods=['POST'])
-def insert_playground():
+
+def create_change_payload(action, request):
     """
-    Create a new playground with data cross-posted from the app.
+    Create a changes.json entry.
     """
-    from flask import request
-
-    if request.method != 'POST':
-        abort(401)
-
-    #playground_fields = Playground._meta.get_field_names()
-
     payload = {}
-    payload['action'] = 'insert'
+    payload['action'] = action
     payload['timestamp'] = time.mktime(datetime.datetime.now(pytz.utc).timetuple())
     payload['playground'] = {}
-    payload['playground']['features'] = []
     payload['request'] = {}
     payload['request']['ip_address'] = request.remote_addr
     payload['request']['cookies'] = request.cookies
@@ -82,25 +74,45 @@ def insert_playground():
     for key, value in request.headers:
         payload['request']['headers'][key.lower().replace('-', '_')] = value
 
-    # Process playground fields
-    for field in Playground.USER_EDITABLE_FIELDS:
-        val = request.form.get(field)
+    if action != 'delete-request':
+        # Process playground fields
+        for field in Playground.USER_EDITABLE_FIELDS:
+            val = request.form.get(field)
 
-        if val:
-            op = Playground.FIELD_OPS[getattr(Playground, field).__class__]
-            payload['playground'][field] = op(val)
-        else:
-            if field in ['latitude', 'longitude']:
-                payload['playground'][field] = None
+            if field == 'reverse_geocoded':
+                payload['playground'][field] = (val == 'on')  
+            elif val:
+                op = Playground.FIELD_OPS[getattr(Playground, field).__class__]
+                payload['playground'][field] = op(val)
             else:
-                payload['playground'][field] = ''
+                if field in ['latitude', 'longitude']:
+                    payload['playground'][field] = None
+                else:
+                    payload['playground'][field] = ''
 
-    # Process playground features
-    for feature in copytext.COPY.feature_list:
-        slug = feature['key']
+        payload['playground']['features'] = []
 
-        if request.form.get(slug, None):
-            payload['playground']['features'].append(slug)
+        # Process playground features
+        for feature in copytext.COPY.feature_list:
+            slug = feature['key']
+
+            if request.form.get(slug, None):
+                payload['playground']['features'].append(slug)
+
+    return payload
+
+
+@app.route('/%s/insert-playground/' % app_config.PROJECT_SLUG, methods=['POST'])
+def insert_playground():
+    """
+    Create a new playground with data cross-posted from the app.
+    """
+    from flask import request
+
+    if request.method != 'POST':
+        abort(401)
+
+    payload = create_change_payload('insert', request)
 
     write_data(payload)
 
@@ -119,43 +131,8 @@ def update_playground():
 
     playground = Playground.get(id=request.form.get('id'))
 
-    # Prep the payload.
-    payload = {}
-    payload['action'] = 'update'
-    payload['timestamp'] = time.mktime(datetime.datetime.now(pytz.utc).timetuple())
-    payload['playground'] = {}
-    payload['playground']['features'] = []
-    payload['request'] = {}
-    payload['request']['ip_address'] = request.remote_addr
-    payload['request']['cookies'] = request.cookies
-    payload['request']['headers'] = {}
-
-    # Write the request headers to the payload.
-    # It's nicer when they use underscores instead of dashes.
-    for key, value in request.headers:
-        payload['request']['headers'][key.lower().replace('-', '_')] = value
-
+    payload = create_change_payload('update', request) 
     payload['playground']['id'] = int(request.form.get('id'))
-
-    # Process playground fields
-    for field in Playground.USER_EDITABLE_FIELDS:
-        val = request.form.get(field)
-
-        if val:
-            op = Playground.FIELD_OPS[getattr(Playground, field).__class__]
-            payload['playground'][field] = op(val)
-        else:
-            if field in ['latitude', 'longitude']:
-                payload['playground'][field] = None
-            else:
-                payload['playground'][field] = ''
-
-    # Process features
-    for feature in copytext.COPY.feature_list:
-        slug = feature['key']
-
-        if request.form.get(slug, None):
-            payload['playground']['features'].append(slug)
 
     write_data(payload)
 
@@ -170,24 +147,12 @@ def delete_playground():
     from flask import request
 
     playground_slug = request.form.get('slug', None)
-    text = request.form.get('text', None)
+    text = request.form.get('text', '')
 
-    if not (playground_slug and text):
+    if not playground_slug:
         abort(400)
 
-    payload = {}
-    payload['action'] = 'delete-request'
-    payload['timestamp'] = time.mktime(datetime.datetime.now(pytz.utc).timetuple())
-    payload['playground'] = {}
-    payload['request'] = {}
-    payload['request']['ip_address'] = request.remote_addr
-    payload['request']['cookies'] = request.cookies
-    payload['request']['headers'] = {}
-
-    # Write the request headers to the payload.
-    # It's nicer when they use underscores instead of dashes.
-    for key, value in request.headers:
-        payload['request']['headers'][key.lower().replace('-', '_')] = value
+    payload = create_change_payload('delete-request', request)
 
     payload['playground']['slug'] = playground_slug
     payload['playground']['text'] = text
@@ -212,7 +177,11 @@ def delete_playground_confirm(playground_slug=None):
 
     Playground.get(slug=playground_slug).deactivate()
 
-    return json.dumps({"slug": playground_slug, "action": "delete", "success": True})
+    return json.dumps({
+        'slug': playground_slug,
+        'action': 'delete',
+        'success': True
+    })
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8001, debug=app_config.DEBUG)
