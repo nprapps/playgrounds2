@@ -223,7 +223,7 @@ $(function() {
                 var map_height;
                 var map_width = playground.CONTENT_WIDTH;
                 var modal_path;
-                var modal_width = $('#edit-playground').width();
+                var modal_width = Math.round($('#edit-playground').width());
                 var modal_height;
 
                 map_height = Math.floor(playground.CONTENT_WIDTH / 3);
