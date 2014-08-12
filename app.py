@@ -157,6 +157,15 @@ def search():
 
     return render_template('search.html', **context)
 
+@app.route('/add-search.html')
+def add_search():
+    """
+    Pre-add search page
+    """
+    context = make_context()
+
+    return render_template('add_search.html', **context)
+
 @app.route('/create.html')
 def playground_create():
     context = make_context()
