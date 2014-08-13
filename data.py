@@ -121,8 +121,8 @@ def deploy_to_s3(src):
     s3cmd_gzip = 's3cmd -P --add-header=Cache-Control:max-age=5 --add-header=Content-encoding:gzip --guess-mime-type --recursive --exclude "*" --include-from gzip_types.txt sync %s/ %s'
 
     for bucket in app_config.S3_BUCKETS:
-        os.system(s3cmd % (src, 's3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
-        os.system(s3cmd_gzip % (src, 's3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
+        os.system(s3cmd % (src, 's3://%s/' % (bucket)))
+        os.system(s3cmd_gzip % (src, 's3://%s/' % (bucket)))
 
 
 def deploy_file_to_s3(src, dst, gzipped=False):
@@ -132,7 +132,7 @@ def deploy_file_to_s3(src, dst, gzipped=False):
         s3cmd = 's3cmd -P --add-header=Cache-Control:max-age=5 --guess-mime-type --recursive --exclude-from gzip_types.txt put %s %s'
 
     for bucket in app_config.S3_BUCKETS:
-        os.system(s3cmd % (src, 's3://%s/%s/%s' % (bucket, app_config.PROJECT_SLUG, dst)))
+        os.system(s3cmd % (src, 's3://%s/%s' % (bucket, dst)))
 
 
 def gzip(src, dst):

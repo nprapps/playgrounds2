@@ -27,10 +27,10 @@ REPOSITORY_NAME = 'playgrounds2'
 """
 DEPLOYMENT
 """
-PRODUCTION_S3_BUCKETS = ['www.playgroundsforeveryone.com.s3-website-us-east-1.amazonaws.com']
+PRODUCTION_S3_BUCKETS = ['www.playgroundsforeveryone.com']
 PRODUCTION_SERVERS = ['54.214.20.225']
 
-STAGING_S3_BUCKETS = ['staging.playgroundsforeveryone.com.s3-website-us-east-1.amazonaws.com']
+STAGING_S3_BUCKETS = ['staging.playgroundsforeveryone.com']
 STAGING_SERVERS = ['54.214.20.232']
 
 # Should code be deployed to the web/cron servers?
