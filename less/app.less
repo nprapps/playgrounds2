@@ -531,7 +531,7 @@ section#the-goods { margin-top: 44px; }
         display: table-cell;
         padding-left: 11px;
         padding-right: 11px;
-        width: 18px;
+        width: 20px;
 
         strong {
             display: inline-block;
@@ -540,10 +540,12 @@ section#the-goods { margin-top: 44px; }
             overflow: hidden;
             color: #111;
             text-align: center;
-            font-weight: bold;
+            font-weight: normal;
             font-size: 12px;
-            width: 18px;
-            line-height: 18px;
+            width: 20px;
+            line-height: 20px;
+            position: relative;
+            top: 5px;
         }
     }
     .result-text {
@@ -1703,8 +1705,18 @@ section#the-goods { margin-top: 44px; }
 
 #google-map {
     @media @screen-small-above {
-        width: 500px;
-        height: 500px;
+        width: 352px;
+        height: 352px;
+    }
+
+    @media screen and (min-width: 980px) {
+        width: 460px;
+        height: 460px;
+    }
+
+    @media screen and (min-width: 1200px) {
+        width: 570px;
+        height: 570px;
     }
 }
 
