@@ -235,12 +235,15 @@ function search() {
                 $results_address.show();
 
                 if (IS_MOBILE) {
+                    $('#google-map').hide();
+
                     var search_map_width = RESULTS_MAP_WIDTH;
                     var search_map_height = RESULTS_MAP_HEIGHT;
 
                     $search_results_map.on('load', function() {
                         $search_results_map_loading_text.text('Searching...').hide();
                         $search_results_map.css('opacity', '1.0');
+                        $search_results_map.css('display', 'block');
                         $search_results_map.off('load');
                     });
 
@@ -374,8 +377,10 @@ function config_map_affix() {
      * Use Bootstrap affix to anchor slippy map to the top of the page
      * as the user scrolls down a long list of results (e.g., NYC)
      */
+
     var mc_pos = $('#main-content').position();
 
+    $search_results_wrapper.addClass('affix-top');
     $search_results_wrapper.attr('data-spy', 'affix');
     $search_results_wrapper.attr('data-offset-top', mc_pos.top + 35);
 
@@ -425,6 +430,7 @@ function parse_geocode_results(results, status) {
 function initialize_google_map() {
     var mapOptions = {
         center: new google.maps.LatLng(-34.397, 150.644),
+        disableDefaultUI: true,
         mapTypeControl: false,
         overviewMapControl: false,
         panControl: false,
@@ -611,6 +617,8 @@ $(function() {
     if (PAGE_WIDTH > 767 && !IS_MOBILE) {
         config_map_affix();
     }
+
+    $(window).resize(config_map_affix);
 
     // Check to see if we've got a message to show.
     if (get_parameter_by_name('action') !== null){
