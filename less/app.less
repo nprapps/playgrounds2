@@ -185,6 +185,16 @@ header {
 
         .title-banner {
             margin-bottom: 22px;
+
+            @media @screen-tiny {
+                h1 {
+                    display: inline-block;
+                    font-size: 14px;
+                    font-weight: bold;
+                    line-height: 23px;
+                    vertical-align: top;
+                }
+            }
         }
 
         @media @screen-small {
@@ -280,6 +290,12 @@ header {
         @media @screen-small {
             position: static;
         }
+
+        .index & {
+            @media @screen-tiny {
+                margin-top: 0;
+            }
+        }
     }
     .project-info {
         padding: 33px;
@@ -329,9 +345,10 @@ header {
         height: 375px;
     }
     @media @screen-tiny {
-        background-image: url('@{img-root}/playground-480.jpg');
-        background-position: 50% 45%;
-        height: 350px;
+        display: none;
+        // background-image: url('@{img-root}/playground-480.jpg');
+        // background-position: 50% 45%;
+        // height: 350px;
     }
 
     .mobile-prompt {
@@ -955,6 +972,14 @@ section#the-goods { margin-top: 44px; }
         }
     }
 
+    #playground-meta {
+        @media @screen-tiny {
+            p {
+                font-size: 14px;
+            }
+        }
+    }
+
     #playground-about {
         table.city-list {
             margin: 0 0 1.3em 0;
@@ -1543,13 +1568,21 @@ section#the-goods { margin-top: 44px; }
         margin: 0;
     }
     p {
-        margin: 0;
+        margin: 0 0 11px;
 
         &.example {
             font-size: 13px;
             line-height: 1.2;
             color: #777;
             clear: both;
+
+            @media @screen-tiny {
+                display: none;
+            }
+        }
+
+        @media @screen-tiny {
+            font-size: 16px;
         }
     }
     label {
@@ -1825,5 +1858,12 @@ footer {
         }
 
     }
-    footer { border-top: 1px solid #CCC; margin-top: 24px; }
+    footer {
+        border-top: 1px solid #CCC;
+        margin-top: 24px;
+
+        .secondary li {
+            margin-left: 6px;
+        }
+    }
 }
