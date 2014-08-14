@@ -1109,6 +1109,14 @@ section#the-goods { margin-top: 44px; }
 }
 
 .playground #main-content {
+    h1 {
+        line-height: 1.2;
+
+        @media @screen-tiny {
+            font-size: 22px;
+        }
+    }
+
     h4 {
         margin: 0 0 22px 0;
         color: #333;
@@ -1363,8 +1371,21 @@ section#the-goods { margin-top: 44px; }
             b {
                 display: none;
             }
+
+            @media @screen-tiny {
+                margin-bottom: 3px;
+
+                &.facebook a {
+                    border-right: none;
+                }
+            }
         }
         &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
+
+        @media @screen-tiny {
+            margin-top: 22px;
+        }
+
     }
     .update-form-modal {
         @media @screen-tiny {
