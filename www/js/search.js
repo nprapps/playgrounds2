@@ -7,6 +7,7 @@ var RESULTS_MAP_HEIGHT = 500;
 var RESULTS_MAX_ZOOM = 16;
 var RESULTS_MIN_ZOOM = 8;
 var IS_MOBILE = Modernizr.touch;
+var IS_ADD_SEARCH = window.location.pathname === '/add-search.html';
 
 var LETTERS = 'abcdefghijklmnopqrstuvwxyz';
 
@@ -270,6 +271,10 @@ function search() {
         },
         cache: true
     });
+
+    if (IS_MOBILE){
+        scroll_to_results();
+    }
 }
 
 function navigate(nearby) {
@@ -360,7 +365,9 @@ function hashchange_callback() {
         $search_latitude.val(latitude);
         $search_longitude.val(longitude);
 
-        if (!nearby) {
+        if (IS_ADD_SEARCH === true){
+            $results_address.text('Is the playground you would like to add on this list?');
+        } else if (!nearby) {
             $results_address.text('Accessible Playgrounds Near ' + $search_address.val());
         } else {
             $results_address.text('Accessible Playgrounds Near You');
@@ -450,6 +457,10 @@ function initialize_google_map() {
     google.maps.event.addListener(google_desktop_map, 'zoom_changed', debounced_moveend);
 }
 
+function scroll_to_results() {
+    $('html,body').animate({'scrollTop': $('#the-goods').offset().top}, 500)
+}
+
 
 $(function() {
     $search_form = $('#search');
@@ -497,6 +508,8 @@ $(function() {
     }
 
     $geolocate_button.click(function() {
+        $map_loading.show();
+
         navigator.geolocation.getCurrentPosition(function(position) {
             $search_address.val('');
             $search_latitude.val(position.coords.latitude);
