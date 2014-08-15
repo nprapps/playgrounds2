@@ -185,6 +185,16 @@ header {
 
         .title-banner {
             margin-bottom: 22px;
+
+            @media @screen-tiny {
+                h1 {
+                    display: inline-block;
+                    font-size: 14px;
+                    font-weight: bold;
+                    line-height: 23px;
+                    vertical-align: top;
+                }
+            }
         }
 
         @media @screen-small {
@@ -280,6 +290,16 @@ header {
         @media @screen-small {
             position: static;
         }
+
+        .index & {
+            @media @screen-tiny {
+                margin-top: 0;
+
+                .share-bulk {
+                    margin-bottom: 0;
+                }
+            }
+        }
     }
     .project-info {
         padding: 33px;
@@ -329,9 +349,10 @@ header {
         height: 375px;
     }
     @media @screen-tiny {
-        background-image: url('@{img-root}/playground-480.jpg');
-        background-position: 50% 45%;
-        height: 350px;
+        display: none;
+        // background-image: url('@{img-root}/playground-480.jpg');
+        // background-position: 50% 45%;
+        // height: 350px;
     }
 
     .mobile-prompt {
@@ -399,7 +420,17 @@ header {
 
 
 // Content
-section#the-goods { margin-top: 44px; }
+section#the-goods {
+    margin-top: 44px;
+
+    @media @screen-tiny {
+        margin-top: 22px;
+
+        .index & {
+            margin-top: 0;
+        }
+    }
+}
 
 .logo {
     width: 69px;
@@ -407,9 +438,10 @@ section#the-goods { margin-top: 44px; }
 }
 
 .alert {
-    margin: 0 0 2px 0;
-    color: #A8803C;
+    margin: 2px 0;
+    color: #222;
     border: none;
+    background: fade(@green, 10%);
 
     #the-goods & {
         @media @screen-tiny {
@@ -477,6 +509,10 @@ section#the-goods { margin-top: 44px; }
         p {
             text-align: left;
             font-size: 16px;
+        }
+
+        @media @screen-tiny {
+            margin: 11px -20px;
         }
     }
 }
@@ -571,6 +607,14 @@ section#the-goods { margin-top: 44px; }
             white-space: nowrap;
 
             &.result-city { display: block; }
+        }
+
+        @media @screen-tiny {
+            max-width: 33.3333%;
+
+            span {
+                white-space: normal;
+            }
         }
     }
 }
@@ -955,6 +999,14 @@ section#the-goods { margin-top: 44px; }
         }
     }
 
+    #playground-meta {
+        @media @screen-tiny {
+            p {
+                font-size: 14px;
+            }
+        }
+    }
+
     #playground-about {
         table.city-list {
             margin: 0 0 1.3em 0;
@@ -1084,6 +1136,14 @@ section#the-goods { margin-top: 44px; }
 }
 
 .playground #main-content {
+    h1 {
+        line-height: 1.2;
+
+        @media @screen-tiny {
+            font-size: 22px;
+        }
+    }
+
     h4 {
         margin: 0 0 22px 0;
         color: #333;
@@ -1158,6 +1218,12 @@ section#the-goods { margin-top: 44px; }
                 overflow: hidden;
             }
             #directions-link + a { margin-left: 10px; }
+
+            @media @screen-tiny {
+                .btn.btn-blue {
+                    padding: 0 10px;
+                }
+            }
         }
 
         @media @screen-tiny-above {
@@ -1332,8 +1398,21 @@ section#the-goods { margin-top: 44px; }
             b {
                 display: none;
             }
+
+            @media @screen-tiny {
+                margin-bottom: 3px;
+
+                &.facebook a {
+                    border-right: none;
+                }
+            }
         }
         &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
+
+        @media @screen-tiny {
+            margin-top: 22px;
+        }
+
     }
     .update-form-modal {
         @media @screen-tiny {
@@ -1518,7 +1597,6 @@ section#the-goods { margin-top: 44px; }
 }
 #playground-search {
     background-color: #f5f5f5;
-    // border-bottom: 2px solid #ebebeb;
     padding: 33px 0;
 
     h1 {
@@ -1543,13 +1621,22 @@ section#the-goods { margin-top: 44px; }
         margin: 0;
     }
     p {
-        margin: 0;
+        margin: 0 0 11px;
+        line-height: 1.2;
 
         &.example {
             font-size: 13px;
             line-height: 1.2;
             color: #777;
             clear: both;
+
+            @media @screen-tiny {
+                display: none;
+            }
+        }
+
+        @media @screen-tiny {
+            font-size: 16px;
         }
     }
     label {
@@ -1584,6 +1671,10 @@ section#the-goods { margin-top: 44px; }
         }
         &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
     }
+
+    @media @screen-tiny {
+        padding: 11px 0;
+    }
 }
 
 .search #main-content {
@@ -1592,6 +1683,10 @@ section#the-goods { margin-top: 44px; }
     h3 {
         font-size: 24px;
         margin: 0 0 22px 0;
+
+        @media @screen-tiny {
+            font-size: 18px;
+        }
     }
     p {
         font-size: 14px;
@@ -1634,6 +1729,9 @@ section#the-goods { margin-top: 44px; }
     #search-results-map-wrapper {
         position: relative;
 
+        #search-results-map {
+            display: none;
+        }
         h3 { margin-bottom: 11px; }
         .zoom-buttons {
             position: absolute;
@@ -1704,19 +1802,23 @@ section#the-goods { margin-top: 44px; }
 }
 
 #google-map {
-    @media @screen-small-above {
-        width: 352px;
-        height: 352px;
+    margin: 0 auto;
+    @media @screen-tiny {
+        width: 280px;
+        height: 280px;
     }
-
+    @media @screen-tiny-above {
+        min-width: 352px;
+        min-height: 352px;
+    }
     @media screen and (min-width: 980px) {
-        width: 460px;
-        height: 460px;
+        min-width: 460px;
+        min-height: 460px;
     }
 
     @media screen and (min-width: 1200px) {
-        width: 570px;
-        height: 570px;
+        min-width: 570px;
+        min-height: 570px;
     }
 }
 
@@ -1825,5 +1927,22 @@ footer {
         }
 
     }
-    footer { border-top: 1px solid #CCC; margin-top: 24px; }
+    footer {
+        border-top: 1px solid #CCC;
+        margin-top: 24px;
+
+        .secondary li {
+            margin-left: 6px;
+        }
+    }
+}
+
+.affix {
+    @media @screen-small {
+        position: static;
+    }
+
+    @media @screen-small-above {
+        position: fixed;
+    }
 }

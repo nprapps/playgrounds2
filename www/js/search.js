@@ -7,6 +7,7 @@ var RESULTS_MAP_HEIGHT = 500;
 var RESULTS_MAX_ZOOM = 16;
 var RESULTS_MIN_ZOOM = 8;
 var IS_MOBILE = Modernizr.touch;
+var IS_ADD_SEARCH = window.location.pathname === '/add-search.html';
 
 var LETTERS = 'abcdefghijklmnopqrstuvwxyz';
 
@@ -235,12 +236,15 @@ function search() {
                 $results_address.show();
 
                 if (IS_MOBILE) {
+                    $('#google-map').hide();
+
                     var search_map_width = RESULTS_MAP_WIDTH;
                     var search_map_height = RESULTS_MAP_HEIGHT;
 
                     $search_results_map.on('load', function() {
                         $search_results_map_loading_text.text('Searching...').hide();
                         $search_results_map.css('opacity', '1.0');
+                        $search_results_map.css('display', 'block');
                         $search_results_map.off('load');
                     });
 
@@ -267,6 +271,10 @@ function search() {
         },
         cache: true
     });
+
+    if (IS_MOBILE){
+        scroll_to_results();
+    }
 }
 
 function navigate(nearby) {
@@ -357,7 +365,9 @@ function hashchange_callback() {
         $search_latitude.val(latitude);
         $search_longitude.val(longitude);
 
-        if (!nearby) {
+        if (IS_ADD_SEARCH === true){
+            $results_address.text('Is the playground you would like to add on this list?');
+        } else if (!nearby) {
             $results_address.text('Accessible Playgrounds Near ' + $search_address.val());
         } else {
             $results_address.text('Accessible Playgrounds Near You');
@@ -374,8 +384,10 @@ function config_map_affix() {
      * Use Bootstrap affix to anchor slippy map to the top of the page
      * as the user scrolls down a long list of results (e.g., NYC)
      */
+
     var mc_pos = $('#main-content').position();
 
+    $search_results_wrapper.addClass('affix-top');
     $search_results_wrapper.attr('data-spy', 'affix');
     $search_results_wrapper.attr('data-offset-top', mc_pos.top + 35);
 
@@ -425,6 +437,7 @@ function parse_geocode_results(results, status) {
 function initialize_google_map() {
     var mapOptions = {
         center: new google.maps.LatLng(-34.397, 150.644),
+        disableDefaultUI: true,
         mapTypeControl: false,
         overviewMapControl: false,
         panControl: false,
@@ -442,6 +455,10 @@ function initialize_google_map() {
 
     google.maps.event.addListener(google_desktop_map, 'center_changed', debounced_moveend);
     google.maps.event.addListener(google_desktop_map, 'zoom_changed', debounced_moveend);
+}
+
+function scroll_to_results() {
+    $('html,body').animate({'scrollTop': $('#the-goods').offset().top}, 500)
 }
 
 
@@ -491,6 +508,8 @@ $(function() {
     }
 
     $geolocate_button.click(function() {
+        $map_loading.show();
+
         navigator.geolocation.getCurrentPosition(function(position) {
             $search_address.val('');
             $search_latitude.val(position.coords.latitude);
@@ -611,6 +630,8 @@ $(function() {
     if (PAGE_WIDTH > 767 && !IS_MOBILE) {
         config_map_affix();
     }
+
+    $(window).resize(config_map_affix);
 
     // Check to see if we've got a message to show.
     if (get_parameter_by_name('action') !== null){

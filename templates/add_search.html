@@ -5,3 +5,11 @@
 {% include '_alerts.html' %}
 {% include '_add_search_form.html' %}
 {% endblock %}
+
+
+{% block help_prompt %}
+<div id="search-help-prompt">
+    <p class="prompt">Don&rsquo;t see your playground here? Please add it!</p>
+    <p><a href="create.html" class="btn btn-blue btn-block create" role="button"><i class="icon-plus-sign"></i> {{ COPY.content.search_help_button }}</a></p>
+</div>
+{% endblock %}
