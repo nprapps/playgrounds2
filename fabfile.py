@@ -59,17 +59,11 @@ def production():
     env.settings = 'production'
     env.s3_buckets = app_config.PRODUCTION_S3_BUCKETS
     env.hosts = app_config.PRODUCTION_SERVERS
-    env.cloud_search_proxy_base_url = 'http://%s/%s' % (env.hosts[0], app_config.PROJECT_SLUG)
-    env.s3_base_url = 'http://%s/%s' % (env.s3_buckets[0], app_config.PROJECT_SLUG)
-    env.server_base_url = 'http://%s/%s' % (env.hosts[0], app_config.PROJECT_SLUG)
 
 def staging():
     env.settings = 'staging'
     env.s3_buckets = app_config.STAGING_S3_BUCKETS
     env.hosts = app_config.STAGING_SERVERS
-    env.cloud_search_proxy_base_url = 'http://%s/%s' % (env.hosts, app_config.PROJECT_SLUG)
-    env.s3_base_url = 'http://%s/%s' % (env.s3_buckets, app_config.PROJECT_SLUG)
-    env.server_base_url = 'http://%s/%s' % (env.hosts, app_config.PROJECT_SLUG)
 
 """
 Branches
@@ -421,7 +415,7 @@ def deploy_data():
         s3cmd = 's3cmd -P --add-header=Cache-Control:max-age=5 --guess-mime-type --recursive sync %s %s'
 
         for bucket in app_config.S3_BUCKETS:
-            os.system(s3cmd % ('www/%s' % filename, 's3://%s/%s/' % (bucket, app_config.PROJECT_SLUG)))
+            os.system(s3cmd % ('www/%s' % filename, 's3://%s/' % (bucket)))
 
     # Un-fake-out deployment target
     app_config.configure_targets(deployment_target)
@@ -479,8 +473,8 @@ def write_snapshots():
     s3cmd_gzip = 's3cmd -P --add-header=Cache-Control:max-age=5 --add-header=Content-encoding:gzip --guess-mime-type --recursive --exclude "*" --include-from gzip_types.txt sync %s/ %s'
 
     for bucket in app_config.S3_BUCKETS:
-        os.system(s3cmd % ('.backups_gzip', 's3://%s/%s/backups/' % (bucket, app_config.PROJECT_SLUG)))
-        os.system(s3cmd_gzip % ('.backups_gzip', 's3://%s/%s/backups/' % (bucket, app_config.PROJECT_SLUG)))
+        os.system(s3cmd % ('.backups_gzip', 's3://%s/backups/' % (bucket)))
+        os.system(s3cmd_gzip % ('.backups_gzip', 's3://%s/backups/' % (bucket)))
 
     os.system('rm -rf .backups_gzip')
     os.system('rm -rf data/backups')
@@ -846,7 +840,7 @@ def shiva_the_destroyer():
 
         for bucket in env.s3_buckets:
             env.s3_bucket = bucket
-            local(s3cmd % ('s3://%(s3_bucket)s/%(project_slug)s' % env))
+            local(s3cmd % ('s3://%(s3_bucket)s' % env))
 
         clear_search_index()
 

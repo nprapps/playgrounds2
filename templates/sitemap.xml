@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     {% for path, timestamp in pages %}
     <url>
-        <loc>http://{{ S3_BUCKETS[0] }}/{{ PROJECT_SLUG }}{{ path|safe }}</loc>
+        <loc>http://{{ S3_BUCKETS[0] }}{{ path|safe }}</loc>
         <lastmod>{{ timestamp }}</lastmod>
     </url>
     {% endfor %}
