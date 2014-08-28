@@ -24,6 +24,7 @@ playgrounds2
 * [Add fake changelog data](#add-fake-changelog-data)
 * [Run the remote cron](#run-the-remote-cron)
 * [If cron fails](#if-cron-fails)
+* [DNS Configuration)](dns-configuration)
 
 What is this?
 -------------
@@ -282,3 +283,28 @@ If cron fails
 If the overnight cron job fails changes in process may not have been applied. The changes that were in process will have been staged in `changes-in-process.json` in the root directory of the repository. The accumulating changeset will have been deleted from `data/changes.json`. Depending on what stage of the cron job failed (processing or rendering) the changes may or may not have been applied in their entirety. It is virtually impossible to automatically handle every case that may arise, so instead you must manually investigate which changes were applied and determine if changes staged in `changes-in-process.json` need to be copied by into `data/changes.json` so they will be applied the next time the cron job is run. This can not be done automatically because it could result in duplicate playgrounds being created if, for example, the cron job failed half-way through the processing step.
 
 If you determine that all changes have been successfully applied (even if they were not rendered), simply delete `changes-in-process.json`, fix the bug and rerun the cron process to render those changes.
+
+DNS Configuration
+-----------------
+
+The `www` version of this application CNAME'd to S3 as usual. Our internal DNS doesn't support issuing a 301 for the bare domain and S3 doesn't support bare domains unless using Route 53. To work around this we've configured a custom Nginx rule to redirect bare domain traffic to www:
+
+```
+server {
+    listen 80;
+    server_name playgroundsforeveryone.com;
+    return 301 $scheme://www.playgroundsforeveryone.com$request_uri;
+}
+```
+
+In order for this to work the default Nginx server must be modified to be the default server:
+
+```
+server {
+    listen 80 default_server;
+    client_max_body_size 15M;
+    root /var/www;
+    server_name $hostname "";
+    include /etc/nginx/locations-enabled/*;
+}
+```
