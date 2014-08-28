@@ -34,10 +34,16 @@
 {% block header_content %}
 {% include '_nav-interior.html' %}
 {% include '_alerts.html' %}
+
+<div class="container">
+    <div class="row">
+        <h1 class="playground-name span-12">{{ playground.display_name }}</h1>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block content %}
-<h1>{{ playground.display_name }}</h1>
 
 {% if not features %}
 <div class="help-prompt help-prompt-features">

@@ -283,7 +283,7 @@ header {
     .project-info-wrapper {
         position: absolute;
         background: #FFF;
-        background: rgba(255,255,255,.8);
+        background: rgba(255,255,255,.9);
         margin-top: 44px;
         top: 0;
 
@@ -302,7 +302,7 @@ header {
         }
     }
     .project-info {
-        padding: 33px;
+        padding: 22px;
         font-size: 14px;
         line-height: 1.4;
 
@@ -1136,14 +1136,23 @@ section#the-goods {
     }
 }
 
-.playground #main-content {
-    h1 {
-        line-height: 1.2;
+.playground .playground-name {
+    line-height: 1.2;
+    font-weight: normal;
+    margin-top: 22px;
+    margin-bottom: 0;
 
-        @media @screen-tiny {
-            font-size: 22px;
-        }
+    @media @screen-tiny {
+        font-size: 22px;
     }
+}
+
+.playground #the-goods {
+    margin-top: 22px;
+}
+
+.playground #main-content {
+
 
     h4 {
         margin: 0 0 22px 0;
