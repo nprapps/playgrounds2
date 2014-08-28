@@ -159,12 +159,20 @@ header {
             width: 69px;
             height: 23px;
             margin-bottom: 11px;
+
+            @media @screen-small-above {
+                margin-bottom: 22px;
+            }
         }
 
         h1 {
             font-size: 60px;
             line-height: 1.1;
             font-weight: normal;
+
+            @media @screen-small-above {
+                margin-bottom: 22px;
+            }
 
             @media @screen-small {
                 font-size: 36px;
