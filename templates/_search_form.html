@@ -10,22 +10,20 @@
                     <h6 class="divider">OR</h6>
 
                     <div id="address-search">
-                        <input type="text" name="address" placeholder="Address, City, State, or Zip Code" class="address-search-input" role="input"/>
-
+                        <div class="address-wrapper">
+                            <input type="text" name="address" placeholder="Address, City, State, or Zip Code" class="address-search-input" role="input"/>
+                        </div>
                         <input type="hidden" name="latitude" />
                         <input type="hidden" name="longitude" />
                         <button type="submit" id="search-btn" role="button" class="btn btn-blue btn-block"><i class="icon-search" aria-label="Search"></i><span>Search</span></button>
-
-                        <p class="example">For example,
-                        <a href="search.html#address=600+Central+Street,+Evanston,+Cook,+Illinois,+60201&latitude=42.063957&longitude=-87.677219&zoom={{ RESULTS_DEFAULT_ZOOM }}&nearby=false" class="search-example">600 Central St, Evanston, IL</a> or
-                        <a href="search.html#address=New+York+City,+New+York&latitude=40.7305991&longitude=-73.9865812&zoom={{ RESULTS_DEFAULT_ZOOM }}&nearby=false" class="search-example">New York, NY</a> or
-                        <a href="search.html#address=Lubbock,+Lubbock+County,+Texas,+79410&latitude=33.5687784855597&longitude=-101.890442782044&zoom={{ RESULTS_DEFAULT_ZOOM }}&nearby=false" class="search-example">79410</a>
-                        </p>
-
                     </div>
-
                 </form>
 
+                <p class="example">For example,
+                <a href="search.html#address=600+Central+Street,+Evanston,+Cook,+Illinois,+60201&latitude=42.063957&longitude=-87.677219&zoom={{ RESULTS_DEFAULT_ZOOM }}&nearby=false" class="search-example">600 Central St, Evanston, IL</a> or
+                <a href="search.html#address=New+York+City,+New+York&latitude=40.7305991&longitude=-73.9865812&zoom={{ RESULTS_DEFAULT_ZOOM }}&nearby=false" class="search-example">New York, NY</a> or
+                <a href="search.html#address=Lubbock,+Lubbock+County,+Texas,+79410&latitude=33.5687784855597&longitude=-101.890442782044&zoom={{ RESULTS_DEFAULT_ZOOM }}&nearby=false" class="search-example">79410</a>
+                </p>
             </div>
         </div>
     </div>

@@ -183,6 +183,11 @@ header {
                 font-size: 24px;
                 line-height: 1.1;
             }
+
+            @media @screen-small {
+                padding-top: 0;
+                padding-bottom: 0;
+            }
         }
 
         .title-banner {
@@ -291,6 +296,7 @@ header {
 
         @media @screen-small {
             position: static;
+            margin-top: 0;
         }
 
         .index & {
@@ -1685,10 +1691,17 @@ section#the-goods {
         width: 45%;
         float: left;
 
-        .address-search-input {
+        .address-wrapper {
             float: left;
-            height: 32px;
-            width: 80%;
+            width: 85%;
+            padding-right: 15px;
+            box-sizing: border-box;
+
+
+            .address-search-input {
+                height: 32px;
+                width: 100%;
+            }
         }
         #search-btn {
             font-size: 14px;
@@ -1698,7 +1711,43 @@ section#the-goods {
             i { margin-right: 0; }
             span { display: none; }
         }
+
         &:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
+    }
+
+    @media @screen-small and (min-width: 480px) {
+        h6.divider {
+            display: none !important;
+        }
+
+        #address-search {
+            width: 65%;
+            padding-right: 15px;
+            box-sizing: border-box;
+
+            .address-wrapper {
+                width: 80% !important;
+                padding-right: 15px;
+                box-sizing: border-box;
+
+                .address-search-input {
+                    width: 100%;
+                }
+            }
+
+            #search-btn {
+                width: 20% !important;
+            }
+        }
+
+        #geolocate {
+            width: 35%;
+            padding: 0 10px;
+
+            i {
+                display: none;
+            }
+        }
     }
 
     @media @screen-tiny {
@@ -1908,7 +1957,7 @@ footer {
         padding-left: 20px; padding-right: 20px;
 
         #address-search {
-            .address-search-input { width: 65%; }
+            .address-wrapper { width: 75%; }
             #search-btn { width: 25%; }
         }
     }
@@ -1930,7 +1979,7 @@ footer {
             width: 90%;
             float: right;
 
-            .address-search-input { width: 70%; }
+            .address-wrapper { width: 80%; }
             #search-btn { width: 20%; }
         }
         #geolocate {
