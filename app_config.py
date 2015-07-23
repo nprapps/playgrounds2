@@ -59,7 +59,6 @@ SERVER_BASE_URL = 'http://127.0.0.1:8001/%s' % PROJECT_SLUG
 COPY EDITING
 """
 COPY_GOOGLE_DOC_KEY = '1EztSxy1HdiYKs64h57W6HEnoVKnBx6YlQYtueWL1ZWk'
-#COPY_URL = 'https://docs.google.com/spreadsheet/pub?key=%s&output=xls' % COPY_GOOGLE_DOC_KEY
 COPY_PATH = 'data/copy.xlsx'
 
 """
