@@ -586,7 +586,7 @@ def process_updates():
                 'NPR News Apps <nprapps@npr.org>',
                 'Playgrounds Cron Error! (%s, %s)' % (os.environ.get('DEPLOYMENT_TARGET'), datetime.datetime.now(pytz.utc).replace(tzinfo=pytz.utc).strftime('%m/%d')),
                 traceback.format_exc() + '\n\nPlease see the README docs for details on how to resolve this: https://github.com/nprapps/playgrounds2#if-cron-fails',
-                ['nprapps@npr.org', 'deads@npr.org'])
+                'nprapps@npr.org')
 
     else:
         prepare_changes()
