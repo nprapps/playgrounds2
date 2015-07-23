@@ -93,8 +93,8 @@ def create_change_payload(action, request):
         payload['playground']['features'] = []
 
         # Process playground features
-        #for feature in copytext.Copy(app_config.COPY_PATH)['feature_list']:
-            #slug = feature['key']
+        for feature in copytext.Copy(app_config.COPY_PATH)['feature_list']:
+            slug = feature['key']
 
             #if request.form.get(slug, None):
                 #payload['playground']['features'].append(slug)
