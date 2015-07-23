@@ -389,6 +389,17 @@ def deploy_confs():
                     sudo('service %s restart' % service_name)
 
 
+def install_google_oauth_creds():
+    """
+    Install Google Oauth credentials file (global) from workinprivate repo
+    """
+    require('settings', provided_by=[production, staging])
+
+    run('git clone git@github.com:nprapps/workinprivate.git /tmp/workinprivate-tmp')
+    run('cp /tmp/workinprivate-tmp/.google_oauth_credentials %s' % app_config.GOOGLE_OAUTH_CREDENTIALS_PATH)
+    run('rm -Rf /tmp/workinprivate-tmp')
+
+
 def write_data_json():
     data.write_data_json()
 
