@@ -353,7 +353,7 @@ class Playground(Model):
         """
         fields = []
 
-        features = copytext.COPY.feature_list
+        features = copytext.Copy(app_config.COPY_PATH)['feature_list']
 
         for feature in features:
             slug = feature['key']
@@ -411,7 +411,7 @@ class Playground(Model):
             sdf['fields']['latitude'] = abs(int((self.latitude + app_config.CLOUD_SEARCH_DEG_OFFSET) * app_config.CLOUD_SEARCH_DEG_SCALE))
             sdf['fields']['longitude'] = abs(int((self.longitude + app_config.CLOUD_SEARCH_DEG_OFFSET) * app_config.CLOUD_SEARCH_DEG_SCALE))
 
-        for feature in copytext.COPY.feature_list:
+        for feature in copytext.Copy(app_config.COPY_PATH)['feature_list'] :
             slug = feature['key']
 
             if PlaygroundFeature.select().where(
@@ -472,7 +472,7 @@ def display_field_name(field_name):
     try:
         return getattr(Playground, field_name).verbose_name
     except AttributeError:
-        feature = next(f for f in copytext.COPY.feature_list if f.key == field_name)
+        feature = next(f for f in copytext.Copy(app_config.COPY_PATH)['feature_list'] if f.key == field_name)
 
         return feature['term']
 
@@ -501,7 +501,7 @@ class PlaygroundFeature(Model):
 
     @property
     def copy(self):
-        for feature in copytext.COPY.feature_list:
+        for feature in copytext.Copy(app_config.COPY_PATH)['feature_list'] :
             if feature['key'] == self.slug:
                 return feature
 
