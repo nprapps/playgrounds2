@@ -21,7 +21,7 @@ nose==1.2.1
 odict==1.5.1
 openpyxl==2.2.5
 peewee==2.2.5
-ply==3.6
+ply==3.4
 pycrypto==2.6
 python-dateutil==1.5
 pytz==2013b
