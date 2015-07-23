@@ -19,6 +19,7 @@ import pytz
 import app
 import app_config
 import copytext
+from oauth import get_document
 from models import Playground, PlaygroundFeature, Revision, database, get_active_playgrounds
 
 
@@ -49,7 +50,7 @@ def write_data_csv(playgrounds=None):
         playgrounds = get_active_playgrounds()
 
     fields = get_active_playgrounds()[0].__dict__['_data'].keys()
-    fields.extend([f['key'] for f in copytext.COPY.feature_list])
+    fields.extend([f['key'] for f in copytext.Copy(app_config.COPY_PATH)['feature_list']])
 
     with open('www/npr-accessible-playgrounds.csv', 'wb') as csvfile:
         csvwriter = csv.DictWriter(csvfile, fields)
@@ -59,7 +60,7 @@ def write_data_csv(playgrounds=None):
             playground_dict = playground.to_dict()
             playground_dict.pop('features')
 
-            for feature in copytext.COPY.feature_list:
+            for feature in copytext.Copy(app_config.COPY_PATH)['feature_list']:
                 playground_dict[feature['key']] = False
 
             if playground.features:
@@ -168,7 +169,7 @@ def render_playgrounds(playgrounds=None, compiled_includes=[]):
     """
     from flask import g, url_for
 
-    os.system('curl -o data/copy.xls "%s"' % app_config.COPY_URL)
+    get_document(app_config.COPY_GOOGLE_DOC_KEY, app_config.COPY_PATH)
     less()
     jst()
 
@@ -238,7 +239,7 @@ def load_playgrounds(path='data/playgrounds.csv'):
 
     NOTE: THIS HAS NOT BEEN TESTED IN A VERY LONG TIME.
     """
-    features = copytext.COPY.feature_list
+    features = copytext.Copy(app_config.COPY_PATH)['feature_list']
 
     with open(path) as f:
         rows = CSVKitDictReader(f)
@@ -418,7 +419,7 @@ def process_update(record):
             })
 
     if set(old_features) != set(new_features):
-        for feature in copytext.COPY.feature_list:
+        for feature in copytext.Copy(app_config.COPY_PATH)['feature_list']:
             slug = feature['key']
 
             # Removed
