@@ -837,7 +837,7 @@ def shiva_the_destroyer():
     _confirm("You are about to destroy everything deployed to %(settings)s for this project.\nDo you know what you're doing?" % env)
 
     with settings(warn_only=True):
-        s3cmd = 's3cmd del --recursive %s'
+        s3cmd = 's3cmd del --force --recursive %s'
 
         for bucket in env.s3_buckets:
             env.s3_bucket = bucket
