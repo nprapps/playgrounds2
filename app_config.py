@@ -10,6 +10,9 @@ See get_secrets() below for a fast way to access them.
 
 import os
 
+from authomatic.providers import oauth2
+from authomatic import Authomatic
+
 """
 NAMES
 """
@@ -55,8 +58,9 @@ SERVER_BASE_URL = 'http://127.0.0.1:8001/%s' % PROJECT_SLUG
 """
 COPY EDITING
 """
-COPY_GOOGLE_DOC_KEY = '0AlXMOHKxzQVRdHR4bkdreFVEQWdCUjZpZEw0cVRCM1E'
-COPY_URL = 'https://docs.google.com/spreadsheet/pub?key=%s&output=xls' % COPY_GOOGLE_DOC_KEY
+COPY_GOOGLE_DOC_KEY = '1EztSxy1HdiYKs64h57W6HEnoVKnBx6YlQYtueWL1ZWk'
+#COPY_URL = 'https://docs.google.com/spreadsheet/pub?key=%s&output=xls' % COPY_GOOGLE_DOC_KEY
+COPY_PATH = 'data/copy.xlsx'
 
 """
 SHARING
@@ -198,6 +202,25 @@ STATE_LIST = [
     'WI',
     'WY'
 ]
+
+"""
+OAUTH
+"""
+
+GOOGLE_OAUTH_CREDENTIALS_PATH = '~/.google_oauth_credentials'
+
+authomatic_config = {
+    'google': {
+        'id': 1,
+        'class_': oauth2.Google,
+        'consumer_key': os.environ.get('GOOGLE_OAUTH_CLIENT_ID'),
+        'consumer_secret': os.environ.get('GOOGLE_OAUTH_CONSUMER_SECRET'),
+        'scope': ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/userinfo.email'],
+        'offline': True,
+    },
+}
+
+authomatic = Authomatic(authomatic_config, os.environ.get('AUTHOMATIC_SALT'))
 
 """
 Utilities

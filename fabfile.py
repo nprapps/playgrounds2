@@ -17,6 +17,7 @@ import app
 import app_config
 import data
 from etc import github
+from oauth import get_document
 import models
 
 
@@ -111,7 +112,7 @@ def update_copy():
     """
     Fetches the latest Google Doc and updates local JSON.
     """
-    os.system('curl -o data/copy.xls "%s"' % app_config.COPY_URL)
+    get_document(app_config.COPY_GOOGLE_DOC_KEY, app_config.COPY_PATH)
 
 def app_config_js():
     """
