@@ -378,7 +378,8 @@ def deploy_confs():
             a = local('md5 -q %s' % local_path, capture=True)
             b = run('md5sum %s' % remote_path).split()[0]
 
-            if a != b:
+            #if a != b:
+            if True:
                 put(local_path, remote_path, use_sudo=True)
 
                 if service == 'nginx':
