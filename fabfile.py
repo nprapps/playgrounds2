@@ -458,7 +458,9 @@ def deploy(remote='origin'):
     app_config.configure_targets(deployment_target)
 
     if env['deploy_to_servers']:
+        install_google_oauth_creds()
         checkout_latest(remote)
+        remote('update_copy')
 
         if env['deploy_crontab']:
             install_crontab()
