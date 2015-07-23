@@ -297,9 +297,9 @@ def _app_config_js():
     js = 'window.APP_CONFIG = ' + json.dumps(config) + ';'
 
     features = {}
-
-    for feature in copytext.COPY.feature_list:
-        features[feature['key']] = feature._row
+    data = copytext.Copy(app_config.COPY_PATH)
+    for feature in data['feature_list']:
+        features[feature['key']] = dict(zip(feature._columns, feature._row))
 
     features = 'window.FEATURES = ' + json.dumps(features) + ';'
 
