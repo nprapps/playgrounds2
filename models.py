@@ -472,7 +472,7 @@ def display_field_name(field_name):
     try:
         return getattr(Playground, field_name).verbose_name
     except AttributeError:
-        feature = next(f for f in copytext.Copy(app_config.COPY_PATH)['feature_list'] if f.key == field_name)
+        feature = next(f for f in copytext.Copy(app_config.COPY_PATH)['feature_list'] if f['key'] == field_name)
 
         return feature['term']
 
