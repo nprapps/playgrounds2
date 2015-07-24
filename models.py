@@ -561,7 +561,7 @@ class Revision(Model):
         try:
             return json.loads(self.log)
         except:
-            return None
+            return []
 
     def get_headers(self):
         try:

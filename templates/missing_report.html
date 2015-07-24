@@ -1,0 +1,27 @@
+{% extends '_base.html' %}
+
+{% block wide_content %}
+
+<table>
+  <tbody>
+
+    {% for revision in revisions %}
+    <tr>
+      <td>{{ revision.timestamp }}</td>
+      <td>{{ revision.playground.slug }}</td>
+      <td>{{ revision.playground.name }}</td>
+      <td>{{ revision.action }}</td>
+      <td>
+      {% for log_item in revision.get_log() %}
+        {% for k, v in log_item.items() %}
+          {{ k }}: {{ v }}<br/>
+        {% endfor %}
+      {% endfor %}
+      </td>
+    </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+
+{% endblock %}

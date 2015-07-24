@@ -8,6 +8,7 @@ from mimetypes import guess_type
 import re
 from sets import Set
 import urllib
+from dateutil.relativedelta import relativedelta
 
 import envoy
 from flask import Flask, Markup, abort, render_template, url_for
@@ -232,6 +233,19 @@ def _playground(playground_slug):
     context['path'] = request.path
 
     return render_template('playground.html', **context)
+
+@app.route('/missing-report/')
+def _missing_report():
+    context = make_context()
+    end = datetime.datetime.utcnow()
+    start = end - relativedelta(months=6)
+    start_timestamp = (start - datetime.datetime(1970, 1, 1)).total_seconds()
+    revisions = Revision.select().where(Revision.timestamp > start_timestamp).order_by(Revision.timestamp.desc())
+
+    context['start_date'] = start
+    context['revisions'] = revisions
+
+    return render_template('missing_report.html', **context)
 
 @app.route('/cloudsearch/<path:path>')
 def _cloudsearch_proxy(path):
