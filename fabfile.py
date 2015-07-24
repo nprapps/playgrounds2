@@ -534,7 +534,6 @@ def _download_data():
     print 'Cloning database from %s...' % env.settings
 
     get(remote_path='%(repo_path)s/playgrounds.db' % env, local_path='playgrounds.db')
-    #local('curl -o data/playgrounds.csv "%s"' % app_config.DATA_URL)
 
 def load_data():
     """
