@@ -16,7 +16,7 @@ dulwich==0.9.4
 envoy==0.0.2
 geopy==0.95.1
 gunicorn==17.5
-jdcal==1.0
+jdcal==1.2
 nose==1.2.1
 odict==1.5.1
 openpyxl==2.2.5

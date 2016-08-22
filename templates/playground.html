@@ -164,15 +164,6 @@
     <p><a href="#edit-playground" class="btn btn-blue btn-block" data-toggle="modal" role="button"><i class="icon-pencil"></i> {{ COPY.content.playground_help_button }}</a></p>
 </div>
 
-<!-- disqus -->
-<div class="comments">
-    <h4>{{ COPY.content.playground_note_title }}</h4>
-    <p class="description">{{ COPY.content.playground_note_description }}</p>
-    <p class="meta" aria-label="{{ COPY.content.ARIA_guidelines }}">Discussion Guidelines</p>
-    <p class="guidelines">{{ COPY.content.playground_terms }}</p>
-    {% include '_comments.html' %}
-</div>
-
 {% if revisions.count() > 0 %}
 <div class="changelog" aria-label="{{ COPY.content.ARIA_changelog }}" role="menu">
     <h5 class="meta">Changelog</h5>
