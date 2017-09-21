@@ -126,6 +126,9 @@
     {% endblock extra_head %}
 </head>
 <body class="{% block body_class %}{% endblock body_class %}">
+
+    {% include '_modal.html' %}
+
     {% block outer_content %}
 <!--     <nav>
         <ul class="site-links">
@@ -233,6 +236,7 @@
     {{ JS.push('js/analytics.js') }}
     {{ JS.push('js/console.js') }}
     {{ JS.push('js/lib/html5.js') }}
+    {{ JS.push('js/lib/jquery.cookie.js') }}
     {% block extra_foot_js %}{% endblock extra_foot_js %}
 
     {% block extra_foot %}

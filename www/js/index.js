@@ -11,6 +11,8 @@ var $playground_meta_hdr = null;
 var $playground_meta_items = null;
 var $playground_data = null;
 
+var $modalClose = null;
+
 $(function() {
     $search_form = $('#search');
     $search_address = $('#search input[name="address"]');
@@ -22,6 +24,8 @@ $(function() {
     $playground_meta_items = $('#main-content').find('.about').find('ul.meta');
     $alerts = $('.alerts');
     $playground_data = $('.data-download');
+
+    $modalClose = $('.modal__box label');
 
     CONTENT_WIDTH = $('#main-content').width();
     RESULTS_MAP_WIDTH = CONTENT_WIDTH;
@@ -46,12 +50,12 @@ $(function() {
 
     $geolocate_button.click(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
-            window.location.href = 'search.html#latitude=' + position.coords.latitude + '&longitude=' + position.coords.longitude + '&zoom=' + RESULTS_DEFAULT_ZOOM + '&nearby=true'; 
+            window.location.href = 'search.html#latitude=' + position.coords.latitude + '&longitude=' + position.coords.longitude + '&zoom=' + RESULTS_DEFAULT_ZOOM + '&nearby=true';
         });
     });
 
     $search_form.submit(function() {
-        window.location.href = 'search.html#address=' + encodeURIComponent($search_address.val()); 
+        window.location.href = 'search.html#address=' + encodeURIComponent($search_address.val());
 
         return false;
     });
@@ -64,4 +68,28 @@ $(function() {
     if ($(window).width() <= 430) {
         $playground_data.addClass('btn-block');
     }
+
+    /*
+    * When modal closes, make sure it's not clickable
+    */
+    var onModalCloseClick = function() {
+        $('.modal-warning').css('visibility', 'hidden');
+        $.cookie('playgrounds_modal_status', 'true', { expires: 0.0001, path: '/' });
+    }
+
+    /*
+    *If modal status is 1, hide the content warning on page load.
+    */
+    var checkModalStatus = function() {
+        if ($.cookie('playgrounds_modal_status') != 'true') {
+            $('.modal-warning').css('visibility', 'visible');
+        }
+    }
+
+    $modalClose.off('click');
+    $modalClose.on('click', onModalCloseClick);
+
+    checkModalStatus();
+
+
 });
