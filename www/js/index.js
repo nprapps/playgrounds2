@@ -74,7 +74,7 @@ $(function() {
     */
     var onModalCloseClick = function() {
         $('.modal-warning').css('visibility', 'hidden');
-        $.cookie('playgrounds_modal_status', 'true', { expires: 0.0001, path: '/' });
+        $.cookie('playgrounds_modal_status', 'true', { expires: 1, path: '/' });
     }
 
     /*
