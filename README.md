@@ -78,7 +78,7 @@ Then install the project requirements:
 
 ```
 cd playgrounds2
-npm install less universal-jst
+npm install
 mkvirtualenv playgrounds2
 pip install -r requirements.txt
 fab update_copy

@@ -1,0 +1,14 @@
+{
+  "name": "playgrounds2",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nprapps/playgrounds2.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nprapps/playgrounds2/issues"
+  },
+  "dependencies": {
+    "less": "^3.0.4",
+    "universal-jst": "^1.0.5"
+  }
+}
